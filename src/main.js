@@ -1,0 +1,13 @@
+import Vue from 'vue'
+import App from './App.vue'
+import router from './router'
+import './registerServiceWorker'
+import 'normalize.css'
+// import 'flexible'
+import 'lib-flexible/flexible'
+Vue.config.productionTip = false
+
+new Vue({
+  router,
+  render: h => h(App)
+}).$mount('#app')
