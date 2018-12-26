@@ -1,32 +1,55 @@
 import vue from 'vue'
 import axios from 'axios'
+
 const service = axios.create({
-    timeout:5000
+    timeout: 7000
 })
 service.interceptors.request.use(function (config) {
-    
-})
+    // if (config.method === 'post') {
+    //     // config.data = qs.stringify(config.data);
+    //     config.data = config.data
+    // }
+    return config;  //添加这一行
+}, (error) => {
+    return Promise.reject(error);
+});
 
 service.interceptors.response.use(function (response) {
-    
+    return response.data
 })
 
-function _post(url,data){
-    service.post({
-        method:'post',
-        url:url,
-        data:data,
+
+function _post(url,param){
+    return new Promise((resolve,reject)=>{
+        service({
+            method:'post',
+            url,
+            data:param,
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            console.log(err,'异常')
+        })
     })
 }
 
-function _get(url,data) {
-    service.get({
-        url:url,
-        data:data,
-    }).then(response =>{
-        resolve(response.data)
-    }).then(err =>{
-        reject(err)
+
+function _get(url,param){
+
+    return new Promise((resolve,reject)=>{
+        service({
+            method:'get',
+            url,
+            params:param,
+            // cancelToken:new CancelToken(c=>{
+            //     cancel=c
+            // })
+        }).then(res=>{
+            resolve(res)
+        }).catch(err=>{
+            console.log(err,'异常')
+        })
     })
 }
-export {_post,_get}
+
+export {_post, _get}
