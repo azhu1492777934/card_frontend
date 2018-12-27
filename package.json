@@ -33,6 +33,10 @@
         "rootValue": 75,
         "propList": [
           "*"
+        ],
+        "selectorBlackList":[
+          "van-toast",
+          "van-picker"
         ]
       }
     }

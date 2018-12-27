@@ -1,0 +1,606 @@
+<template>
+    <div class="recharge-wrap">
+        <div class="recharge-tip">
+            <p>充值活动：充值钻石送ELB，钻石ELB可等额购买套餐。</p>
+        </div>
+        <div class="content-wrap">
+            <div class="title-wrap">
+                <em class="title-line"></em>
+                <span class="title-name">支付选择</span>
+                <em class="title-line rotate-180"></em>
+            </div>
+            <ul class="discount-wrap">
+
+                <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
+                    :class="{'checked':index==activeIndex}">
+                    <div>
+                        <p class="discount-rmb">{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
+                        <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
+
+                        <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
+                            可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>元<br>无ELB赠送
+                        </p><!--钻石支付-->
+
+                        <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
+
+                        <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">{{item.give_elb}}</em>ELB
+                        </p><!--多充值支付-->
+                    </div>
+                </li>
+                <li class="special"></li>
+            </ul>
+            <div class="choice-wrap">
+                <div v-show="isShowChoice.showDate">
+                    <span class="cl-primary">生效日期：</span>
+                    <div @click="changedCheck('date')">
+                        <input :checked="!check_date" type="radio">
+                        <span>立即生效</span>
+                    </div>
+                    <div @click="changedCheck('date')">
+                        <input :checked="check_date" type="radio">
+                        <span>选择时间</span>
+                    </div>
+                    <input @click="showChooseDate" v-show="check_date" id="dateSelector" v-model="val_date" readonly placeholder="请选择时间"
+                           type="text">
+                </div><!--生效日期-->
+                <div v-show="isShowChoice.showCode">
+                    <span class="cl-primary">使用抵扣券：</span>
+                    <div @click="changedCheck('coupon')">
+                        <input :checked="!check_coupon" type="radio">
+                        <span>否</span>
+                    </div>
+                    <div @click="changedCheck('coupon')">
+                        <input :checked="check_coupon" type="radio">
+                        <span>是</span>
+                    </div>
+                    <input v-show="check_coupon" id="codeSelector" v-model="val_coupon" placeholder="请输入券码,券码不退不补"
+                           type="text">
+                </div><!--抵扣券-->
+                <div v-show="isShowChoice.showELB">
+                    <span class="cl-primary">使用ELB：</span>
+                    <div @click="changedCheck('elb')">
+                        <input :checked="!check_elb" type="radio">
+                        <span>否</span>
+                    </div>
+                    <div @click="changedCheck('elb')">
+                        <input :checked="check_elb" type="radio">
+                        <span>是</span>
+                    </div>
+                    <input v-show="check_elb" id="elbSelector" v-model="val_elb" placeholder="请输入抵扣数,ELB不退不补"
+                           type="number">
+                </div><!---elb-->
+            </div>
+            <button @click="recharge" class="btn-large">支付</button>
+        </div>
+
+        <van-popup
+                v-model="showDate"
+                position="bottom"
+                :overlay="true"
+                :lock-scroll="true"
+                :lazy-render="true"
+                :close-on-click-overlay="true"
+        >
+            <van-datetime-picker
+                v-model="currentDate"
+                type="date"
+                :min-date="minDate"
+                :max-date="maxDate"
+                :formatter="dateFormatter"
+                @confirm="dateConfirm"
+                @cancel="dateCancel"
+            >
+            </van-datetime-picker>
+        </van-popup><!--时间选择-->
+    </div>
+</template>
+
+<script>
+    import {DatetimePicker, Area, Popup,Toast} from 'vant';
+    import {getStorage} from "../../utilies";
+    import {_post} from "../../http";
+
+    export default {
+        name: "recharge",
+        components: {
+            [DatetimePicker.name]: DatetimePicker,
+            [Area.name]: Area,
+            [Popup.name]: Popup,
+            [Toast.name]:Toast
+        },
+        data() {
+            return {
+                recharge_list: [
+                    {
+                        pay_type: 'diamond_charge',
+                        pay_money: 0,
+                        user_rmb: 0,
+                        give_elb: 0,
+                    }, {
+                        pay_type: 'over_charge',
+                        pay_money: 100,
+                        give_elb: 20
+                    }, {
+                        pay_type: 'over_charge',
+                        pay_money: 200,
+                        give_elb: 50
+                    }, {
+                        pay_type: 'over_charge',
+                        pay_money: 300,
+                        give_elb: 80
+                    }, {
+                        pay_type: 'normal_charge',
+                        pay_money: 0,
+                        give_elb: 0
+                    }
+                ],//充值列表数据
+                new_recharge_list:[],
+
+                minDate: new Date(),
+                maxDate: new Date(this.getEndDate().endYear, this.getEndDate().endMonth, this.getEndDate().endDay),
+                currentDate: new Date(),
+
+                isShowChoice:{
+                    showDate:true,
+                    showELB:true,
+                    showCode:true,
+                },
+
+                check_date: false,
+                check_coupon: false,
+                check_elb: false,
+
+                val_date: this.getToday(),
+                val_coupon: '',
+                val_elb: '',
+
+                activeIndex: 0,//当前选择充值方式索引
+                showDate: false,//选择时间弹出
+
+                userInfo:getStorage('userInfo'),
+                userDiscountInfo:null,
+                planInfo:getStorage('planInfo'),//当前充值套餐信息
+
+            }
+        },
+        methods: {
+            changedCheck: function (type) {
+                switch (type) {
+                    case 'date':
+                        this.check_date = !this.check_date;
+                        if(!this.check_date){
+                            this.val_date = this.getToday()
+                        }
+                        break;
+                    case 'coupon':
+                        this.check_coupon = !this.check_coupon;
+                        break;
+                    case 'elb':
+                        this.check_elb = !this.check_elb;
+                        break;
+                }
+            },
+            rechargeTypeClick: function (index) {
+                this.activeIndex = index
+            },
+            dateFormatter: function (type, value) {
+                if (type === 'year') {
+                    return `${value}年`;
+                } else if (type === 'month') {
+                    return `${value}月`
+                } else if (type === 'day') {
+                    return `${value}日`
+                }
+                return value;
+            },
+            getToday:function (val) {
+                let date = new Date();
+                if(val){
+                    date = new Date(val);
+                }
+                let year = date.getFullYear(),
+                    month = date.getMonth() + 1,
+                    day = date.getDate();
+                if(month<10){
+                    month = '0' +month
+                }
+                if(day<10){
+                    day = '0' + day
+                }
+                return year+'-'+month+'-'+day
+            },
+            getEndDate:function () {
+                let date = new Date();
+                date.setDate(date.getDate() + 90);
+                let end_month = date.getMonth() + 1,
+                    end_date = date.getDate(),
+                    end_year = date.getFullYear();
+                if(end_month<10){
+                    end_month = '0' + end_month
+                }
+                if(end_date<10){
+                    end_date = '0' + end_date
+                }
+
+                return {
+                    endDay:end_date,
+                    endMonth:end_month,
+                    endYear:end_year
+                }
+            },
+            showChooseDate:function () {
+                this.showDate = true;
+            },
+            dateConfirm:function (value) {
+                this.val_date = this.getToday(value);
+                this.showDate = false;
+            },//确定弹窗
+            dateCancel:function () {
+                this.showDate = false;
+            },//取消日期弹窗
+            recharge:function () {
+                let rechargeInfo = this.new_recharge_list[this.activeIndex];
+                let param = {};
+                rechargeInfo.pay_type=='diamond_charge'?param.status==1 : param.status=0;
+                rechargeInfo.pay_type=='over_charge'?param.rechargeInfo = rechargeInfo.pay_money : this.planInfo.price;
+                param.iccid = this.planInfo.iccid;
+                param.rating_id = this.planInfo.id;
+                param.price = this.planInfo.price;
+
+                if(this.check_elb){
+                    if(!this.val_elb){
+                        Toast('请输入ELB抵扣数');
+                        return
+                    }
+                    if(this.planInfo.is_elb_deductible==0){
+                        Toast('此套餐不可抵扣ELB');
+                        return
+                    }
+                    if( !(/^[1-9]\d*$/.test(this.val_elb)) ){
+                        Toast('ELB最低抵扣数额为1');
+                        return
+                    }
+                    if(this.val_elb>this.userInfo.elb){
+                        Toast('您的ELB余额不足');
+                        return
+                    }
+                    if(this.planInfo.is_elb_deductible==1 && this.val_elb > this.planInfo.max_elb){
+                        Toast('此套餐ELB最大抵扣值为'+this.planInfo.max_elb);
+                        return
+                    }
+                    if(this.val_elb>=this.planInfo.price){
+                        Toast('ELB抵扣数不能超过套餐总值');
+                        return
+                    }
+                    param.elb_deduction = this.val_elb
+                }
+                if(this.check_coupon){
+                    if(!this.val_coupon){
+                        Toast('请输入券码');
+                        return
+                    }else{
+                        param.coupon_no = this.val_coupon
+                    }
+                }
+                if(this.check_date){
+                    if(!this.val_date){
+                        Toast('请选择套餐生效时间');
+                        return
+                    }else{
+                        param.start_time = this.val_date
+                    }
+                }
+
+                _post('/test',param);
+            },
+            filterRechargeList:function (rmb,planPrice) {
+                return this.recharge_list.filter(item=>{
+                    if(item.pay_type=='normal_charge'){
+                        item.pay_money = planPrice;
+                    }
+                    if(rmb<=0 ){
+                        if(planPrice>100&&planPrice<=200){
+                            return (item.pay_type ==='over_charge' && item.pay_money == 200 )
+                                || item.pay_type ==='normal_charge'
+                        }else if(planPrice>200&&planPrice<=300){
+                            return (item.pay_type ==='over_charge' && item.pay_money >200)
+                                || item.pay_type ==='normal_charge'
+
+                        }else if(planPrice>300){
+                            return item.pay_type ==='normal_charge'
+                        }else{
+                            return item.pay_money >=0
+                                && item.pay_type != 'diamond_charge'
+                        }
+                    }else{
+                        if(item.pay_type==='diamond_charge'){
+                            item.user_rmb = rmb
+                        }
+                        if(planPrice>100&&planPrice<=200){
+                            return item.pay_type ==='diamond_charge'
+                                &&(item.pay_type ==='over_charge' && item.pay_money <=200 )
+                                || item.pay_type ==='normal_charge'
+
+
+                        }else if(planPrice>200&&planPrice<=300){
+                            return item.pay_type ==='diamond_charge'
+                                || (item.pay_type ==='over_charge' && item.pay_money >200)
+                                || item.pay_type ==='normal_charge'
+
+
+                        }else if(planPrice>300){
+                            return item.pay_type ==='diamond_charge'
+                               || item.pay_type ==='normal_charge'
+                        }
+
+                    }
+
+                })
+            }//用户rmb,套餐价格planPrice
+
+        },
+        created() {
+            if(this.planInfo){
+                if(this.planInfo.is_elb_deductible==0){
+                    this.isShowChoice.showELB = false
+                }
+            }//是否显示ELB
+
+            if(getStorage('newCard')){
+                if(getStorage('newCard')==1){
+                    this.isShowChoice.showELB = false;
+                    this.isShowChoice.showCode = false;
+                    this.isShowChoice.showDate = false;
+                }
+            }//新卡默认不显示所有选择
+
+            if(getStorage('isSpeedUp')){
+                if(getStorage('isSpeedUp')==1){
+                    this.isShowChoice.showDate = false;
+                }
+            }//加速包默认不显示生效时间
+
+            this.new_recharge_list = this.filterRechargeList(0,this.planInfo.price);//根据套餐价格过滤充值参数
+
+
+        },
+        mounted() {
+
+        },
+    }
+</script>
+
+<style lang="less" scoped>
+    input[type=radio] {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        position: relative;
+        display: inline-block;
+        vertical-align: top;
+        width: 30px;
+        height: 30px;
+        border: 1px solid #bcbcbc;
+        outline: none;
+        cursor: pointer;
+        border-radius: 50%;
+        vertical-align: text-top;
+    }
+
+    input[type=radio]:after {
+        content: '';
+        position: absolute;
+        width: 10px;
+        height: 10px;
+        display: block;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        margin: auto;
+        background: #dca85f;
+        border-radius: 12px;
+        transform: scale(0);
+        transition: all ease-in-out 300ms;
+    }
+
+    input[type=radio]:checked {
+        border-color: #dca85f;
+    }
+
+    input[type=radio]:checked:after {
+        transform: scale(1);
+    }
+
+    input[type=radio]:checked + em {
+        vertical-align: middle
+    }
+
+    .cl-primary {
+        color: #c19252;
+    }
+
+    .recharge-wrap {
+        text-align: left;
+
+        .recharge-tip {
+            background-color: #feeae5;
+            p {
+                text-align: center;
+                padding: 20px;
+                font-size: 24px;
+                color: #ff562f;
+            }
+        }
+        //充值提醒
+
+        .title-wrap {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 0;
+            text-align: center;
+            font-size: 28px;
+            color: #c89439;
+            span {
+                padding: 0 30px;
+            }
+
+            .rotate-180 {
+                transform: rotate(180deg);
+            }
+
+            .title-line {
+                display: inline-block;
+                flex: 1;
+                height: 3px;
+                max-width: 20%;
+                content: '';
+                background: linear-gradient(45deg, #fff 0, #c19252 100%);
+            }
+
+        }
+        //支付title
+
+        .content-wrap {
+            width: 95%;
+            margin: 0 auto;
+
+            .discount-wrap {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: space-between;
+            }
+            li {
+                display: table;
+                position: relative;
+                width: 31%;
+                max-width: 33.33%;
+                min-height: 183px;
+                margin: 0 0 20px;
+                font-size: 28px;
+                text-align: center;
+                border: 1PX solid #e6e6e6;
+                border-radius: 16px;
+                -webkit-text-size-adjust: none;
+                &.special {
+                    border-color: transparent;
+                    visibility: hidden
+                }
+                .line {
+                    display: block;
+                    width: 60px;
+                    height: 3px;
+                    margin: 10px auto 13px;
+                    background-color: #c89439;
+                }
+                div {
+                    display: table-cell;
+                    vertical-align: middle;
+                }
+
+                .cl-elb {
+                    color: #70a6ec;
+                }
+
+                .discount-rmb {
+                    font-size: 28px;
+                    color: #2c251d;
+                    line-height: 1;
+                }
+                .discount-diamond {
+                    padding-top: 5px;
+                }
+                .discount-appendix {
+                    color: #888;
+                    font-size: 20px;
+                    letter-spacing: 1PX;
+                }
+
+                &.checked {
+                    border-color: #c89439;
+                    box-shadow: 0 50px 0 #fff;
+
+                    .discount-rmb {
+                        color: #fd720d;
+                    }
+
+                    &::after {
+                        position: absolute;
+                        right: 0;
+                        bottom: 0;
+                        content: '✓';
+                        width: 33px;
+                        height: 25px;
+                        color: #fff;
+                        background-color: #c89439;
+                        font-size: 22px;
+                        border-top-left-radius: 16px;
+                        border-bottom-right-radius: 16px;
+                    }
+                }
+
+            }
+        }
+        //充值列表结束
+
+        .choice-wrap {
+            position: relative;
+            padding-top: 60px;
+            font-size: 28px;
+            color: #2c251d;
+
+            > div {
+                display: flex;
+                align-items: center;
+                flex-wrap: wrap;
+                padding-bottom: 30px;
+            }
+
+            div {
+                span,
+                div {
+                    flex: 1;
+                    max-width: 200px;
+                    input {
+                        vertical-align: middle;
+                    }
+                    input + span {
+                        padding-left: 8px;
+                        vertical-align: middle;
+                    }
+                }
+            }
+
+            span:first-child {
+                max-width: 200px;
+                text-align: right;
+            }
+
+            input[type="text"],
+            input[type="number"] {
+                display: block;
+                width: 100%;
+                font-size: 28px;
+                margin: 10px 30px 0;
+                padding: 10px;
+                border-bottom: 1PX solid #cac7c7;
+            }
+
+        }
+        //充值方式选择
+
+        .btn-large {
+            display: block;
+            width: 100%;
+            padding: 20px;
+            margin: 90px 0;
+            color: #fff;
+            background-color: #dca85f;
+            font-size: 34px;
+            border-radius: 13px;
+
+        }
+        //充值按钮
+    }
+</style>

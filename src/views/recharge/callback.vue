@@ -1,0 +1,85 @@
+<template>
+    <div class="recharge-success-wrap">
+        <p class="recharge-success">
+            <img class="icon-success" src="../../assets/imgs/recharge_success/icon-recharge_20181001.svg" alt=""><br>支付成功!
+        </p>
+        <img class="success-banner" src="../../assets/imgs/recharge_success/recharge_callback_20181126.jpg" alt="">
+        <span id="to_lottery" @click="to_another_way('lottery')" class="btn_to_lottery">立刻领取</span>
+        <span id="jump_plan" @click="to_another_way('card')" class="btn_to_plan">跳过</span>
+    </div>
+</template>
+
+<style lang="less">
+    html,body,#app{height: 100%;}
+    .recharge-success-wrap {
+        background-color: #ececec;
+        text-align: center;
+        width: 100%;
+        min-height: 100%;
+        background-image: linear-gradient(135deg, rgb(81, 151, 241) 5%, rgba(77, 176, 241, 0.2) 100%);
+        .success-banner {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+        .recharge-success {
+            padding: 80px 0;
+            font-size: 36px;
+            letter-spacing: 2px;
+            color: #fff;
+            .icon-success {
+                width: 81px;
+                height: 81px;
+            }
+        }
+
+        .btn_to_lottery {
+            display: block;
+            width: 98%;
+            height: 96px;
+            margin: 120px auto 55px;
+            font-size: 40px;
+            line-height: 96px;
+            color: #fff;
+            background-color: #da5655;
+            text-decoration: none;
+            text-align: center;
+        }
+        .btn_to_plan {
+            display: inline-block;
+            position: relative;
+            color: #da5655;
+            font-size: 32px;
+            text-decoration: none;
+        }
+    }
+
+
+</style>
+
+<script>
+    // @ is an alias to /src
+    export default {
+        name: "recharge_success",
+
+        data() {
+            return {
+                iccid:'',
+
+            }
+        },
+        created() {
+
+        },
+        methods: {
+           to_another_way:function (location) {
+               if(location=='card') {
+                   location.href = '/weixin/cards/telcom/usage?iccid=' + this.iccid;
+               }else{
+                   location.href = 'http://wxgame.china-m2m.com/common/home';
+               }
+           }
+        }
+    };
+</script>
+
