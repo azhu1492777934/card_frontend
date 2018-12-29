@@ -8,7 +8,7 @@
         </div>
         <div class="van-swipe-wrap" ref="vanSwiperWwrap">
             <van-swipe ref="swiperVant" :show-indicators="false" @change="swiperOnChange">
-                <van-swipe-item v-for="(item,index) in plan_type">
+                <van-swipe-item v-for="(item,index) in plan_type" :key="item">
                     <ul class="plan-list-wrap">
                         <li @click="choosePlanClick(inner_index)" v-for="(inner_item,inner_index) in mock_list[item]"
                             :class="{'activedPlan':inner_index==choose_plan_index,'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0}">

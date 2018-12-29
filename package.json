@@ -36,7 +36,8 @@
         ],
         "selectorBlackList":[
           "van-toast",
-          "van-picker"
+          "van-picker",
+          "van-popup"
         ]
       }
     }

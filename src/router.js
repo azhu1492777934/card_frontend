@@ -23,12 +23,16 @@ const coupon_telcom = r => require.ensure([], () => r(require('./views/coupon/co
 //套餐充值列表
 const plan_list = r => require.ensure([], () => r(require('./views/card/plan_list')), 'plan_list');
 
+//卡查询
+const card_lookup = r => require.ensure([], () => r(require('./views/card/lookup')), 'card_lookup');
+const card_usage = r => require.ensure([], () => r(require('./views/card/usage')), 'card_usage');
+
 Vue.use(Router)
 
 
 export const constantRouterMap = [{
         path:'/',
-        component:lookup
+        component:card_lookup
     }, {
         path: '/new_card/real_name',
         component: real_name
@@ -56,7 +60,13 @@ export const constantRouterMap = [{
     },{
         path:'/card/plan_list',
         component:plan_list
-}]
+    },{
+        path:'/card/lookup',
+        component:plan_list
+    },{
+        path:'/card/usage',
+        component:card_usage
+    }]
 
 export default new Router({
     routes: constantRouterMap
