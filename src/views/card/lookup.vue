@@ -23,7 +23,7 @@
                 </li>
             </ul>
         </div><!--历史记录-->
-        <van-popup v-model="checkShow">
+        <van-popup :close-on-click-overlay="false" v-model="checkShow">
             <p class="showTip">正在检测中,请等候</p>
         </van-popup>
     </div>
@@ -140,7 +140,7 @@
 <script>
     // @ is an alias to /src
     import {checkICCID, setStorage, formatterCardTime, getStorage, sortObj} from '../../utilies'
-    import {Toast, Popup} from 'vant'
+    import {Toast, Popup , Notify} from 'vant'
     import {_post} from "../../http";
 
     export default {
@@ -165,7 +165,6 @@
                     this.recording_show = true;
                 }
             }
-            console.log(this.recording_list);
         },
         methods: {
             searchIccid: function (iccid) {
@@ -181,7 +180,8 @@
             },
             processCheckIccid: function (iccid) {
                 this.checkShow = true
-                let isExist = false;
+                let isExist = false,
+                    _this = this;
                 if (this.recording_list.length) {
 
                     this.recording_list.map(function (item, index) {
@@ -208,9 +208,36 @@
 
                 this.recording_list.sort(this.compare('millisecond'));
 
+                if(this.recording_list.length>20){
+                    this.recording_list.splice(20)
+                }
+
                 setStorage('recording_list', this.recording_list)
 
                 this.recording_list_length = this.recording_list.length;
+
+                //查询
+                _post('/api/v1/app/new_auth/check_auth_',{
+                    iccid:iccid
+                }).then(res=>{
+                    if(!res.state){
+                        Notify({
+                            message:res.msg
+                        })
+                        _this.checkShow = false
+                    }else{
+                        setStorage('check_iccid',iccid);
+                       if(res.data.status==1){
+                           _this.$router.push({path:'/card/plan_list'});
+                           //未实名
+                       }else if(res.data.status==2){
+                           setStorage('chec_realNameSource',res.data.source)
+                           _this.$router.push({path:'/new_card/real_name'});
+                       }else if(res.data.status==3){
+                           _this.$router.push({path:'/card/usage'});
+                       }
+                    }
+                })
 
             },
 

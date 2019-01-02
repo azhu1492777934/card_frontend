@@ -10,19 +10,19 @@
                 <span>ICCID</span>
                 <input v-model="info_iccid" readonly placeholder="请输入ICCID" type="text">
             </div>
-            <div>
+            <div v-if="showItem.showImei">
                 <span>IMEI</span>
                 <input v-model="info_imei" placeholder="请输入IMEI" type="number">
                 <span class="iconfont icon-scan"></span>
             </div>
-            <p class="tip-imei">可录入IMEI,也可使用默认IMEI;系统检测到设备IMEI后将自动更新。</p>
-            <div>
+            <p v-if="showItem.showImei" class="tip-imei">可录入IMEI,也可使用默认IMEI;系统检测到设备IMEI后将自动更新。</p>
+            <div v-show="showItem.showID">
                 <span>身份证</span>
                 <input v-model="info_id" placeholder="请输入身份证" type="number">
             </div>
-            <div>
+            <div v-show="showItem.showImei">
                 <span>姓名</span>
-                <input v-model="info_id" placeholder="请输入姓名" type="number">
+                <input v-model="info_name" placeholder="请输入姓名" type="number">
             </div>
             <div>
                 <span>手机号</span>
@@ -30,7 +30,7 @@
             </div>
             <div>
                 <input v-model="info_code" placeholder="获取验证码" type="number">
-                <button class="btn-code">获取验证码</button>
+                <button @click="getCode" class="btn-code" :disabled="disabled_code">{{countDownMsg}}</button>
             </div>
         </div>
         <div class="btn-next-wrap">
@@ -39,10 +39,9 @@
         <p class="tutorial-wrap">
             <a href="javascript:;">查看实名教程</a>
         </p>
-
-        <div class="fixed-wrap-imei">
-            <p class="check-imei-info">正在检测IMEI,请等候</p>
-        </div>
+        <van-popup v-model="showItem.showFixedWrap" :close-on-click-overlay="false">
+            <p class="showTip">{{showTipMsg}}</p>
+        </van-popup>
     </div>
 </template>
 
@@ -139,43 +138,69 @@
 </style>
 
 <script>
+    import { Popup,Notify } from 'vant';
+    import {_get,_post} from "../../http";
+
+    import {codeParam,getStorage} from "../../utilies";
+    import '../../assets/less/common.less'
     // @ is an alias to /src
     export default {
         name: "home",
-        props: {
-            options: {
-                type: Object,
-
-            }
-        },
         data() {
             return {
-                message_timer: null,
-                user_elb: 0,
-                user_diamond: 0,
-                user_name: '测试数据',
-                is_show_msg: false,
-                phone: '',
+                //校验数据
+                iccid:'',
                 regex_phone: /(?:^1[3456789]|^9[28])\d{9}$/,
                 regex_num: /^[1-9]\d*$/,
-                err_msg: '',
-                toss: true, // 弹窗
-                is_discount_true: false,//是否选择抵扣
-                is_discount_false: true,
-                discount_num: '', //选择抵扣elb个数
+                regex_name: /^[\u4e00-\u9fa5a-zA-Z]+$/,
+                is_boss:false,
 
-
-                //校验数据
                 info_iccid: '',
-                info_imei: '111111111',
+                info_imei: '864319031839011',
                 info_id: '',
                 info_code: '',
                 info_phone: '',
+                info_name:'',
 
+                showItem:{
+                    showID:false,
+                    showName:false,
+                    showImei:false,
+                    showFixedWrap:false
+                },
+
+                countDown:60,
+                countDownMsg:'获取验证码',
+                showTipMsg:'检测信息中，请等候',
+
+                timer:null,
+                disabled_code:false,
             }
         },
+        components:{
+            [Popup.name]:Popup,
+            [Notify.name]:Notify
+        },
         created() {
+            if(getStorage('iccid')){
+                this.info_iccid = getStorage('iccid');
+            }else{
+                console.log('无iccid');
+            }
 
+            _post('/payCenter/v1/iot-card/card-partner',codeParam({iccid:'8986061805001065858'}))
+                .then(res =>{
+                   if(res.state){
+                       this.isBoss =  true
+                       this.showItem.showID = true;
+                       this.showItem.showName = true
+                   }else{
+                       this.isBoss = false
+                       this.showItem.showID = false
+                       this.showItem.showName = false
+                   }
+                   this.showItem.showFixedWrap = false
+                })//检测是否是大佬账户
 
         },
         methods: {
@@ -225,12 +250,18 @@
                 var pass = true;
 
                 if (!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
-                    console.log('身份证号格式错误');
-                    return
+                    // console.log('身份证号格式错误');
+                    return {
+                        state:0,
+                        msg:'身份号码错误'
+                    }
                 }
                 else if (!city[code.substr(0, 2)]) {
-                    console.log('地址编码错误');
-                    return
+                    // console.log('地址编码错误');
+                    return {
+                        state:0,
+                        msg:'身份号码错误'
+                    }
                 }
                 else {
                     //18位身份证需要验证最后一位校验位
@@ -252,25 +283,210 @@
                         var last = parity[sum % 11];
                         if (parity[sum % 11] != code[17]) {
                             // tip = "校验位错误";
-                            console.log('身份证有误')
-                            return
+                            return {
+                                state:0,
+                                msg:'身份号码错误'
+                            }
                         }
                     }
                 }
-                console.log('通过')
-                // if (!pass) alert(tip);
-                // return pass;
+               return{
+                   state:1,
+               }
+
             },
-            checkInfo: function () {
-                this.verifyID(this.info_id)
+            checkPhone:function(){
+                if(!this.info_phone){
+                    return {
+                        state:0,
+                        msg:'请输入您的手机号码'
+                    }
+                }
                 if (!this.regex_phone.test(this.info_phone)) {
-                    console.log('手机格式错误');
-                    return
+                    return {
+                        state:0,
+                        msg:'手机号码有误'
+                    }
                 }
+                return{
+                    state:1
+                }
+            },
+            checkCode:function(){
                 if (!this.regex_num.test(this.info_code)) {
-                    console.log('验证码有误');
+                    return{
+                        state:0,
+                        msg:'验证码有误'
+                    }
+                }
+                return{
+                    state:1
+                }
+            },
+            getCode:function(){
+                let _this = this;
+                let resultCheckPhone = this.checkPhone();
+                if(!resultCheckPhone.state){
+                    Notify({
+                        message:resultCheckPhone.msg,
+                        background:'#ce4141'
+                    })
                     return
                 }
+
+                _post('/api/v1/app/phone/check',{mobile:this.info_phone})
+                    .then(res=>{
+                        if(!res.state){
+                            Notify({
+                                message:res.msg,
+                                background:'#ce4141'
+                            })
+                            return
+                        }
+                    })
+
+                clearInterval(this.timer);
+                this.disabled_code = true;
+                this.countDownMsg = this.countDown + 's';
+
+                this.timer = setInterval(function () {
+                    _this.countDown--;
+                    _this.countDownMsg = _this.countDown + 's重新获取'
+                    if(_this.countDown<=0){
+                        clearInterval(_this.timer);
+                        _this.countDownMsg = '获取验证码';
+                        _this.countDown = 60;
+                        _this.disabled_code = false;
+                    }
+                },1000)
+
+                /*_post('/api/v1/app/messages/send',{mobile:this.info_phone})
+                    .then(function (res) {
+                        if(!res.responseJSON.code){
+                            eLink.showMsg('验证码发送失败, 请稍后再试');
+                        }
+
+                        if (res.responseJSON.code == 1003) {
+                            eLink.showMsg("服务内部错误");
+                        }
+                        else if (res.responseJSON.code == 2001) {
+                            eLink.showMsg("参数错误");
+                        }
+                        else if (res.responseJSON.code == 2004) {
+                            eLink.showMsg("微信服务过期");
+                        }
+                        else if (res.responseJSON.code == 2005) {
+                            eLink.showMsg("验证码发送过于频繁,请稍后再试");
+                        }
+                        else if (res.responseJSON.code == 2006) {
+                            eLink.showMsg("消息服务错误");
+                        }
+                        else if (res.responseJSON.code == 2007) {
+                            eLink.showMsg("无效验证码");
+                        }
+                        else if (res.responseJSON.code == 2008) {
+                            eLink.showMsg("验证码过期");
+                        }
+                        else if (res.responseJSON.code == 2010) {
+                            eLink.showMsg("短信一小时内同一手机号码发送次数不能超过3条");
+                        }
+                        else if (res.responseJSON.code == 2011) {
+                            eLink.showMsg("同一手机号每60秒只能发送一条");
+                        } else {
+                            eLink.showMsg("验证码发送过于频繁");
+                        }
+                    })*/
+
+
+            },//获取验证码
+
+            checkInfo:function(){
+                let checkIdResult = this.verifyID(this.info_id),
+                    checkPhone = this.checkPhone(),
+                    checkCode = this.checkCode();
+
+                if(this.is_boss){
+                    if(!checkIdResult.state){
+                        Notify({
+                            message:checkIdResult.msg,
+                            background:'#ce4141'
+                        })
+                        return
+                    }
+
+                    if(!this.regex_name.test(this.info_name) || this.info_name.length>15){
+                        Notify({
+                            message:'请填写正确的姓名',
+                            background:'#ce4141'
+                        })
+                        return
+                    }
+
+                }
+
+                if(!checkPhone.state){
+                    Notify({
+                        message:checkPhone.msg,
+                        background:'#ce4141'
+                    })
+                    return
+                }
+
+                if(!checkCode.state){
+                    Notify({
+                        message:checkCode.msg,
+                        background:'#ce4141'
+                    })
+                    return
+                }
+
+                let param = {
+                    mobile: this.info_phone,
+                    iccid: this.iccid,
+                    code: this.info_code,
+                    imei: this.info_imei,
+                    realname: this.info_name || '***',
+                    id_no: this.info_id || '***',
+                    alibind: true,
+                };
+                _post('/api/v1/app/bind/imei',param)
+                    .then(res=>{
+                        if(res.state){
+                            location.href = "/weixin/jump/taobao?iccid=" + eLink.iccid + "&imei=" + eLink.imei + "&source=" + eLink.source;
+                        }else{
+                            Notify({
+                                message:'绑定手机失败',
+                                background:'#ce4141'
+                            })
+                        }
+                    })
+
+            },
+            checkPhoneBind:function(){
+                return new Promise((resolve, reject) => {
+                    _post('/api/v1/app/phone/check',{mobile:this.info_phone})
+                        .then(res=>{
+                            if(!res.state){
+                                if(res > 10){
+                                    resolve({
+                                        state: 1,
+                                        msg: '同一个手机号只能实名10个卡'
+                                    })
+                                }else{
+                                    resolve({
+                                        state:1,
+                                        msg:'手机号码校验成功'
+                                    })
+                                }
+                            }else{
+                                resolve({
+                                    state:0,
+                                    msg:'服务器内部错误'
+                                })
+                            }
+
+                        })//校验手机是否可以绑定实名
+                })
             },
             scan:function(){
 
@@ -282,8 +498,6 @@
                     location.href = 'https://mp.weixin.qq.com/s?__biz=MzUxODA0OTAyOQ==&mid=100000010&idx=1&sn=a5269b403df4782a2413184f027a01d2&chksm=798f9d604ef81476a074d02828cc355331e354d3c37f89aa3f87ddb21004903190d858842300&mpshare=1&scene=23&srcid=0601LjTN6Zs9SunY3rvoUg4Y#rd';
                 }
             },
-
-
         }
     };
 </script>

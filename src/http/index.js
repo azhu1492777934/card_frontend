@@ -28,7 +28,10 @@ function _post(url,param){
         }).then(res=>{
             resolve(res)
         }).catch(err=>{
-            console.log(err,'异常')
+            resolve({
+                state:0,
+                msg:'服务出小差啦，请稍后查询'
+            })
         })
     })
 }
@@ -47,7 +50,10 @@ function _get(url,param){
         }).then(res=>{
             resolve(res)
         }).catch(err=>{
-            console.log(err,'异常')
+            resolve({
+                state:0,
+                msg:'服务出小差啦，请稍后查询'
+            })
         })
     })
 }

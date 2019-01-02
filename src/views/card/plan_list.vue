@@ -2,15 +2,14 @@
     <div class="plan-wrap">
         <div class="plan-type-wrap">
             <div class="plan-type-inner-wrap">
-                <span @click="planTypeClikc(index)" v-for="(item,index) in plan_type_name"
-                      :class="{'active_type':index==cur_plan_type_index}">{{item}}</span>
+                <span ref="ref_plan_type" @click="planTypeClikc(index)" v-for="(item,index) in plan_type_name" :class="{'active_type':index==cur_plan_type_index}">{{item}}</span>
             </div>
         </div>
         <div class="van-swipe-wrap" ref="vanSwiperWwrap">
-            <van-swipe ref="swiperVant" :show-indicators="false" @change="swiperOnChange">
+            <van-swipe ref="swiperVant" :show-indicators="false"  @change="swiperOnChange">
                 <van-swipe-item v-for="(item,index) in plan_type" :key="item">
                     <ul class="plan-list-wrap">
-                        <li @click="choosePlanClick(inner_index)" v-for="(inner_item,inner_index) in mock_list[item]"
+                        <li @click="choosePlanClick(inner_index)" v-for="(inner_item,inner_index) in plan_list[item]"
                             :class="{'activedPlan':inner_index==choose_plan_index,'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0}">
                             <div class="plan-info-wrap">
                                 <p class="plan-name">{{ inner_item.name }}</p>
@@ -37,9 +36,13 @@
             </van-swipe>
         </div>
 
-        <div class="btn-recharge-wrap">
+        <div v-show="!load_plan_list" class="btn-recharge-wrap">
             <button @click="recharge">充值</button>
         </div>
+
+        <van-popup :close-on-click-overlay="false" v-model="load_plan_list">
+            <p class="showTip">{{load_plan_msg}}</p>
+        </van-popup>
 
     </div>
 </template>
@@ -48,10 +51,11 @@
     html, body, #app, .plan-wrap {
         height: 100%;
     }
+    @import "../../assets/less/common";
 
     .plan-wrap {
-        .van-swipe-wrap {
-            overflow: auto;
+        .van-swipe{
+            height: 100%;
         }
         .plan-type-wrap {
             display: flex;
@@ -79,6 +83,8 @@
         }
         //套餐列表
         .plan-list-wrap {
+            height: 100%;
+            overflow-y: auto;
             li {
                 position: relative;
                 width: 90%;
@@ -192,8 +198,9 @@
 
 <script>
 
-    import {Swipe, SwipeItem,Toast} from 'vant';
-    import {setStorage} from "../../utilies";
+    import {Swipe, SwipeItem,Toast,Popup} from 'vant';
+    import {setStorage,getStorage} from "../../utilies";
+    import {_get} from "../../http";
     // @ is an alias to /src
     export default {
         name: "home",
@@ -203,301 +210,58 @@
                 "moth_plan": null,
                 "accumulated_plan": null,
                 "speedup_plan": null,
+                load_plan_list:true,
+                load_plan_msg:'正在加载套餐中,请等候',
                 plan_type: [],
                 plan_type_name: [],
                 cur_plan_type_index: 0,//当前选中套餐类型
                 choose_plan_index: 0,//当前选中套餐
-                mock_list: {
-                    "0": [
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "",
-                            "id": 5501,
-                            "is_elb_deductible": 10,
-                            "is_recommend": false,
-                            "market_price": 40.0,
-                            "max_deductible_elb": null,
-                            "name": "1G\u6708\u5957\u9910",
-                            "price": 6.0,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u67081.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "13",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "",
-                            "id": 10071,
-                            "is_elb_deductible": 45,
-                            "is_recommend": false,
-                            "market_price": 39.0,
-                            "max_deductible_elb": null,
-                            "name": "\u9996\u5145\u4f18\u60e0\u5957\u99103G/\u6708",
-                            "price": 9.9,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u67083.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "",
-                            "id": 9299,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 99.0,
-                            "max_deductible_elb": null,
-                            "name": "12G*1\u4e2a\u6708",
-                            "price": 29.9,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u670812.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": 12,
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "",
-                            "id": 10072,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 99.0,
-                            "max_deductible_elb": null,
-                            "name": "12G*1\u4e2a\u6708",
-                            "price": 29.9,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u670812.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": -1,
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "30G\u4e00\u4e2a\u6708\uff0c\u6bcf\u670826\u53f724\u70b9\u6e05\u96f6",
-                            "id": 9288,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 139.0,
-                            "max_deductible_elb": null,
-                            "name": "30G/1\u4e2a\u6708",
-                            "price": 59.0,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u670830.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 360,
-                            "describe": "",
-                            "id": 9298,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 199.0,
-                            "max_deductible_elb": null,
-                            "name": "3G*12\u4e2a\u6708",
-                            "price": 99.0,
-                            "remark": "\u6709\u6548\u671f360\u5929,\u6bcf\u67083.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "30G\u4e00\u4e2a\u6708\uff0c\u6bcf\u670826\u53f724\u70b9\u6e05\u96f6",
-                            "id": 9288,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 139.0,
-                            "max_deductible_elb": null,
-                            "name": "30G/1\u4e2a\u6708",
-                            "price": 59.0,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u670830.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 360,
-                            "describe": "",
-                            "id": 9298,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 199.0,
-                            "max_deductible_elb": null,
-                            "name": "3G*12\u4e2a\u6708",
-                            "price": 99.0,
-                            "remark": "\u6709\u6548\u671f360\u5929,\u6bcf\u67083.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "30G\u4e00\u4e2a\u6708\uff0c\u6bcf\u670826\u53f724\u70b9\u6e05\u96f6",
-                            "id": 9288,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 139.0,
-                            "max_deductible_elb": null,
-                            "name": "30G/1\u4e2a\u6708",
-                            "price": 59.0,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u670830.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 360,
-                            "describe": "",
-                            "id": 9298,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 199.0,
-                            "max_deductible_elb": null,
-                            "name": "3G*12\u4e2a\u6708",
-                            "price": 99.0,
-                            "remark": "\u6709\u6548\u671f360\u5929,\u6bcf\u67083.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": -1,
-                            "type": 1
-                        },
-                    ],
-                    "1": [
-                        {
-                            "card_source": 16,
-                            "day": 90,
-                            "describe": "\u5957\u9910\u6709\u6548\u671f\u4e3a3\u4e2a\u6708\uff0c527GB/\u6bcf\u6708(51G\u9ad8\u901f+476G\u4e2d\u901f)\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u3002",
-                            "id": 6294,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 398.0,
-                            "max_deductible_elb": null,
-                            "name": "527G*3\u4e2a\u6708",
-                            "price": 298.0,
-                            "remark": "\u6709\u6548\u671f90\u5929,\u6bcf\u6708527.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 180,
-                            "describe": "\u5957\u9910\u6709\u6548\u671f\u4e3a6\u4e2a\u6708\uff0c527GB/\u6bcf\u6708(51G\u9ad8\u901f+476G\u4e2d\u901f)\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u3002",
-                            "id": 6295,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 598.0,
-                            "max_deductible_elb": null,
-                            "name": "527G*6\u4e2a\u6708",
-                            "price": 498.0,
-                            "remark": "\u6709\u6548\u671f180\u5929,\u6bcf\u6708527.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 360,
-                            "describe": "\u5957\u9910\u6709\u6548\u671f\u4e3a12\u4e2a\u6708\uff0c527GB/\u6bcf\u6708(51G\u9ad8\u901f+476G\u4e2d\u901f)\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u3002",
-                            "id": 6296,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 1398.0,
-                            "max_deductible_elb": null,
-                            "name": "527G*12\u4e2a\u6708",
-                            "price": 698.0,
-                            "remark": "\u6709\u6548\u671f360\u5929,\u6bcf\u6708527.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 1080,
-                            "describe": "500G\u4e00\u4e2a\u6708,50G\u9ad8\u901f\u7f51\u7edc,450G\u4e2d\u901f\u7f51\u7edc,\u6bcf\u670826\u65e5\u6e05\u96f6",
-                            "id": 9296,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 1999.0,
-                            "max_deductible_elb": null,
-                            "name": "VIP 500G x 36\u4e2a\u6708",
-                            "price": 1298.0,
-                            "remark": "\u6709\u6548\u671f1080\u5929,\u6bcf\u6708500.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        }
-                    ],
-                    "2": [
-                        {
-                            "card_source": 16,
-                            "day": 30,
-                            "describe": "100GB/1\u4e2a\u6708\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u3002",
-                            "id": 9295,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 400.0,
-                            "max_deductible_elb": null,
-                            "name": "100GB/1\u4e2a\u6708",
-                            "price": 198.0,
-                            "remark": "\u6709\u6548\u671f30\u5929,\u6bcf\u6708100.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 360,
-                            "describe": "",
-                            "id": 9301,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 299.0,
-                            "max_deductible_elb": null,
-                            "name": "12G*12\u4e2a\u6708",
-                            "price": 199.0,
-                            "remark": "\u6709\u6548\u671f360\u5929,\u6bcf\u670812.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                        {
-                            "card_source": 16,
-                            "day": 180,
-                            "describe": "30G\u4e00\u4e2a\u6708\uff0c\u6bcf\u670826\u53f724\u70b9\u6e05\u96f6",
-                            "id": 9291,
-                            "is_elb_deductible": 0,
-                            "is_recommend": false,
-                            "market_price": 459.0,
-                            "max_deductible_elb": null,
-                            "name": "30G/6\u4e2a\u6708",
-                            "price": 259.0,
-                            "remark": "\u6709\u6548\u671f180\u5929,\u6bcf\u670830.0G\u6d41\u91cf\uff0c\u6bcf\u670826\u65e524\u70b9\u6e05\u96f6\u5f53\u6708\u6d41\u91cf.",
-                            "surplus_times": "False",
-                            "type": 1
-                        },
-                    ]
-                }
+                plan_list:{},
+                ref_plan_type:null,
             }
         },
         components: {
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
             [Toast.name]:Toast,
+            [Popup.name]:Popup,
         },
         created() {
             //处理套餐数据
-            for (let i in this.mock_list) {
-                if (this.mock_list[i]) {
-                    this.plan_type.push(i);
-                    if (i == 0) {
-                        this.plan_type_name.push('累计套餐');
+            _get('/api/v1/app/plan_list',{
+                iccid:getStorage('check_iccid')
+            }).then(res=>{
+                console.log(res);
+                if(res.state){
+                    this.load_plan_list = false;
+                    this.plan_list = res.data;
+
+                    for (let i in this.plan_list) {
+                        if (this.plan_list[i]) {
+                            this.plan_type.push(i);
+                            if (i == 0) {
+                                this.plan_type_name.push('累计套餐');
+                            }
+                            if (i == 1) {
+                                this.plan_type_name.push('月套餐');
+                            }
+                            if (i == 2) {
+                                this.plan_type_name.push('加油包');
+                            }
+                        }
                     }
-                    if (i == 1) {
-                        this.plan_type_name.push('月套餐');
-                    }
-                    if (i == 2) {
-                        this.plan_type_name.push('加油包');
-                    }
+
+                }else{
+                    this.load_plan_msg = res.msg;
                 }
-            }
+            })
+
+
 
         },
         mounted() {
             var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            this.$refs.vanSwiperWwrap.style.maxHeight = (clientHeight - 146) + 'px';
+            this.$refs.vanSwiperWwrap.style.height = (clientHeight - 146) + 'px';
 
         },
         methods: {
@@ -514,13 +278,33 @@
                 this.choose_plan_index = index
             },
             recharge:function () {
-                let planInfo = this.mock_list[this.cur_plan_type_index][this.choose_plan_index]
+                let planInfo = null,
+                    ref_plan_type_index = 0;//当前套餐索引
+
+                for(let i=0;i<this.$refs.ref_plan_type.length;i++){
+                    if(this.$refs.ref_plan_type[i].className=='active_type'){
+                       if(this.$refs.ref_plan_type[i].innerText=='累计套餐'){
+                           ref_plan_type_index = 0
+                       }else if(this.$refs.ref_plan_type[i].innerText=='月套餐'){
+                           ref_plan_type_index = 1
+                       }else if(this.$refs.ref_plan_type[i].innerText=='加油包'){
+                           ref_plan_type_index = 2
+                       }
+                        break;
+                    }
+                }
+
+                planInfo = this.plan_list[ref_plan_type_index][this.choose_plan_index]
+
                 if(planInfo.surplus_times<=0){
                     Toast('此套餐已售罄, 请更换套餐');
                     return
                 }
-                planInfo.iccid = '891111111100000000'
+
+                planInfo.iccid = getStorage('check_iccid');
+
                 setStorage('planInfo',planInfo);
+
                 this.$router.push({ path:'/recharge'})
             }
         }

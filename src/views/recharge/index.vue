@@ -92,12 +92,16 @@
             >
             </van-datetime-picker>
         </van-popup><!--时间选择-->
+
+        <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
+            <p class="showTip">创建订单中,请等候</p>
+        </van-popup><!--创建订单-->
     </div>
 </template>
 
 <script>
-    import {DatetimePicker, Area, Popup,Toast} from 'vant';
-    import {getStorage} from "../../utilies";
+    import {DatetimePicker, Area, Popup,Toast,Notify} from 'vant';
+    import {setStorage,getStorage} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -106,10 +110,12 @@
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
             [Popup.name]: Popup,
-            [Toast.name]:Toast
+            [Toast.name]:Toast,
+            [Notify.name]:Notify
         },
         data() {
             return {
+                rechargeShow:false,//创建订单遮罩
                 recharge_list: [
                     {
                         pay_type: 'diamond_charge',
@@ -221,10 +227,9 @@
                 if(end_date<10){
                     end_date = '0' + end_date
                 }
-
                 return {
                     endDay:end_date,
-                    endMonth:end_month,
+                    endMonth:end_month-1,
                     endYear:end_year
                 }
             },
@@ -240,7 +245,8 @@
             },//取消日期弹窗
             recharge:function () {
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
-                let param = {};
+                let param = {},
+                    _this = this;
                 rechargeInfo.pay_type=='diamond_charge'?param.status==1 : param.status=0;
                 rechargeInfo.pay_type=='over_charge'?param.rechargeInfo = rechargeInfo.pay_money : this.planInfo.price;
                 param.iccid = this.planInfo.iccid;
@@ -291,7 +297,26 @@
                     }
                 }
 
-                _post('/test',param);
+                _post('/api/v1/pay/weixin/create',param)
+                    .then(res=>{
+                        if(res.state){
+                            if(res.html){
+                                document.write(res.html);
+                            }else{
+                                Notify({
+                                    message:'充值成功'
+                                })
+                                setTimeout(function () {
+                                    setStorage('check_iccid',_this.plan_list.iccid);
+                                    _this.$router.push({path:'/card/usage'})
+                                },2000)
+                            }
+                        }else{
+                            Notify({
+                                message:res.msg
+                            })
+                        }
+                    })
             },
             filterRechargeList:function (rmb,planPrice) {
                 return this.recharge_list.filter(item=>{
@@ -361,16 +386,12 @@
             }//加速包默认不显示生效时间
 
             this.new_recharge_list = this.filterRechargeList(0,this.planInfo.price);//根据套餐价格过滤充值参数
-
-
-        },
-        mounted() {
-
         },
     }
 </script>
 
 <style lang="less" scoped>
+    @import "../../assets/less/common";
     input[type=radio] {
         -webkit-appearance: none;
         -moz-appearance: none;
