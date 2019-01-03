@@ -20,9 +20,9 @@
                 <span>身份证</span>
                 <input v-model="info_id" placeholder="请输入身份证" type="number">
             </div>
-            <div v-show="showItem.showImei">
+            <div v-show="showItem.showName">
                 <span>姓名</span>
-                <input v-model="info_name" placeholder="请输入姓名" type="number">
+                <input v-model="info_name" maxlength="15" placeholder="请输入姓名" type="text">
             </div>
             <div>
                 <span>手机号</span>
@@ -37,7 +37,7 @@
             <button @click="checkInfo" class="btn-next">下一步</button>
         </div>
         <p class="tutorial-wrap">
-            <a href="javascript:;">查看实名教程</a>
+            <a @click="toTutorial">查看实名教程</a>
         </p>
         <van-popup v-model="showItem.showFixedWrap" :close-on-click-overlay="false">
             <p class="showTip">{{showTipMsg}}</p>
@@ -95,7 +95,7 @@
                     flex: 6;
                     font-size: 30px;
                 }
-                &:nth-child(2), &:last-child {
+                &:last-child {
                     border-bottom: none;
                 }
             }
@@ -182,20 +182,21 @@
             [Notify.name]:Notify
         },
         created() {
-            if(getStorage('iccid')){
-                this.info_iccid = getStorage('iccid');
+            if(getStorage('check_iccid')){
+                this.info_iccid = getStorage('check_iccid');
             }else{
                 console.log('无iccid');
             }
 
-            _post('/payCenter/v1/iot-card/card-partner',codeParam({iccid:'8986061805001065858'}))
-                .then(res =>{
+            _get('/api/v1/app/find_iccid',{
+                iccid:getStorage('check_iccid')
+            }).then(res =>{
                    if(res.state){
-                       this.isBoss =  true
+                       this.is_boss =  true
                        this.showItem.showID = true;
                        this.showItem.showName = true
                    }else{
-                       this.isBoss = false
+                       this.is_boss = false
                        this.showItem.showID = false
                        this.showItem.showName = false
                    }
@@ -246,21 +247,26 @@
                     82: "澳门",
                     91: "国外 "
                 };
-                var tip = "";
-                var pass = true;
 
-                if (!code || !/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
+                if(!code){
+                    return{
+                        state:0,
+                        msg:'请输入您的身份证号码'
+                    }
+                }
+
+                if (!/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
                     // console.log('身份证号格式错误');
                     return {
                         state:0,
-                        msg:'身份号码错误'
+                        msg:'您的身份号码有误'
                     }
                 }
                 else if (!city[code.substr(0, 2)]) {
                     // console.log('地址编码错误');
                     return {
                         state:0,
-                        msg:'身份号码错误'
+                        msg:'您的身份号码有误'
                     }
                 }
                 else {
@@ -285,7 +291,7 @@
                             // tip = "校验位错误";
                             return {
                                 state:0,
-                                msg:'身份号码错误'
+                                msg:'您的身份号码有误'
                             }
                         }
                     }
@@ -349,13 +355,14 @@
                                 message:res.msg,
                                 background:'#ce4141'
                             })
-                            return
+                        }else{
+
                         }
                     })
 
                 clearInterval(this.timer);
                 this.disabled_code = true;
-                this.countDownMsg = this.countDown + 's';
+                this.countDownMsg = this.countDown + 's后重新获取';
 
                 this.timer = setInterval(function () {
                     _this.countDown--;
@@ -414,21 +421,19 @@
 
                 if(this.is_boss){
                     if(!checkIdResult.state){
-                        Notify({
-                            message:checkIdResult.msg,
-                            background:'#ce4141'
-                        })
+                        Notify({message:checkIdResult.msg,})
+                        return
+                    }
+
+                    if(!this.info_name){
+                        Notify({message:'请填写您的姓名'})
                         return
                     }
 
                     if(!this.regex_name.test(this.info_name) || this.info_name.length>15){
-                        Notify({
-                            message:'请填写正确的姓名',
-                            background:'#ce4141'
-                        })
+                        Notify({message:'请填写正确的姓名',})
                         return
                     }
-
                 }
 
                 if(!checkPhone.state){
@@ -496,7 +501,7 @@
                 })
             },
             scan:function(){
-                
+
             },
             toTutorial:function(){
                 if (source == 18) {

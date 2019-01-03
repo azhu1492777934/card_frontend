@@ -8,7 +8,7 @@
             </div>
         </div>
 
-        <button class="btn-getback">唤醒套餐</button>
+        <card-button @clickThrotle="revokePlan" :btnText="'唤醒套餐'"></card-button>
     </div>
 </template>
 
@@ -38,27 +38,35 @@
                 font-size: 28px;
             }
         }
-        .btn-getback{
-            position: absolute;
-            bottom: 60px;
-            left:50%;
-            width: 88%;
-            height: 80px;
-            margin-left: -44%;
-            background-image: url("../../assets/imgs/question/btn.png");
-            background-size: 100% 100%;
-            background-color: transparent;
-            color: #fff;
-            font-size: 30px;
-            font-weight: bold;
-            line-height: 80px;
-            text-align: center;
+        .btn-wrap{
+            button{
+                position: absolute;
+                bottom: 60px;
+                left:50%;
+                width: 88%;
+                height: 80px;
+                margin-left: -44%;
+                background-image: url("../../assets/imgs/question/btn.png");
+                background-size: 100% 100%;
+                background-color: transparent;
+                color: #fff;
+                font-size: 30px;
+                font-weight: bold;
+                line-height: 80px;
+                text-align: center;
+            }
         }
+
     }
 </style>
 
 <script>
     // @ is an alias to /src
+    import {_post} from "../../http";
+    import {getStorage} from "../../utilies";
+    import {Notify} from 'vant'
+    import cardButton from '../../components/button'
+
     export default {
         name: "home",
 
@@ -67,14 +75,27 @@
 
             }
         },
+        components:{
+            cardButton
+        },
         created() {
 
         },
-        mounted() {
-
-        },
         methods: {
-
+            revokePlan: function () {
+                _post('/api/v1/app/restart_device', {
+                    iccid: getStorage('check_iccid'),
+                }).then(res => {
+                    if (res.state) {
+                        Notify({message: '成功唤醒套餐,即将跳转至详情页'})
+                        setTimeout(function () {
+                            location.href = '/card/usage'
+                        }, 2000)
+                    } else {
+                        Notify({message: res.msg})
+                    }
+                })
+            }
         }
     };
 </script>

@@ -1,29 +1,30 @@
 import md5 from 'js-md5';
+
 function checkICCID(iccid) {
-    if(iccid.length < 19 || iccid.length > 20 || iccid.substr(0,2)!='89'){
+    if (iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != '89') {
         return {
-            state:0,
-            msg:'ICCID有误,请输入正确的ICCID'
+            state: 0,
+            msg: 'ICCID有误,请输入正确的ICCID'
         }
     }
-    return{
-        state:1
+    return {
+        state: 1
     }
 }//校验ICCID
 
-function formatterCardTime(){
+function formatterCardTime() {
     let date = new Date()
     var o = {
-        "month": (date.getMonth()+1)<10 ? '0'+(date.getMonth() + 1) :(date.getMonth() + 1), //月份
-        "date": date.getDate()<10?'0'+date.getDate():date.getDate(), //日
-        "hours": date.getHours()<10?'0'+date.getHours():date.getHours(), //小时
-        "minutes": date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes(), //分
-        "second": date.getSeconds()<10?'0'+date.getSeconds():date.getSeconds(), //秒
+        "month": (date.getMonth() + 1) < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1), //月份
+        "date": date.getDate() < 10 ? '0' + date.getDate() : date.getDate(), //日
+        "hours": date.getHours() < 10 ? '0' + date.getHours() : date.getHours(), //小时
+        "minutes": date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes(), //分
+        "second": date.getSeconds() < 10 ? '0' + date.getSeconds() : date.getSeconds(), //秒
     };
 
     return {
-        searchTime:o.month+'-'+o.date+' '+o.hours+':'+o.minutes,
-        millisecond:date.getTime()
+        searchTime: o.month + '-' + o.date + ' ' + o.hours + ':' + o.minutes,
+        millisecond: date.getTime()
     }
 }//记录查询时间
 
@@ -39,7 +40,7 @@ function removeStorage(key) {
     localStorage.removeItem(key)
 };
 
-function toDecimal (val) {
+function toDecimal(val) {
     var value = val.toString();
     if (value.indexOf('.') > 0) {
         var decimal = value.substr(value.indexOf('.') + 1, value.length);
@@ -57,9 +58,9 @@ function toDecimal (val) {
     }
 }//保留两位小数点
 
-function filterDate(date){
+function filterDate(date) {
     var spaceIndex = date.indexOf(' ');
-    return date.substr(0,spaceIndex);
+    return date.substr(0, spaceIndex);
 }//删除详情时间参数
 
 function objKeySort(obj) {
@@ -71,7 +72,7 @@ function objKeySort(obj) {
     return newObj;
 }//排序参数
 
-function codeParam(param,type) {
+function codeParam(param, type) {
     let commParam = {
         timestamp: Math.round(new Date().getTime() / 1000),
         version: 'v1',
@@ -79,7 +80,7 @@ function codeParam(param,type) {
         app_key: 'SMBQpaBWvVZPkpcBvDwQswDWxm',
     };
 
-    let newParam = Object.assign(param,commParam),
+    let newParam = Object.assign(param, commParam),
         sortParm = objKeySort(newParam),
         row_sign = '',
         sign = '';
@@ -92,39 +93,93 @@ function codeParam(param,type) {
 
     let finalParam = {};
 
-    if(type=='post'){
+    if (type == 'post') {
         finalParam = commParam
-    }else{
-        finalParam = Object.assign(param,commParam);
+    } else {
+        finalParam = Object.assign(param, commParam);
     }
 
     let param_str = '';
 
-    for(var i in finalParam){
-        param_str+=i+'='+finalParam[i]+'&';
+    for (var i in finalParam) {
+        param_str += i + '=' + finalParam[i] + '&';
     }
 
-    param_str = param_str.substring(0,param_str.lastIndexOf("&"));
+    param_str = param_str.substring(0, param_str.lastIndexOf("&"));
 
     return param_str
 }//支付中心及用户中心 参数加密
 
 function checkBrowser() {
     var userAgent = navigator.userAgent.toLowerCase();
-    if(userAgent.match(/Alipay/i)=="alipay"){
-        return 'ali'
-    }else if(userAgent.match(/MicroMessenger/i)=="micromessenger"){
-        return 'wx'
-    }else {
-        return 'app'
+    if (userAgent.match(/Alipay/i) == "alipay") {
+        return 'wechat'
+    } else if (userAgent.match(/MicroMessenger/i) == "micromessenger") {
+        return 'alipay'
     }
 }//查看用户环境 微信/支付宝/app
 
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
     var r = window.location.search.substr(1).match(reg);  //匹配目标参数
-    if (r != null) return unescape(r[2]); return null; //返回参数值
+    if (r != null) return unescape(r[2]);
+    return null; //返回参数值
 }
+
+function getUserInfo() {
+    //获取用户信息
+    _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
+        .then((res) => {
+            if (res.data.error == 0) {
+                let UserInfo = {
+                    account:res.data.account,
+                    avatar:res.data.avatar,
+                    nickname:res.data.nickname
+                }
+                setStorage('userInfo', UserInfo);
+            } else if (res.data.error == "11002") {
+                this.$emit("getToken");
+            } else {
+                Notify({message: res.data.msg})
+            }
+        })
+}//获取用户信息
+
+function isUserBind() {
+    return new Promise((resolve,reject)=>{
+        _get('/accountCenter/v2/user/info?'+codeParam({
+            from:checkBrowser(),
+            uuid:getStorage('decrypt_data').data.openid
+        },'get')).then(res=>{
+            if(!res.error){
+                setStorage('userBind',1)
+                resolve({
+                    state:0,
+                    msg:'已成功绑定'
+                })
+            }else if(res.error=='30005'){
+
+                resolve({
+                    state:1,
+                    msg:'用户未绑定'
+                })
+            }
+        }).catch(err=>{
+            resolve({
+                state:-1,
+                msg:'服务开小差了,请稍后再试'
+            })
+        })
+    })
+}//判断用户是否已和用户中心绑定
+
+function clickThrotle(btn){
+    clearTimeout(btn.timer);
+    btn.timer = setTimeout(function () {
+
+    },2000)
+
+}//禁止按钮频繁点击
 
 export {
     setStorage,
@@ -136,5 +191,8 @@ export {
     filterDate,
     codeParam,
     checkBrowser,
-    getUrlParam
+    getUrlParam,
+    getUserInfo,
+    isUserBind,
+    clickThrotle
 }

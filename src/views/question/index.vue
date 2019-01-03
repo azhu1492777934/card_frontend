@@ -3,10 +3,10 @@
         <p class="title">问题中心</p>
         <ul>
             <li>
-                <router-link to="/question/find_plan">1.套餐充值成功，流量通话未增加</router-link>
+                <a href="/question/find_plan">1.套餐充值成功，流量通话未增加</a>
             </li>
             <li>
-                <router-link to="/question/revoke_plan">2.流量通话显示正常，但无法使用</router-link>
+                <a href="/question/revoke_plan">2.流量通话显示正常，但无法使用</a>
             </li>
         </ul>
     </div>
@@ -51,10 +51,9 @@
 
 <script>
     // @ is an alias to /src
-    import RouterLink from "vant/packages/mixins/router-link";
+
     export default {
         name: "home",
-        components: {RouterLink},
         data() {
             return {
                 

@@ -139,7 +139,7 @@
 
 <script>
     // @ is an alias to /src
-    import {checkICCID, setStorage, formatterCardTime, getStorage, sortObj} from '../../utilies'
+    import {checkICCID, setStorage, formatterCardTime, getStorage,codeParam,getUserInfo,isUserBind,getUrlParam} from '../../utilies'
     import {Toast, Popup , Notify} from 'vant'
     import {_post} from "../../http";
 
@@ -147,6 +147,8 @@
         name: "home",
         data() {
             return {
+                state: '',//防跨域攻击
+                userInfo:{},
                 sort_recording_list: {},
                 recording_list: getStorage('recording_list')?getStorage('recording_list'):[],
                 recording_list_length: getStorage('recording_list')?getStorage('recording_list').length:0,
@@ -160,20 +162,157 @@
             [Popup.name]: Popup,
         },
         created() {
+            /*if (getStorage('token')) {
+                if(getStorage('userBind')){
+                    getUserInfo()
+                }else{
+                    isUserBind().then(res=>{
+                        if(res.state){
+                            this.$router.push({path:'/login'})
+                            //未绑定
+                        }else{
+                            getUserInfo()
+                        }
+                    })
+                }
+            } else {
+                if (getUrlParam('data')) {
+                    setStorage('auth_data', getUrlParam('data'))
+                }
+                if (getStorage('auth_data')) {
+                    /*
+                    * 已授权操作
+                    * */
+                   /* if (getStorage('state') == getUrlParam('state')) {
+                        //解密data
+                        _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
+                            data: getStorage('auth_data')
+                        }).then(res => {
+                            if (!res.data.error) {
+                                this.decrypt_data = res.data.data;
+                                setStorage('decrypt_data', res.data.data);
+
+                                //login
+                                _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
+                                    uuid: res.data.data.data.openid,
+                                    code: res.data.data.code
+                                }).then(res => {
+                                    if (!res.data.error) {
+                                        if(getStorage('userBind')){
+                                            getUserInfo()
+                                        }else{
+                                            isUserBind().then(res=>{
+                                                if(res.state){
+                                                    this.$router.push({path:'/login'})
+                                                    //未绑定
+                                                }else{
+                                                    getUserInfo()
+                                                }
+                                            })
+                                        }
+
+                                        setStorage('token', res.data.data);//获取token
+                                    } else if (res.data.error === '11002') {
+
+                                    } else if (res.data.error === '30005' || res.data.error === '11003') {
+
+                                    } else {
+                                        Notify({
+                                            message: res.data.msg
+                                        })
+                                    }
+                                })
+                            } else if (res.data.error === '11002') {
+                                this.$emit('getToken');
+                            } else {
+                                Notify({
+                                    message: res.data.msg
+                                })
+                            }
+                        })
+                        // end 状态
+                    } else {
+                        location.reload()
+                    }
+                    /*
+                   * end 已授权操作
+                   * */
+                /*} else {
+                    //授权
+                    this.state = Math.random().toString(36).substr(2);
+                    setStorage('state', this.state);
+                    _get('/accountCenter/v2/oauth/authorize?' + codeParam({
+                        client_type: 'wechat',
+                        redirect_uri: 'https://wxtest.china-m2m.com',
+                        scope: 'userinfo',
+                        state: this.state
+                    }, 'get'))
+                        .then(res => {
+                            if(!res.data.error){
+                                console.log('授权成功')
+                                // window.location.href = res.data.data
+                            }else if(res.data.error=='11002'){
+                                this.$emit('getToken');
+                            }else{
+                                Notify({
+                                    message: res.data.msg
+                                })
+                            }
+                        })
+                }
+            }*/
+                
+            if(getStorage('check_iccid')){
+                this.iccid = getStorage('check_iccid');
+            }
+
             if (getStorage('recording_list')) {
                 if(getStorage('recording_list').length){
                     this.recording_show = true;
+                }
+            }
+
+
+            let scanWatchCardIccid = getUrlParam('iccid');
+
+            if(scanWatchCardIccid){
+
+                if(getStorage('watch_card_timestamp')){
+
+                    var watch_card_timestamp = getStorage('watch_card_timestamp')
+                    var cur_date = new Date().getTime();
+
+                    if(cur_date>watch_card_timestamp){
+                        let setTime  = new Date().getTime()+(1*60*1000);
+                        setStorage('check_iccid',scanWatchCardIccid)
+                        setStorage('watch_card_timestamp',setTime);
+                        this.processCheckIccid(scanWatchCardIccid);//自动查询
+                    }else{
+                        let isWatchCardResult  = checkICCID(scanWatchCardIccid);
+                        if(isWatchCardResult.state){
+                            this.iccid = scanWatchCardIccid
+                        }else{
+                            Notify({message:isWatchCardResult.msg})
+                        }
+                    }
+                }else{
+                    this.iccid = scanWatchCardIccid;
+                    setStorage('check_iccid',scanWatchCardIccid)
+                    let setTime  = new Date().setTime(new Date().getTime()+1*60*1000);
+                    setStorage('watch_card_timestamp',setTime);
+
+                    this.processCheckIccid(scanWatchCardIccid);//自动查询
                 }
             }
         },
         methods: {
             searchIccid: function (iccid) {
                 if (!iccid) {
-                    Toast('请输入ICCID');
+                    Notify({message:'请输入ICCID'});
                     return
                 }
-                if (!checkICCID(iccid).state) {
-                    Toast(checkICCID(iccid).msg);
+                if (!this.checkSearchIccid(iccid).state) {
+                    Notify({message:this.checkSearchIccid(iccid).msg});
                     return
                 }
                 this.processCheckIccid(iccid);
@@ -228,13 +367,12 @@
                     }else{
                         setStorage('check_iccid',iccid);
                        if(res.data.status==1){
-                           _this.$router.push({path:'/card/plan_list'});
-                           //未实名
+                           _this.$router.push({path:'/card/usage'});
                        }else if(res.data.status==2){
                            setStorage('chec_realNameSource',res.data.source)
                            _this.$router.push({path:'/new_card/real_name'});
                        }else if(res.data.status==3){
-                           _this.$router.push({path:'/card/usage'});
+                           _this.$router.push({path:'/card/plan_list'});
                        }
                     }
                 })
@@ -249,6 +387,23 @@
                     var value1 = a[property];
                     var value2 = b[property];
                     return value2 - value1;
+                }
+            },
+            checkSearchIccid:function (iccid) {
+                if(!iccid){
+                    return {
+                        state:0,
+                        msg:'请输入ICCID'
+                    }
+                }
+                if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != "89") && (iccid.length != 13 && iccid.length != 11 && iccid.length != 15 && iccid.length != 16)) {
+                    return{
+                        state:0,
+                        msg:'ICCID有误,请检查'
+                    };
+                }
+                return{
+                    state:1
                 }
             }
         }

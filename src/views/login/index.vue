@@ -17,9 +17,8 @@
 
 <script>
     import {Notify} from 'vant'
-    import {codeParam, checkBrowser} from "../../utilies";
     import {_post,_get} from "../../http";
-    import {getStorage, getUrlParam, setStorage} from "../../utilies";
+    import {getStorage, getUrlParam, setStorage,getUserInfo,codeParam, checkBrowser} from "../../utilies";
 
     export default {
         data() {
@@ -29,7 +28,6 @@
                 code: "",
                 codeText: "获取验证码",
                 countdown: 60,
-                userData: {},
                 state: '',
                 client_type: '',
                 btnCode_disabled:false,
@@ -44,84 +42,8 @@
             } else {
                 this.client_type = 'alipay';
             }
-
-            /*this.userData = localStorage.getItem('decrypt_data');
-            console.log(this.userData)*/
-            if (getStorage('token')) {
-                this.userData = getStorage('userData');
-            } else {
-                if (getUrlParam('data')) {
-                    setStorage('auth_data', getUrlParam('data'))
-                }
-                if (getStorage('auth_data')) {
-                    /*
-                    * 已授权操作
-                    * */
-                    if (getStorage('state') == getUrlParam('state')) {
-                        //解密data
-                        _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
-                            data: getStorage('auth_data')
-                        }).then(res => {
-                            if (!res.data.error) {
-                                this.decrypt_data = res.data.data;
-                                setStorage('decrypt_data', res.data.data);
-
-                                //login
-                                _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
-                                    uuid: res.data.data.data.openid,
-                                    code: res.data.data.code
-                                }).then(res => {
-                                    if (!res.data.error) {
-                                        setStorage('token', res.data.data);
-                                    } else if (res.data.error === '11002') {
-
-                                    } else if (res.data.error === '30005' || res.data.error === '11003') {
-
-                                    } else {
-                                        Notify({
-                                            message: res.data.msg
-                                        })
-                                    }
-                                })
-                            } else if (res.data.error === '11002') {
-                                this.$emit('getToken');
-                            } else {
-                                Notify({
-                                    message: res.data.msg
-                                })
-                            }
-                        })
-                        // end 状态
-                    } else {
-                        location.reload()
-                    }
-                    /*
-                   * end 已授权操作
-                   * */
-                } else {
-                    //授权
-                    this.state = Math.random().toString(36).substr(2);
-                    setStorage('state', this.state);
-                    _get('/accountCenter/v2/oauth/authorize?' + codeParam({
-                        client_type: 'wechat',
-                        redirect_uri: 'https://wxtest.china-m2m.com',
-                        scope: 'userinfo',
-                        state: this.state
-                    }, 'get'))
-                        .then(res => {
-                            if(!res.data.error){
-                                console.log('授权成功')
-                                // window.location.href = res.data.data
-                            }else if(res.data.error=='11002'){
-                                this.$emit('getToken');
-                            }else{
-                                Notify({
-                                    message: res.data.msg
-                                })
-                            }
-                        })
-                }
-            }
+            //获取用户信息
+            this.decrypt_data = getStorage('decrypt_data');
         },
         methods: {
             login() {
@@ -136,10 +58,10 @@
                         mobile: this.phone,
                         code: this.code,
                         from: this.client_type,
-                        uuid: this.userData.openid,
-                        nickname: this.userData.nickname,
-                        gender: this.userData.sex,
-                        avatar: this.userData.headimgurl
+                        uuid: this.decrypt_data.data.openid,
+                        nickname: this.decrypt_data.data.nickname,
+                        gender: this.decrypt_data.data.sex,
+                        avatar: this.decrypt_data.data.headimgurl
                     }).then((res) => {
                         if (res.data.error == 0) {
                             Notify({message:'绑定成功'});

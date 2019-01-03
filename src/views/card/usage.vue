@@ -17,7 +17,7 @@
                         </div>
                         <div>
                             <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                            <em>?</em>
+                            <em href="/question">?</em>
                         </div>
                     </div>
                 </div>
@@ -101,12 +101,12 @@
                                         </p><!--流量卡-->
                                         <div class="speedup-wrap" v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
                                     <span v-if="item.planCellInfo.key!='MG500'">
-                                        <a v-if="item.planCellInfo.plan_cell_status==1" :href="'/weixin/telcom/plans_80g?iccid={{usageInfo.iccid}}'">
+                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/speedup/plan_80">
                                             购买加速包
                                         </a>
                                     </span>
                                             <span v-else>
-                                        <a v-if="item.planCellInfo.plan_cell_status==1" :href="'/weixin/telcom/plans_500g?iccid={{usageInfo.iccid}}'"></a>
+                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/speedup/plan_500"></a>
                                     </span>
                                         </div>
                                     </div>
