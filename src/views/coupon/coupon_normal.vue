@@ -12,12 +12,11 @@
 
             <div class="coupon-code-wrap">
                 <span>券号:</span>
-                <input class="search-input_" maxlength="20" type="search" name="coupon"
-                                       placeholder="请输入兑换码">
+                <input v-model="coupon_code" maxlength="15" placeholder="请输入兑换码">
             </div>
 
             <div class="btn-exchange-wrap">
-                <button class="btn-exchange">立即兑换</button>
+                <button @click="exchange" class="btn-exchange">立即兑换</button>
             </div>
         </div>
     </div>
@@ -120,6 +119,8 @@
 
 <script>
     // @ is an alias to /src
+    import {Notify} from 'vant'
+    import {getStorage,setStorage} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -127,13 +128,43 @@
 
         data() {
             return {
-                iccid: '8986061805001065858'
+                iccid: '',
+                coupon_code:'',
             }
         },
         created() {
-
+            if(getStorage('check_iccid')){
+                this.iccid = getStorage('check_iccid');
+            }else{
+                this.router.push('/card/lookup')
+            }
         },
-        methods: {}
+        methods: {
+            exchange:function () {
+                if(!this.coupon_code){
+                    Notify({message:'请输入兑换码'})
+                    return
+                }else if(!/[a-zA-Z0-9_]{4,12}/.test(this.coupon_code)){
+                    Notify({message:'您的兑换码有误,请检查'})
+                    return
+                }
+                _post('/api/v1/app/coupon/exchange',{
+                    iccid:this.iccid,
+                    no:this.coupon_code
+                }).then(res=>{
+                    if(res.state){
+                        let _this = this;
+                        Notify({message:'兑换成功'})
+                        setTimeout(function () {
+                            setStorage('check_iccid',_this.iccid)
+                            _this.$router.push({path:'/card/usage'});
+                        },2000)
+                    }else{
+                        Notify({message:res.msg})
+                    }
+                })
+            }
+        }
     };
 </script>
 

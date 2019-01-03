@@ -11,7 +11,7 @@
 
 <script>
     // @ is an alias to /src
-    import axios from 'axios'
+    import {Notify} from 'vant'
     import speedup from '../../components/speedup/index'
     import {_post} from "../../http";
 
@@ -47,7 +47,13 @@
                     iccid:'8986061805001065858',
                     rating_id:this.list[speedupIndex].rating_id
                 }).then(res=>{
-                    console.log(res);
+                    if(res.state){
+                        if(res.html){
+                            document.write(res.html)
+                        }
+                    }else{
+                        Notify({message:res.msg})
+                    }
                 })
 
             }

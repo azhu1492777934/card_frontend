@@ -153,7 +153,7 @@
 
             <div  class="btn-recharge-wrap">
                 <button @click="recharge">套餐查询</button>
-                <a href="">卡券兑换</a>
+                <a href="/coupon/index">卡券兑换</a>
             </div>
         </div>
 
@@ -433,9 +433,10 @@
 
 
     import { swiper, swiperSlide } from 'vue-awesome-swiper'
-    import {Swipe, SwipeItem,Notify,Popup} from 'vant';
+    import { Notify,Popup} from 'vant';
     import {getStorage,setStorage,toDecimal} from "../../utilies";
     import {_get} from "../../http";
+    import RouterLink from "vant/packages/mixins/router-link";
 
     export default {
         name: "home",
@@ -485,8 +486,7 @@
             }
         },
         components: {
-            [Swipe.name]: Swipe,
-            [SwipeItem.name]: SwipeItem,
+            RouterLink,
             [Notify.name]:Notify,
             [Popup.name]:Popup,
             swiper,

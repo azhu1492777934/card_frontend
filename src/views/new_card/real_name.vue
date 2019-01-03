@@ -334,6 +334,14 @@
                     return
                 }
 
+
+                // this.checkPhoneBind().then(res=>{
+                //     Notify({message:res.msg})
+                //     if(res.state!==2){
+                //         return
+                //     }
+                // })//检测实名卡数
+
                 _post('/api/v1/app/phone/check',{mobile:this.info_phone})
                     .then(res=>{
                         if(!res.state){
@@ -360,43 +368,42 @@
                     }
                 },1000)
 
-                /*_post('/api/v1/app/messages/send',{mobile:this.info_phone})
+                _post('/api/v1/app/messages/send',{mobile:this.info_phone})
                     .then(function (res) {
                         if(!res.responseJSON.code){
                             eLink.showMsg('验证码发送失败, 请稍后再试');
                         }
 
                         if (res.responseJSON.code == 1003) {
-                            eLink.showMsg("服务内部错误");
+                            Notify({message:'服务内部错误'});
                         }
                         else if (res.responseJSON.code == 2001) {
-                            eLink.showMsg("参数错误");
+                            Notify({message:'参数错误'});
                         }
                         else if (res.responseJSON.code == 2004) {
-                            eLink.showMsg("微信服务过期");
+                            Notify({message:'微信服务过期'});
                         }
                         else if (res.responseJSON.code == 2005) {
-                            eLink.showMsg("验证码发送过于频繁,请稍后再试");
+                            Notify({message:'验证码发送过于频繁,请稍后再试'});
                         }
                         else if (res.responseJSON.code == 2006) {
-                            eLink.showMsg("消息服务错误");
+                            Notify({message:'验消息服务错误'});
                         }
                         else if (res.responseJSON.code == 2007) {
-                            eLink.showMsg("无效验证码");
+                            Notify({message:'无效验证码'});
                         }
                         else if (res.responseJSON.code == 2008) {
-                            eLink.showMsg("验证码过期");
+                            Notify({message:'验证码过期'});
                         }
                         else if (res.responseJSON.code == 2010) {
-                            eLink.showMsg("短信一小时内同一手机号码发送次数不能超过3条");
+                            Notify({message:'短信一小时内同一手机号码发送次数不能超过3条'});
                         }
                         else if (res.responseJSON.code == 2011) {
-                            eLink.showMsg("同一手机号每60秒只能发送一条");
+                            Notify({message:'同一手机号每60秒只能发送一条'});
                         } else {
-                            eLink.showMsg("验证码发送过于频繁");
+                            Notify({message:'验证码发送过于频繁'});
                         }
-                    })*/
-
+                    })
 
             },//获取验证码
 
@@ -467,14 +474,14 @@
                     _post('/api/v1/app/phone/check',{mobile:this.info_phone})
                         .then(res=>{
                             if(!res.state){
-                                if(res > 10){
+                                if(res.data > 10){
                                     resolve({
                                         state: 1,
                                         msg: '同一个手机号只能实名10个卡'
                                     })
                                 }else{
                                     resolve({
-                                        state:1,
+                                        state:2,
                                         msg:'手机号码校验成功'
                                     })
                                 }
@@ -489,7 +496,7 @@
                 })
             },
             scan:function(){
-
+                
             },
             toTutorial:function(){
                 if (source == 18) {

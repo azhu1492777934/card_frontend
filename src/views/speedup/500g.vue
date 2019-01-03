@@ -53,27 +53,7 @@
         created() {
 
         },
-        mounted(){
-            // _post('/wy/playlist/detail?id=19723756','').then(res=>{
-            //     console.log(res);
-            // })
 
-            /*_post('/api/v1/pay/weixin/create',{
-                iccid:'8986061805001065858',
-                rating_id:this.list[0].rating_id
-            }).then(res=>{
-                console.log(res);
-            })*/
-
-            // _get('/api/v1/app/cards/telcom/usage',{
-            //     iccid:'8986061805001065858'
-            // }).then(res=>{
-            //     console.log(res);
-            // })
-
-
-
-        },
         methods: {
             recharge_500: function (speedupIndex) {
                 /*
@@ -83,10 +63,17 @@
                     iccid:'8986061805001065858',
                     rating_id:this.list[speedupIndex].rating_id
                 }).then(res=>{
-                    console.log(res);
+                    if(res.state){
+                        if(res.html){
+                            document.write(res.html)
+                        }
+                    }else{
+                        Notify({message:res.msg})
+                    }
                 })
 
             }
+
         }
     };
 </script>
