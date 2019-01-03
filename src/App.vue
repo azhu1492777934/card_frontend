@@ -1,8 +1,31 @@
 <template>
   <div id="app">
-    <router-view v-wechat-title="$route.meta.title" />
+    <router-view @getToken="refreshToken" v-wechat-title="$route.meta.title" />
   </div>
 </template>
+
+<script>
+  import {_get} from "./http";
+  import {codeParam} from "./utilies";
+  import {getStorage} from "./utilies";
+
+  export default {
+      name:'App',
+      methods:{
+          refreshToken(){
+              _get("/accountCenter/v2/auth/refresh?"+codeParam({
+                 token:getStorage('token')
+              },'get'))
+                  .then((res) => {
+                  if(res.data.error == 0){
+                      localStorage.setItem("token",res.data.data);
+                      location.reload();
+                  }
+              })
+          }
+      }
+  }
+</script>
 
 <style lang="less">
 #app {

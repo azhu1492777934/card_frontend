@@ -48,8 +48,8 @@
                         <p>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}} 已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</p>
                         <p>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}} 已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</p>
                     </div>
-                    <div class="to-flow-wrap">
-                        <a href=""> 流量用量详情> </a>
+                    <div @click="toConnnection" class="to-flow-wrap">
+                        <a> 流量用量详情> </a>
                     </div>
                 </div>
             </div>
@@ -60,8 +60,8 @@
                     <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array" :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
                 </p>
                 <div class="van-swipe-wrap">
-                    <van-swipe ref="vanSwiperWwrap" :width="swiperwidth" :show-indicators="false" :loop="false" @change="swiperOnChange">
-                        <van-swipe-item>
+                    <swiper ref="mySwiper" :options="swiperOption">
+                        <swiper-slide>
                             <ul v-if="hasUsagePlan" class="usage-plan-wrap">
                                 <li v-for="(item,index) in usageInfo.usage.plans">
                                     <div class="plan-info-wrap">
@@ -115,8 +115,9 @@
                             <div v-else class="no-plan">
                                 <img src="../../assets/imgs/card/usage/bg_no_plan.svg" alt="">
                             </div>
-                        </van-swipe-item>
-                        <van-swipe-item>
+                        </swiper-slide>
+
+                        <swiper-slide>
                             <ul v-if="hasOrderPlan" class="order-plan-wrap">
                                 <li v-for="(item,index) in usageInfo.orders">
                                     <div class="plan-info-wrap">
@@ -144,8 +145,8 @@
                             <div v-else class="no-plan">
                                 <img src="../../assets/imgs/card/usage/bg_no_recharge.svg" alt="">
                             </div>
-                        </van-swipe-item>
-                    </van-swipe>
+                        </swiper-slide>
+                    </swiper>
                 </div>
 
             </div>
@@ -164,6 +165,7 @@
 </template>
 
 <style lang="less">
+    @import "~swiper/dist/css/swiper.min.css";
     #app,html,body,.plan-usage-wrap{height: 100%}
     html{background-color: #fbfafa;}
     .plan-usage-wrap {
@@ -321,7 +323,7 @@
                 width: 100%;
                 padding: 0 25px;
                 box-sizing: border-box;
-                .van-swipe{
+                .swiper-container{
                     background-color: #fff;
                     border-radius: 8px;
                 }
@@ -429,16 +431,17 @@
 <script>
     // @ is an alias to /src
 
-    import {Swipe, SwipeItem, Toast,Notify,Popup} from 'vant';
+
+    import { swiper, swiperSlide } from 'vue-awesome-swiper'
+    import {Swipe, SwipeItem,Notify,Popup} from 'vant';
     import {getStorage,setStorage,toDecimal} from "../../utilies";
     import {_get} from "../../http";
 
     export default {
         name: "home",
-
         data() {
+            const _this = this;
             return {
-                swiperwidth:300,
                 load_plan:true,
                 load_plan_msg:'获取套餐信息,请等候',
                 watch_source: [5, 10, 12, 17, 18, 20, 22],
@@ -472,14 +475,22 @@
                 hasUsagePlan:false,
                 hasOrderPlan:false,
                 usageInfo: {},
+                swiperOption:{
+                    on:{
+                        slideChangeTransitionEnd:function (swiper) {
+                            _this.cur_plan_type_index = this.activeIndex
+                        }
+                    }
+                }
             }
         },
         components: {
             [Swipe.name]: Swipe,
             [SwipeItem.name]: SwipeItem,
-            [Toast.name]: Toast,
             [Notify.name]:Notify,
             [Popup.name]:Popup,
+            swiper,
+            swiperSlide
         },
         created() {
             if(getStorage('check_iccid')){
@@ -603,32 +614,14 @@
         },
         mounted() {
             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            let clientWidth = document.documentElement.clientWidth || document.body.clientWidth;
-            this.swiperwidth = clientWidth;
-            // this.$refs.vanSwiperWwrap.$el.style.height = (clientHeight - 320) ;
+            this.$refs.mySwiper.$el.style.height = (clientHeight - 320) +'px';
         },
         methods: {
-            swiperOnChange: function (index) {
-                this.cur_plan_type_index = index;
-                this.choose_plan_index = 0;
-            },
             planTypeClikc: function (index) {
                 this.cur_plan_type_index = index;
-                this.choose_plan_index = 0;
-                console.log(index);
-                this.$refs.vanSwiperWwrap.swipeTo(index);
-            },
-            choosePlanClick: function (index) {
-                this.choose_plan_index = index
+                this.$refs.mySwiper.swiper.slideTo(index);
             },
             recharge: function () {
-                let planInfo = this.mock_list[this.cur_plan_type_index][this.choose_plan_index]
-                if (planInfo.surplus_times <= 0) {
-                    Toast('此套餐已售罄, 请更换套餐');
-                    return
-                }
-                planInfo.iccid = '891111111100000000'
-                setStorage('planInfo', planInfo);
                 this.$router.push({path: '/recharge'})
             },
             refreshOrActivated:function(){
@@ -660,6 +653,9 @@
                         })
 
                 }
+            },
+            toConnnection:function(){
+               this.$router.push({path:'/card/connection'});
             },
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);

@@ -7,11 +7,11 @@
 
 var domain_test = {
     card_server : 'https://cardserver_test.china-m2m.com',
-    accountCenter : 'http://zfbtest.china-m2m.com',
+    accountCenter : 'http://uc-test.api.china-m2m.com',
 }
 var domain_production = {
     card_server : 'https://cardserver_test.china-m2m.com',
-    accountCenter : 'http://zfbtest.china-m2m.com',
+    accountCenter : 'http://uc.api.china-m2m.com',
 }
 
 module.exports = {
@@ -19,7 +19,6 @@ module.exports = {
         disableHostCheck:true,
         proxy: {
             '/api': {
-                // target: domain_test.card_server,
                 target:'http://cardserver_test.china-m2m.com',
                 changeOrigin: true,
                 pathRewrite: {
@@ -30,7 +29,7 @@ module.exports = {
                 target:domain_test.accountCenter,
                 changeOrigin:true,
                 pathRewrite:{
-                    '^/accountCenter':''
+                    '^/accountCenter':'http://uc-test.api.china-m2m.com'
                 }
             },
         }

@@ -14,7 +14,7 @@ function checkICCID(iccid) {
 function formatterCardTime(){
     let date = new Date()
     var o = {
-        "month": (date.getMonth() + 1), //月份
+        "month": (date.getMonth()+1)<10 ? '0'+(date.getMonth() + 1) :(date.getMonth() + 1), //月份
         "date": date.getDate()<10?'0'+date.getDate():date.getDate(), //日
         "hours": date.getHours()<10?'0'+date.getHours():date.getHours(), //小时
         "minutes": date.getMinutes()<10?'0'+date.getMinutes():date.getMinutes(), //分
@@ -104,7 +104,7 @@ function codeParam(param,type) {
         param_str+=i+'='+finalParam[i]+'&';
     }
 
-    param_str = param_str.subscribe(0,param_str.lastIndexOf("&"));
+    param_str = param_str.substring(0,param_str.lastIndexOf("&"));
 
     return param_str
 }//支付中心及用户中心 参数加密
