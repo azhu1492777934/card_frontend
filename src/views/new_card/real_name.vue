@@ -42,6 +42,20 @@
         <van-popup v-model="showItem.showFixedWrap" :close-on-click-overlay="false">
             <p class="showTip">{{showTipMsg}}</p>
         </van-popup>
+
+        <van-popup v-model="showItem.showVerifyCode" :close-on-click-overlay="false" class="verify-code-wrap">
+            <div class="verify-code-inner">
+                <p class="title">提示<span class="btn-close">&times</span></p>
+                <p>实名校验码将用于下一步实名步骤中</p>
+                <p class="code-wrap">校验码:<input id="j-verify-code" v-model="verifyCode"/>
+                    <button data-clipboard-action="copy" data-clipboard-target="#j-verify-code" class="btn-copy">复制校验码
+                    </button>
+                </p>
+                <p class="btn-nex-wrap">
+                    <button class="j-btn-next">下一步实名</button>
+                </p>
+            </div>
+        </van-popup>
     </div>
 </template>
 
@@ -54,10 +68,28 @@
         border: none;
         outline: none;
     }
-    .fixed-wrap-imei {position: fixed;top: 0;left: 0; width: 100%;height: 100%;z-index: 99;}
 
-    .check-imei-info{position: relative;top: 40%;width: 80%;margin: 0 auto;padding: 30px;background: #fff;color: #333;text-align: center;font-size: 24px;border-radius: 5px;}
+    .fixed-wrap-imei {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99;
+    }
 
+    .check-imei-info {
+        position: relative;
+        top: 40%;
+        width: 80%;
+        margin: 0 auto;
+        padding: 30px;
+        background: #fff;
+        color: #333;
+        text-align: center;
+        font-size: 24px;
+        border-radius: 5px;
+    }
 
     .card-activated-wrap {
         .tip-wrap {
@@ -134,14 +166,70 @@
             }
         }
 
+        .verify-code-wrap{
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .verify-code-inner {
+            align-items: center;
+            position: relative;
+            width: 90%;
+            margin: 0 auto;
+            padding: 25px;
+            background-color: #fff;
+            color: #333;
+            font-size: 32px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            p {
+                padding-bottom: 25px;
+                &:last-child {
+                    padding: 25px 0;
+                    text-align: right;
+                }
+            }
+
+            button {
+                padding: 15px 30px;
+                border-radius: 8px;
+                color: #fff;
+                font-size: 22px;
+                background-color: #e4a750;
+            }
+
+            .title {
+                font-size: 40px;
+                text-align: center;
+            }
+
+            .btn-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                line-height: .9;
+                color: #e4a750;
+            }
+
+            .code-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .code-wrap input {
+                width: 150px
+            }
+        }
+
     }
 </style>
 
 <script>
-    import { Popup,Notify } from 'vant';
-    import {_get,_post} from "../../http";
+    import {Popup, Notify, Dialog} from 'vant';
+    import {_get, _post} from "../../http";
 
-    import {codeParam,getStorage,inArray} from "../../utilies";
+    import {codeParam, getStorage, inArray} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
     export default {
@@ -152,68 +240,72 @@
                 regex_phone: /(?:^1[3456789]|^9[28])\d{9}$/,
                 regex_num: /^[1-9]\d*$/,
                 regex_name: /^[\u4e00-\u9fa5a-zA-Z]+$/,
-                is_boss:false,
+                is_boss: false,
 
-                card_tip:true,
-                card_source:'',//卡源
+                card_tip: true,
+                card_source: '',//卡源
                 info_iccid: '',
                 info_imei: '864319031839011',
                 info_id: '',
                 info_code: '',
                 info_phone: '',
-                info_name:'',
+                info_name: '',
 
-                showItem:{
-                    showID:false,
-                    showName:false,
-                    showImei:false,
-                    showFixedWrap:false
+                verifyCode:'1111',
+
+                showItem: {
+                    showID: false,
+                    showName: false,
+                    showImei: false,
+                    showFixedWrap: false,
+                    showVerifyCode:false
                 },
 
-                countDown:60,
-                countDownMsg:'获取验证码',
-                showTipMsg:'检测信息中，请等候',
+                countDown: 60,
+                countDownMsg: '获取验证码',
+                showTipMsg: '检测信息中，请等候',
 
-                timer:null,
-                disabled_code:false,
+                timer: null,
+                disabled_code: false,
             }
         },
-        components:{
-            [Popup.name]:Popup,
-            [Notify.name]:Notify
+        components: {
+            [Popup.name]: Popup,
+            [Notify.name]: Notify,
+            // [Dialog.name]:Dialog
         },
         created() {
 
             this.card_source = getStorage('chec_realNameSource');
-            if(inArray(this.card_source,[18, 19, 20, 21,22])>=0){
+            if (inArray(this.card_source, [18, 19, 20, 21, 22]) >= 0) {
                 this.card_tip = !this.card_tip
             }
 
-            if(getStorage('check_iccid')){
+            if (getStorage('check_iccid')) {
                 this.info_iccid = getStorage('check_iccid');
-            }else{
+            } else {
                 console.log('无iccid');
             }
 
-            _get('/api/v1/app/find_iccid',{
-                iccid:getStorage('check_iccid')
-            }).then(res =>{
-                   if(res.state){
-                       this.is_boss =  true
-                       this.showItem.showID = true;
-                       this.showItem.showName = true
-                   }else{
-                       this.is_boss = false
-                       this.showItem.showID = false
-                       this.showItem.showName = false
-                   }
-                   this.showItem.showFixedWrap = false
-                })//检测是否是大佬账户
+            _get('/api/v1/app/find_iccid', {
+                iccid: getStorage('check_iccid')
+            }).then(res => {
+                if (res.state) {
+                    this.is_boss = true
+                    this.showItem.showID = true;
+                    this.showItem.showName = true
+                } else {
+                    this.is_boss = false
+                    this.showItem.showID = false
+                    this.showItem.showName = false
+                }
+                this.showItem.showFixedWrap = false
+            })//检测是否是大佬账户
 
         },
         methods: {
-            inArray:function (elem, arr, i) {
-                return arr == null ? -1 : arr.indexOf( elem, i);
+            inArray: function (elem, arr, i) {
+                return arr == null ? -1 : arr.indexOf(elem, i);
             },
             //验证身份证
             verifyID: function (code) {
@@ -255,25 +347,25 @@
                     91: "国外 "
                 };
 
-                if(!code){
-                    return{
-                        state:0,
-                        msg:'请输入您的身份证号码'
+                if (!code) {
+                    return {
+                        state: 0,
+                        msg: '请输入您的身份证号码'
                     }
                 }
 
                 if (!/^\d{6}(18|19|20)?\d{2}(0[1-9]|1[012])(0[1-9]|[12]\d|3[01])\d{3}(\d|X)$/i.test(code)) {
                     // console.log('身份证号格式错误');
                     return {
-                        state:0,
-                        msg:'您的身份号码有误'
+                        state: 0,
+                        msg: '您的身份号码有误'
                     }
                 }
                 else if (!city[code.substr(0, 2)]) {
                     // console.log('地址编码错误');
                     return {
-                        state:0,
-                        msg:'您的身份号码有误'
+                        state: 0,
+                        msg: '您的身份号码有误'
                     }
                 }
                 else {
@@ -297,52 +389,52 @@
                         if (parity[sum % 11] != code[17]) {
                             // tip = "校验位错误";
                             return {
-                                state:0,
-                                msg:'您的身份号码有误'
+                                state: 0,
+                                msg: '您的身份号码有误'
                             }
                         }
                     }
                 }
-               return{
-                   state:1,
-               }
+                return {
+                    state: 1,
+                }
 
             },
-            checkPhone:function(){
-                if(!this.info_phone){
+            checkPhone: function () {
+                if (!this.info_phone) {
                     return {
-                        state:0,
-                        msg:'请输入您的手机号码'
+                        state: 0,
+                        msg: '请输入您的手机号码'
                     }
                 }
                 if (!this.regex_phone.test(this.info_phone)) {
                     return {
-                        state:0,
-                        msg:'手机号码有误'
+                        state: 0,
+                        msg: '手机号码有误'
                     }
                 }
-                return{
-                    state:1
+                return {
+                    state: 1
                 }
             },
-            checkCode:function(){
+            checkCode: function () {
                 if (!this.regex_num.test(this.info_code)) {
-                    return{
-                        state:0,
-                        msg:'验证码有误'
+                    return {
+                        state: 0,
+                        msg: '验证码有误'
                     }
                 }
-                return{
-                    state:1
+                return {
+                    state: 1
                 }
             },
-            getCode:function(){
+            getCode: function () {
                 let _this = this;
                 let resultCheckPhone = this.checkPhone();
-                if(!resultCheckPhone.state){
+                if (!resultCheckPhone.state) {
                     Notify({
-                        message:resultCheckPhone.msg,
-                        background:'#ce4141'
+                        message: resultCheckPhone.msg,
+                        background: '#ce4141'
                     })
                     return
                 }
@@ -356,14 +448,14 @@
                 // })//检测实名卡数
 
 
-                _post('/api/v1/app/phone/check',{mobile:this.info_phone})
-                    .then(res=>{
-                        if(!res.state){
+                _post('/api/v1/app/phone/check', {mobile: this.info_phone})
+                    .then(res => {
+                        if (!res.state) {
                             Notify({
-                                message:res.msg,
-                                background:'#ce4141'
+                                message: res.msg,
+                                background: '#ce4141'
                             })
-                        }else{
+                        } else {
 
                             clearInterval(this.timer);
                             this.disabled_code = true;
@@ -372,64 +464,63 @@
                             this.timer = setInterval(function () {
                                 _this.countDown--;
                                 _this.countDownMsg = _this.countDown + 's重新获取'
-                                if(_this.countDown<=0){
+                                if (_this.countDown <= 0) {
                                     clearInterval(_this.timer);
                                     _this.countDownMsg = '获取验证码';
                                     _this.countDown = 60;
                                     _this.disabled_code = false;
                                 }
-                            },1000)
+                            }, 1000)
 
-                            _post('/api/v1/app/messages/send',{mobile:this.info_phone})
+                            _post('/api/v1/app/messages/send', {mobile: this.info_phone})
                                 .then(function (res) {
 
-                                    if(res.state){
-                                        Notify({message:'验证码发送成功'});
-                                    } else{
-                                        Notify({message:res.msg});
+                                    if (res.state) {
+                                        Notify({message: '验证码发送成功'});
+                                    } else {
+                                        Notify({message: res.msg});
                                     }
                                 })
                         }
                     })
 
 
-
             },//获取验证码
 
-            checkInfo:function(){
+            checkInfo: function () {
                 let checkIdResult = this.verifyID(this.info_id),
                     checkPhone = this.checkPhone(),
                     checkCode = this.checkCode();
 
-                if(this.is_boss){
-                    if(!checkIdResult.state){
-                        Notify({message:checkIdResult.msg,})
+                if (this.is_boss) {
+                    if (!checkIdResult.state) {
+                        Notify({message: checkIdResult.msg,})
                         return
                     }
 
-                    if(!this.info_name){
-                        Notify({message:'请填写您的姓名'})
+                    if (!this.info_name) {
+                        Notify({message: '请填写您的姓名'})
                         return
                     }
 
-                    if(!this.regex_name.test(this.info_name) || this.info_name.length>15){
-                        Notify({message:'请填写正确的姓名',})
+                    if (!this.regex_name.test(this.info_name) || this.info_name.length > 15) {
+                        Notify({message: '请填写正确的姓名',})
                         return
                     }
                 }
 
-                if(!checkPhone.state){
+                if (!checkPhone.state) {
                     Notify({
-                        message:checkPhone.msg,
-                        background:'#ce4141'
+                        message: checkPhone.msg,
+                        background: '#ce4141'
                     })
                     return
                 }
 
-                if(!checkCode.state){
+                if (!checkCode.state) {
                     Notify({
-                        message:checkCode.msg,
-                        background:'#ce4141'
+                        message: checkCode.msg,
+                        background: '#ce4141'
                     })
                     return
                 }
@@ -443,49 +534,49 @@
                     id_no: this.info_id || '***',
                     alibind: true,
                 };
-                _post('/api/v1/app/bind/imei',param)
-                    .then(res=>{
-                        if(res.state){
+                _post('/api/v1/app/bind/imei', param)
+                    .then(res => {
+                        if (res.state) {
                             location.href = "/new_card/to_tb?iccid=" + this.info_iccid + "&imei=" + this.info_imei + "&source=" + this.card_source;
-                        }else{
+                        } else {
                             Notify({
-                                message:'绑定手机失败',
-                                background:'#ce4141'
+                                message: '绑定手机失败',
+                                background: '#ce4141'
                             })
                         }
                     })
 
             },
-            checkPhoneBind:function(){
+            checkPhoneBind: function () {
                 return new Promise((resolve, reject) => {
-                    _post('/api/v1/app/phone/check',{mobile:this.info_phone})
-                        .then(res=>{
-                            if(!res.state){
-                                if(res.data > 10){
+                    _post('/api/v1/app/phone/check', {mobile: this.info_phone})
+                        .then(res => {
+                            if (!res.state) {
+                                if (res.data > 10) {
                                     resolve({
                                         state: 1,
                                         msg: '同一个手机号只能实名10个卡'
                                     })
-                                }else{
+                                } else {
                                     resolve({
-                                        state:2,
-                                        msg:'手机号码校验成功'
+                                        state: 2,
+                                        msg: '手机号码校验成功'
                                     })
                                 }
-                            }else{
+                            } else {
                                 resolve({
-                                    state:0,
-                                    msg:'服务器内部错误'
+                                    state: 0,
+                                    msg: '服务器内部错误'
                                 })
                             }
 
                         })//校验手机是否可以绑定实名
                 })
             },
-            scan:function(){
+            scan: function () {
 
             },
-            toTutorial:function(){
+            toTutorial: function () {
                 if (source == 18) {
                     location.href = 'https://mp.weixin.qq.com/s/IMUU9Wan63K00QEFcxUnjg'
                 } else {

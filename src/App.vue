@@ -16,7 +16,7 @@
 
   export default {
       name:'App',
-      date(){
+      data(){
         return{
             userInfo:{},
             showUser:false,
