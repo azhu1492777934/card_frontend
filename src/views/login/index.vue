@@ -37,9 +37,10 @@
             [Notify.name]: Notify
         },
         created() {
-            if (checkBrowser() == 'wx') {
+            let checkBrowserResult = checkBrowser()
+            if (checkBrowserResult == 'wechat') {
                 this.client_type = 'wechat';
-            } else {
+            } else if(checkBrowserResult == 'alipay') {
                 this.client_type = 'alipay';
             }
             //获取用户信息

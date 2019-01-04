@@ -1,9 +1,9 @@
 <template>
     <div class="g-wrap card-activated-wrap">
-        <div class="tip-wrap">根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
-        <div style="display: none" class="tip-mobile">
+        <div v-show="card_tip" class="tip-wrap">根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
+        <div v-show="!card_tip" class="tip-mobile ip-wrap">
             <span>1.请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
-            <span>2.申请退款将会扣除卡板成本、套餐激活成本后返还余额</span>
+            <span>2.申请退款将会扣除卡板成本、套餐激活成本后返还余额</span><br>
         </div>
         <div class="info-wrap">
             <div>
@@ -141,7 +141,7 @@
     import { Popup,Notify } from 'vant';
     import {_get,_post} from "../../http";
 
-    import {codeParam,getStorage} from "../../utilies";
+    import {codeParam,getStorage,inArray} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
     export default {
@@ -149,12 +149,13 @@
         data() {
             return {
                 //校验数据
-                iccid:'',
                 regex_phone: /(?:^1[3456789]|^9[28])\d{9}$/,
                 regex_num: /^[1-9]\d*$/,
                 regex_name: /^[\u4e00-\u9fa5a-zA-Z]+$/,
                 is_boss:false,
 
+                card_tip:true,
+                card_source:'',//卡源
                 info_iccid: '',
                 info_imei: '864319031839011',
                 info_id: '',
@@ -182,6 +183,12 @@
             [Notify.name]:Notify
         },
         created() {
+
+            this.card_source = getStorage('chec_realNameSource');
+            if(inArray(this.card_source,[18, 19, 20, 21,22])>=0){
+                this.card_tip = !this.card_tip
+            }
+
             if(getStorage('check_iccid')){
                 this.info_iccid = getStorage('check_iccid');
             }else{
@@ -348,6 +355,7 @@
                 //     }
                 // })//检测实名卡数
 
+
                 _post('/api/v1/app/phone/check',{mobile:this.info_phone})
                     .then(res=>{
                         if(!res.state){
@@ -357,60 +365,34 @@
                             })
                         }else{
 
+                            clearInterval(this.timer);
+                            this.disabled_code = true;
+                            this.countDownMsg = this.countDown + 's后重新获取';
+
+                            this.timer = setInterval(function () {
+                                _this.countDown--;
+                                _this.countDownMsg = _this.countDown + 's重新获取'
+                                if(_this.countDown<=0){
+                                    clearInterval(_this.timer);
+                                    _this.countDownMsg = '获取验证码';
+                                    _this.countDown = 60;
+                                    _this.disabled_code = false;
+                                }
+                            },1000)
+
+                            _post('/api/v1/app/messages/send',{mobile:this.info_phone})
+                                .then(function (res) {
+
+                                    if(res.state){
+                                        Notify({message:'验证码发送成功'});
+                                    } else{
+                                        Notify({message:res.msg});
+                                    }
+                                })
                         }
                     })
 
-                clearInterval(this.timer);
-                this.disabled_code = true;
-                this.countDownMsg = this.countDown + 's后重新获取';
 
-                this.timer = setInterval(function () {
-                    _this.countDown--;
-                    _this.countDownMsg = _this.countDown + 's重新获取'
-                    if(_this.countDown<=0){
-                        clearInterval(_this.timer);
-                        _this.countDownMsg = '获取验证码';
-                        _this.countDown = 60;
-                        _this.disabled_code = false;
-                    }
-                },1000)
-
-                _post('/api/v1/app/messages/send',{mobile:this.info_phone})
-                    .then(function (res) {
-                        if(!res.responseJSON.code){
-                            eLink.showMsg('验证码发送失败, 请稍后再试');
-                        }
-
-                        if (res.responseJSON.code == 1003) {
-                            Notify({message:'服务内部错误'});
-                        }
-                        else if (res.responseJSON.code == 2001) {
-                            Notify({message:'参数错误'});
-                        }
-                        else if (res.responseJSON.code == 2004) {
-                            Notify({message:'微信服务过期'});
-                        }
-                        else if (res.responseJSON.code == 2005) {
-                            Notify({message:'验证码发送过于频繁,请稍后再试'});
-                        }
-                        else if (res.responseJSON.code == 2006) {
-                            Notify({message:'验消息服务错误'});
-                        }
-                        else if (res.responseJSON.code == 2007) {
-                            Notify({message:'无效验证码'});
-                        }
-                        else if (res.responseJSON.code == 2008) {
-                            Notify({message:'验证码过期'});
-                        }
-                        else if (res.responseJSON.code == 2010) {
-                            Notify({message:'短信一小时内同一手机号码发送次数不能超过3条'});
-                        }
-                        else if (res.responseJSON.code == 2011) {
-                            Notify({message:'同一手机号每60秒只能发送一条'});
-                        } else {
-                            Notify({message:'验证码发送过于频繁'});
-                        }
-                    })
 
             },//获取验证码
 
@@ -454,7 +436,7 @@
 
                 let param = {
                     mobile: this.info_phone,
-                    iccid: this.iccid,
+                    iccid: this.info_iccid,
                     code: this.info_code,
                     imei: this.info_imei,
                     realname: this.info_name || '***',
@@ -464,7 +446,7 @@
                 _post('/api/v1/app/bind/imei',param)
                     .then(res=>{
                         if(res.state){
-                            location.href = "/weixin/jump/taobao?iccid=" + eLink.iccid + "&imei=" + eLink.imei + "&source=" + eLink.source;
+                            location.href = "/new_card/to_tb?iccid=" + this.info_iccid + "&imei=" + this.info_imei + "&source=" + this.card_source;
                         }else{
                             Notify({
                                 message:'绑定手机失败',

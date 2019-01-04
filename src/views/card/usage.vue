@@ -444,7 +444,7 @@
             const _this = this;
             return {
                 load_plan:true,
-                load_plan_msg:'获取套餐信息,请等候',
+                load_plan_msg:'获取卡详情信息,请等候',
                 watch_source: [5, 10, 12, 17, 18, 20, 22],
                 auth_status: ['未实名', '审核中', '审核不通过'],
                 card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],

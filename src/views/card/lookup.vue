@@ -5,7 +5,7 @@
         </div>
         <div class="search-wrap">
             <input v-model="iccid" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
-            <span class="iconfont icon-scan bounceIn animated"></span>
+            <span @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
             <span class="icon-scanTip"></span>
         </div>
         <div class="btn-check-wrap">
@@ -139,7 +139,7 @@
 
 <script>
     // @ is an alias to /src
-    import {checkICCID, setStorage, formatterCardTime, getStorage,codeParam,getUserInfo,isUserBind,getUrlParam} from '../../utilies'
+    import {checkICCID, setStorage, formatterCardTime, getStorage,codeParam,getUserInfo,isUserBind,getUrlParam,checkBrowser} from '../../utilies'
     import {Toast, Popup , Notify} from 'vant'
     import {_post} from "../../http";
 
@@ -379,6 +379,34 @@
 
             },
 
+            scanIccid(){
+                let _this = this,
+                    checkBrowserResult = checkBrowser();
+
+                if(checkBrowserResult=='wechat'){
+                    wx.scanQRCode({
+                        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                        scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                        success: function (res) {
+                            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                            if(result &&( result.length==19 || result.length==20 )){
+                                _this.iccid = (result.replace(/[^0-9]*/g, ""));
+                                _this.processCheckIccid(_this.iccid)
+                            }else{
+                                Notify({message:'请扫描正确的ICCID'});
+                            }
+                        }
+                    });
+                }else if(checkBrowserResult=='alipay'){
+
+                    ap.scan(function(res){
+                        var result = res.code; // 当needResult 为 1 时，扫码返回的结果
+
+                        _this.iccid = (result.replace(/[^0-9]*/g, ""));
+                        _this.processCheckIccid(_this.iccid)
+                    });
+                }
+            },
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
