@@ -119,7 +119,7 @@
         data() {
             return {
                 hasVocie:false,
-                load_connection:false,
+                load_connection:true,
                 load_connection_msg:'加载连接数据,请等候',
                 connection_flow_list:[],
                 connection_voice_list:[],

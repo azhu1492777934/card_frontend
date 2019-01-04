@@ -231,7 +231,6 @@
             _get('/api/v1/app/plan_list',{
                 iccid:getStorage('check_iccid')
             }).then(res=>{
-                console.log(res);
                 if(res.state){
                     this.load_plan_list = false;
                     this.plan_list = res.data;

@@ -17,7 +17,7 @@
                         </div>
                         <div>
                             <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                            <em href="/question">?</em>
+                            <a href="/question">?</a>
                         </div>
                     </div>
                 </div>
@@ -33,7 +33,7 @@
                         <p>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}}</p>
                         <p>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</p>
                     </div>
-                    <div class="to-flow-wrap">
+                    <div @click="toConnnection" class="to-flow-wrap">
                         <a> 流量用量详情> </a>
                     </div>
                 </div>
@@ -223,7 +223,7 @@
                     span{
                         font-size: 12PX !important;
                     }
-                    span,em{
+                    span,em,a{
                         display: inline-block;
                         margin-right: 15px;
                         padding: 5px 10px;
@@ -236,11 +236,14 @@
                             margin-right: 0;
                         }
                     }
-                    em{
+                    em,a{
                         font-style: normal;
                         color: #fff;
                         border:1PX solid #38b5ed;
                         background-color: #38b5ed;
+                    }
+                    a{
+                        padding: 5px 20px;
                     }
                 }
 
@@ -443,6 +446,7 @@
         data() {
             const _this = this;
             return {
+                iccid:'',
                 load_plan:true,
                 load_plan_msg:'获取卡详情信息,请等候',
                 watch_source: [5, 10, 12, 17, 18, 20, 22],
@@ -494,6 +498,9 @@
         },
         created() {
             if(getStorage('check_iccid')){
+
+                this.iccid = getStorage('check_iccid');
+
                 _get('/api/v1/app/cards/telcom/usage',{
                     iccid:getStorage('check_iccid')
                 }).then(res=>{
@@ -622,7 +629,8 @@
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
             recharge: function () {
-                this.$router.push({path: '/recharge'})
+                setStorage('check_iccid',this.iccid)
+                this.$router.push({path: '/card/plan_list'})
             },
             refreshOrActivated:function(){
                 if(this.filterCardInfo.refresh_actived=='刷新'){
@@ -655,6 +663,7 @@
                 }
             },
             toConnnection:function(){
+                setStorage('check_iccid',this.iccid);
                this.$router.push({path:'/card/connection'});
             },
             inArray: function (elem, arr, i) {
