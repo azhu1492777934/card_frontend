@@ -141,7 +141,7 @@
     // @ is an alias to /src
     import {checkICCID, setStorage, formatterCardTime, getStorage,codeParam,getUserInfo,isUserBind,getUrlParam,checkBrowser} from '../../utilies'
     import {Toast, Popup , Notify} from 'vant'
-    import {_post} from "../../http";
+    import {_post,_get} from "../../http";
 
     export default {
         name: "home",
@@ -162,7 +162,7 @@
             [Popup.name]: Popup,
         },
         created() {
-            /*if (getStorage('token')) {
+            if (getStorage('token')) {
                 if(getStorage('userBind')){
                     getUserInfo()
                 }else{
@@ -183,7 +183,7 @@
                     /*
                     * 已授权操作
                     * */
-                   /* if (getStorage('state') == getUrlParam('state')) {
+                    if (getStorage('state') == getUrlParam('state')) {
                         //解密data
                         _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
                             data: getStorage('auth_data')
@@ -237,19 +237,20 @@
                     /*
                    * end 已授权操作
                    * */
-                /*} else {
+                } else {
                     //授权
                     this.state = Math.random().toString(36).substr(2);
                     setStorage('state', this.state);
                     _get('/accountCenter/v2/oauth/authorize?' + codeParam({
-                        client_type: 'wechat',
-                        redirect_uri: 'https://wxtest.china-m2m.com',
+                        client_type: this.client_type,
+                        redirect_uri: 'http://cardserver-test.china-m2m.com',
                         scope: 'userinfo',
                         state: this.state
                     }, 'get'))
                         .then(res => {
                             if(!res.data.error){
                                 console.log('授权成功')
+                                console.log(res.data.data);
                                 // window.location.href = res.data.data
                             }else if(res.data.error=='11002'){
                                 this.$emit('getToken');
@@ -260,7 +261,7 @@
                             }
                         })
                 }
-            }*/
+            }
                 
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');

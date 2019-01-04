@@ -69,15 +69,15 @@
                                         <div class="plan-describe">
                                             <!--/*套餐描述-->
                                             <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
-                                        <span v-if="item.describe && item.planCellInfo.key!='MG500'">
-                                            {{item.describe}}
-                                        </span><br>
+                                                <span v-if="item.describe && item.planCellInfo.key!='MG500'">
+                                                    {{item.describe}}
+                                                </span><br>
                                                 <span v-if="item.planCellInfo.max_high">
-                                        高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}
-                                        </span><br>
+                                                    高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}
+                                                    </span><br>
                                                 <span v-if="item.planCellInfo.max_normal">
-                                        中速流量:{{item.planCellInfo.max_normal}}
-                                    </span>
+                                                    中速流量:{{item.planCellInfo.max_normal}}
+                                                </span>
                                             </div>
                                             <div v-else>
                                                 <p v-if="item.describe && item.describe!='None'">
@@ -276,6 +276,7 @@
                     flex: 1;
                 }
                 .card-used-data-wrap{
+                    flex: 2;
                     text-align: left;
                     padding-top: 20px;
                     p{
@@ -284,6 +285,7 @@
 
                 }
                 .to-flow-wrap{
+                    min-width: 270px;
                     text-align: right;
                     a{
                         display: inline-block;
@@ -518,7 +520,7 @@
 
                         if (this.inArray(this.usageInfo.source, this.watch_source) >= 0 && this.usageInfo.source != 19) {
                             if (this.usageInfo.msisdn.substr(0, 2) == '86') {
-                                this.filterCardInfo.msisdn = this.usageInfo.substr(2, this.usageInfo.msisdn.length);
+                                this.filterCardInfo.msisdn = this.usageInfo.msisdn.substr(2, this.usageInfo.msisdn.length);
                             } else {
                                 this.filterCardInfo.msisdn = this.usageInfo.msisdn
                             }
