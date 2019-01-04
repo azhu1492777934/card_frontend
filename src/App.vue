@@ -1,5 +1,10 @@
 <template>
   <div id="app">
+    <div v-if="showUser" class="userInfo-wrap">
+      <span><img :src="usageInfo.avatar" alt="用户头像">{{usageInfo.nickname}}</span>
+      <span>钻石:{{usageInfo.account.rmb}}</span>
+      <span>ELB:{{usageInfo.account.elb}}</span>
+    </div>
     <router-view @getToken="refreshToken" v-wechat-title="$route.meta.title" />
   </div>
 </template>
@@ -11,6 +16,18 @@
 
   export default {
       name:'App',
+      date(){
+        return{
+            userInfo:{},
+            showUser:false,
+        }
+      },
+      mounted(){
+        if(getStorage('userInfo')){
+            this.showUser = true;
+            this.usageInfo = getStorage('userInfo');
+        }
+      },
       methods:{
           refreshToken(){
               _get("/accountCenter/v2/auth/refresh?"+codeParam({
@@ -36,6 +53,17 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  .userInfo-wrap{
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    img{
+      display: inline-block;
+      width: 58px;
+      height: 58px;
+      vertical-align: middle;
+    }
+  }
 }
 #nav {
   padding: 30px;

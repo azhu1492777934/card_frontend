@@ -1,14 +1,22 @@
 import vue from 'vue'
 import axios from 'axios'
+import qs from 'qs'
+import {getStorage} from "../utilies";
 
 const service = axios.create({
     timeout: 7000
 })
 service.interceptors.request.use(function (config) {
-    // if (config.method === 'post') {
-    //     // config.data = qs.stringify(config.data);
-    //     config.data = config.data
-    // }
+
+    if (config.method === 'post' && config.url.indexOf('/accountCenter') !=-1 ) {
+        config.data = qs.stringify(config.data);
+        config.data = config.data
+    }
+
+    if(getStorage('token')){
+        config.headers.Authorization =  getStorage('token');
+    }
+
     return config;  //添加这一行
 }, (error) => {
     return Promise.reject(error);

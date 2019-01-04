@@ -155,6 +155,7 @@
                 recording_show: false,
                 iccid: '',
                 checkShow: false,//查询遮罩
+                client_type: '',
             }
         },
         components: {
@@ -162,106 +163,119 @@
             [Popup.name]: Popup,
         },
         created() {
-            if (getStorage('token')) {
-                if(getStorage('userBind')){
-                    getUserInfo()
-                }else{
-                    isUserBind().then(res=>{
-                        if(res.state){
-                            this.$router.push({path:'/login'})
-                            //未绑定
-                        }else{
-                            getUserInfo()
-                        }
-                    })
-                }
-            } else {
-                if (getUrlParam('data')) {
-                    setStorage('auth_data', getUrlParam('data'))
-                }
-                if (getStorage('auth_data')) {
-                    /*
-                    * 已授权操作
-                    * */
-                    if (getStorage('state') == getUrlParam('state')) {
-                        //解密data
-                        _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
-                            data: getStorage('auth_data')
-                        }).then(res => {
-                            if (!res.data.error) {
-                                this.decrypt_data = res.data.data;
-                                setStorage('decrypt_data', res.data.data);
 
-                                //login
-                                _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
-                                    uuid: res.data.data.data.openid,
-                                    code: res.data.data.code
-                                }).then(res => {
-                                    if (!res.data.error) {
-                                        if(getStorage('userBind')){
-                                            getUserInfo()
-                                        }else{
-                                            isUserBind().then(res=>{
-                                                if(res.state){
-                                                    this.$router.push({path:'/login'})
-                                                    //未绑定
-                                                }else{
-                                                    getUserInfo()
-                                                }
+            let checkBrowserResult = checkBrowser()
+            if (checkBrowserResult == 'wechat') {
+                this.client_type = 'wechat';
+            } else if(checkBrowserResult == 'alipay') {
+                this.client_type = 'alipay';
+            }
+
+            if(this.client_type=='wechat' || this.client_type =='alipay'){
+
+                if (getStorage('token')) {
+                    if(getStorage('userBind')){
+                        getUserInfo()
+                    }else{
+                        isUserBind().then(res=>{
+                            if(res.state==1){
+                                this.$router.push({path:'/login'})
+                                //未绑定
+                            }else if(res.state==0){
+                                getUserInfo()
+                            }else{
+                                Notify({message:res.msg})
+                            }
+                        })
+                    }
+                } else {
+                    if (getUrlParam('data')) {
+                        setStorage('auth_data', getUrlParam('data'))
+                    }
+                    if (getStorage('auth_data')) {
+                        /*
+                        * 已授权操作
+                        * */
+                        if (getStorage('state') == getUrlParam('state')) {
+                            //解密data
+                            _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
+                                data: getStorage('auth_data')
+                            }).then(res => {
+                                if (res.error==0) {
+                                    this.decrypt_data = res.data.data;
+                                    setStorage('decrypt_data', res.data.data);
+
+                                    //login
+                                    _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
+                                        uuid: res.data.data.openid,
+                                        code: res.data.code
+                                    }).then(res => {
+                                        if (res.error==0) {
+                                            if(getStorage('userBind')){
+                                                getUserInfo()
+                                            }else{
+                                                isUserBind().then(res=>{
+                                                    if(res.state==1){
+                                                        this.$router.push({path:'/login'})
+                                                        //未绑定
+                                                    }else{
+                                                        getUserInfo()
+                                                    }
+                                                })
+                                            }
+
+                                            setStorage('token', res.data);//获取token
+                                        } else if (res.error === '11002') {
+                                            this.$emit('getToken');
+                                        } else if (res.error === '30005' || res.data.error === '11003') {
+
+                                        } else {
+                                            Notify({
+                                                message: res.msg
                                             })
                                         }
-
-                                        setStorage('token', res.data.data);//获取token
-                                    } else if (res.data.error === '11002') {
-
-                                    } else if (res.data.error === '30005' || res.data.error === '11003') {
-
-                                    } else {
-                                        Notify({
-                                            message: res.data.msg
-                                        })
-                                    }
-                                })
-                            } else if (res.data.error === '11002') {
-                                this.$emit('getToken');
-                            } else {
-                                Notify({
-                                    message: res.data.msg
-                                })
-                            }
-                        })
-                        // end 状态
+                                    })
+                                } else if (res.data.error === '11002') {
+                                    this.$emit('getToken');
+                                } else {
+                                    Notify({
+                                        message: res.msg
+                                    })
+                                }
+                            })
+                            // end 状态
+                        } else {
+                            location.reload()
+                        }
+                        /*
+                       * end 已授权操作
+                       * */
                     } else {
-                        location.reload()
+                        //授权
+                        this.state = Math.random().toString(36).substr(2);
+                        setStorage('state', this.state);
+                        _get('/accountCenter/v2/oauth/authorize?' + codeParam({
+                            client_type: this.client_type,
+                            redirect_uri: 'http://cardserver-test.china-m2m.com',
+                            scope: 'userinfo',
+                            state: this.state
+                        }, 'get'))
+                            .then(res => {
+                                if(res.error==0){
+                                    window.location.href = res.data
+                                }else if(res.error=='11002'){
+                                    this.$emit('getToken');
+                                }else{
+                                    Notify({
+                                        message: res.msg
+                                    })
+                                }
+                            })
                     }
-                    /*
-                   * end 已授权操作
-                   * */
-                } else {
-                    //授权
-                    this.state = Math.random().toString(36).substr(2);
-                    setStorage('state', this.state);
-                    _get('/accountCenter/v2/oauth/authorize?' + codeParam({
-                        client_type: this.client_type,
-                        redirect_uri: 'http://cardserver-test.china-m2m.com',
-                        scope: 'userinfo',
-                        state: this.state
-                    }, 'get'))
-                        .then(res => {
-                            if(!res.data.error){
-                                console.log('授权成功')
-                                console.log(res.data.data);
-                                // window.location.href = res.data.data
-                            }else if(res.data.error=='11002'){
-                                this.$emit('getToken');
-                            }else{
-                                Notify({
-                                    message: res.data.msg
-                                })
-                            }
-                        })
                 }
+
             }
+
                 
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
@@ -381,10 +395,9 @@
             },
 
             scanIccid(){
-                let _this = this,
-                    checkBrowserResult = checkBrowser();
+                let _this = this;
 
-                if(checkBrowserResult=='wechat'){
+                if(this.client_type=='wechat'){
                     wx.scanQRCode({
                         needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                         scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
@@ -398,7 +411,7 @@
                             }
                         }
                     });
-                }else if(checkBrowserResult=='alipay'){
+                }else if(this.client_type=='alipay'){
 
                     ap.scan(function(res){
                         var result = res.code; // 当needResult 为 1 时，扫码返回的结果

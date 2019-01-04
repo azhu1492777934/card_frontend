@@ -1,4 +1,6 @@
 import md5 from 'js-md5';
+import {_get,_post} from "../http";
+import {Notify} from 'vant'
 
 function checkICCID(iccid) {
     if (iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != '89') {
@@ -78,6 +80,7 @@ function codeParam(param, type) {
         version: 'v1',
         format: 'json',
         app_key: 'SMBQpaBWvVZPkpcBvDwQswDWxm',
+        nonce:new Date().getMilliseconds()+'0'+Math.floor(Math.random()*10000)
     };
 
     let newParam = Object.assign(param, commParam),
@@ -109,6 +112,18 @@ function codeParam(param, type) {
 
     return param_str
 }//支付中心及用户中心 参数加密
+
+function refreshToken(){
+    _get("/accountCenter/v2/auth/refresh?"+codeParam({
+        token:getStorage('token')
+    },'get'))
+        .then((res) => {
+            if(res.error == 0){
+                setStorage("token",res.data);
+                this.$route.push({path:'/'});
+            }
+        })
+}
 
 function checkBrowser() {
     var userAgent = navigator.userAgent.toLowerCase();
@@ -142,17 +157,17 @@ function getUserInfo() {
     //获取用户信息
     _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
         .then((res) => {
-            if (res.data.error == 0) {
+            if (res.error == 0) {
                 let UserInfo = {
                     account:res.data.account,
                     avatar:res.data.avatar,
                     nickname:res.data.nickname
                 }
                 setStorage('userInfo', UserInfo);
-            } else if (res.data.error == "11002") {
-                this.$emit("getToken");
+            } else if (res.error == "11002") {
+                refreshToken()
             } else {
-                Notify({message: res.data.msg})
+                Notify({message: res.msg})
             }
         })
 }//获取用户信息
@@ -160,21 +175,25 @@ function getUserInfo() {
 function isUserBind() {
     let checkBrowserResult = checkBrowser()
     return new Promise((resolve,reject)=>{
-        _get('/accountCenter/v2/user/info?'+codeParam({
+        _get('/accountCenter/v2/user/has-bind?'+codeParam({
             from:checkBrowserResult,
-            uuid:getStorage('decrypt_data').data.openid
+            uuid:getStorage('decrypt_data').openid
         },'get')).then(res=>{
-            if(!res.error){
+            if(res.error==0){
                 setStorage('userBind',1)
                 resolve({
                     state:0,
                     msg:'已成功绑定'
                 })
             }else if(res.error=='30005'){
-
                 resolve({
                     state:1,
                     msg:'用户未绑定'
+                })
+            }else{
+                resolve({
+                    state:2,
+                    msg:res.msg
                 })
             }
         }).catch(err=>{
