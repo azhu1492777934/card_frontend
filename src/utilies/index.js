@@ -120,7 +120,7 @@ function refreshToken(){
         .then((res) => {
             if(res.error == 0){
                 setStorage("token",res.data);
-                this.$route.push({path:'/'});
+               location.reload();
             }
         })
 }

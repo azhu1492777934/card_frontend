@@ -9,9 +9,7 @@ import '../src/assets/less/common.less'
 import 'lib-flexible/flexible'
 import vueWeChatTitle from 'vue-wechat-title'
 import globalFunction from '../src/utilies/global_function'//全局函数
-import {domain_list,domain_list_test} from "./utilies/domain";
-Vue.prototype.domain_list = domain_list
-Vue.prototype.domain_list_test = domain_list_test;
+
 Vue.config.productionTip = false
 
 Vue.use(globalFunction)

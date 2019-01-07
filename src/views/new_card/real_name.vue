@@ -1,9 +1,9 @@
 <template>
     <div class="g-wrap card-activated-wrap">
         <div v-show="card_tip" class="tip-wrap">根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
-        <div v-show="!card_tip" class="tip-mobile ip-wrap">
-            <span>1.请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
-            <span>2.申请退款将会扣除卡板成本、套餐激活成本后返还余额</span><br>
+        <div v-show="!card_tip" class="tip-mobile tip-wrap">
+            <span>1.根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备,才允许使用。</span><br>
+            <span>2.请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
         </div>
         <div class="info-wrap">
             <div>
@@ -43,16 +43,21 @@
             <p class="showTip">{{showTipMsg}}</p>
         </van-popup>
 
+        <van-popup v-model="showItem.showCodeWrap" :close-on-click-overlay="false">
+            <p class="showTip">{{showCodeMsg}}</p>
+        </van-popup>
+
         <van-popup v-model="showItem.showVerifyCode" :close-on-click-overlay="false" class="verify-code-wrap">
             <div class="verify-code-inner">
-                <p class="title">提示<span class="btn-close">&times</span></p>
-                <p>实名校验码将用于下一步实名步骤中</p>
+                <p class="title">提示<span @click="hideCodeVerify" class="btn-close">&times</span></p>
+                <p class="text-left">实名校验码将用于下一步实名步骤中</p>
                 <p class="code-wrap">校验码:<input id="j-verify-code" v-model="verifyCode"/>
-                    <button data-clipboard-action="copy" data-clipboard-target="#j-verify-code" class="btn-copy">复制校验码
+                    <button data-clipboard-action="copy" data-clipboard-target="#j-verify-code" class="j-btn-copy">
+                        复制校验码
                     </button>
                 </p>
-                <p class="btn-nex-wrap">
-                    <button class="j-btn-next">下一步实名</button>
+                <p class="">
+                    <button @click="bindImei" class="j-btn-next">下一步实名</button>
                 </p>
             </div>
         </van-popup>
@@ -68,6 +73,7 @@
         border: none;
         outline: none;
     }
+    .text-left{text-align: left;}
 
     .fixed-wrap-imei {
         position: fixed;
@@ -194,12 +200,12 @@
                 padding: 15px 30px;
                 border-radius: 8px;
                 color: #fff;
-                font-size: 22px;
+                font-size: 26px;
                 background-color: #e4a750;
             }
 
             .title {
-                font-size: 40px;
+                font-size: 38px;
                 text-align: center;
             }
 
@@ -228,7 +234,7 @@
 <script>
     import {Popup, Notify, Dialog} from 'vant';
     import {_get, _post} from "../../http";
-
+    import Clipboard from 'clipboard';
     import {codeParam, getStorage, inArray} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
@@ -242,6 +248,7 @@
                 regex_name: /^[\u4e00-\u9fa5a-zA-Z]+$/,
                 is_boss: false,
 
+
                 card_tip: true,
                 card_source: '',//卡源
                 info_iccid: '',
@@ -251,14 +258,18 @@
                 info_phone: '',
                 info_name: '',
 
-                verifyCode:'1111',
+                isVerifyCode:false,//实名校验码
+                verifyCode:'1111',//实名校验码
 
                 showItem: {
                     showID: false,
                     showName: false,
                     showImei: false,
-                    showFixedWrap: false,
-                    showVerifyCode:false
+                    showFixedWrap: false,//大佬账户
+                    showVerifyCode:false,//大佬账户信息
+
+                    showCodeWrap:false,//实名校验码异步加载问题
+                    showCodeMsg:''//实名校验码失败加载信息
                 },
 
                 countDown: 60,
@@ -276,7 +287,7 @@
         },
         created() {
 
-            this.card_source = getStorage('chec_realNameSource');
+            this.card_source = getStorage('check_realNameSource');
             if (inArray(this.card_source, [18, 19, 20, 21, 22]) >= 0) {
                 this.card_tip = !this.card_tip
             }
@@ -286,6 +297,7 @@
             } else {
                 console.log('无iccid');
             }
+
 
             _get('/api/v1/app/find_iccid', {
                 iccid: getStorage('check_iccid')
@@ -302,8 +314,39 @@
                 this.showItem.showFixedWrap = false
             })//检测是否是大佬账户
 
+            if(this.card_source==18 || this.card_source ==19){
+                _get('/api/v1/app/find_puk', {
+                    iccid: this.info_iccid
+                }).then(res => {
+                    if(res.state){
+                        this.isVerifyCode = true;
+                        this.verifyCode = res.data
+                    }else{
+                        if(res.msg){
+                            this.showItem.showCodeWrap = true;
+                            this.showCodeMsg = res.msg
+                        }
+                    }
+                })//检测是否是大佬账户
+            }
+
+        },
+        mounted(){
+            var clipboard = new Clipboard('.j-btn-copy');
+
+            clipboard.on('success', function(e) {
+                Notify({message:'实名校验码已复制到剪切板',background:'#60ce53'});
+                e.clearSelection();
+            });
+
+            clipboard.on('error', function(e) {
+                Notify({message:'复制校验失败,请手动长按复制校验码'})
+            });
         },
         methods: {
+            hideCodeVerify(){
+                this.showItem.showVerifyCode = false
+            },
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
@@ -525,6 +568,18 @@
                     return
                 }
 
+                if(this.card_source==18 || this.card_source ==19){
+                    if(this.isVerifyCode && this.verifyCode){
+                        this.showItem.showVerifyCode = true
+                    }else if(this.isVerifyCode && !this.verifyCode){
+                        Notify({message:'暂时无法实名,请稍后再试'});
+                        return
+                    }
+                }else{
+                    this.bindImei();
+                }
+            },
+            bindImei(){
                 let param = {
                     mobile: this.info_phone,
                     iccid: this.info_iccid,
@@ -540,12 +595,11 @@
                             location.href = "/new_card/to_tb?iccid=" + this.info_iccid + "&imei=" + this.info_imei + "&source=" + this.card_source;
                         } else {
                             Notify({
-                                message: '绑定手机失败',
+                                message: '绑定手机失败,请稍后再试',
                                 background: '#ce4141'
                             })
                         }
                     })
-
             },
             checkPhoneBind: function () {
                 return new Promise((resolve, reject) => {
@@ -577,7 +631,7 @@
 
             },
             toTutorial: function () {
-                if (source == 18) {
+                if (this.card_source == 18 || this.card_source ==19) {
                     location.href = 'https://mp.weixin.qq.com/s/IMUU9Wan63K00QEFcxUnjg'
                 } else {
                     location.href = 'https://mp.weixin.qq.com/s?__biz=MzUxODA0OTAyOQ==&mid=100000010&idx=1&sn=a5269b403df4782a2413184f027a01d2&chksm=798f9d604ef81476a074d02828cc355331e354d3c37f89aa3f87ddb21004903190d858842300&mpshare=1&scene=23&srcid=0601LjTN6Zs9SunY3rvoUg4Y#rd';

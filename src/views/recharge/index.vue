@@ -248,7 +248,7 @@
                 let param = {},
                     _this = this;
                 rechargeInfo.pay_type=='diamond_charge'?param.status==1 : param.status=0;
-                rechargeInfo.pay_type=='over_charge'?param.rechargeInfo = rechargeInfo.pay_money : this.planInfo.price;
+                rechargeInfo.pay_type=='over_charge'?param.recharge_price = rechargeInfo.pay_money : this.planInfo.price;
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
                 param.price = this.planInfo.price;

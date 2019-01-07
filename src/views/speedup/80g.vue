@@ -44,9 +44,10 @@
                 * speedupIndex:当前选中的加速包的index
                 * */
                 _post('/api/v1/pay/weixin/create',{
-                    statue:0,
+                    status:0,
                     iccid:'8986061805001065858',
                     rating_id:this.list[speedupIndex].rating_id,
+                    recharge_price:this.list[speedupIndex].price,
                     price : this.list[speedupIndex].price
                 }).then(res=>{
                     if(res.state){

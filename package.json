@@ -43,7 +43,9 @@
           "van-toast",
           "van-picker",
           "van-popup",
-          "van-notify"
+          "van-notify",
+          "van-dialog",
+          "van-button"
         ]
       }
     }

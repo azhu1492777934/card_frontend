@@ -48,12 +48,13 @@
 </template>
 
 <style lang="less">
-    html, body, #app, .plan-wrap {
+    html, body, #app {
         height: 100%;
     }
     @import "../../assets/less/common";
 
     .plan-wrap {
+        height:calc(100% - 44px);
         .van-swipe{
             height: 100%;
         }

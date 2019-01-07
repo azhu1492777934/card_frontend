@@ -10,7 +10,7 @@
                 <p>进行实名认证（长按保存）</p>
             </div>
             <div class="qr-img-wrap">
-                <img src="" alt="实名二维码">
+                <img :src="qrSrc" alt="实名二维码">
             </div>
             <img src="" alt="">
             <p class="footer-wrap">
@@ -39,7 +39,7 @@
             text-align: center;
             img{
                 display: inline-block;
-                width: 80%;
+                width: 50%;
                 height: auto;
             }
 
@@ -66,7 +66,7 @@
     // @ is an alias to /src
 
     import {Notify,Popup} from 'vant';
-    import {getStorage,setStorage,toDecimal} from "../../utilies";
+    import {getUrlParam} from "../../utilies";
     import {_get} from "../../http";
 
     export default {
@@ -74,7 +74,9 @@
 
         data() {
             return {
-                
+                iccid:'',
+                imei:'',
+                qrSrc:''
             }
         },
         components: {
@@ -82,7 +84,9 @@
             [Popup.name]:Popup,
         },
         created() {
-            
+            this.iccid = getUrlParam('iccid');
+            this.imei = getUrlParam('imei');
+            this.qrSrc = 'http://cardserver_test.china-m2m.com/qrcode?iccid='+this.iccid+'&imei='+this.imei
         },
         mounted() {
            

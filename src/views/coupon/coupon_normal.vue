@@ -23,13 +23,14 @@
 </template>
 
 <style lang="less">
-    html,body,#app{height: 100%;background-image: linear-gradient(-167deg, #5dcdff 0%, #1ba0fe 100%);}
+    html,body,#app{height: 100%;}
     .coupon-wrap {
         position: relative;
-        height: 100%;
-        min-height: 100%;
-        padding-top:160px;
+        height: calc(100% - 44px);
+        padding-top: 2rem;
+        -webkit-box-sizing: border-box;
         box-sizing: border-box;
+        background-image: linear-gradient(-167deg,#5dcdff,#1ba0fe);
         .coupon-inner-wrap {
             position: relative;
             width: 80%;

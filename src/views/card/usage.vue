@@ -1,5 +1,5 @@
 <template>
-    <div  class="plan-usage-wrap">
+    <div class="plan-usage-wrap">
         <div v-show="!load_plan">
 
             <div class="card-info-wrap">
@@ -12,8 +12,10 @@
                     <div class="card-state-wrap">
                         <div>
                             <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
-                            <span v-if="filterCardInfo.device_state==''" :class="usageInfo.status>=3?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
-                            <span :class="filterCardInfo.device_state.code==1?'cl-state-primary':'cl-state-warning'" v-if="filterCardInfo.device_state!=''">{{filterCardInfo.device_state.state}}</span>
+                            <span v-if="filterCardInfo.device_state==''"
+                                  :class="usageInfo.status>=3?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
+                            <span :class="filterCardInfo.device_state.code==1?'cl-state-primary':'cl-state-warning'"
+                                  v-if="filterCardInfo.device_state!=''">{{filterCardInfo.device_state.state}}</span>
                         </div>
                         <div>
                             <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
@@ -45,8 +47,10 @@
                 </p>
                 <div class="card-flow-detail">
                     <div class="card-used-data-wrap">
-                        <p>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}} 已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</p>
-                        <p>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}} 已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</p>
+                        <p>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}}
+                            已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</p>
+                        <p>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}}
+                            已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</p>
                     </div>
                     <div @click="toConnnection" class="to-flow-wrap">
                         <a> 流量用量详情> </a>
@@ -57,7 +61,8 @@
 
             <div class="card-plan-wrap">
                 <p class="card-plan-wrap-title">
-                    <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array" :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
+                    <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
+                          :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
                 </p>
                 <div class="van-swipe-wrap">
                     <swiper ref="mySwiper" :options="swiperOption">
@@ -92,14 +97,16 @@
                                         </div>
                                     </div>
                                     <div class="plan-date-wrap">
-                                        <p class="plan-date" v-if="(inArray(usageInfo.source,watch_source)>=0||inArray(usageInfo.source,[1,7,8])>=0)">
+                                        <p class="plan-date"
+                                           v-if="(inArray(usageInfo.source,watch_source)>=0||inArray(usageInfo.source,[1,7,8])>=0)">
                                             <span>开始日期:{{filterDate(item.activated_at)}}</span><br>
                                             <span>有效日期:{{filterDate(item.expired_at)}}</span>
                                         </p><!--手表卡-->
                                         <p class="plan-date" v-else-if="item.expired_at">
                                             <span>有效日期:{{filterDate(item.expired_at)}}</span>
                                         </p><!--流量卡-->
-                                        <div class="speedup-wrap" v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
+                                        <div class="speedup-wrap"
+                                             v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
                                     <span v-if="item.planCellInfo.key!='MG500'">
                                         <a v-if="item.planCellInfo.plan_cell_status==1" href="/speedup/plan_80">
                                             购买加速包
@@ -133,7 +140,7 @@
                                     </div>
 
                                     <div class="plan-date-wrap">
-                                        <p  class="plan-date">
+                                        <p class="plan-date">
                                             <span>续费日期:{{filterDate(item.created_at)}}</span>
                                         </p>
                                         <p class="plan-order-status-wrap">
@@ -151,7 +158,7 @@
 
             </div>
 
-            <div  class="btn-recharge-wrap">
+            <div class="btn-recharge-wrap">
                 <button @click="recharge">套餐查询</button>
                 <a href="/coupon/index">卡券兑换</a>
             </div>
@@ -166,19 +173,25 @@
 
 <style lang="less">
     @import "~swiper/dist/css/swiper.min.css";
-    #app,html,body,.plan-usage-wrap{height: 100%}
-    html{background-color: #fbfafa;}
+
+    #app, html, body {
+        height: 100%
+    }
+
+    html {
+        background-color: #fbfafa;
+    }
+
     .plan-usage-wrap {
-        box-shadow: 0 0 60px #dbdbdb;
-        .cl-state-warning{
+        .cl-state-warning {
             color: #fe8d2e !important;
             border-color: #fe8d2e !important;
         }
-        .cl-state-normal{
+        .cl-state-normal {
             color: #3bce9e !important;
             border-color: #3bce9e !important;
         }
-        .cl-state-primary{
+        .cl-state-primary {
             color: #38b5ed !important;
             border-color: #38b5ed !important;
         }
@@ -187,194 +200,193 @@
             padding: 15px;
             .operation-logo-wrap {
                 margin-right: 15px;
-                img{
+                img {
                     width: 160px;
                     height: 160px;;
                 }
             }
-            .card-info-detail{
+            .card-info-detail {
                 text-align: left;
-                > p{
+                > p {
                     padding-bottom: 10px;
-                    &:first-child{
+                    &:first-child {
                         font-size: 36px;
                         color: #31b3ef;
                     }
-                    &:nth-child(2){
+                    &:nth-child(2) {
                         padding-bottom: 35px;
                         font-size: 28px;
                         color: #017ef9;
                     }
                 }
 
-
-                .card-state-wrap{
+                .card-state-wrap {
                     display: flex;
                     align-items: center;
-                    div{
-                        &:first-child{
+                    div {
+                        &:first-child {
                             flex: 3;
                         }
-                        &:last-child{
-                             /*flex: 1;*/
+                        &:last-child {
+                            /*flex: 1;*/
                             text-align: right;
                         }
                     }
-                    span{
+                    span {
                         font-size: 12PX !important;
                     }
-                    span,em,a{
+                    span, em, a {
                         display: inline-block;
                         margin-right: 15px;
                         padding: 5px 10px;
-                        border:1PX solid #3bce9e;
+                        border: 1PX solid #3bce9e;
                         color: #3bce9e;
                         border-radius: 6px;
                         line-height: 1;
                         -webkit-text-size-adjust: none;
-                        &:last-child{
+                        &:last-child {
                             margin-right: 0;
                         }
                     }
-                    em,a{
+                    em, a {
                         font-style: normal;
                         color: #fff;
-                        border:1PX solid #38b5ed;
+                        border: 1PX solid #38b5ed;
                         background-color: #38b5ed;
                     }
-                    a{
+                    a {
                         padding: 5px 20px;
                     }
                 }
 
             }
         }
-        .card-used-wrap{
+        .card-used-wrap {
             padding: 25px;
             color: #fff;
             font-weight: 500;
             background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);
             box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
-            .card-surplus-flow{
+            .card-surplus-flow {
                 display: flex;
                 align-items: center;
-                span{
+                span {
                     flex: 1;
-                    &:first-child{
+                    &:first-child {
                         text-align: left;
                     }
-                    &:last-child{
+                    &:last-child {
                         font-size: 52px;
                         text-align: right;
                     }
                 }
             }
-            .card-flow-detail{
+            .card-flow-detail {
                 display: flex;
                 align-items: center;
-                >div{
+                > div {
                     flex: 1;
                 }
-                .card-used-data-wrap{
+                .card-used-data-wrap {
                     flex: 2;
                     text-align: left;
                     padding-top: 20px;
-                    p{
+                    p {
                         padding-bottom: 15px;
                     }
 
                 }
-                .to-flow-wrap{
+                .to-flow-wrap {
                     min-width: 270px;
                     text-align: right;
-                    a{
+                    a {
                         display: inline-block;
                         padding: 25px 30px;
-                        background-color: rgba(0,0,0,0.1);
+                        background-color: rgba(0, 0, 0, 0.1);
                     }
                 }
 
             }
         }
-        .card-plan-wrap{
-            .no-plan{
-                img{
+        .card-plan-wrap {
+            .no-plan {
+                img {
                     display: block;
                     width: 100%;
                     height: auto;
                 }
             }
-            .card-plan-wrap-title{
+            .card-plan-wrap-title {
                 display: flex;
-                span{
+                span {
                     display: inline-block;
                     flex: 1;
                     padding: 30px 25px;
                     font-size: 26px;
                     color: #afafaf;
-                    &:first-child{
+                    &:first-child {
                         text-align: left;
                     }
-                    &:last-child{
+                    &:last-child {
                         text-align: right;
                     }
-                    &.checked{
+                    &.checked {
                         color: #31b3ef;
                     }
 
                 }
             }
-            .van-swipe-wrap{
+            .van-swipe-wrap {
                 width: 100%;
                 padding: 0 25px;
                 box-sizing: border-box;
-                .swiper-container{
+                .swiper-container {
                     background-color: #fff;
                     border-radius: 8px;
                 }
             }
-            .usage-plan-wrap,.order-plan-wrap{
+            .usage-plan-wrap, .order-plan-wrap {
                 width: 100%;
                 overflow-y: auto;
                 height: 100%;
-                li{
+                li {
                     display: flex;
                     padding: 10px 15px;
                     border-bottom: 1PX solid #dedede;
-                    &:last-child{
+                    &:last-child {
                         border-bottom: none;
                     }
-                    .plan-info-wrap{
+                    .plan-info-wrap {
                         flex: 4;
                         text-align: left;
-                        .plan-name{
+                        .plan-name {
                             padding: 20px 0;
                             font-size: 36px;
                             color: #1c1c1c;
                         }
-                        .plan-describe{
+                        .plan-describe {
                             min-height: 40px;
                             font-size: 24px;
                             color: #9fa4af;
                         }
                     }
-                    .plan-date-wrap{
+                    .plan-date-wrap {
                         position: relative;
                         /*flex:2.7;*/
                         text-align: right;
-                        .plan-date{
+                        .plan-date {
                             padding: 20px 0;
                             font-size: 24px;
                             color: #31b3ef;
 
                         }
-                        .speedup-wrap{
-                            a{
+                        .speedup-wrap {
+                            a {
                                 position: absolute;
                                 width: auto;
                                 right: 0;
                                 bottom: 0;
-                                padding:13px;
+                                padding: 13px;
                                 border-radius: 6px;
                                 color: #fff;
                                 background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);
@@ -384,11 +396,11 @@
                     }
                 }
             }
-            .order-plan-wrap{
-                li{
-                    .plan-order-status-wrap{
+            .order-plan-wrap {
+                li {
+                    .plan-order-status-wrap {
                         padding-top: 40px;
-                        span{
+                        span {
                             display: inline-block;
                             padding: 0 10px;
                             height: 36px;
@@ -397,7 +409,7 @@
                             color: #3bce9e;
                         }
                     }
-                    .plan-orderNo{
+                    .plan-orderNo {
                         padding-top: 15px;
                         font-size: 24px;
                         color: #9fa4af;
@@ -407,10 +419,10 @@
             }
 
         }
-        .btn-recharge-wrap{
+        .btn-recharge-wrap {
             position: relative;
             padding: 40px 0;
-            button{
+            button {
                 display: inline-block;
 
                 width: 430px;
@@ -420,7 +432,7 @@
                 background: #38b5ed;
                 border-radius: 80px;
             }
-            a{
+            a {
                 position: absolute;
                 right: 30px;
                 bottom: 60px;
@@ -436,10 +448,9 @@
 <script>
     // @ is an alias to /src
 
-
-    import { swiper, swiperSlide } from 'vue-awesome-swiper'
-    import { Notify,Popup} from 'vant';
-    import {getStorage,setStorage,toDecimal} from "../../utilies";
+    import {swiper, swiperSlide} from 'vue-awesome-swiper'
+    import {Notify, Popup} from 'vant';
+    import {getStorage, setStorage, toDecimal, checkBrowser} from "../../utilies";
     import {_get} from "../../http";
     import RouterLink from "vant/packages/mixins/router-link";
 
@@ -448,24 +459,24 @@
         data() {
             const _this = this;
             return {
-                iccid:'',
-                load_plan:true,
-                load_plan_msg:'获取卡详情信息,请等候',
+                iccid: '',
+                load_plan: true,
+                load_plan_msg: '获取卡详情信息,请等候',
                 watch_source: [5, 10, 12, 17, 18, 20, 22],
                 auth_status: ['未实名', '审核中', '审核不通过'],
                 card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
-                order_state:['未支付', '已支付', '已到帐'],
-                plan_title_array:['当前套餐','历史续费套餐'],
+                order_state: ['未支付', '已支付', '已到帐'],
+                plan_title_array: ['当前套餐', '历史续费套餐'],
                 cur_plan_type_index: 0,//swiper 索引
                 filterCardInfo: {
-                    operator_logo:'',//运营商icon
+                    operator_logo: '',//运营商icon
                     msisdn: '',
                     device_state: '',//机卡状态
                     card_str_state: '',//卡状态
                     real_name_state: '',//实名状态
                     refresh_actived: '',//刷新卡状态/激活
-                    is_watch_card:false,//手表卡
-                    is_flow_card:false,//流量卡
+                    is_watch_card: false,//手表卡
+                    is_flow_card: false,//流量卡
                     watch_card_usage: {
                         'total_flow': '',//总流量
                         'used_flow': '',//流量用量
@@ -479,12 +490,12 @@
                         'detail_right': ''//右侧详情
                     }//流量卡
                 },
-                hasUsagePlan:false,
-                hasOrderPlan:false,
+                hasUsagePlan: false,
+                hasOrderPlan: false,
                 usageInfo: {},
-                swiperOption:{
-                    on:{
-                        slideChangeTransitionEnd:function (swiper) {
+                swiperOption: {
+                    on: {
+                        slideChangeTransitionEnd: function (swiper) {
                             _this.cur_plan_type_index = this.activeIndex
                         }
                     }
@@ -493,28 +504,28 @@
         },
         components: {
             RouterLink,
-            [Notify.name]:Notify,
-            [Popup.name]:Popup,
+            [Notify.name]: Notify,
+            [Popup.name]: Popup,
             swiper,
             swiperSlide
         },
         created() {
-            if(getStorage('check_iccid')){
+            if (getStorage('check_iccid')) {
 
                 this.iccid = getStorage('check_iccid');
 
-                _get('/api/v1/app/cards/telcom/usage',{
-                    iccid:getStorage('check_iccid')
-                }).then(res=>{
-                    if(res.state){
+                _get('/api/v1/app/cards/telcom/usage', {
+                    iccid: getStorage('check_iccid')
+                }).then(res => {
+                    if (res.state) {
                         this.load_plan = false;
                         this.usageInfo = res.data;
 
-                        if(this.usageInfo.operator==0){
+                        if (this.usageInfo.operator == 0) {
                             this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/unicom-logo.svg')
-                        }else if(this.usageInfo.operator==1){
+                        } else if (this.usageInfo.operator == 1) {
                             this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/mobile-logo.png')
-                        }else{
+                        } else {
                             this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/telecom-logo.svg')
                         }
 
@@ -540,14 +551,14 @@
                             //判断是否可以点击
                         }
 
-                        if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.userInfo.imei) {
+                        if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.usageInfo.imei) {
                             if (!this.usageInfo.usage.imei || !this.usageInfo.data.fenli) {
-                                this.filterCardInfo.device_state = {state:'机卡已绑定',code:1}
+                                this.filterCardInfo.device_state = {state: '机卡已绑定', code: 1}
                             } else {
                                 if (this.usageInfo.status == 2) {
-                                    this.filterCardInfo.device_state = {state:'机卡已分离停机',code:2}
+                                    this.filterCardInfo.device_state = {state: '机卡已分离停机', code: 2}
                                 } else {
-                                    this.filterCardInfo.device_state = {state:'机卡分离',code:2}
+                                    this.filterCardInfo.device_state = {state: '机卡分离', code: 2}
                                 }
                             }
                         }//机卡状态
@@ -600,7 +611,7 @@
 
                             if (this.usageInfo.source != 6 && this.usageInfo.usage.noMax != 1) {
                                 this.filterCardInfo.flow_card_usage.total_flow = toDecimal(this.usageInfo.usage.total / 1024) + 'GB'
-                                this.filterCardInfo.flow_card_usage.detail_right = toDecimal( (this.usageInfo.usage.total - this.usageInfo.usage.used) / 1024 ) + 'GB'
+                                this.filterCardInfo.flow_card_usage.detail_right = toDecimal((this.usageInfo.usage.total - this.usageInfo.usage.used) / 1024) + 'GB'
                             }
 
                             this.filterCardInfo.flow_card_usage.used_flow = toDecimal(this.usageInfo.usage.used / 1024) + 'GB'
@@ -612,18 +623,23 @@
                         this.hasOrderPlan = this.usageInfo.orders.length ? true : false
 
 
-                    }else{
+                    } else {
                         this.load_plan_msg = res.msg;
                     }
                 })
-            }else{
-                this.$router.push({path:'/card/lookup'})
+            } else {
+                this.$router.push({path: '/card/lookup'})
             }
 
         },
         mounted() {
             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            this.$refs.mySwiper.$el.style.height = (clientHeight - 320) +'px';
+            let checkBrowserResult = checkBrowser();
+            if (checkBrowserResult != 'alipy' || checkBrowserResult != 'wechat') {
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 370) + 'px';
+            } else {
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 370 - 44) + 'px';
+            }
         },
         methods: {
             planTypeClikc: function (index) {
@@ -631,42 +647,42 @@
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
             recharge: function () {
-                setStorage('check_iccid',this.iccid)
+                setStorage('check_iccid', this.iccid)
                 this.$router.push({path: '/card/plan_list'})
             },
-            refreshOrActivated:function(){
-                if(this.filterCardInfo.refresh_actived=='刷新'){
+            refreshOrActivated: function () {
+                if (this.filterCardInfo.refresh_actived == '刷新') {
                     location.reload()
-                }else{
-                    if(!this.usageInfo.canActivated){
+                } else {
+                    if (!this.usageInfo.canActivated) {
                         Notify({
-                            message:'无效套餐,无法激活',
-                            background:'#ff0752'
+                            message: '无效套餐,无法激活',
+                            background: '#ff0752'
                         })
                         return
                     }
-                    if(this.usageInfo.usage.used >= this.usageInfo.usage.total && this.usageInfo.usage.total>0){
+                    if (this.usageInfo.usage.used >= this.usageInfo.usage.total && this.usageInfo.usage.total > 0) {
                         Notify({
-                            message:'流量已用完,不能激活,请充值',
-                            background:'#ff0752'
+                            message: '流量已用完,不能激活,请充值',
+                            background: '#ff0752'
                         })
                         return
                     }
-                    _post('/api/v1/app/activated',{iccid:'8934564565432345'})
-                        .then(res=>{
-                            if(res.state){
+                    _post('/api/v1/app/activated', {iccid: '8934564565432345'})
+                        .then(res => {
+                            if (res.state) {
                                 Notify({
-                                    message:'请在5分钟内放回原绑定的设备中开机,否则会被停机',
-                                    background:'#00c2ff'
+                                    message: '请在5分钟内放回原绑定的设备中开机,否则会被停机',
+                                    background: '#00c2ff'
                                 })
                             }
                         })
 
                 }
             },
-            toConnnection:function(){
-                setStorage('check_iccid',this.iccid);
-               this.$router.push({path:'/card/connection'});
+            toConnnection: function () {
+                setStorage('check_iccid', this.iccid);
+                this.$router.push({path: '/card/connection'});
             },
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);

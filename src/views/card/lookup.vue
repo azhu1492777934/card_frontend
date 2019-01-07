@@ -223,7 +223,6 @@
                                                     }
                                                 })
                                             }
-
                                             setStorage('token', res.data);//获取token
                                         } else if (res.error === '11002') {
                                             this.$emit('getToken');
@@ -384,7 +383,7 @@
                        if(res.data.status==1){
                            _this.$router.push({path:'/card/usage'});
                        }else if(res.data.status==2){
-                           setStorage('chec_realNameSource',res.data.source)
+                           setStorage('check_realNameSource',res.data.source)
                            _this.$router.push({path:'/new_card/real_name'});
                        }else if(res.data.status==3){
                            _this.$router.push({path:'/card/plan_list'});
