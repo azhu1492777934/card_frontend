@@ -155,22 +155,46 @@ function getUrlParam(name) {
 
 function getUserInfo() {
     //获取用户信息
-    _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
-        .then((res) => {
-            if (res.error == 0) {
-                let UserInfo = {
-                    account:res.data.account,
-                    avatar:res.data.avatar,
-                    nickname:res.data.nickname
+    return new Promise((resolve, reject) => {
+        _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
+            .then((res) => {
+                if (res.error == 0) {
+                    let UserInfo = {
+                        account:res.data.account,
+                        avatar:res.data.avatar,
+                        nickname:res.data.nickname
+                    }
+                    setStorage('userInfo', UserInfo);
+                    resolve({
+                        state:1,
+                        msg:'获取用户信息成功'
+                    })
+                } else if (res.error == "11002") {
+                    refreshToken()
+                } else {
+                    resolve({
+                        state:0,
+                        msg:res.msg
+                    })
                 }
-                setStorage('userInfo', UserInfo);
-            } else if (res.error == "11002") {
-                refreshToken()
-            } else {
-                Notify({message: res.msg})
-            }
-        })
+            })
+    })
+
 }//获取用户信息
+
+function getOpenid() {
+    let checkBrowserResult = checkBrowser();
+    if(checkBrowserResult=='wechat' || checkBrowserResult == 'alipay'){
+        if(getStorage('decrypt_data')){
+            let openid = getStorage('decrypt_data').openid;
+            return openid
+        }else{
+            return ''
+        }
+    }else{
+        return ''
+    }
+}
 
 function isUserBind() {
     let checkBrowserResult = checkBrowser()
@@ -230,6 +254,7 @@ export {
     getUrlParam,
     getUserInfo,
     isUserBind,
+    getOpenid,
     clickThrotle,
-    inArray
+    inArray,
 }

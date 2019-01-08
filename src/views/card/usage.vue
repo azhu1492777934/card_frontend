@@ -456,6 +456,9 @@
 
     export default {
         name: "home",
+        props:{
+            decrypt_data:{},
+        },
         data() {
             const _this = this;
             return {
@@ -510,12 +513,14 @@
             swiperSlide
         },
         created() {
+
             if (getStorage('check_iccid')) {
 
                 this.iccid = getStorage('check_iccid');
 
                 _get('/api/v1/app/cards/telcom/usage', {
-                    iccid: getStorage('check_iccid')
+                    iccid: getStorage('check_iccid'),
+                    open_id:this.decrypt_data.openid
                 }).then(res => {
                     if (res.state) {
                         this.load_plan = false;
@@ -552,7 +557,7 @@
                         }
 
                         if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.usageInfo.imei) {
-                            if (!this.usageInfo.usage.imei || !this.usageInfo.data.fenli) {
+                            if (!this.usageInfo.usage.imei || !this.usageInfo.fenli) {
                                 this.filterCardInfo.device_state = {state: '机卡已绑定', code: 1}
                             } else {
                                 if (this.usageInfo.status == 2) {

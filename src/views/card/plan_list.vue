@@ -261,8 +261,7 @@
         },
         mounted() {
             var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            this.$refs.vanSwiperWwrap.style.height = (clientHeight - 146) + 'px';
-
+            this.$refs.vanSwiperWwrap.style.height = (clientHeight - 146 - 44) + 'px';
         },
         methods: {
             swiperOnChange: function (index) {

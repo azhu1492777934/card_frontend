@@ -139,12 +139,15 @@
 
 <script>
     // @ is an alias to /src
-    import {checkICCID, setStorage, formatterCardTime, getStorage,codeParam,getUserInfo,isUserBind,getUrlParam,checkBrowser} from '../../utilies'
+    import {checkICCID, setStorage, formatterCardTime, getStorage,getUrlParam,checkBrowser} from '../../utilies'
     import {Toast, Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
 
     export default {
         name: "home",
+        props:{
+            decrypt_data:{},
+        },
         data() {
             return {
                 state: '',//防跨域攻击
@@ -164,118 +167,6 @@
         },
         created() {
 
-            let checkBrowserResult = checkBrowser()
-            if (checkBrowserResult == 'wechat') {
-                this.client_type = 'wechat';
-            } else if(checkBrowserResult == 'alipay') {
-                this.client_type = 'alipay';
-            }
-
-            if(this.client_type=='wechat' || this.client_type =='alipay'){
-
-                if (getStorage('token')) {
-                    if(getStorage('userBind')){
-                        getUserInfo()
-                    }else{
-                        isUserBind().then(res=>{
-                            if(res.state==1){
-                                this.$router.push({path:'/login'})
-                                //未绑定
-                            }else if(res.state==0){
-                                getUserInfo()
-                            }else{
-                                Notify({message:res.msg})
-                            }
-                        })
-                    }
-                } else {
-                    if (getUrlParam('data')) {
-                        setStorage('auth_data', getUrlParam('data'))
-                    }
-                    if (getStorage('auth_data')) {
-                        /*
-                        * 已授权操作
-                        * */
-                        if (getStorage('state') == getUrlParam('state')) {
-                            //解密data
-                            _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
-                                data: getStorage('auth_data')
-                            }).then(res => {
-                                if (res.error==0) {
-                                    this.decrypt_data = res.data.data;
-                                    setStorage('decrypt_data', res.data.data);
-
-                                    //login
-                                    _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
-                                        uuid: res.data.data.openid,
-                                        code: res.data.code
-                                    }).then(res => {
-                                        if (res.error==0) {
-                                            if(getStorage('userBind')){
-                                                getUserInfo()
-                                            }else{
-                                                isUserBind().then(res=>{
-                                                    if(res.state==1){
-                                                        this.$router.push({path:'/login'})
-                                                        //未绑定
-                                                    }else{
-                                                        getUserInfo()
-                                                    }
-                                                })
-                                            }
-                                            setStorage('token', res.data);//获取token
-                                        } else if (res.error === '11002') {
-                                            this.$emit('getToken');
-                                        } else if (res.error === '30005' || res.data.error === '11003') {
-
-                                        } else {
-                                            Notify({
-                                                message: res.msg
-                                            })
-                                        }
-                                    })
-                                } else if (res.data.error === '11002') {
-                                    this.$emit('getToken');
-                                } else {
-                                    Notify({
-                                        message: res.msg
-                                    })
-                                }
-                            })
-                            // end 状态
-                        } else {
-                            location.reload()
-                        }
-                        /*
-                       * end 已授权操作
-                       * */
-                    } else {
-                        //授权
-                        this.state = Math.random().toString(36).substr(2);
-                        setStorage('state', this.state);
-                        _get('/accountCenter/v2/oauth/authorize?' + codeParam({
-                            client_type: this.client_type,
-                            redirect_uri: 'http://cardserver-test.china-m2m.com',
-                            scope: 'userinfo',
-                            state: this.state
-                        }, 'get'))
-                            .then(res => {
-                                if(res.error==0){
-                                    window.location.href = res.data
-                                }else if(res.error=='11002'){
-                                    this.$emit('getToken');
-                                }else{
-                                    Notify({
-                                        message: res.msg
-                                    })
-                                }
-                            })
-                    }
-                }
-
-            }
-
-                
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
             }
@@ -369,9 +260,11 @@
 
                 this.recording_list_length = this.recording_list.length;
 
+
                 //查询
                 _post('/api/v1/app/new_auth/check_auth_',{
-                    iccid:iccid
+                    iccid:iccid,
+                    open_id:this.decrypt_data.openid
                 }).then(res=>{
                     if(!res.state){
                         Notify({
@@ -446,7 +339,7 @@
                 return{
                     state:1
                 }
-            }
+            },
         }
 
     };

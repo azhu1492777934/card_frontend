@@ -240,6 +240,9 @@
     // @ is an alias to /src
     export default {
         name: "home",
+        props:{
+            decrypt_data:{},
+        },
         data() {
             return {
                 //校验数据
@@ -588,7 +591,9 @@
                     realname: this.info_name || '***',
                     id_no: this.info_id || '***',
                     alibind: true,
+                    open_id : this.decrypt_data.openid
                 };
+
                 _post('/api/v1/app/bind/imei', param)
                     .then(res => {
                         if (res.state) {

@@ -15,6 +15,13 @@ Vue.config.productionTip = false
 Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)
 
+Vue.prototype.appContext = false;
+document.addEventListener('UniAppJSBridgeReady', function() {
+    uni.getEnv(function(res) {
+        Vue.prototype.appContext = true;
+    });
+});
+
 new Vue({
   router,
   render: h => h(App)

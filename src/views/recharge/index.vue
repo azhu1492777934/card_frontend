@@ -70,7 +70,7 @@
                            type="number">
                 </div><!---elb-->
             </div>
-            <button @click="recharge" class="btn-large">支付</button>
+            <button @click="normalPay" class="btn-large">支付</button>
         </div>
 
         <van-popup
@@ -96,16 +96,36 @@
         <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
             <p class="showTip">创建订单中,请等候</p>
         </van-popup><!--创建订单-->
+
+        <van-popup :close-on-click-overlay="false" v-model="appPay.show" class="border-radius-10">
+            <div class="appContext-pay-wrap">
+                <div class="title">
+                    支付方式选择
+                </div>
+                <div class="content">
+                    <p @click="changePayType(1)" :class="{'choose_type':appPay.type}">微信支付</p>
+                    <p @click="changePayType(0)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
+                </div>
+                <div class="footer">
+                    <button @click="closePayType">取消</button>
+                    <button @click="FinalAppPay">确定</button>
+                </div>
+            </div>
+        </van-popup><!--app支付选择-->
+
     </div>
 </template>
 
 <script>
     import {DatetimePicker, Area, Popup,Toast,Notify} from 'vant';
-    import {setStorage,getStorage} from "../../utilies";
+    import {setStorage,getStorage,removeStorage} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
         name: "recharge",
+        props:{
+            decrypt_data: {},
+        },
         components: {
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
@@ -166,6 +186,11 @@
                 userInfo:getStorage('userInfo'),
                 userDiscountInfo:null,
                 planInfo:getStorage('planInfo'),//当前充值套餐信息
+
+                appPay:{
+                  show:false,
+                  type:true,//true 为微信，false 为支付宝
+                },
 
             }
         },
@@ -252,6 +277,8 @@
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
                 param.price = this.planInfo.price;
+                param.user_id = this.userInfo.account.user_id;
+                param.open_id = this.decrypt_data.openid;
 
                 if(this.check_elb){
                     if(!this.val_elb){
@@ -266,7 +293,7 @@
                         Toast('ELB最低抵扣数额为1');
                         return
                     }
-                    if(this.val_elb>this.userInfo.elb){
+                    if(this.val_elb>this.userInfo.account.elb){
                         Toast('您的ELB余额不足');
                         return
                     }
@@ -279,6 +306,7 @@
                         return
                     }
                     param.elb_deduction = this.val_elb
+
                 }
                 if(this.check_coupon){
                     if(!this.val_coupon){
@@ -297,17 +325,27 @@
                     }
                 }
 
+                if(this.appContext){
+                    if(this.appPay.type){
+                        param.payType = 'WECHAT'
+                    }else{
+                        param.payType = 'ALIPAY'
+                    }
+                }
+
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state){
-                            if(res.html){
-                                document.write(res.html);
+                            if(/<[^>]+>/.test(res.data)){
+                                document.write(res.data);
                             }else{
                                 Notify({
-                                    message:'充值成功'
+                                    message:'充值成功',
+                                    background:'#60ce53'
                                 })
                                 setTimeout(function () {
-                                    setStorage('check_iccid',_this.plan_list.iccid);
+                                    setStorage('check_iccid',_this.planInfo.iccid);
+                                    removeStorage('planInfo')
                                     _this.$router.push({path:'/card/usage'})
                                 },2000)
                             }
@@ -318,6 +356,17 @@
                         }
                     })
             },
+            normalPay(){
+                if(this.appContext){
+                    this.appPay.show = true
+                }else{
+                    this.recharge()
+                }
+            },//普通支付
+            FinalAppPay(){
+                this.recharge();
+            },//app支付
+
             filterRechargeList:function (rmb,planPrice) {
                 return this.recharge_list.filter(item=>{
                     if(item.pay_type=='normal_charge'){
@@ -361,10 +410,22 @@
                     }
 
                 })
-            }//用户rmb,套餐价格planPrice
+            },//用户rmb,套餐价格planPrice
+            changePayType(type){
+                if(type){
+                    this.appPay.type = true
+                }else{
+                    this.appPay.type = false
+                }
+            },
 
+            closePayType(){
+                this.appPay.type = true;
+                this.appPay.show = false
+            }
         },
         created() {
+
             if(this.planInfo){
                 if(this.planInfo.is_elb_deductible==0){
                     this.isShowChoice.showELB = false
@@ -385,7 +446,17 @@
                 }
             }//加速包默认不显示生效时间
 
-            this.new_recharge_list = this.filterRechargeList(0,this.planInfo.price);//根据套餐价格过滤充值参数
+            /*
+            * 用户钻石数
+            * 套餐价格
+            * */
+            let user_rmb = 0;
+            if(this.userInfo){
+                if(this.userInfo.account.rmb > 0){
+                    let user_rmb = this.userInfo.account.rmb;
+                }
+            }
+            this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
         },
     }
 </script>
@@ -401,7 +472,7 @@
         vertical-align: top;
         width: 30px;
         height: 30px;
-        border: 1px solid #bcbcbc;
+        border: 1PX solid #bcbcbc;
         outline: none;
         cursor: pointer;
         border-radius: 50%;
@@ -442,7 +513,57 @@
     }
 
     .recharge-wrap {
+
         text-align: left;
+
+        .border-radius-10{
+            width: 80%;
+            border-radius: 10px;
+        }
+        .appContext-pay-wrap{
+            color: #333;
+            .title{
+                font-size: 32px;
+                font-weight: 500;
+                padding-top: 25px;
+                text-align: center;
+            }
+            .content{
+                padding: 25px;
+                line-height: 1.5;
+                max-height: 60vh;
+                overflow-y: auto;
+                text-align: center;
+                color: #7d7e80;
+                font-size: 28px;
+                p{
+                    margin: 10px 0;
+                    padding: 10px;
+                }
+                .choose_type{
+                    background-color: #f1af4c;
+                    color: #fff;
+                    border-radius: 5px;
+                }
+            }
+            .footer{
+                display: flex;
+                border-top:1PX solid #f5f5f5 ;
+                height: 90px;
+                button{
+                    flex: 1;
+                    font-size: 28px;
+                    background-color: transparent;
+                    &:first-child{
+                        color: #000;
+                        border-right: 1PX solid #f5f5f5;
+                    }
+                    &:last-child{
+                        color: @primary;
+                    }
+                }
+            }
+        }
 
         .recharge-tip {
             background-color: #feeae5;

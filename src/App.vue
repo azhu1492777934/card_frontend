@@ -9,27 +9,28 @@
                 <div>
                     <span>余额:</span>
                     <span class="icon-diamond-wrap">
-              <i class="icon-user-size  icon-diamond"></i>
-              {{userInfo.account.rmb}}
-          </span>
+                          <i class="icon-user-size  icon-diamond"></i>
+                          {{userInfo.account.rmb}}
+                      </span>
                     <span class="icon-elb-wrap">
-              <i class="icon-user-size icon-elb"></i>
-              {{userInfo.account.elb}}
-          </span>
+                          <i class="icon-user-size icon-elb"></i>
+                          {{userInfo.account.elb}}
+                      </span>
                     <span @click="showDoc" class="icon-question">?</span>
                 </div>
             </div>
         </div>
 
-        <router-view @getToken="refreshToken" v-wechat-title="$route.meta.title"/>
+        <router-view :decrypt_data="decrypt_data" @getToken="refreshToken"
+                     v-wechat-title="$route.meta.title"/>
     </div>
 </template>
 
 <script>
-    import {Dialog} from 'vant'
-    import {_get} from "./http";
-    import {codeParam} from "./utilies";
-    import {getStorage} from "./utilies";
+    import {Dialog, Notify} from 'vant'
+    import {_get, _post} from "./http";
+    import {codeParam, getUserInfo, isUserBind, checkBrowser, setStorage} from "./utilies";
+    import {getStorage, getUrlParam} from "./utilies";
 
     export default {
         name: 'App',
@@ -37,15 +38,181 @@
             return {
                 userInfo: {},
                 showUser: false,
+                openid: '',
+                decrypt_data: {},
             }
         },
         components: {
             [Dialog.name]: Dialog
         },
         created() {
-            if(getStorage('userInfo')){
-                this.showUser = true;
-                this.userInfo = getStorage('userInfo');
+
+            let checkBrowserResult = checkBrowser()
+            if (checkBrowserResult == 'wechat') {
+                this.client_type = 'wechat';
+            } else if (checkBrowserResult == 'alipay') {
+                this.client_type = 'alipay';
+            }
+
+            if (getStorage('decrypt_data')) {
+                this.decrypt_data = getStorage('decrypt_data')
+            }
+
+            if (!this.decrypt_data.openid) {
+                this.decrypt_data.openid = 0;//非真实数据;
+            }
+
+            if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.appContext) {
+
+                if (this.appContext) {
+                    this.showUser = false;
+                    let token = getUrlParam('appToken');
+                    setStorage('token', token);
+                }
+
+                if (getStorage('token')) {
+
+                    if (this.appContext) {
+                        getUserInfo().then(res => {
+                            if (res.state) {
+                                this.showUser = true;
+                                this.userInfo = getStorage('userInfo');
+                            } else {
+                                Notify({message: res.msg})
+                            }
+                        })//app 环境
+                    } else {
+
+                        if (getStorage('userBind')) {
+                            getUserInfo().then(res => {
+                                if (res.state) {
+                                    this.showUser = true;
+                                    this.userInfo = getStorage('userInfo');
+                                } else {
+                                    Notify({message: res.msg})
+                                }
+                            })
+                        } else {
+                            isUserBind().then(res => {
+                                if (res.state == 1) {
+                                    this.$router.push({path: '/login'})
+                                    //未绑定
+                                } else if (res.state == 0) {
+                                    getUserInfo().then(res => {
+                                        if (res.state) {
+                                            this.showUser = true
+                                            this.userInfo = getStorage('userInfo');
+                                        } else {
+                                            Notify({message: res.msg})
+                                        }
+                                    })
+                                } else {
+                                    Notify({message: res.msg})
+                                }
+                            })
+                        }
+                        //支付宝微信环境
+                    }
+                } else {
+                    if (getUrlParam('data')) {
+                        setStorage('auth_data', getUrlParam('data'))
+                    }
+                    if (getStorage('auth_data')) {
+                        /*
+                        * 已授权操作
+                        * */
+                        if (getStorage('state') == getUrlParam('state')) {
+                            //解密data
+                            _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
+                                data: getStorage('auth_data')
+                            }).then(res => {
+                                if (res.error == 0) {
+                                    this.decrypt_data = res.data.data;
+                                    setStorage('decrypt_data', res.data.data);
+
+
+                                    //login
+                                    _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
+                                        uuid: res.data.data.openid,
+                                        code: res.data.code
+                                    }).then(res => {
+                                        if (res.error == 0) {
+                                            if (getStorage('userBind')) {
+                                                getUserInfo().then(res => {
+                                                    if (res.state) {
+                                                        this.showUser = true
+                                                        this.userInfo = getStorage('userInfo');
+                                                    } else {
+                                                        Notify({message: res.msg})
+                                                    }
+                                                })
+                                            } else {
+                                                isUserBind().then(res => {
+                                                    if (res.state == 1) {
+                                                        this.$router.push({path: '/login'})
+                                                        //未绑定
+                                                    } else {
+                                                        getUserInfo().then(res => {
+                                                            if (res.state) {
+                                                                this.showUser = true
+                                                                this.userInfo = getStorage('userInfo');
+                                                            } else {
+                                                                Notify({message: res.msg})
+                                                            }
+                                                        })
+                                                    }
+                                                })
+                                            }
+                                            setStorage('token', res.data);//获取token
+                                        } else if (res.error === '11002') {
+                                            this.$emit('getToken');
+                                        } else if (res.error === '30005' || res.data.error === '11003') {
+
+                                        } else {
+                                            Notify({
+                                                message: res.msg
+                                            })
+                                        }
+                                    })
+                                } else if (res.data.error === '11002') {
+                                    this.$emit('getToken');
+                                } else {
+                                    Notify({
+                                        message: res.msg
+                                    })
+                                }
+                            })
+                            // end 状态
+                        } else {
+                            location.reload()
+                        }
+                        /*
+                       * end 已授权操作
+                       * */
+                    } else {
+                        //授权
+                        this.state = Math.random().toString(36).substr(2);
+                        setStorage('state', this.state);
+                        _get('/accountCenter/v2/oauth/authorize?' + codeParam({
+                            client_type: this.client_type,
+                            redirect_uri: 'http://cardserver-test.china-m2m.com',
+                            scope: 'userinfo',
+                            state: this.state
+                        }, 'get'))
+                            .then(res => {
+                                if (res.error == 0) {
+                                    window.location.href = res.data
+                                } else if (res.error == '11002') {
+                                    this.$emit('getToken');
+                                } else {
+                                    Notify({
+                                        message: res.msg
+                                    })
+                                }
+                            })
+                    }
+                }
+
             }
         },
         methods: {
