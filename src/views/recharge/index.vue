@@ -183,7 +183,7 @@
                 activeIndex: 0,//当前选择充值方式索引
                 showDate: false,//选择时间弹出
 
-                userInfo:'',
+                userInfo:'',//用户信息
                 userDiscountInfo:null,
                 planInfo:getStorage('planInfo'),//当前充值套餐信息
 
@@ -269,12 +269,18 @@
                 this.showDate = false;
             },//取消日期弹窗
             recharge:function () {
+                if(!this.userInfo.account.user_id){
+                    Notify({message:'请在支付宝或微信环境中充值'});
+                    return
+                }
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
                 let param = {},
                     _this = this;
 
                 rechargeInfo.pay_type=='diamond_charge'?param.status = 1 : param.status = 0;
-                rechargeInfo.pay_type=='over_charge'?param.recharge_price = rechargeInfo.pay_money : param.recharge_price =  this.planInfo.price;
+                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'){
+                    param.recharge_price = rechargeInfo.pay_money
+                }
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
                 param.price = this.planInfo.price;
@@ -324,6 +330,8 @@
                     }else{
                         param.start_time = this.val_date
                     }
+                }else{
+                    param.start_time = this.val_date
                 }
 
                 if(this.appContext){
@@ -349,8 +357,7 @@
                                 })
                                 setTimeout(function () {
                                     setStorage('check_iccid',_this.planInfo.iccid);
-                                    removeStorage('planInfo')
-                                    _this.$router.push({path:'/card/usage'})
+                                    location.href = res.data.return_url
                                 },2000)
                             }
                         }else{
@@ -435,6 +442,10 @@
             }
         },
         created() {
+
+            if(!this.planInfo){
+                this.$router.push({'path':'/card/plan_list'});
+            }
 
             if(this.planInfo){
                 if(this.planInfo.is_elb_deductible==0){

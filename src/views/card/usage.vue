@@ -421,7 +421,7 @@
         }
         .btn-recharge-wrap {
             position: relative;
-            padding: 40px 0;
+            padding: 30px 0;
             button {
                 display: inline-block;
 
@@ -520,7 +520,6 @@
 
                 _get('/api/v1/app/cards/telcom/usage', {
                     iccid: getStorage('check_iccid'),
-                    open_id:this.decrypt_data.openid
                 }).then(res => {
                     if (res.state) {
                         this.load_plan = false;
@@ -640,10 +639,10 @@
         mounted() {
             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
             let checkBrowserResult = checkBrowser();
-            if (checkBrowserResult != 'alipy' || checkBrowserResult != 'wechat') {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 370) + 'px';
+            if (checkBrowserResult != 'alipy' || checkBrowserResult != 'wechat' || !this.appContext) {
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 330) + 'px';
             } else {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 370 - 44) + 'px';
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 340 - 44) + 'px';
             }
         },
         methods: {

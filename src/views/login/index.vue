@@ -59,10 +59,10 @@
                         mobile: this.phone,
                         code: this.code,
                         from: this.client_type,
-                        uuid: this.decrypt_data.data.openid,
-                        nickname: this.decrypt_data.data.nickname,
-                        gender: this.decrypt_data.data.sex,
-                        avatar: this.decrypt_data.data.headimgurl
+                        uuid: this.decrypt_data.openid,
+                        nickname: this.decrypt_data.nickname,
+                        gender: this.decrypt_data.sex,
+                        avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
                         if (res.data.error == 0) {
                             Notify({message:'绑定成功'});

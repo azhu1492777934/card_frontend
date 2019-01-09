@@ -183,7 +183,7 @@
         }
 
         .btn-recharge-wrap {
-            padding: 60px 32px;
+            padding: 40px 32px;
             button {
                 display: block;
                 width: 100%;
@@ -200,7 +200,7 @@
 <script>
 
     import {Swipe, SwipeItem,Toast,Popup} from 'vant';
-    import {setStorage,getStorage} from "../../utilies";
+    import {setStorage,getStorage,checkBrowser} from "../../utilies";
     import {_get} from "../../http";
     // @ is an alias to /src
     export default {
@@ -260,8 +260,14 @@
 
         },
         mounted() {
-            var clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            this.$refs.vanSwiperWwrap.style.height = (clientHeight - 146 - 44) + 'px';
+            let checkBrowserResult = checkBrowser(),
+             clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+
+            if(checkBrowserResult == 'wechat' || checkBrowserResult =='alipay'){
+                this.$refs.vanSwiperWwrap.style.height = (clientHeight - 130 - 44) + 'px';
+            }else{
+                this.$refs.vanSwiperWwrap.style.height = (clientHeight - 120) + 'px';
+            }
         },
         methods: {
             swiperOnChange: function (index) {

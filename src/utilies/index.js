@@ -120,7 +120,7 @@ function refreshToken(){
         .then((res) => {
             if(res.error == 0){
                 setStorage("token",res.data);
-               location.reload();
+               window.location.reload();
             }
         })
 }
@@ -182,20 +182,6 @@ function getUserInfo() {
 
 }//获取用户信息
 
-function getOpenid() {
-    let checkBrowserResult = checkBrowser();
-    if(checkBrowserResult=='wechat' || checkBrowserResult == 'alipay'){
-        if(getStorage('decrypt_data')){
-            let openid = getStorage('decrypt_data').openid;
-            return openid
-        }else{
-            return ''
-        }
-    }else{
-        return ''
-    }
-}
-
 function isUserBind() {
     let checkBrowserResult = checkBrowser()
     return new Promise((resolve,reject)=>{
@@ -254,7 +240,6 @@ export {
     getUrlParam,
     getUserInfo,
     isUserBind,
-    getOpenid,
     clickThrotle,
     inArray,
 }

@@ -76,7 +76,8 @@
             return {
                 iccid:'',
                 imei:'',
-                qrSrc:''
+                qrSrc:'',
+                source:''
             }
         },
         components: {
@@ -86,7 +87,18 @@
         created() {
             this.iccid = getUrlParam('iccid');
             this.imei = getUrlParam('imei');
+            this.source = getUrlParam('source');
             this.qrSrc = 'http://cardserver_test.china-m2m.com/qrcode?iccid='+this.iccid+'&imei='+this.imei
+
+            // _get('/api/v1/app/jump/taobao',{
+            //     imei:this.imei,
+            //     iccid:this.iccid,
+            //     source:this.source
+            // }).then(res=>{
+            //     if(!res.state){
+            //         Notify({message:'实名跳转失败'});
+            //     }
+            // });
         },
         mounted() {
            

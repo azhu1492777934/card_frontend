@@ -1,7 +1,7 @@
 <template>
     <div class="g-wrap card-activated-wrap">
         <div v-show="card_tip" class="tip-wrap">根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
-        <div v-show="!card_tip" class="tip-mobile tip-wrap">
+        <div v-show="!card_tip" class="tip-wrap">
             <span>1.根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备,才允许使用。</span><br>
             <span>2.请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
         </div>
@@ -96,7 +96,7 @@
     .card-activated-wrap {
         .tip-wrap {
             padding: 18px 60px;
-            font-size: 24px;
+            font-size: 26px;
             line-height: 1.3;
             color: #ff562f;
             background-color: #fff1ee;
@@ -231,7 +231,7 @@
     import {Popup, Notify, Dialog} from 'vant';
     import {_get, _post} from "../../http";
     import Clipboard from 'clipboard';
-    import {codeParam, getStorage, inArray} from "../../utilies";
+    import {codeParam, getStorage, inArray,getUrlParam} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
     export default {
@@ -286,18 +286,28 @@
         },
         created() {
 
-            this.card_source = getStorage('check_realNameSource');
+            if(getUrlParam('iccid')){
+                this.info_iccid =  getUrlParam('iccid');
+            }else{
+                if (getStorage('check_iccid')) {
+                    this.info_iccid = getStorage('check_iccid');
+                } else {
+                    this.$router.push({'path':'/card/lookup'});
+                }
+            }
+            if(getUrlParam('source')){
+                this.card_source = getUrlParam('source');
+            }else{
+                if(getStorage('check_realNameSource')){
+                    this.card_source = getStorage('check_realNameSource');
+                }else{
+                    this.$router.push({'path':'/card/lookup'});
+                }
+            }
+
             if (inArray(this.card_source, [18, 19, 20, 21, 22]) >= 0) {
                 this.card_tip = !this.card_tip
             }
-
-            if (getStorage('check_iccid')) {
-                this.info_iccid = getStorage('check_iccid');
-            } else {
-                console.log('无iccid');
-            }
-
-
 
             _get('/api/v1/app/find_iccid', {
                 iccid: getStorage('check_iccid')
@@ -584,18 +594,18 @@
                     realname: this.info_name || '***',
                     id_no: this.info_id || '***',
                     alibind: true,
-                    open_id : this.decrypt_data.openid
                 };
 
                 _post('/api/v1/app/bind/imei', param)
                     .then(res => {
                         if (res.state) {
-                            location.href = "/new_card/to_tb?iccid=" + this.info_iccid + "&imei=" + this.info_imei + "&source=" + this.card_source;
+                            location.href = '/api/v1/app/jump/taobao?imei='+this.info_imei+'&iccid='+this.info_iccid+'&source='+this.card_source;
                         } else {
-                            Notify({
-                                message: '绑定手机失败,请稍后再试',
-                                background: '#ce4141'
-                            })
+                            if(res.msg){
+                                Notify({message: res.msg,})
+                            }else{
+                                Notify({message: '绑定手机失败,请稍后再试',})
+                            }
                         }
                     })
             },

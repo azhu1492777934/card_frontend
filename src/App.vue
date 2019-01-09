@@ -38,7 +38,6 @@
             return {
                 userInfo: {},
                 showUser: false,
-                openid: '',
                 decrypt_data: {},
             }
         },
@@ -46,6 +45,9 @@
             [Dialog.name]: Dialog
         },
         created() {
+
+            let scanWatchCardIccid = getUrlParam('iccid');
+            setStorage('watch_card',scanWatchCardIccid);//手表扫码
 
             let checkBrowserResult = checkBrowser()
             if (checkBrowserResult == 'wechat') {
@@ -75,9 +77,9 @@
                     if (this.appContext) {
                         getUserInfo().then(res => {
                             if (res.state) {
-                                this.showUser = true;
+                                this.showUser = false;
                                 this.userInfo = getStorage('userInfo');
-                            } else {
+                            } else if(!res.state){
                                 Notify({message: res.msg})
                             }
                         })//app 环境
@@ -184,7 +186,7 @@
                             })
                             // end 状态
                         } else {
-                            location.reload()
+                            window.location.reload();
                         }
                         /*
                        * end 已授权操作
@@ -237,6 +239,7 @@
 </script>
 
 <style lang="less">
+    html,body,#app{height: 100%;}
     #app {
         max-width: 750px;
         margin: 0 auto;

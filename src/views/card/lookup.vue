@@ -34,13 +34,14 @@
     @import "../../assets/less/common";
 
     .check-card-wrap {
+        height: 100%;
         padding: 0 40px;
         .scanTop-wrap {
             padding: 35px 0 70px;
             text-align: center;
             img {
                 display: block;
-                width: 80%;
+                width: 77%;
                 margin: 0 auto;
                 height: auto;
             }
@@ -49,7 +50,7 @@
             position: relative;
             display: flex;
             height: 80px;
-            margin-bottom: 70px;
+            margin-bottom: 50px;
             align-items: center;
             border: 2px solid #38b5ed;
             border-radius: 7px;
@@ -74,7 +75,7 @@
             }
         }
         .btn-check-wrap {
-            padding-bottom: 70px;
+            padding-bottom: 50px;
             button {
                 display: inline-block;
                 width: 50%;
@@ -145,9 +146,6 @@
 
     export default {
         name: "home",
-        props:{
-            decrypt_data:{},
-        },
         data() {
             return {
                 state: '',//防跨域攻击
@@ -180,7 +178,7 @@
 
             let scanWatchCardIccid = getUrlParam('iccid');
 
-            if(scanWatchCardIccid){
+            if(scanWatchCardIccid || getStorage('watch_card')){
 
                 if(getStorage('watch_card_timestamp')){
 
@@ -264,7 +262,6 @@
                 //查询
                 _post('/api/v1/app/new_auth/check_auth_',{
                     iccid:iccid,
-                    open_id:this.decrypt_data.openid
                 }).then(res=>{
                     if(!res.state){
                         Notify({
