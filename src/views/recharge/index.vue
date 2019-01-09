@@ -183,7 +183,7 @@
                 activeIndex: 0,//当前选择充值方式索引
                 showDate: false,//选择时间弹出
 
-                userInfo:getStorage('userInfo'),
+                userInfo:'',
                 userDiscountInfo:null,
                 planInfo:getStorage('planInfo'),//当前充值套餐信息
 
@@ -272,8 +272,9 @@
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
                 let param = {},
                     _this = this;
-                rechargeInfo.pay_type=='diamond_charge'?param.status==1 : param.status=0;
-                rechargeInfo.pay_type=='over_charge'?param.recharge_price = rechargeInfo.pay_money : this.planInfo.price;
+
+                rechargeInfo.pay_type=='diamond_charge'?param.status = 1 : param.status = 0;
+                rechargeInfo.pay_type=='over_charge'?param.recharge_price = rechargeInfo.pay_money : param.recharge_price =  this.planInfo.price;
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
                 param.price = this.planInfo.price;
@@ -333,9 +334,12 @@
                     }
                 }
 
+                this.rechargeShow = true;
+
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state){
+                            this.rechargeShow = false;
                             if(/<[^>]+>/.test(res.data)){
                                 document.write(res.data);
                             }else{
@@ -388,11 +392,15 @@
                         }
                     }else{
                         if(item.pay_type==='diamond_charge'){
-                            item.user_rmb = rmb
+                            if(planPrice<rmb){
+                                item.user_rmb = planPrice
+                            }else{
+                                item.user_rmb = rmb
+                            }
                         }
                         if(planPrice>100&&planPrice<=200){
                             return item.pay_type ==='diamond_charge'
-                                &&(item.pay_type ==='over_charge' && item.pay_money <=200 )
+                                ||(item.pay_type ==='over_charge' && item.pay_money <=200 )
                                 || item.pay_type ==='normal_charge'
 
 
@@ -405,6 +413,8 @@
                         }else if(planPrice>300){
                             return item.pay_type ==='diamond_charge'
                                || item.pay_type ==='normal_charge'
+                        }else{
+                            return item.pay_money >=0
                         }
 
                     }
@@ -451,9 +461,10 @@
             * 套餐价格
             * */
             let user_rmb = 0;
-            if(this.userInfo){
+            if(getStorage('userInfo')) {
+                this.userInfo = getStorage('userInfo');
                 if(this.userInfo.account.rmb > 0){
-                    let user_rmb = this.userInfo.account.rmb;
+                    user_rmb = this.userInfo.account.rmb;
                 }
             }
             this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数

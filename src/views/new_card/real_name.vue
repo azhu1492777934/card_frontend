@@ -65,10 +65,6 @@
 </template>
 
 <style lang="less">
-    html, body {
-        background-color: #f7f7f7;
-    }
-
     input, button {
         border: none;
         outline: none;
@@ -302,6 +298,7 @@
             }
 
 
+
             _get('/api/v1/app/find_iccid', {
                 iccid: getStorage('check_iccid')
             }).then(res => {
@@ -485,13 +482,9 @@
                     return
                 }
 
-
-                // this.checkPhoneBind().then(res=>{
-                //     Notify({message:res.msg})
-                //     if(res.state!==2){
-                //         return
-                //     }
-                // })//检测实名卡数
+                Notify({
+                    message:'检测手机号码中,请等候'
+                })
 
 
                 _post('/api/v1/app/phone/check', {mobile: this.info_phone})
@@ -605,35 +598,6 @@
                             })
                         }
                     })
-            },
-            checkPhoneBind: function () {
-                return new Promise((resolve, reject) => {
-                    _post('/api/v1/app/phone/check', {mobile: this.info_phone})
-                        .then(res => {
-                            if (!res.state) {
-                                if (res.data > 10) {
-                                    resolve({
-                                        state: 1,
-                                        msg: '同一个手机号只能实名10个卡'
-                                    })
-                                } else {
-                                    resolve({
-                                        state: 2,
-                                        msg: '手机号码校验成功'
-                                    })
-                                }
-                            } else {
-                                resolve({
-                                    state: 0,
-                                    msg: '服务器内部错误'
-                                })
-                            }
-
-                        })//校验手机是否可以绑定实名
-                })
-            },
-            scan: function () {
-
             },
             toTutorial: function () {
                 if (this.card_source == 18 || this.card_source ==19) {

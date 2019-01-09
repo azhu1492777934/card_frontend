@@ -4,7 +4,7 @@ import qs from 'qs'
 import {getStorage} from "../utilies";
 
 const service = axios.create({
-    timeout: 7000
+    timeout: 10000
 })
 service.interceptors.request.use(function (config) {
 

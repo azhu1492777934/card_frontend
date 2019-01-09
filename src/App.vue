@@ -245,6 +245,7 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
+        background-color: #fff;
         .user-wrap {
             padding: 15px;
             background-color: #fff;
