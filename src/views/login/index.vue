@@ -9,7 +9,7 @@
                 <button :disabled="btnCode_disabled" class="getCode" @click="getCode">{{codeText}}</button>
             </div>
             <div class="btn-login-wrap">
-                <button>登录</button>
+                <button @click="login">登录</button>
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
 <script>
     import {Notify} from 'vant'
     import {_post,_get} from "../../http";
-    import {getStorage, getUrlParam, setStorage,getUserInfo,codeParam, checkBrowser} from "../../utilies";
+    import {getStorage, getUrlParam, setStorage,codeParam, checkBrowser} from "../../utilies";
 
     export default {
         data() {
@@ -31,31 +31,27 @@
                 state: '',
                 client_type: '',
                 btnCode_disabled:false,
+                time:null,
             }
         },
         components: {
             [Notify.name]: Notify
         },
         created() {
-            let checkBrowserResult = checkBrowser()
-            if (checkBrowserResult == 'wechat') {
-                this.client_type = 'wechat';
-            } else if(checkBrowserResult == 'alipay') {
-                this.client_type = 'alipay';
-            }
+
             //获取用户信息
             this.decrypt_data = getStorage('decrypt_data');
         },
         methods: {
             login() {
-                if (this.phone == '' || this.code == '') {
+                if (this.phone == '' && this.code == '') {
                     Notify({message: '请填写您的登录信息'})
                     return
                 } else if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
                     Notify({message: '您的手机号码有误'})
                     return
                 } else {
-                    _post("/accountCenter/v2/user/bind?" + code({},'post'), {
+                    _post("/accountCenter/v2/user/bind?" + codeParam({},'post'), {
                         mobile: this.phone,
                         code: this.code,
                         from: this.client_type,
@@ -64,14 +60,23 @@
                         gender: this.decrypt_data.sex,
                         avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
-                        if (res.data.error == 0) {
-                            Notify({message:'绑定成功'});
+                        if (res.error == 0) {
                             setStorage("token", res.data.data);
-                            this.$router.push('/card/lookup')
-                        } else if (res.data.error == "11002") {
+
+                            Notify({message:'绑定成功'});
+
+                            location.href = '/card/lookup'
+
+                        } else if (res.error == "11002") {
+
                             this.$emit("getToken");
-                        } else {
-                            Notify({message:res.data.msg})
+
+                        } else if(res.error == 30002){
+
+                            location.href = '/card/lookup'
+
+                        } else{
+                            Notify({message:res.msg})
                         }
                     })
                 }
@@ -88,29 +93,33 @@
                     _post("/accountCenter/v2/verify/send?" + codeParam({},'post'), {
                         mobile: this.phone
                     }).then((res) => {
-                        if (res.data.error == 0) {
+                        if (res.error == 0) {
                             Notify({message:'验证码发送成功'})
-                        } else if(res.data.error == "11002") {
+                        } else if(res.error == "11002") {
                             this.$emit("getToken");
                         } else {
-                            Notify({message:response.data.msg})
+                            Notify({message:res.msg})
                         }
                     })
                 }
             },
             countDownFun() {
-                this.countdown = 0;
-                this.codeText  = '获取验证码'
+                let _this = this;
                 this.btnCode_disabled = true;
-                let timer = setInterval(() => {
-                    if (this.countdown <= 0) {
-                        this.codeText = '获取验证码';
-                        this.countdown = 60;
-                        this.btnCode_disabled = false
-                        clearInterval(timer);
+
+                clearInterval(this.timer);
+
+                console.log(11);
+
+                this.timer = setInterval(() => {
+                    if (_this.countdown <= 0) {
+                        _this.codeText = '获取验证码';
+                        _this.countdown = 60;
+                        _this.btnCode_disabled = false
+                        clearInterval(_this.timer);
                     } else {
-                        this.codeText = this.countdown+'s';
-                        this.countdown--;
+                        _this.codeText = this.countdown+'s';
+                        _this.countdown--;
                     }
                 }, 1000)
             }
@@ -151,6 +160,7 @@
                 align-items: center;
                 button {
                     display: inline-block;
+                    width: 180px;
                     padding: 12px 30px;
                     border-radius: 6px;
                     color: #23B0FE;

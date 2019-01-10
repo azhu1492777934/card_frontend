@@ -18,7 +18,7 @@
                                         剩{{inner_item.surplus_times}}笔
                                     </span>
                                     <span class="limited-num" v-show="inner_item.is_elb_deductible!=0">
-                                        可抵扣{{inner_item.is_elb_deductible}}个ELB
+                                        可抵扣{{inner_item.max_deductible_elb}}个ELB
                                     </span>
                                 </p>
                                 <p class="plan-desc">{{ inner_item.describe ?
@@ -244,6 +244,7 @@
                             }
                             if (i == 1) {
                                 this.plan_type_name.push('月套餐');
+                                this.isPlanMonth = true;
                             }
                             if (i == 2) {
                                 this.plan_type_name.push('加油包');
@@ -251,12 +252,16 @@
                         }
                     }
 
+                    if(this.plan_type_name.length>1 && this.plan_type_name[0]!='月套餐'){
+                        this.cur_plan_type_index = 1;
+                        this.$refs.swiperVant.swipeTo(1)
+
+                    }
+
                 }else{
                     this.load_plan_msg = res.msg;
                 }
             })
-
-
 
         },
         mounted() {

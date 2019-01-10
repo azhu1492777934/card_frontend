@@ -117,7 +117,7 @@
 </template>
 
 <script>
-    import {DatetimePicker, Area, Popup,Toast,Notify} from 'vant';
+    import {DatetimePicker, Area, Popup,Notify} from 'vant';
     import {setStorage,getStorage,removeStorage} from "../../utilies";
     import {_post} from "../../http";
 
@@ -130,7 +130,6 @@
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
             [Popup.name]: Popup,
-            [Toast.name]:Toast,
             [Notify.name]:Notify
         },
         data() {
@@ -193,6 +192,45 @@
                 },
 
             }
+        },
+        created() {
+
+            if(!this.planInfo){
+                this.$router.push({'path':'/card/plan_list'});
+            }
+
+            if(this.planInfo){
+                if(this.planInfo.is_elb_deductible==0){
+                    this.isShowChoice.showELB = false
+                }
+            }//是否显示ELB
+
+            if(getStorage('newCard')){
+                if(getStorage('newCard')==1){
+                    this.isShowChoice.showELB = false;
+                    this.isShowChoice.showCode = false;
+                    this.isShowChoice.showDate = false;
+                }
+            }//新卡默认不显示所有选择
+
+            if(getStorage('isSpeedUp')){
+                if(getStorage('isSpeedUp')==1){
+                    this.isShowChoice.showDate = false;
+                }
+            }//加速包默认不显示生效时间
+
+            /*
+            * 用户钻石数
+            * 套餐价格
+            * */
+            let user_rmb = 0;
+            if(getStorage('userInfo')) {
+                this.userInfo = getStorage('userInfo');
+                if(this.userInfo.account.rmb > 0){
+                    user_rmb = this.userInfo.account.rmb;
+                }
+            }
+            this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
         },
         methods: {
             changedCheck: function (type) {
@@ -288,28 +326,29 @@
                 param.open_id = this.decrypt_data.openid;
 
                 if(this.check_elb){
+                    let userElb = parseInt(this.userInfo.account.rmb);
                     if(!this.val_elb){
-                        Toast('请输入ELB抵扣数');
+                        Notify({message:'请输入ELB抵扣数'})
                         return
                     }
                     if(this.planInfo.is_elb_deductible==0){
-                        Toast('此套餐不可抵扣ELB');
+                        Notify({message:'此套餐不可抵扣ELB'})
                         return
                     }
                     if( !(/^[1-9]\d*$/.test(this.val_elb)) ){
-                        Toast('ELB最低抵扣数额为1');
+                        Notify({message:'ELB最低抵扣数额为1'})
                         return
                     }
-                    if(this.val_elb>this.userInfo.account.elb){
-                        Toast('您的ELB余额不足');
+                    if(this.val_elb>userElb){
+                        Notify({message:'您的ELB余额不足'})
                         return
                     }
-                    if(this.planInfo.is_elb_deductible==1 && this.val_elb > this.planInfo.max_elb){
-                        Toast('此套餐ELB最大抵扣值为'+this.planInfo.max_elb);
+                    if(this.planInfo.is_elb_deductible==1 && this.val_elb > this.planInfo.max_deductible_elb){
+                        Notify({message:'此套餐ELB最大抵扣值为'+this.planInfo.max_deductible_elb})
                         return
                     }
                     if(this.val_elb>=this.planInfo.price){
-                        Toast('ELB抵扣数不能超过套餐总值');
+                        Notify({message:'ELB抵扣数不能超过套餐总值'})
                         return
                     }
                     param.elb_deduction = this.val_elb
@@ -317,7 +356,7 @@
                 }
                 if(this.check_coupon){
                     if(!this.val_coupon){
-                        Toast('请输入券码');
+                        Notify({message:'请输入券码'})
                         return
                     }else{
                         param.coupon_no = this.val_coupon
@@ -325,7 +364,7 @@
                 }
                 if(this.check_date){
                     if(!this.val_date){
-                        Toast('请选择套餐生效时间');
+                        Notify({message:'请选择套餐生效时间'})
                         return
                     }else{
                         param.start_time = this.val_date
@@ -361,6 +400,7 @@
                                 },2000)
                             }
                         }else{
+                            this.rechargeShow = false;
                             Notify({
                                 message:res.msg
                             })
@@ -440,45 +480,6 @@
                 this.appPay.type = true;
                 this.appPay.show = false
             }
-        },
-        created() {
-
-            if(!this.planInfo){
-                this.$router.push({'path':'/card/plan_list'});
-            }
-
-            if(this.planInfo){
-                if(this.planInfo.is_elb_deductible==0){
-                    this.isShowChoice.showELB = false
-                }
-            }//是否显示ELB
-
-            if(getStorage('newCard')){
-                if(getStorage('newCard')==1){
-                    this.isShowChoice.showELB = false;
-                    this.isShowChoice.showCode = false;
-                    this.isShowChoice.showDate = false;
-                }
-            }//新卡默认不显示所有选择
-
-            if(getStorage('isSpeedUp')){
-                if(getStorage('isSpeedUp')==1){
-                    this.isShowChoice.showDate = false;
-                }
-            }//加速包默认不显示生效时间
-
-            /*
-            * 用户钻石数
-            * 套餐价格
-            * */
-            let user_rmb = 0;
-            if(getStorage('userInfo')) {
-                this.userInfo = getStorage('userInfo');
-                if(this.userInfo.account.rmb > 0){
-                    user_rmb = this.userInfo.account.rmb;
-                }
-            }
-            this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
         },
     }
 </script>
