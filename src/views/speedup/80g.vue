@@ -18,15 +18,13 @@
 
     export default {
         name: "home",
-        props:{
-            decrypt_data: {},
-        },
         components: {
             speedup
         },
         data() {
             return {
                 userInfo:'',
+                open_id:'',
                 list: [{
                     name: '30G加速包',
                     flow: 30,
@@ -46,6 +44,10 @@
                 this.userInfo = getStorage('userInfo');
             }
 
+            if(getStorage('decrypt_data')){
+                this.open_id = getStorage('decrypt_data').openid
+            }
+
         },
         methods: {
             recharge_80: function (speedupIndex) {
@@ -63,7 +65,7 @@
                     recharge_price:this.list[speedupIndex].price,
                     price : this.list[speedupIndex].price,
                     user_id : this.userInfo.account.user_id,
-                    open_id : this.decrypt_data.openid
+                    open_id : this.open_id
                 }).then(res=>{
                     if(res.state){
                         if(res.html){

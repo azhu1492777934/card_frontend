@@ -123,9 +123,6 @@
 
     export default {
         name: "recharge",
-        props:{
-            decrypt_data: {},
-        },
         components: {
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
@@ -183,7 +180,7 @@
                 showDate: false,//选择时间弹出
 
                 userInfo:'',//用户信息
-                userDiscountInfo:null,
+                openid:'', //用户openid
                 planInfo:getStorage('planInfo'),//当前充值套餐信息
 
                 appPay:{
@@ -194,6 +191,10 @@
             }
         },
         created() {
+
+            if(getStorage('decrypt_data')){
+                this.open_id = getStorage('decrypt_data').open_id
+            }
 
             if(!this.planInfo){
                 this.$router.push({'path':'/card/plan_list'});
@@ -323,7 +324,7 @@
                 param.rating_id = this.planInfo.id;
                 param.price = this.planInfo.price;
                 param.user_id = this.userInfo.account.user_id;
-                param.open_id = this.decrypt_data.openid;
+                param.open_id = this.open_id;
 
                 if(this.check_elb){
                     let userElb = parseInt(this.userInfo.account.rmb);
@@ -386,6 +387,14 @@
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state){
+
+                            this.userInfo.account.elb = res.data.elb;
+                            this.userInfo.account.rmb = res.data.rmb;
+
+                            setStorage('userInfo',this.userInfo);
+
+                            this.$store.commit('userInfo/changeUserInfo',this.userInfo);
+
                             this.rechargeShow = false;
                             if(/<[^>]+>/.test(res.data)){
                                 document.write(res.data);

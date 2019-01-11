@@ -1,5 +1,5 @@
 <template>
-    <div v-show="showUser" class="user-wrap">
+    <div class="user-wrap">
         <div class="user-inner-wrap">
             <div class="user-name-wrap">
                 <img :src="userInfo.avatar">
@@ -25,6 +25,11 @@
     import {Dialog} from 'vant'
     export default {
         name: "uesrHead",
+        props:{
+          userInfo:{
+              type:Object
+          }
+        },
         data(){
             return{
 

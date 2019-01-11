@@ -14,12 +14,13 @@
         <div v-show="recording_show" class="recording-wrap">
             <p class="recording-title">
                 <span>历史搜索记录</span>
-                <span>{{recording_list_length}}条</span>
+                <span>{{recording_list.length}}条</span>
             </p>
             <ul class="recording-list-wrap">
-                <li @click="searchIccid(item.iccid)" v-for="(item,index) in recording_list">
-                    <span>{{item.iccid}}</span>
+                <li v-for="(item,index) in recording_list">
+                    <span @click="searchIccid(item.iccid)">{{item.iccid}}</span>
                     <span>{{item.searchTime}}</span>
+                    <span @click="deleteIccid(item.iccid)">&times</span>
                 </li>
             </ul>
         </div><!--历史记录-->
@@ -34,7 +35,6 @@
     @import "../../assets/less/common";
 
     .check-card-wrap {
-        height: 100%;
         padding: 0 40px;
         .scanTop-wrap {
             padding: 35px 0 70px;
@@ -97,6 +97,7 @@
             li {
                 display: flex;
                 padding: 20px;
+                align-items: center;
                 background-color: #fff;
                 line-height: 1;
                 font-size: 24px;
@@ -110,10 +111,18 @@
                         flex: 4;
                         text-align: left;
                     }
-                    &:last-child {
+                    &:nth-child(2) {
                         flex: 2;
                         text-align: right;
                     }
+                    &:last-child{
+                        max-width: 20px;
+                        font-size: 48px;
+                        line-height: .5;
+                        padding-left: 10px;
+                        color: #e0e0e0;
+                    }
+
                 }
             }
         }
@@ -140,8 +149,8 @@
 
 <script>
     // @ is an alias to /src
-    import {checkICCID, setStorage, formatterCardTime, getStorage,getUrlParam,checkBrowser} from '../../utilies'
-    import {Toast, Popup , Notify} from 'vant'
+    import {setStorage, formatterCardTime, getStorage,getUrlParam,checkBrowser,codeParam} from '../../utilies'
+    import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
 
     export default {
@@ -149,36 +158,178 @@
         data() {
             return {
                 state: '',//防跨域攻击
-                userInfo:{},
-                sort_recording_list: {},
-                recording_list: getStorage('recording_list')?getStorage('recording_list'):[],
-                recording_list_length: getStorage('recording_list')?getStorage('recording_list').length:0,
+                userInfo:{}, //用户信息
+                sort_recording_list: {}, // 排序查询列表
+                recording_list: [],
                 recording_show: false,
                 iccid: '',
                 checkShow: false,//查询遮罩
-                client_type: '',
+                client_type: '',//当前客户端环境 微信/支付宝
+                appContext:'', //判断当前是否为app环境
+
             }
         },
         components: {
-            [Toast.name]: Toast,
             [Popup.name]: Popup,
         },
         created() {
 
+            if (checkBrowser() == 'wechat') {
+
+                this.client_type = 'wechat';
+
+            } else if (checkBrowser() == 'alipay') {
+
+                this.client_type = 'alipay';
+            }
+
+            /*获取用户信息*/
+            if ( this.client_type == 'wechat' || this.client_type == 'alipay' || this.appContext ) {
+
+                if (getStorage('token')) {
+
+                    this.getUserInfo().then(res => {
+                        if (res.state==1) {
+
+                            // this.showUser = true;
+                            this.userInfo = getStorage('userInfo');
+
+                            this.$store.commit('userInfo/changeUserStatus',true);
+                            this.$store.commit('userInfo/changeUserInfo',this.userInfo);
+
+                        }else if (!res.state) {
+                            Notify({message: res.msg})
+                        }
+                    })
+
+                } else {
+                    if (getUrlParam('data')) {
+                        setStorage('auth_data', getUrlParam('data'))
+                    }
+                    if (getStorage('auth_data')) {
+                        /*
+                        * 已授权操作 重定向后操作
+                        * */
+                        if (getStorage('state') == getUrlParam('state')) {
+                            //解密data
+                            _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
+                                data: getStorage('auth_data')
+                            }).then(res => {
+                                if (res.error == 0) {
+                                    this.decrypt_data = res.data.data;
+                                    setStorage('decrypt_data', res.data.data);
+
+                                    //login
+                                    _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
+                                        uuid: res.data.data.openid,
+                                        code: res.data.code
+                                    }).then(res => {
+                                        if (res.error == 0) {
+
+                                            setStorage('token', res.data);//获取token
+
+                                            this.getUserInfo().then(res => {
+                                                if (res.state==1) {
+                                                    // this.showUser = true
+                                                    this.userInfo = getStorage('userInfo');
+
+                                                    this.$store.commit('userInfo/changeUserStatus',true);
+                                                    this.$store.commit('userInfo/changeUserInfo',this.userInfo);
+
+                                                } else if(!res.state){
+                                                    Notify({message: res.msg})
+                                                }
+                                            })
+
+                                        } else if (res.error == '11002') {
+
+                                           this.$emit('getToken')
+
+                                        } else if (res.error == '30005' || res.error == '11003') {
+
+                                            this.$store.commit('userInfo/changeUserStatus',false);
+
+                                            this.$router.push({path:'/login'})
+
+                                        } else {
+                                            Notify({
+                                                message: res.msg
+                                            })
+                                        }
+                                    })
+                                } else if (res.error == '11002') {
+
+                                   this.$emit('getToken')
+
+                                } else {
+
+                                    Notify({
+                                        message: res.msg
+                                    })
+                                }
+                            })
+                            // end 状态
+                        }
+                        /*
+                       * end 已授权操作
+                       * */
+                    } else {
+                        this.state = Math.random().toString(36).substr(2);
+                        setStorage('state', this.state);
+                        //授权
+                        _get('/accountCenter/v2/oauth/authorize?' + codeParam({
+                            client_type: this.client_type,
+                            redirect_uri: 'http://cardserver-test.china-m2m.com',
+                            scope: 'userinfo',
+                            state: this.state
+                        }, 'get'))
+                            .then(res => {
+                                if (res.error == 0) {
+
+                                    location.href = res.data
+
+                                } else if (res.error == '11002') {
+
+                                   this.$emit('getToken')
+
+                                } else {
+
+                                    Notify({
+                                        message: res.msg
+                                    })
+                                }
+                            })
+                    }
+                }
+
+            } else {
+                // this.showUser = false;
+                this.$store.commit('userInfo/changeUserStatus',false);
+
+            }
+            /*end 获取用户信息*/
+
+
             if(getStorage('check_iccid')){
+
                 this.iccid = getStorage('check_iccid');
             }
 
             if (getStorage('recording_list')) {
-                if(getStorage('recording_list').length){
-                    this.recording_show = true;
+                let local_recording_list = getStorage('recording_list')
+
+                if(local_recording_list.length){
+
+                    this.recording_list = local_recording_list;
+                    this.recording_show = true
                 }
             }
 
 
-            let scanWatchCardIccid = getUrlParam('iccid');
+            let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card');
 
-            if(scanWatchCardIccid || getStorage('watch_card')){
+
+            if(scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state==1){
 
                 if(getStorage('watch_card_timestamp')){
 
@@ -206,9 +357,55 @@
 
                     this.processCheckIccid(scanWatchCardIccid);//自动查询
                 }
+
+            }else{
+               if(scanWatchCardIccid){
+                   Notify({message:this.checkSearchIccid(scanWatchCardIccid).msg});
+               }
             }
         },
         methods: {
+
+            getUserInfo() {
+                //获取用户信息
+                return new Promise((resolve, reject) => {
+                    _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
+                        .then(res => {
+                            if (res.error == 0) {
+                                let UserInfo = {
+                                    account: res.data.account,
+                                    avatar: res.data.avatar,
+                                    nickname: res.data.nickname
+                                }
+                                setStorage('userInfo', UserInfo);
+
+                                this.$store.dispatch('invokeChange',UserInfo);
+                                this.$store.dispatch('invokeUserStatus',true);
+
+                                resolve({
+                                    state: 1,
+                                    msg: '获取用户信息成功'
+                                })
+                            } else if (res.error == "11002") {
+
+                               this.$emit('getToken')
+
+                            } else {
+                                resolve({
+                                    state: 0,
+                                    msg: res.msg
+                                })
+                            }
+                        }).catch(err => {
+                        resolve({
+                            state: 0,
+                            msg: '服务开小差啦,请稍后再试'
+                        })
+                    })
+                })
+
+            },// 获取用户信息
+
             searchIccid: function (iccid) {
                 if (!iccid) {
                     Notify({message:'请输入ICCID'});
@@ -255,9 +452,6 @@
                 }
 
                 setStorage('recording_list', this.recording_list)
-
-                this.recording_list_length = this.recording_list.length;
-
 
                 //查询
                 _post('/api/v1/app/new_auth/check_auth_',{
@@ -337,6 +531,23 @@
                     state:1
                 }
             },
+            deleteIccid:function (iccid) {
+                let deleteIndex = -1 ;
+                for(let i = 0;i<this.recording_list.length;i++){
+                    if(this.recording_list[i].iccid==iccid){
+                        deleteIndex = i
+                        break
+                    }
+                }
+                if(deleteIndex>=0){
+                    this.recording_list.splice(deleteIndex,1);
+                    setStorage('recording_list',this.recording_list);
+                }
+
+                if(!this.recording_list.length){
+                    this.recording_show = false
+                }
+            }
         }
 
     };

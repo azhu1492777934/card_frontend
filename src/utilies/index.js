@@ -31,11 +31,26 @@ function formatterCardTime() {
 }//记录查询时间
 
 function setStorage(key, value) {
+
     localStorage.setItem(key, JSON.stringify(value));
 };
 
-function getStorage(key) {
+function getStorage(key,type) {
+
     return JSON.parse(localStorage.getItem(key));
+
+    // let value = localStorage.getItem(key);
+    // let valueType = Object.prototype.toString.call(value);
+    //
+    // if(valueType == '[object Array]' || valueType == '[object Object]'){
+    //     return JSON.parse(localStorage.getItem(key));
+    // }else{
+    //     if(value=='null' || value == 'undefined'){
+    //         return false
+    //     } else{
+    //         return localStorage.getItem(key);
+    //     }
+    // }
 };
 
 function removeStorage(key) {
@@ -113,17 +128,6 @@ function codeParam(param, type) {
     return param_str
 }//支付中心及用户中心 参数加密
 
-function refreshToken(){
-    _get("/accountCenter/v2/auth/refresh?"+codeParam({
-        token:getStorage('token')
-    },'get'))
-        .then((res) => {
-            if(res.error == 0){
-                setStorage("token",res.data);
-               window.location.reload();
-            }
-        })
-}
 
 function checkBrowser() {
     var userAgent = navigator.userAgent.toLowerCase();
@@ -153,11 +157,11 @@ function getUrlParam(name) {
     return null; //返回参数值
 }
 
-function getUserInfo() {
+/*function getUserInfo() {
     //获取用户信息
     return new Promise((resolve, reject) => {
         _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
-            .then((res) => {
+            .then(res => {
                 if (res.error == 0) {
                     let UserInfo = {
                         account:res.data.account,
@@ -177,12 +181,17 @@ function getUserInfo() {
                         msg:res.msg
                     })
                 }
-            })
+            }).catch(err=>{
+                resolve({
+                    state:0,
+                    msg:'服务开小差啦,请稍后再试'
+                })
+        })
     })
 
-}//获取用户信息
+}//获取用户信息*/
 
-function isUserBind() {
+/*function isUserBind() {
     let checkBrowserResult = checkBrowser()
     return new Promise((resolve,reject)=>{
         _get('/accountCenter/v2/user/has-bind?'+codeParam({
@@ -213,15 +222,7 @@ function isUserBind() {
             })
         })
     })
-}//判断用户是否已和用户中心绑定
-
-function clickThrotle(btn){
-    clearTimeout(btn.timer);
-    btn.timer = setTimeout(function () {
-
-    },2000)
-
-}//禁止按钮频繁点击
+}//判断用户是否已和用户中心绑定*/
 
 function inArray (elem, arr, i) {
     return arr == null ? -1 : arr.indexOf(elem, i);
@@ -238,8 +239,7 @@ export {
     codeParam,
     checkBrowser,
     getUrlParam,
-    getUserInfo,
-    isUserBind,
-    clickThrotle,
+    // getUserInfo,
+    // isUserBind,
     inArray,
 }

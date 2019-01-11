@@ -456,9 +456,6 @@
 
     export default {
         name: "home",
-        props:{
-            decrypt_data:{},
-        },
         data() {
             const _this = this;
             return {

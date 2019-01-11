@@ -39,6 +39,17 @@
         },
         created() {
 
+            if (checkBrowser() == 'wechat') {
+
+                this.client_type = 'wechat';
+
+            } else if (checkBrowser() == 'alipay') {
+
+                this.client_type = 'alipay';
+            }
+
+
+
             //获取用户信息
             this.decrypt_data = getStorage('decrypt_data');
         },
@@ -61,19 +72,21 @@
                         avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
                         if (res.error == 0) {
-                            setStorage("token", res.data.data);
+                            setStorage("token", res.data);
 
                             Notify({message:'绑定成功'});
-
-                            location.href = '/card/lookup'
-
+                            setTimeout(function () {
+                                location.href = '/card/lookup'
+                            },2000)
                         } else if (res.error == "11002") {
 
                             this.$emit("getToken");
 
                         } else if(res.error == 30002){
-
-                            location.href = '/card/lookup'
+                            Notify({message:'用户绑定成功'})
+                            setTimeout(function () {
+                                location.href = '/card/lookup'
+                            },2000)
 
                         } else{
                             Notify({message:res.msg})
@@ -139,6 +152,8 @@
         align-items: center;
         width: 100%;
         .bg-image('../../assets/imgs/login/login_bg');
+        background-position: center center;
+        background-size: cover;
         .info-wrap {
             width: 70%;
             margin: 0 auto;
@@ -156,16 +171,20 @@
                 }
             }
             .code-wrap {
-                display: flex;
                 align-items: center;
+                input{
+                    display: inline-block;
+                    width: 59%;
+                }
                 button {
                     display: inline-block;
-                    width: 180px;
+                    width: 200px;
                     padding: 12px 30px;
                     border-radius: 6px;
                     color: #23B0FE;
                     line-height: 1;
                     background-color: #fff;
+                    box-sizing: border-box;
                 }
             }
 

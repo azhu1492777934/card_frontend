@@ -29,7 +29,7 @@ module.exports = {
                 target:domain_test.accountCenter,
                 changeOrigin:true,
                 pathRewrite:{
-                    '^/accountCenter':'http://uc-test.api.china-m2m.com'
+                    '^/accountCenter':'http://uc.api.china-m2m.com'
                 }
             },
         }
