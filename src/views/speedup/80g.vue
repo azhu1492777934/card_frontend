@@ -67,7 +67,7 @@
                     user_id : this.userInfo.account.user_id,
                     open_id : this.open_id
                 }).then(res=>{
-                    if(res.state){
+                    if(res.state==1){
                         if(res.html){
                             document.write(res.html)
                         }

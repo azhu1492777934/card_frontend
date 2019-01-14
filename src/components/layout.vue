@@ -11,7 +11,7 @@
     import userHeader from './common/uesrHead'
     import {Dialog} from 'vant'
     import {_post, _get} from "../http";
-    import {codeParam, checkBrowser, setStorage, getStorage, removeStorage,getUrlParam} from "../utilies";
+    import {codeParam, checkBrowser, setStorage, getStorage, removeStorage,getUrlParam,checkICCID} from "../utilies";
 
     export default {
         name: 'App',
@@ -33,20 +33,26 @@
                 authorizeUserInfo: state => state.userInfo.userInfoInner
             }),
         },
-        created() {
-            //授权
-            if (checkBrowser() == 'wechat') {
+        created(){
+            document.addEventListener("plusready",this.plusReady,false);
+        },
+        mounted() {
 
-                this.client_type = 'wechat';
-
-            } else if (checkBrowser() == 'alipay') {
-
-                this.client_type = 'alipay';
+            //存储手表二维码ICCID
+            if(getUrlParam('iccid')){
+                let watch_iccid = getUrlParam('iccid');
+                if(checkICCID(watch_iccid).state==1){
+                    setStorage('watch_card',watch_iccid)
+                }
+            }else{
+                removeStorage('watch_card');
             }
 
-            this.client_type = 'alipay'
+            //授权
+            this.client_type = checkBrowser();
+
             /*获取用户信息*/
-            if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.appContext) {
+            if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'mobile') {
 
                 if (getStorage('token')) {
 
@@ -86,10 +92,11 @@
                                         setStorage('decrypt_data', aliUser, 'obj');
 
 
-                                    } else if (this.client_type == 'wechat' || this.appContext) {
+                                    } else if (this.client_type == 'wechat' || this.client_type=='mobile') {
 
                                         setStorage('decrypt_data', res.data.data, 'obj');
                                     }
+
 
                                     //login
                                     _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
@@ -133,7 +140,7 @@
                         }else{
                             removeStorage('auth_data');
 
-                            window.reload();
+                            location.reload();
                         }
                         /*
                        * end 已授权操作
@@ -175,12 +182,14 @@
             } else {
 
                 this.$store.commit('userInfo/changeUserStatus', false);
-
             }
             /*end 获取用户信息*/
 
         },
         methods: {
+            plusReady(){
+                localStorage.setItem("token",plus.storage.getItem("appToken"));
+            },
             GetUrlRelativePath() {
                 let url = document.location.toString(),
                      arrUrl = url.split("//"),

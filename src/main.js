@@ -14,6 +14,15 @@ import globalFunction from '../src/utilies/global_function'//全局函数
 
 Vue.config.productionTip = false
 
+Vue.prototype.appContext = false;
+document.addEventListener('UniAppJSBridgeReady', function() {
+    uni.getEnv(function(res) {
+        if(res.plus){
+            Vue.prototype.appContext = true;
+        }
+    });
+});
+
 
 Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)

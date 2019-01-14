@@ -518,7 +518,7 @@
                 _get('/api/v1/app/cards/telcom/usage', {
                     iccid: getStorage('check_iccid'),
                 }).then(res => {
-                    if (res.state) {
+                    if (res.state==1) {
                         this.load_plan = false;
                         this.usageInfo = res.data;
 
@@ -671,7 +671,7 @@
                     }
                     _post('/api/v1/app/activated', {iccid: '8934564565432345'})
                         .then(res => {
-                            if (res.state) {
+                            if (res.state==1) {
                                 Notify({
                                     message: '请在5分钟内放回原绑定的设备中开机,否则会被停机',
                                     background: '#00c2ff'

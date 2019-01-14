@@ -153,7 +153,7 @@
                     iccid:this.iccid,
                     no:this.coupon_code
                 }).then(res=>{
-                    if(res.state){
+                    if(res.state==1){
                         let _this = this;
                         Notify({message:'兑换成功'})
                         setTimeout(function () {

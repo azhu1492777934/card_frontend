@@ -313,7 +313,7 @@
             _get('/api/v1/app/find_iccid', {
                 iccid: getStorage('check_iccid')
             }).then(res => {
-                if (res.state) {
+                if (res.state==1) {
                     this.is_boss = true
                     this.showItem.showID = true;
                     this.showItem.showName = true
@@ -329,7 +329,7 @@
                 _get('/api/v1/app/find_puk', {
                     iccid: this.info_iccid
                 }).then(res => {
-                    if(res.state){
+                    if(res.state==1){
                         this.isVerifyCode = true;
                         this.verifyCode = res.data
                     }else{
@@ -500,12 +500,7 @@
 
                 _post('/api/v1/app/phone/check', {mobile: this.info_phone})
                     .then(res => {
-                        if (!res.state) {
-                            Notify({
-                                message: res.msg,
-                                background: '#ce4141'
-                            })
-                        } else {
+                        if (res.state==1) {
 
                             clearInterval(this.timer);
                             this.disabled_code = true;
@@ -525,12 +520,19 @@
                             _post('/api/v1/app/messages/send', {mobile: this.info_phone})
                                 .then(function (res) {
 
-                                    if (res.state) {
+                                    if (res.state==1) {
                                         Notify({message: '验证码发送成功'});
                                     } else {
                                         Notify({message: res.msg});
                                     }
                                 })
+
+                        } else {
+
+                            Notify({
+                                message: res.msg,
+                                background: '#ce4141'
+                            })
                         }
                     })
 

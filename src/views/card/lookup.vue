@@ -9,7 +9,7 @@
             <span class="icon-scanTip"></span>
         </div>
         <div class="btn-check-wrap">
-            <button @click="searchIccid(iccid)">查询</button>
+            <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
         </div>
         <div v-show="recording_show" class="recording-wrap">
             <p class="recording-title">
@@ -149,9 +149,10 @@
 
 <script>
     // @ is an alias to /src
-    import {setStorage, formatterCardTime, getStorage,getUrlParam,checkBrowser,codeParam} from '../../utilies'
+    import {setStorage, formatterCardTime, getStorage,getUrlParam,checkBrowser,checkICCID} from '../../utilies'
     import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
+    import cardButton from '../../components/button'
 
     export default {
         name: "home",
@@ -167,6 +168,7 @@
         },
         components: {
             [Popup.name]: Popup,
+            cardButton
         },
         created() {
 
@@ -196,7 +198,6 @@
 
 
             let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card');
-
 
             if(scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state==1){
 
@@ -286,21 +287,21 @@
                 _post('/api/v1/app/new_auth/check_auth_',{
                     iccid:iccid,
                 }).then(res=>{
-                    if(!res.state){
+                    if(res.state==1){
+                        setStorage('check_iccid',iccid);
+                        if(res.data.status==1){
+                            _this.$router.push({path:'/card/usage'});
+                        }else if(res.data.status==2){
+                            setStorage('check_realNameSource',res.data.source)
+                            _this.$router.push({path:'/new_card/real_name'});
+                        }else if(res.data.status==3){
+                            _this.$router.push({path:'/card/plan_list'});
+                        }
+                    }else{
                         Notify({
                             message:res.msg
                         })
                         _this.checkShow = false
-                    }else{
-                        setStorage('check_iccid',iccid);
-                       if(res.data.status==1){
-                           _this.$router.push({path:'/card/usage'});
-                       }else if(res.data.status==2){
-                           setStorage('check_realNameSource',res.data.source)
-                           _this.$router.push({path:'/new_card/real_name'});
-                       }else if(res.data.status==3){
-                           _this.$router.push({path:'/card/plan_list'});
-                       }
                     }
                 })
 

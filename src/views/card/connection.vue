@@ -135,7 +135,7 @@
                 _get('/api/v1/app/detail',{
                     iccid:getStorage('check_iccid')
                 }).then(res=>{
-                    if(res.state){
+                    if(res.state==1){
                         this.connection_flow_list = res.data.data
                         if(res.data.data.length || res.data.voice.length){
                             this.load_connection = false

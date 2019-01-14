@@ -386,7 +386,7 @@
 
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
-                        if(res.state){
+                        if(res.state==1){
 
                             this.userInfo.account.elb = res.data.elb;
                             this.userInfo.account.rmb = res.data.rmb;

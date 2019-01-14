@@ -3,8 +3,6 @@
 * accountCenter:用户中心
 * card_server:后台
 * */
-
-
 const domain_list = {
     payCenter : 'https://lh-api.china-m2m.com',
     accountCenter:'',
