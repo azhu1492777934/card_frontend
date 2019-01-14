@@ -181,7 +181,7 @@
 
                 userInfo:'',//用户信息
                 openid:'', //用户openid
-                planInfo:getStorage('planInfo'),//当前充值套餐信息
+                planInfo:getStorage('planInfo','obj'),//当前充值套餐信息
 
                 appPay:{
                   show:false,
@@ -192,8 +192,8 @@
         },
         created() {
 
-            if(getStorage('decrypt_data')){
-                this.open_id = getStorage('decrypt_data').open_id
+            if(getStorage('decrypt_data','obj')){
+                this.open_id = getStorage('decrypt_data','obj').openid
             }
 
             if(!this.planInfo){
@@ -225,8 +225,8 @@
             * 套餐价格
             * */
             let user_rmb = 0;
-            if(getStorage('userInfo')) {
-                this.userInfo = getStorage('userInfo');
+            if(getStorage('userInfo','obj')) {
+                this.userInfo = getStorage('userInfo','obj');
                 if(this.userInfo.account.rmb > 0){
                     user_rmb = this.userInfo.account.rmb;
                 }
@@ -391,7 +391,7 @@
                             this.userInfo.account.elb = res.data.elb;
                             this.userInfo.account.rmb = res.data.rmb;
 
-                            setStorage('userInfo',this.userInfo);
+                            setStorage('userInfo',this.userInfo,'obj');
 
                             this.$store.commit('userInfo/changeUserInfo',this.userInfo);
 

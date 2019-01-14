@@ -53,11 +53,11 @@
             }
         },
         created() {
-            if(getStorage('userInfo')) {
-                this.userInfo = getStorage('userInfo');
+            if(getStorage('userInfo','obj')) {
+                this.userInfo = getStorage('userInfo','obj');
             }
-            if(getStorage('decrypt_data')){
-                this.open_id = getStorage('decrypt_data').openid
+            if(getStorage('decrypt_data','obj')){
+                this.open_id = getStorage('decrypt_data','obj').openid
             }
         },
 

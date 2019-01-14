@@ -1,6 +1,9 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import {getStorage} from "./utilies";
+import {getStorage, checkBrowser} from "./utilies";
+
+//layout
+const Layout = r => require.ensure([], () => r(require('./components/layout')), 'Layout');
 
 //登录
 const login = r => require.ensure([], () => r(require('./views/login/index')), 'login');//查询
@@ -41,121 +44,133 @@ const revoke_plan = r => require.ensure([], () => r(require('./views/question/qu
 Vue.use(Router)
 
 export const constantRouterMap = [{
-    path: '/login',
-    component: login,
-    meta: {
-        title: '登录',
-    }
+        path: '/login',
+        component: login,
+        meta: {
+            title: '登录',
+        }
 
-}, {
-    path: '/',
-    redirect: '/card/lookup'
-}, {
-    path: '/new_card/real_name',
-    component: real_name,
-    meta: {
-        title: '实名',
-        requireAuth: true,
-    }
-}, {
-    path: '/new_card/to_tb',
-    component: to_tb,
-    meta: {
-        title: '阿里实名',
-        requireAuth: true,
-    }
-}, {
-    path: '/question',
-    component: question,
-    meta: {
-        title: '问题中心',
-        requireAuth: true,
-    }
-}, {
-    path: '/question/find_plan',
-    component: find_plan,
-    meta: {
-        title: '找回套餐',
-        requireAuth: true,
-    }
-}, {
-    path: '/question/revoke_plan',
-    component: revoke_plan,
-    meta: {
-        title: '唤醒套餐',
-        requireAuth: true,
-    }
-}, {
-    path: '/recharge',
-    component: recharge,
-    meta: {
-        title: '充值',
-        requireAuth: true,
-    }
-}, {
-    path: '/recharge/callback',
-    component: recharge_success,
-    meta: {
-        title: '支付成功',
-        requireAuth: true,
-    }
-}, {
-    path: '/speedup/plan_80',
-    component: speedup_80,
-    meta: {
-        title: '80G加速包',
-        requireAuth: true,
-    }
-}, {
-    path: '/speedup/plan_500',
-    component: speedup_500,
-    meta: {
-        title: '500G加速包',
-        requireAuth: true,
-    }
-}, {
-    path: '/coupon/index',
-    component: coupon_normal,
-    meta: {
-        title: '卡券兑换',
-        requireAuth: true,
-    }
-}, {
-    path: '/coupon/telcom',
-    component: coupon_telcom,
-    meta: {
-        title: '联通卡券兑换',
-        requireAuth: true,
-    }
-}, {
-    path: '/card/plan_list',
-    component: plan_list,
-    meta: {
-        title: '套餐列表',
-        requireAuth: true,
-    }
-}, {
-    path: '/card/lookup',
-    component: card_lookup,
-    meta: {
-        title: '查询',
-        requireAuth: true,
-    }
-}, {
-    path: '/card/usage',
-    component: card_usage,
-    meta: {
-        title: '详情',
-        requireAuth: true,
-    }
-}, {
-    path: '/card/connection',
-    component: card_connection,
-    meta: {
-        title: '连接详情',
-        requireAuth: true,
-    }
-}]
+    }, {
+        path: '/app',
+        component: Layout,
+        children: [
+            {
+                path: 'new_card/real_name',
+                component: real_name,
+                meta: {
+                    title: '实名',
+                    requireAuth: true,
+                }
+            }, {
+                path:'new_card/lookup',
+                component:lookup,
+                meta:{
+                    title:'新卡激活',
+                }
+            },{
+                path: 'new_card/to_tb',
+                component: to_tb,
+                meta: {
+                    title: '阿里实名',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'question',
+                component: question,
+                meta: {
+                    title: '问题中心',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'question/find_plan',
+                component: find_plan,
+                meta: {
+                    title: '找回套餐',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'question/revoke_plan',
+                component: revoke_plan,
+                meta: {
+                    title: '唤醒套餐',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'recharge',
+                component: recharge,
+                meta: {
+                    title: '充值',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'recharge/callback',
+                component: recharge_success,
+                meta: {
+                    title: '支付成功',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'speedup/plan_80',
+                component: speedup_80,
+                meta: {
+                    title: '80G加速包',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'speedup/plan_500',
+                component: speedup_500,
+                meta: {
+                    title: '500G加速包',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'coupon/index',
+                component: coupon_normal,
+                meta: {
+                    title: '卡券兑换',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'coupon/telcom',
+                component: coupon_telcom,
+                meta: {
+                    title: '联通卡券兑换',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'card/plan_list',
+                component: plan_list,
+                meta: {
+                    title: '套餐列表',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'card/lookup',
+                component: card_lookup,
+                meta: {
+                    title: '查询',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'card/usage',
+                component: card_usage,
+                meta: {
+                    title: '详情',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'card/connection',
+                component: card_connection,
+                meta: {
+                    title: '连接详情',
+                    requireAuth: true,
+                }
+            }
+        ],
+    }, {
+        path: '/',
+        redirect: '/app/card/lookup'
+    }]
 
 const router = new Router({
     mode: 'history',
@@ -163,19 +178,23 @@ const router = new Router({
 })
 
 
-/*router.beforeEach((to, from, next) => {
-    if (to.matched.some(res => res.meta.requireAuth)) {
-        if (getStorage('token')) {
-            next()
-        } else {
-            next({
-                path: '/login'
-            })
-        }
-    } else {
-        next();
-    }
-})*/
+// router.beforeEach((to, from, next) => {
+//     if (to.matched.some(res => res.meta.requireAuth)) {
+//
+//         if(checkBrowser()=='wechat' || checkBrowser() =='alipay'){
+//
+//             if (getStorage('token')) {
+//                 next()
+//             } else {
+//                 next({
+//                     path: '/card/lookup'
+//                 })
+//             }
+//         }
+//     } else {
+//         next();
+//     }
+// })
 
 export default router
 

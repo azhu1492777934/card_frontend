@@ -1,6 +1,8 @@
+import {getStorage} from "../../utilies";
+
 const state ={
     showUser:false,//是否显示用户信息
-    userInfoInner:{
+    userInfoInner: getStorage('userInfo','obj') ||{
         account:{
             rmb:0,
             elb:0
@@ -10,6 +12,7 @@ const state ={
     }//用户信息
 }
 
+
 const getters ={
 
 }
@@ -17,6 +20,7 @@ const getters ={
 
 const mutations = {
     changeUserInfo(state,info){
+        state.userInfoInner = getStorage('userInfo','obj');
         state.userInfoInner = info
     },
     changeUserStatus(state,userStatus){

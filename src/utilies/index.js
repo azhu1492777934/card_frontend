@@ -30,27 +30,21 @@ function formatterCardTime() {
     }
 }//记录查询时间
 
-function setStorage(key, value) {
-
-    localStorage.setItem(key, JSON.stringify(value));
+function setStorage(key, value,type) {
+    if(type=='arr'||type=='obj'){
+        localStorage.setItem(key, JSON.stringify(value));
+    }else {
+        localStorage.setItem(key, value);
+    }
 };
 
 function getStorage(key,type) {
 
-    return JSON.parse(localStorage.getItem(key));
-
-    // let value = localStorage.getItem(key);
-    // let valueType = Object.prototype.toString.call(value);
-    //
-    // if(valueType == '[object Array]' || valueType == '[object Object]'){
-    //     return JSON.parse(localStorage.getItem(key));
-    // }else{
-    //     if(value=='null' || value == 'undefined'){
-    //         return false
-    //     } else{
-    //         return localStorage.getItem(key);
-    //     }
-    // }
+    if(type=='arr'||type=='obj'){
+        return JSON.parse(localStorage.getItem(key));
+    }else{
+        return localStorage.getItem(key);
+    }
 };
 
 function removeStorage(key) {

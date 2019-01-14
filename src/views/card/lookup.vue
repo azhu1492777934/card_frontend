@@ -157,16 +157,12 @@
         name: "home",
         data() {
             return {
-                state: '',//防跨域攻击
-                userInfo:{}, //用户信息
                 sort_recording_list: {}, // 排序查询列表
                 recording_list: [],
                 recording_show: false,
                 iccid: '',
                 checkShow: false,//查询遮罩
                 client_type: '',//当前客户端环境 微信/支付宝
-                appContext:'', //判断当前是否为app环境
-
             }
         },
         components: {
@@ -183,140 +179,13 @@
                 this.client_type = 'alipay';
             }
 
-            /*获取用户信息*/
-            if ( this.client_type == 'wechat' || this.client_type == 'alipay' || this.appContext ) {
-
-                if (getStorage('token')) {
-
-                    this.getUserInfo().then(res => {
-                        if (res.state==1) {
-
-                            // this.showUser = true;
-                            this.userInfo = getStorage('userInfo');
-
-                            this.$store.commit('userInfo/changeUserStatus',true);
-                            this.$store.commit('userInfo/changeUserInfo',this.userInfo);
-
-                        }else if (!res.state) {
-                            Notify({message: res.msg})
-                        }
-                    })
-
-                } else {
-                    if (getUrlParam('data')) {
-                        setStorage('auth_data', getUrlParam('data'))
-                    }
-                    if (getStorage('auth_data')) {
-                        /*
-                        * 已授权操作 重定向后操作
-                        * */
-                        if (getStorage('state') == getUrlParam('state')) {
-                            //解密data
-                            _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
-                                data: getStorage('auth_data')
-                            }).then(res => {
-                                if (res.error == 0) {
-                                    this.decrypt_data = res.data.data;
-                                    setStorage('decrypt_data', res.data.data);
-
-                                    //login
-                                    _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
-                                        uuid: res.data.data.openid,
-                                        code: res.data.code
-                                    }).then(res => {
-                                        if (res.error == 0) {
-
-                                            setStorage('token', res.data);//获取token
-
-                                            this.getUserInfo().then(res => {
-                                                if (res.state==1) {
-                                                    // this.showUser = true
-                                                    this.userInfo = getStorage('userInfo');
-
-                                                    this.$store.commit('userInfo/changeUserStatus',true);
-                                                    this.$store.commit('userInfo/changeUserInfo',this.userInfo);
-
-                                                } else if(!res.state){
-                                                    Notify({message: res.msg})
-                                                }
-                                            })
-
-                                        } else if (res.error == '11002') {
-
-                                           this.$emit('getToken')
-
-                                        } else if (res.error == '30005' || res.error == '11003') {
-
-                                            this.$store.commit('userInfo/changeUserStatus',false);
-
-                                            this.$router.push({path:'/login'})
-
-                                        } else {
-                                            Notify({
-                                                message: res.msg
-                                            })
-                                        }
-                                    })
-                                } else if (res.error == '11002') {
-
-                                   this.$emit('getToken')
-
-                                } else {
-
-                                    Notify({
-                                        message: res.msg
-                                    })
-                                }
-                            })
-                            // end 状态
-                        }
-                        /*
-                       * end 已授权操作
-                       * */
-                    } else {
-                        this.state = Math.random().toString(36).substr(2);
-                        setStorage('state', this.state);
-                        //授权
-                        _get('/accountCenter/v2/oauth/authorize?' + codeParam({
-                            client_type: this.client_type,
-                            redirect_uri: 'http://cardserver-test.china-m2m.com',
-                            scope: 'userinfo',
-                            state: this.state
-                        }, 'get'))
-                            .then(res => {
-                                if (res.error == 0) {
-
-                                    location.href = res.data
-
-                                } else if (res.error == '11002') {
-
-                                   this.$emit('getToken')
-
-                                } else {
-
-                                    Notify({
-                                        message: res.msg
-                                    })
-                                }
-                            })
-                    }
-                }
-
-            } else {
-                // this.showUser = false;
-                this.$store.commit('userInfo/changeUserStatus',false);
-
-            }
-            /*end 获取用户信息*/
-
-
             if(getStorage('check_iccid')){
 
                 this.iccid = getStorage('check_iccid');
             }
 
-            if (getStorage('recording_list')) {
-                let local_recording_list = getStorage('recording_list')
+            if (getStorage('recording_list','arr')) {
+                let local_recording_list = getStorage('recording_list','arr')
 
                 if(local_recording_list.length){
 
@@ -365,47 +234,6 @@
             }
         },
         methods: {
-
-            getUserInfo() {
-                //获取用户信息
-                return new Promise((resolve, reject) => {
-                    _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
-                        .then(res => {
-                            if (res.error == 0) {
-                                let UserInfo = {
-                                    account: res.data.account,
-                                    avatar: res.data.avatar,
-                                    nickname: res.data.nickname
-                                }
-                                setStorage('userInfo', UserInfo);
-
-                                this.$store.dispatch('invokeChange',UserInfo);
-                                this.$store.dispatch('invokeUserStatus',true);
-
-                                resolve({
-                                    state: 1,
-                                    msg: '获取用户信息成功'
-                                })
-                            } else if (res.error == "11002") {
-
-                               this.$emit('getToken')
-
-                            } else {
-                                resolve({
-                                    state: 0,
-                                    msg: res.msg
-                                })
-                            }
-                        }).catch(err => {
-                        resolve({
-                            state: 0,
-                            msg: '服务开小差啦,请稍后再试'
-                        })
-                    })
-                })
-
-            },// 获取用户信息
-
             searchIccid: function (iccid) {
                 if (!iccid) {
                     Notify({message:'请输入ICCID'});
@@ -417,6 +245,7 @@
                 }
                 this.processCheckIccid(iccid);
             },
+
             processCheckIccid: function (iccid) {
                 this.checkShow = true
                 let isExist = false,
@@ -451,7 +280,7 @@
                     this.recording_list.splice(20)
                 }
 
-                setStorage('recording_list', this.recording_list)
+                setStorage('recording_list', this.recording_list,'arr')
 
                 //查询
                 _post('/api/v1/app/new_auth/check_auth_',{
@@ -504,9 +333,11 @@
                     });
                 }
             },
+
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
+
             compare: function (property) {
                 return function (a, b) {
                     var value1 = a[property];
@@ -514,6 +345,7 @@
                     return value2 - value1;
                 }
             },
+
             checkSearchIccid:function (iccid) {
                 if(!iccid){
                     return {
@@ -531,6 +363,7 @@
                     state:1
                 }
             },
+
             deleteIccid:function (iccid) {
                 let deleteIndex = -1 ;
                 for(let i = 0;i<this.recording_list.length;i++){
@@ -541,7 +374,7 @@
                 }
                 if(deleteIndex>=0){
                     this.recording_list.splice(deleteIndex,1);
-                    setStorage('recording_list',this.recording_list);
+                    setStorage('recording_list',this.recording_list,'arr');
                 }
 
                 if(!this.recording_list.length){

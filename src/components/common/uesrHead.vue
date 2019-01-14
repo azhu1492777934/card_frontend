@@ -2,18 +2,18 @@
     <div class="user-wrap">
         <div class="user-inner-wrap">
             <div class="user-name-wrap">
-                <img :src="userInfo.avatar">
-                <span class="user-name">{{userInfo.nickname}}</span>
+                <img :src="getUserInfo.avatar">
+                <span class="user-name">{{getUserInfo.nickname}}</span>
             </div>
             <div>
                 <span>余额:</span>
                 <span class="icon-diamond-wrap">
                           <i class="icon-user-size  icon-diamond"></i>
-                          {{userInfo.account.rmb}}
+                          {{getUserInfo.account.rmb}}
                       </span>
                 <span class="icon-elb-wrap">
                           <i class="icon-user-size icon-elb"></i>
-                          {{userInfo.account.elb}}
+                          {{getUserInfo.account.elb}}
                       </span>
                 <span @click="showDoc" class="icon-question">?</span>
             </div>
@@ -22,18 +22,19 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import {Dialog} from 'vant'
     export default {
         name: "uesrHead",
         props:{
-          userInfo:{
-              type:Object
-          }
+            userInfoData:{
+                type:Object
+            },
         },
-        data(){
-            return{
-
-            }
+        computed: {
+            ...mapState({
+                getUserInfo: state => state.userInfo.userInfoInner
+            }),
         },
         components: {
             [Dialog.name]: Dialog

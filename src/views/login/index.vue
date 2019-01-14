@@ -48,10 +48,8 @@
                 this.client_type = 'alipay';
             }
 
-
-
             //获取用户信息
-            this.decrypt_data = getStorage('decrypt_data');
+            this.decrypt_data = getStorage('decrypt_data','obj');
         },
         methods: {
             login() {
@@ -83,9 +81,13 @@
                             this.$emit("getToken");
 
                         } else if(res.error == 30002){
+
                             Notify({message:'用户绑定成功'})
+
+                            let redirect_uri = getStorage('authorized_redirect_uri');
+
                             setTimeout(function () {
-                                location.href = '/card/lookup'
+                                location.href = redirect_uri;
                             },2000)
 
                         } else{
@@ -121,8 +123,6 @@
                 this.btnCode_disabled = true;
 
                 clearInterval(this.timer);
-
-                console.log(11);
 
                 this.timer = setInterval(() => {
                     if (_this.countdown <= 0) {

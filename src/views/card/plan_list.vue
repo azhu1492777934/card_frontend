@@ -313,7 +313,7 @@
 
                 planInfo.iccid = getStorage('check_iccid');
 
-                setStorage('planInfo',planInfo);
+                setStorage('planInfo',planInfo,'obj');
 
                 this.$router.push({ path:'/recharge'})
             }

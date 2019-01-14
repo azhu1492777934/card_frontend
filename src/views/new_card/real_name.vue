@@ -44,7 +44,7 @@
         </van-popup>
 
         <van-popup v-model="showItem.showCodeWrap" :close-on-click-overlay="false">
-            <p class="showTip">{{showCodeMsg}}</p>
+            <p class="showTip">{{showItem.showCodeMsg}}</p>
         </van-popup>
 
         <van-popup v-model="showItem.showVerifyCode" :close-on-click-overlay="false" class="verify-code-wrap">
@@ -305,7 +305,8 @@
                 }
             }
 
-            if (inArray(this.card_source, [18, 19, 20, 21, 22]) >= 0) {
+
+            if (inArray(this.card_source, ['18', '19', '20', '21', '22']) >= 0) {
                 this.card_tip = !this.card_tip
             }
 
@@ -334,7 +335,7 @@
                     }else{
                         if(res.msg){
                             this.showItem.showCodeWrap = true;
-                            this.showCodeMsg = res.msg
+                            this.showItem.showCodeMsg = res.msg
                         }
                     }
                 })//检测是否是大佬账户
