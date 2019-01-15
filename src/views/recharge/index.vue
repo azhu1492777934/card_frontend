@@ -118,7 +118,7 @@
 
 <script>
     import {DatetimePicker, Area, Popup,Notify} from 'vant';
-    import {setStorage,getStorage,removeStorage} from "../../utilies";
+    import {setStorage,getStorage,removeStorage,checkBrowser} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -183,9 +183,10 @@
                 openid:'', //用户openid
                 planInfo:getStorage('planInfo','obj'),//当前充值套餐信息
 
+
                 appPay:{
-                  show:false,
-                  type:true,//true 为微信，false 为支付宝
+                    show:false,
+                    type:true,//true 为微信，false 为支付宝
                 },
 
             }
@@ -325,6 +326,8 @@
                 param.price = this.planInfo.price;
                 param.user_id = this.userInfo.account.user_id;
                 param.open_id = this.open_id;
+                param.env = checkBrowser();
+
 
                 if(this.check_elb){
                     let userElb = parseInt(this.userInfo.account.rmb);
@@ -374,12 +377,16 @@
                     param.start_time = this.val_date
                 }
 
-                if(this.appContext){
+                if(checkBrowser()=='app'){
                     if(this.appPay.type){
-                        param.payType = 'WECHAT'
+                        param.pay_type = 'WEIXIN'
                     }else{
-                        param.payType = 'ALIPAY'
+                        param.pay_type = 'ALIPAY'
                     }
+                }else if(checkBrowser() == 'wechat'){
+                    param.pay_type = 'WEIXIN'
+                }else if(checkBrowser() == 'alipay'){
+                    param.pay_type = 'ALIPAY'
                 }
 
                 this.rechargeShow = true;

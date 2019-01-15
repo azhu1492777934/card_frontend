@@ -292,7 +292,7 @@
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    this.$router.push({'path':'/card/lookup'});
+                    this.$router.push({'path':'/app/card/lookup'});
                 }
             }
             if(getUrlParam('source')){
@@ -301,7 +301,7 @@
                 if(getStorage('check_realNameSource')){
                     this.card_source = getStorage('check_realNameSource');
                 }else{
-                    this.$router.push({'path':'/card/lookup'});
+                    this.$router.push({'path':'/app/card/lookup'});
                 }
             }
 

@@ -83,13 +83,14 @@
         },
         methods: {
             revokePlan: function () {
+                let _this = this;
                 _post('/api/v1/app/restart_device', {
                     iccid: getStorage('check_iccid'),
                 }).then(res => {
                     if (res.state==1) {
                         Notify({message: '成功唤醒套餐,即将跳转至详情页'})
                         setTimeout(function () {
-                            location.href = '/card/usage'
+                            _this.$router.push({path:'/app/card/usage'})
                         }, 2000)
                     } else {
                         Notify({message: res.msg})

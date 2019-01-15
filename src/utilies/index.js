@@ -134,7 +134,9 @@ function checkBrowser() {
             return 'alipay'
         } else if (userAgent.match(/MicroMessenger/i) == "micromessenger") {
             return 'wechat'
-        }else{
+        }else if(/(uni-app)/.test(userAgent)){
+            return 'app'
+        } else{
             return 'mobile'
         }
     }else{

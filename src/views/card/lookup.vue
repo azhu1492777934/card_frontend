@@ -5,7 +5,7 @@
         </div>
         <div class="search-wrap">
             <input v-model="iccid" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
-            <span @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
+            <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
             <span class="icon-scanTip"></span>
         </div>
         <div class="btn-check-wrap">
@@ -163,7 +163,7 @@
                 recording_show: false,
                 iccid: '',
                 checkShow: false,//查询遮罩
-                client_type: '',//当前客户端环境 微信/支付宝
+                client_type: checkBrowser(),//当前客户端环境 微信/支付宝
             }
         },
         components: {
@@ -171,15 +171,6 @@
             cardButton
         },
         created() {
-
-            if (checkBrowser() == 'wechat') {
-
-                this.client_type = 'wechat';
-
-            } else if (checkBrowser() == 'alipay') {
-
-                this.client_type = 'alipay';
-            }
 
             if(getStorage('check_iccid')){
 
@@ -290,12 +281,12 @@
                     if(res.state==1){
                         setStorage('check_iccid',iccid);
                         if(res.data.status==1){
-                            _this.$router.push({path:'/card/usage'});
+                            _this.$router.push({path:'/app/card/usage'});
                         }else if(res.data.status==2){
                             setStorage('check_realNameSource',res.data.source)
-                            _this.$router.push({path:'/new_card/real_name'});
+                            _this.$router.push({path:'/app/new_card/real_name'});
                         }else if(res.data.status==3){
-                            _this.$router.push({path:'/card/plan_list'});
+                            _this.$router.push({path:'/app/card/plan_list'});
                         }
                     }else{
                         Notify({

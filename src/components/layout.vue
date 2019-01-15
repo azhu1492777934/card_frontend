@@ -52,7 +52,7 @@
             this.client_type = checkBrowser();
 
             /*获取用户信息*/
-            if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'mobile') {
+            if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') {
 
                 if (getStorage('token')) {
 

@@ -70,11 +70,12 @@
                         avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
                         if (res.error == 0) {
+                            let _this = this;
                             setStorage("token", res.data);
 
                             Notify({message:'绑定成功'});
                             setTimeout(function () {
-                                location.href = '/card/lookup'
+                                _this.$router.push({path:'/app/card/lookup'})
                             },2000)
                         } else if (res.error == "11002") {
 

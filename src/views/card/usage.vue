@@ -19,7 +19,7 @@
                         </div>
                         <div>
                             <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                            <a href="/question">?</a>
+                            <a href="/app/question">?</a>
                         </div>
                     </div>
                 </div>
@@ -108,12 +108,12 @@
                                         <div class="speedup-wrap"
                                              v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
                                     <span v-if="item.planCellInfo.key!='MG500'">
-                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/speedup/plan_80">
+                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/app/speedup/plan_80">
                                             购买加速包
                                         </a>
                                     </span>
                                             <span v-else>
-                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/speedup/plan_500"></a>
+                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/app/speedup/plan_500"></a>
                                     </span>
                                         </div>
                                     </div>
@@ -160,7 +160,7 @@
 
             <div class="btn-recharge-wrap">
                 <button @click="recharge">套餐查询</button>
-                <a href="/coupon/index">卡券兑换</a>
+                <a href="/app/coupon/index">卡券兑换</a>
             </div>
         </div>
 
@@ -629,7 +629,7 @@
                     }
                 })
             } else {
-                this.$router.push({path: '/card/lookup'})
+                this.$router.push({path: '/app/card/lookup'})
             }
 
         },
@@ -649,7 +649,7 @@
             },
             recharge: function () {
                 setStorage('check_iccid', this.iccid)
-                this.$router.push({path: '/card/plan_list'})
+                this.$router.push({path: '/app/card/plan_list'})
             },
             refreshOrActivated: function () {
                 if (this.filterCardInfo.refresh_actived == '刷新') {
@@ -683,7 +683,7 @@
             },
             toConnnection: function () {
                 setStorage('check_iccid', this.iccid);
-                this.$router.push({path: '/card/connection'});
+                this.$router.push({path: '/app/card/connection'});
             },
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);

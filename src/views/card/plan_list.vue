@@ -315,7 +315,7 @@
 
                 setStorage('planInfo',planInfo,'obj');
 
-                this.$router.push({ path:'/recharge'})
+                this.$router.push({ path:'/app/recharge'})
             }
         }
     };

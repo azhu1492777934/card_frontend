@@ -74,7 +74,7 @@
         methods: {
            to_another_way:function (location) {
                if(location=='card') {
-                   location.href = '/weixin/cards/telcom/usage?iccid=' + this.iccid;
+                   this.$router.push({path:'/app/card/usage'})
                }else{
                    location.href = 'http://wxgame.china-m2m.com/common/home';
                }
