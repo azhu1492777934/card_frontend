@@ -6,7 +6,7 @@
         <div class="search-wrap">
             <input v-model="iccid" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
             <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
-            <span class="icon-scanTip"></span>
+            <span v-show="client_type!='app'" class="icon-scanTip"></span>
         </div>
         <div class="btn-check-wrap">
             <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>

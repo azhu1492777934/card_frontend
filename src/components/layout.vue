@@ -7,6 +7,7 @@
 
 <script>
 
+    import {Notify} from 'vant'
     import {mapState} from 'vuex'
     import userHeader from './common/uesrHead'
     import {Dialog} from 'vant'
@@ -25,7 +26,8 @@
         },
         components: {
             userHeader,
-            [Dialog.name]: Dialog
+            [Dialog.name]: Dialog,
+            [Notify.name]:Notify,
         },
         computed: {
             ...mapState({
@@ -37,17 +39,6 @@
             document.addEventListener("plusready",this.plusReady,false);
         },
         mounted() {
-
-            //存储手表二维码ICCID
-            if(getUrlParam('iccid')){
-                let watch_iccid = getUrlParam('iccid');
-                if(checkICCID(watch_iccid).state==1){
-                    setStorage('watch_card',watch_iccid)
-                }
-            }else{
-                removeStorage('watch_card');
-            }
-
             //授权
             this.client_type = checkBrowser();
 
@@ -71,7 +62,6 @@
 
                         if (getStorage('state') == getUrlParam('state')) {
 
-
                             //解密data
                             _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
                                 data: getStorage('auth_data')
@@ -92,11 +82,10 @@
                                         setStorage('decrypt_data', aliUser, 'obj');
 
 
-                                    } else if (this.client_type == 'wechat' || this.client_type=='mobile') {
+                                    } else if (this.client_type == 'wechat' || this.client_type=='app') {
 
                                         setStorage('decrypt_data', res.data.data, 'obj');
                                     }
-
 
                                     //login
                                     _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
@@ -104,9 +93,11 @@
                                         uuid: getStorage('decrypt_data', 'obj').openid,
                                         code: res.data.code
                                     }).then(res => {
+
                                         if (res.error == 0) {
 
                                             setStorage('token', res.data);//获取token
+
                                             this.getUserInfo();//获取用户信息
 
                                         } else if (res.error == '11002') {
@@ -114,6 +105,7 @@
                                             this.$emit('getToken')
 
                                         } else if (res.error == '30005' || res.error == '11003') {
+
                                             let _this = this;
 
                                             this.$store.commit('userInfo/changeUserStatus', false);
@@ -144,6 +136,7 @@
                             // end 状态
                         }else{
                             removeStorage('auth_data');
+                            removeStorage('token');
 
                             location.reload();
                         }
@@ -157,6 +150,16 @@
                         //获取当前重定向地址
                         let redirect_uri = this.GetUrlRelativePath();
                         setStorage('authorized_redirect_uri',redirect_uri);
+
+                        //存储手表二维码ICCID
+                        if(getUrlParam('iccid')){
+                            let watch_iccid = getUrlParam('iccid');
+                            if(checkICCID(watch_iccid).state==1){
+                                setStorage('watch_card',watch_iccid)
+                            }
+                        }else{
+                            removeStorage('watch_card');
+                        }
 
                         // 授权
                         _get('/accountCenter/v2/oauth/authorize?' + codeParam({

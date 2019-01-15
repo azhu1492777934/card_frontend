@@ -117,12 +117,18 @@
 </template>
 
 <script>
+    import {mapState} from 'vuex'
     import {DatetimePicker, Area, Popup,Notify} from 'vant';
     import {setStorage,getStorage,removeStorage,checkBrowser} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
         name: "recharge",
+        computed: {
+            ...mapState({
+                authorizeUserInfo: state => state.userInfo.userInfoInner
+            }),
+        },
         components: {
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
@@ -226,12 +232,11 @@
             * 套餐价格
             * */
             let user_rmb = 0;
-            if(getStorage('userInfo','obj')) {
-                this.userInfo = getStorage('userInfo','obj');
-                if(this.userInfo.account.rmb > 0){
-                    user_rmb = this.userInfo.account.rmb;
-                }
+            this.userInfo = this.authorizeUserInfo;
+            if(this.userInfo.account.rmb > 0) {
+                user_rmb = this.userInfo.account.rmb;
             }
+
             this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
         },
         methods: {
