@@ -110,6 +110,7 @@
                     padding: 0 40px;
                     box-sizing: border-box;
                     text-align: left;
+                    font-size: 24px;
                     .plan-name {
                         padding: 20px 0 10px;
                         font-size: 26px;
@@ -265,11 +266,10 @@
 
         },
         mounted() {
-            let checkBrowserResult = checkBrowser(),
-             clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
 
-            if(checkBrowserResult == 'wechat' || checkBrowserResult =='alipay'){
-                this.$refs.vanSwiperWwrap.style.height = (clientHeight - 130 - 44) + 'px';
+            if(checkBrowser() == 'wechat' || checkBrowser() =='alipay' || checkBrowser() =='app'){
+                this.$refs.vanSwiperWwrap.style.height = (clientHeight - 180) + 'px';
             }else{
                 this.$refs.vanSwiperWwrap.style.height = (clientHeight - 120) + 'px';
             }

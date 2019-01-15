@@ -1,5 +1,5 @@
 <template>
-    <div id="app">
+    <div>
         <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
         <router-view/>
     </div>

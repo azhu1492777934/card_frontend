@@ -635,11 +635,10 @@
         },
         mounted() {
             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            let checkBrowserResult = checkBrowser();
-            if (checkBrowserResult != 'alipy' || checkBrowserResult != 'wechat' || !this.appContext) {
+            if (checkBrowser() != 'alipay' || checkBrowser() != 'wechat' || checkBrowser()!='app') {
                 this.$refs.mySwiper.$el.style.height = (clientHeight - 330) + 'px';
             } else {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 340 - 44) + 'px';
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 360) + 'px';
             }
         },
         methods: {
