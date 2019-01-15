@@ -32,9 +32,11 @@ const coupon_telcom = r => require.ensure([], () => r(require('./views/coupon/co
 const plan_list = r => require.ensure([], () => r(require('./views/card/plan_list')), 'plan_list');
 
 //卡查询
-const card_lookup = r => require.ensure([], () => r(require('./views/card/lookup')), 'card_lookup');
-const card_usage = r => require.ensure([], () => r(require('./views/card/usage')), 'card_usage');
-const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection');
+const card_lookup = r => require.ensure([], () => r(require('./views/card/lookup')), 'card_lookup');//查询
+const card_usage = r => require.ensure([], () => r(require('./views/card/usage')), 'card_usage');//使用情况
+const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection');//卡连接详情
+const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check');//卡检测
+
 
 //问题中心
 const question = r => require.ensure([], () => r(require('./views/question/index')), 'question');
@@ -165,8 +167,13 @@ export const constantRouterMap = [{
                     title: '连接详情',
                     requireAuth: true,
                 }
-            }
-        ],
+            },{
+                path:'card/check',
+                component:card_check,
+                meta:{
+                    title:'卡检测'
+                }
+            }],
     }, {
         path: '/',
         redirect: '/app/card/lookup'

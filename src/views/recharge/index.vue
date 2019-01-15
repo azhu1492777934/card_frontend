@@ -126,7 +126,7 @@
         name: "recharge",
         computed: {
             ...mapState({
-                authorizeUserInfo: state => state.userInfo.userInfoInner
+                authorizedUserInfo: state => state.userInfo.userInfoInner
             }),
         },
         components: {
@@ -189,6 +189,7 @@
                 openid:'', //用户openid
                 planInfo:getStorage('planInfo','obj'),//当前充值套餐信息
 
+                client_type:checkBrowser(),
 
                 appPay:{
                     show:false,
@@ -198,6 +199,8 @@
             }
         },
         created() {
+
+            this.client_type = 'app'
 
             if(getStorage('decrypt_data','obj')){
                 this.open_id = getStorage('decrypt_data','obj').openid
@@ -232,11 +235,11 @@
             * 套餐价格
             * */
             let user_rmb = 0;
-            this.userInfo = this.authorizeUserInfo;
+            this.userInfo = this.authorizedUserInfo;
+
             if(this.userInfo.account.rmb > 0) {
                 user_rmb = this.userInfo.account.rmb;
             }
-
             this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
         },
         methods: {
@@ -326,12 +329,32 @@
                 if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'){
                     param.recharge_price = rechargeInfo.pay_money
                 }
+
+                if(this.client_type=='alipay'||this.client_type=='wechat'){
+                    param.open_id = this.open_id;
+                }else if(this.client_type =='app'){
+                    param.open_id = this.userInfo.account.user_id
+
+                }
+
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
                 param.price = this.planInfo.price;
                 param.user_id = this.userInfo.account.user_id;
-                param.open_id = this.open_id;
-                param.env = checkBrowser();
+                param.env = this.client_type;
+
+                if(this.client_type=='app'){
+                    if(this.appPay.type){
+                        param.pay_type = 'WEIXIN'
+                    }else{
+                        param.pay_type = 'ALIPAY'
+                    }
+                }else if(this.client_type == 'wechat'){
+                    param.pay_type = 'WEIXIN'
+                }else if(this.client_type == 'alipay'){
+                    param.pay_type = 'ALIPAY'
+                }
+
 
 
                 if(this.check_elb){
@@ -382,18 +405,6 @@
                     param.start_time = this.val_date
                 }
 
-                if(checkBrowser()=='app'){
-                    if(this.appPay.type){
-                        param.pay_type = 'WEIXIN'
-                    }else{
-                        param.pay_type = 'ALIPAY'
-                    }
-                }else if(checkBrowser() == 'wechat'){
-                    param.pay_type = 'WEIXIN'
-                }else if(checkBrowser() == 'alipay'){
-                    param.pay_type = 'ALIPAY'
-                }
-
                 this.rechargeShow = true;
 
                 _post('/api/v1/pay/weixin/create',param)
@@ -408,9 +419,14 @@
                             this.$store.commit('userInfo/changeUserInfo',this.userInfo);
 
                             this.rechargeShow = false;
+
                             if(/<[^>]+>/.test(res.data)){
                                 document.write(res.data);
-                            }else{
+
+                            }else if(res.data && res.data.substr(0,4)=='http'){
+                                location.href = res.data
+
+                            }else {
                                 Notify({
                                     message:'充值成功',
                                     background:'#60ce53'
@@ -429,11 +445,19 @@
                     })
             },
             normalPay(){
-                if(this.appContext){
-                    this.appPay.show = true
+                let rechargeInfo = this.new_recharge_list[this.activeIndex];
+                if(this.client_type=='app'){
+
+                    if(rechargeInfo.pay_type=='diamond_charge' && this.userInfo.account.rmb > this.planInfo.price){
+                        this.appPay.show = false
+                        this.recharge()
+                    }else{
+                        this.appPay.show = true
+                    }
                 }else{
                     this.recharge()
                 }
+
             },//普通支付
             FinalAppPay(){
                 this.recharge();

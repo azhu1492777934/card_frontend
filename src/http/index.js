@@ -38,7 +38,7 @@ function _post(url,param){
         }).catch(err=>{
             resolve({
                 state:0,
-                msg:'服务出小差啦，请稍后查询'
+                msg:'服务出小差啦，请稍后再试'
             })
         })
     })
@@ -60,7 +60,7 @@ function _get(url,param){
         }).catch(err=>{
             resolve({
                 state:0,
-                msg:'服务出小差啦，请稍后查询'
+                msg:'服务出小差啦，请稍后再试'
             })
         })
     })

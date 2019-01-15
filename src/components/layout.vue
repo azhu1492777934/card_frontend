@@ -82,7 +82,7 @@
                                         setStorage('decrypt_data', aliUser, 'obj');
 
 
-                                    } else if (this.client_type == 'wechat' || this.client_type=='app') {
+                                    } else if (this.client_type == 'wechat') {
 
                                         setStorage('decrypt_data', res.data.data, 'obj');
                                     }
