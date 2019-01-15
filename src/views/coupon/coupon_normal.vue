@@ -155,10 +155,13 @@
                 }).then(res=>{
                     if(res.state==1){
                         let _this = this;
-                        Notify({message:'兑换成功'})
+                        Notify({
+                            message:'兑换成功',
+                            background:'#60ce53'
+                        })
                         setTimeout(function () {
                             setStorage('check_iccid',_this.iccid)
-                            _this.$router.push({path:'/card/usage'});
+                            _this.$router.push({path:'/app/card/usage'});
                         },2000)
                     }else{
                         Notify({message:res.msg})

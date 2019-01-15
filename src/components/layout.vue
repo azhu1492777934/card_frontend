@@ -114,10 +114,15 @@
                                             this.$emit('getToken')
 
                                         } else if (res.error == '30005' || res.error == '11003') {
+                                            let _this = this;
 
                                             this.$store.commit('userInfo/changeUserStatus', false);
 
-                                            this.$router.push({path: '/login'})
+                                            Notify({message:'为了您的用户安全,请绑定手机号码'});
+
+                                            setTimeout(function () {
+                                                _this.$router.push({path: '/login'})
+                                            },2000)
 
                                         } else {
                                             Notify({

@@ -73,7 +73,10 @@
                             let _this = this;
                             setStorage("token", res.data);
 
-                            Notify({message:'绑定成功'});
+                            Notify({
+                                message:'账户绑定成功',
+                                background:'#60ce53'
+                            });
                             setTimeout(function () {
                                 _this.$router.push({path:'/app/card/lookup'})
                             },2000)
@@ -83,7 +86,10 @@
 
                         } else if(res.error == 30002){
 
-                            Notify({message:'用户绑定成功'})
+                            Notify({
+                                message:'帐户绑定成功',
+                                background:'#60ce53'
+                            })
 
                             let redirect_uri = getStorage('authorized_redirect_uri');
 
@@ -110,7 +116,10 @@
                         mobile: this.phone
                     }).then((res) => {
                         if (res.error == 0) {
-                            Notify({message:'验证码发送成功'})
+                            Notify({
+                                message:'验证码发送成功',
+                                background:'#60ce53'
+                            })
                         } else if(res.error == "11002") {
                             this.$emit("getToken");
                         } else {

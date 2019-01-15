@@ -88,7 +88,10 @@
                     iccid: getStorage('check_iccid'),
                 }).then(res => {
                     if (res.state==1) {
-                        Notify({message: '成功唤醒套餐,即将跳转至详情页'})
+                        Notify({
+                            message: '成功唤醒套餐,即将跳转至详情页',
+                            background:'#60ce53'
+                        })
                         setTimeout(function () {
                             _this.$router.push({path:'/app/card/usage'})
                         }, 2000)

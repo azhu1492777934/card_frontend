@@ -5,17 +5,16 @@
 </template>
 
 <script>
+    import {Notify} from 'vant'
     import {_get} from "./http";
     import {codeParam} from "./utilies";
     import {getStorage} from "./utilies";
 
     export default {
         name: 'App',
-        data() {
-            return {
-
-            }
-        },
+       components:{
+            [Notify.name]:Notify
+       },
         methods: {
             refreshToken() {
                 _get("/accountCenter/v2/auth/refresh?" + codeParam({
@@ -28,9 +27,13 @@
                             location.reload();
 
                         } else if (res.error == 11003) {
+                            let _this = this;
 
-                            this.showUser = false;
-                            this.$router.push('/login');
+                            Notify({message:'为了您的账号安全,请绑定手机号码'})
+
+                            setTimeout(function () {
+                                _this.$router.push({path: '/login'})
+                            },2000)
                         }
                     })
             },

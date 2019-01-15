@@ -521,7 +521,10 @@
                                 .then(function (res) {
 
                                     if (res.state==1) {
-                                        Notify({message: '验证码发送成功'});
+                                        Notify({
+                                            message: '验证码发送成功',
+                                            background:'#60ce53'
+                                        });
                                     } else {
                                         Notify({message: res.msg});
                                     }
@@ -529,10 +532,7 @@
 
                         } else {
 
-                            Notify({
-                                message: res.msg,
-                                background: '#ce4141'
-                            })
+                            Notify({message: res.msg,})
                         }
                     })
 
