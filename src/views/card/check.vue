@@ -239,7 +239,8 @@
                     this.btnCheckText = '检测中...';
                     this.isDisabled = true;
                     _get('/api/v1/app/cards/check',{
-                        iccid:iccid
+                        iccid:iccid,
+                        is_server:0
                     }).then(res=>{
                         this.btnCheckText = '开始检测';
                         this.isDisabled = false;
@@ -249,18 +250,21 @@
 
                             this.showNormalResult = true
                         }else {
-                            if(res.state=='11001'){ //未实名
-                                this.checkType = 1;
-                                this.otherResultMsg = '卡尚未实名,是否立即实名'
-                            }else if(res.state=='11003'){ //未激活
-                                this.checkType = 2;
-                                this.otherResultMsg = '卡未激活,是否激活此卡'
+                            this.checkType = res.state;
 
-                            }else if(res.state=='11002'){ //无套餐
-                                this.checkType = 3;
-                                this.otherResultMsg = '套餐已到期是否立即续费'
+                            if(res.state=='11001'){
+                                this.otherResultMsg = '未查询到此卡相关信息，请检查您的卡号是否正确';
                             }
-
+                            if(res.state=='11002'){
+                                this.otherResultMsg = '卡尚未实名，是否立即实名'
+                                setStorage('check_realNameSource',res.data.source);
+                            }
+                            if(res.state=='11003'){
+                                this.otherResultMsg = '卡未激活，是否激活此卡'
+                            }
+                            if(res.state=='11004'){
+                                this.otherResultMsg = '卡暂无套餐，是否前往充值'
+                            }
                             this.showOtherResult = true
                         }
                     })
@@ -273,10 +277,18 @@
                 this.processCheckIccid(this.iccid);
             },
             fixedCheckResult(){
-                if(this.checkType==1){
-                    this.$router.push({path:'/app/new_card/real_name'})//需要返回source
-                }else if(this.checkType==2){
-                    _post('/api/v1/app/activated', {iccid: '8934564565432345'})
+                if(this.checkType=='11001'){
+                   this.showOtherResult = false
+                }
+
+                if(this.checkType=='11002'){
+                    this.$router.push({path:'/weixin/new_card/real_name'})//需要返回source
+                }
+
+                if(this.checkType=='11003'){
+                    _post('/api/v1/app/activated', {
+                        iccid: '8934564565432345'
+                    })
                         .then(res => {
                             this.showOtherResult = false
                             if (res.state==1) {
@@ -289,9 +301,10 @@
                             }
                         })
 
-                }else if(this.checkType==3){
+                }
+                if(this.checkType=='11004'){
                     setStorage('check_iccid',this.iccid);
-                    this.$router.push({path:'/app/card/plan_list'});
+                    this.$router.push({path:'/weixin/card/plan_list'});
                 }
             }
 

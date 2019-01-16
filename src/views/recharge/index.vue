@@ -199,9 +199,6 @@
             }
         },
         created() {
-
-            this.client_type = 'app'
-
             if(getStorage('decrypt_data','obj')){
                 this.open_id = getStorage('decrypt_data','obj').openid
             }

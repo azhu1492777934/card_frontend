@@ -137,7 +137,7 @@
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
             }else{
-                this.router.push('/card/lookup')
+                this.router.push('/weixin/new_auth')
             }
         },
         methods: {

@@ -74,7 +74,7 @@
         methods: {
            to_another_way:function (location) {
                if(location=='card') {
-                   this.$router.push({path:'/app/card/usage'})
+                   this.$router.push({path:'/weixin/card/usage'})
                }else{
                    location.href = 'http://wxgame.china-m2m.com/common/home';
                }

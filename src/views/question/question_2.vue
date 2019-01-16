@@ -93,7 +93,7 @@
                             background:'#60ce53'
                         })
                         setTimeout(function () {
-                            _this.$router.push({path:'/app/card/usage'})
+                            _this.$router.push({path:'/weixin/card/usage'})
                         }, 2000)
                     } else {
                         Notify({message: res.msg})

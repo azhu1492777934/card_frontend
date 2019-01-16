@@ -281,12 +281,12 @@
                     if(res.state==1){
                         setStorage('check_iccid',iccid);
                         if(res.data.status==1){
-                            _this.$router.push({path:'/app/card/usage'});
+                            _this.$router.push({path:'/weixin/card/usage'});
                         }else if(res.data.status==2){
                             setStorage('check_realNameSource',res.data.source)
-                            _this.$router.push({path:'/app/new_card/real_name'});
+                            _this.$router.push({path:'/weixin/new_card/real_name'});
                         }else if(res.data.status==3){
-                            _this.$router.push({path:'/app/card/plan_list'});
+                            _this.$router.push({path:'/weixin/card/plan_list'});
                         }
                     }else{
                         Notify({

@@ -33,8 +33,11 @@
                 <button @click="getCode" class="btn-code" :disabled="disabled_code">{{countDownMsg}}</button>
             </div>
         </div>
+        <div class="tip-wrap" v-show="!card_tip">
+            <p>移动号码实名仅支持一证五号，若实名卡数已超出请更换证件</p>
+        </div>
         <div class="btn-next-wrap">
-            <button @click="checkInfo" class="btn-next">下一步</button>
+            <button @click="checkInfo" class="btn-next">下一步实名激活</button>
         </div>
         <p class="tutorial-wrap">
             <a @click="toTutorial">查看实名教程</a>
@@ -292,7 +295,7 @@
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    this.$router.push({'path':'/app/card/lookup'});
+                    this.$router.push({'path':'/weixin/new_auth'});
                 }
             }
             if(getUrlParam('source')){
@@ -301,7 +304,7 @@
                 if(getStorage('check_realNameSource')){
                     this.card_source = getStorage('check_realNameSource');
                 }else{
-                    this.$router.push({'path':'/app/card/lookup'});
+                    this.$router.push({'path':'/weixin/new_auth'});
                 }
             }
 

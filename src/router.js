@@ -53,7 +53,7 @@ export const constantRouterMap = [{
         }
 
     }, {
-        path: '/app',
+        path: '/weixin',
         component: Layout,
         children: [
             {
@@ -147,7 +147,8 @@ export const constantRouterMap = [{
                     requireAuth: true,
                 }
             }, {
-                path: 'card/lookup',
+                // path: 'card/lookup',
+                path:'new_auth',
                 component: card_lookup,
                 meta: {
                     title: '查询',
@@ -176,7 +177,7 @@ export const constantRouterMap = [{
             }],
     }, {
         path: '/',
-        redirect: '/app/card/lookup'
+        redirect: '/weixin/new_auth'
     }]
 
 const router = new Router({

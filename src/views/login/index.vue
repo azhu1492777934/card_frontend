@@ -78,7 +78,7 @@
                                 background:'#60ce53'
                             });
                             setTimeout(function () {
-                                _this.$router.push({path:'/app/card/lookup'})
+                                _this.$router.push({path:'/weixin/new_auth'})
                             },2000)
                         } else if (res.error == "11002") {
 

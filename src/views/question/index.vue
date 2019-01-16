@@ -3,10 +3,10 @@
         <p class="title">问题中心</p>
         <ul>
             <li>
-                <a href="/app/question/find_plan">1.套餐充值成功，流量通话未增加</a>
+                <a href="/weixin/question/find_plan">1.套餐充值成功，流量通话未增加</a>
             </li>
             <li>
-                <a href="/app/question/revoke_plan">2.流量通话显示正常，但无法使用</a>
+                <a href="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</a>
             </li>
         </ul>
     </div>
