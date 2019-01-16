@@ -17,7 +17,7 @@ service.interceptors.request.use(function (config) {
         config.headers.Authorization =  getStorage('token');
     }
     if(returnCitySN.cip){
-        config.headers.real_ip = returnCitySN.cip
+        config.headers.ip = returnCitySN.cip
     }
 
     return config;  //添加这一行
