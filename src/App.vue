@@ -7,8 +7,7 @@
 <script>
     import {Notify} from 'vant'
     import {_get} from "./http";
-    import {codeParam} from "./utilies";
-    import {getStorage} from "./utilies";
+    import {codeParam,getStorage} from "./utilies";
 
     export default {
         name: 'App',

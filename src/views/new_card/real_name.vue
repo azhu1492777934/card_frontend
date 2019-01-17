@@ -29,7 +29,7 @@
                 <input v-model="info_phone" placeholder="请输入" type="number">
             </div>
             <div>
-                <input v-model="info_code" placeholder="获取验证码" type="number">
+                <input v-model="info_code" placeholder="请输入验证码" type="number">
                 <button @click="getCode" class="btn-code" :disabled="disabled_code">{{countDownMsg}}</button>
             </div>
         </div>
@@ -234,7 +234,7 @@
     import {Popup, Notify, Dialog} from 'vant';
     import {_get, _post} from "../../http";
     import Clipboard from 'clipboard';
-    import {codeParam, getStorage, inArray,getUrlParam} from "../../utilies";
+    import {getStorage, inArray,getUrlParam} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
     export default {
@@ -285,7 +285,6 @@
         components: {
             [Popup.name]: Popup,
             [Notify.name]: Notify,
-            // [Dialog.name]:Dialog
         },
         created() {
 
@@ -309,7 +308,7 @@
             }
 
 
-            if (inArray(this.card_source, ['18', '19', '20', '21', '22']) >= 0) {
+            if (inArray(this.card_source, ['18', '19', '20', '21', '22','27']) >= 0) {
                 this.card_tip = !this.card_tip
             }
 

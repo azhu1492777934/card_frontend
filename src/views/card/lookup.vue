@@ -153,6 +153,7 @@
     import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
     import cardButton from '../../components/button'
+    import wx from 'weixin-js-sdk'
 
     export default {
         name: "home",
@@ -171,7 +172,6 @@
             cardButton
         },
         created() {
-
             if(getStorage('check_iccid')){
 
                 this.iccid = getStorage('check_iccid');

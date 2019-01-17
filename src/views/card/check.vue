@@ -35,7 +35,7 @@
                 <p>{{otherResultMsg}}</p>
             </div>
             <div class="footer">
-                <span>否</span>
+                <span @click="closeResult">否</span>
                 <span @click="fixedCheckResult">是</span>
             </div>
         </div>
@@ -177,7 +177,7 @@
 
 <script>
     // @ is an alias to /src
-    import {checkBrowser,checkICCID,setStorage} from "../../utilies";
+    import {checkBrowser,checkICCID,setStorage,getUrlParam} from "../../utilies";
     import {Notify} from 'vant'
     import {_get,_post} from "../../http";
 
@@ -186,6 +186,7 @@
 
         data() {
             return {
+                operatorType:0,
                 iccid:'',
                 showResult:false,
                 btnCheckText:'开始检测',
@@ -194,14 +195,14 @@
                 showOtherResult:false,//其他检测结果
                 otherResultMsg:'卡尚未实名,是否立即实名',
                 checkType:'',//卡未实名,未激活,无套餐
+                objCheckResult:null,//检查结果
             }
         },
         components:{
             [Notify.name]:Notify,
         },
         created() {
-
-
+            this.operatorType = getUrlParam('type');
         },
         methods: {
             scanIccid(){
@@ -231,6 +232,9 @@
                     });
                 }
             },
+            closeResult(){
+                this.showOtherResult = false
+            },
             processCheckIccid(iccid){
                 if(checkICCID(iccid).state==1){
                     this.showNormalResult = false;
@@ -240,11 +244,12 @@
                     this.isDisabled = true;
                     _get('/api/v1/app/cards/check',{
                         iccid:iccid,
-                        is_server:0
+                        is_server:this.operatorType==1 ? 1:0
                     }).then(res=>{
                         this.btnCheckText = '开始检测';
                         this.isDisabled = false;
                         this.showResult = true;
+                        this.objCheckResult = res;
 
                         if(res.state==1){
 
@@ -257,7 +262,6 @@
                             }
                             if(res.state=='11002'){
                                 this.otherResultMsg = '卡尚未实名，是否立即实名'
-                                setStorage('check_realNameSource',res.data.source);
                             }
                             if(res.state=='11003'){
                                 this.otherResultMsg = '卡未激活，是否激活此卡'
@@ -265,6 +269,16 @@
                             if(res.state=='11004'){
                                 this.otherResultMsg = '卡暂无套餐，是否前往充值'
                             }
+                            if(this.operatorType==1){
+
+                                if(res.stata=='11005'){
+                                    this.otherResultMsg = '卡限速中'
+                                }
+                                if(res.stata=='11006'){
+                                    this.otherResultMsg = '深圳移动未下发套餐'
+                                }
+                            }
+
                             this.showOtherResult = true
                         }
                     })
@@ -277,12 +291,14 @@
                 this.processCheckIccid(this.iccid);
             },
             fixedCheckResult(){
-                if(this.checkType=='11001'){
-                   this.showOtherResult = false
+                if(this.checkType=='11001') {
+                    this.showOtherResult = false
                 }
 
                 if(this.checkType=='11002'){
-                    this.$router.push({path:'/weixin/new_card/real_name'})//需要返回source
+                    setStorage('check_realNameSource',this.objCheckResult.data.source);
+                    setStorage('check_iccid',this.iccid);
+                   this.$router.push({path:'/weixin/new_card/real_name'})//需要返回source
                 }
 
                 if(this.checkType=='11003'){

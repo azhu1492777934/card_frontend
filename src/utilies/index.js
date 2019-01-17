@@ -1,6 +1,4 @@
 import md5 from 'js-md5';
-import {_get,_post} from "../http";
-import {Notify} from 'vant'
 
 function checkICCID(iccid) {
     if (iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != '89') {
@@ -153,73 +151,6 @@ function getUrlParam(name) {
     return null; //返回参数值
 }
 
-/*function getUserInfo() {
-    //获取用户信息
-    return new Promise((resolve, reject) => {
-        _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
-            .then(res => {
-                if (res.error == 0) {
-                    let UserInfo = {
-                        account:res.data.account,
-                        avatar:res.data.avatar,
-                        nickname:res.data.nickname
-                    }
-                    setStorage('userInfo', UserInfo);
-                    resolve({
-                        state:1,
-                        msg:'获取用户信息成功'
-                    })
-                } else if (res.error == "11002") {
-                    refreshToken()
-                } else {
-                    resolve({
-                        state:0,
-                        msg:res.msg
-                    })
-                }
-            }).catch(err=>{
-                resolve({
-                    state:0,
-                    msg:'服务开小差啦,请稍后再试'
-                })
-        })
-    })
-
-}//获取用户信息*/
-
-/*function isUserBind() {
-    let checkBrowserResult = checkBrowser()
-    return new Promise((resolve,reject)=>{
-        _get('/accountCenter/v2/user/has-bind?'+codeParam({
-            from:checkBrowserResult,
-            uuid:getStorage('decrypt_data').openid
-        },'get')).then(res=>{
-            if(res.error==0){
-                setStorage('userBind',1)
-                resolve({
-                    state:0,
-                    msg:'已成功绑定'
-                })
-            }else if(res.error=='30005'){
-                resolve({
-                    state:1,
-                    msg:'用户未绑定'
-                })
-            }else{
-                resolve({
-                    state:2,
-                    msg:res.msg
-                })
-            }
-        }).catch(err=>{
-            resolve({
-                state:-1,
-                msg:'服务开小差了,请稍后再试'
-            })
-        })
-    })
-}//判断用户是否已和用户中心绑定*/
-
 function inArray (elem, arr, i) {
     return arr == null ? -1 : arr.indexOf(elem, i);
 }
@@ -235,7 +166,5 @@ export {
     codeParam,
     checkBrowser,
     getUrlParam,
-    // getUserInfo,
-    // isUserBind,
     inArray,
 }
