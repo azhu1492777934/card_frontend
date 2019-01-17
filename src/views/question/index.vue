@@ -9,7 +9,7 @@
                 <a href="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</a>
             </li>
             <li>
-                <a href="/app/question/release_plan">3.解约自动续费套餐</a>
+                <a href="/weixin/question/release_plan">3.解约自动续费套餐</a>
             </li>
         </ul>
     </div>
