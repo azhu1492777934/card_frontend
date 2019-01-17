@@ -1,7 +1,7 @@
 <template>
    <div class="new-card-lookup-wrap">
        <div class="new-card-inner-wrap">
-           <p class="title">让天下没有走失的孩子</p>
+           <p class="title">守护孩子回家</p>
            <ul class="card-type-wrap">
                <li>
                    <span class="block icon-telcom-card"></span>
@@ -16,9 +16,12 @@
            </ul>
        </div>
        <div class="p-lr-30">
-           <input class="search" placeholder="扫码/输入ICCID号/输入手机号码查询" type="text">
+           <input v-model="iccid" class="search" autofocus placeholder="扫码/输入ICCID号/输入手机号码查询" type="text">
            <button class="btn btn-large">查询</button>
        </div>
+       <van-popup :close-on-click-overlay="false" v-model="checkShow">
+           <p class="showTip">正在检测中,请等候</p>
+       </van-popup>
    </div>
 </template>
 
@@ -91,27 +94,79 @@
 </style>
 
 <script>
-    // @ is an alias to /src
+    // @ is an alias to /
+    import {_post} from "../../http";
+    import {Notify,Popup} from 'vant'
+
     export default {
-        name: "home",
-        props: {
-            options: {
-                type: Object,
+        name: "newCardLookup",
+        data() {
+            return {
+                iccid:'',
+                checkShow:false,
 
             }
         },
-        data() {
-            return {
-
-
-            }
+        components:{
+            [Notify.name]:Notify,
+            [Popup.name]:Popup
         },
         created() {
 
 
         },
         methods: {
-            inArray:function (elem, arr, i) {
+            processCheckIccid(iccid){
+
+                let checkSearchResult = this.checkSearchIccid(iccid);
+
+                if(checkSearchResult.state==1){
+                    this.checkShow = true;
+                    //查询
+                    _post('/api/v1/app/new_auth/check_auth_',{
+                        iccid:iccid,
+                    }).then(res=>{
+                        if(res.state==1){
+                            setStorage('check_iccid',iccid);
+                            if(res.data.status==1){
+                                _this.$router.push({path:'/weixin/card/usage'});
+                            }else if(res.data.status==2){
+                                setStorage('check_realNameSource',res.data.source)
+                                _this.$router.push({path:'/weixin/new_card/real_name'});
+                            }else if(res.data.status==3){
+                                _this.$router.push({path:'/weixin/card/plan_list'});
+                            }
+                        }else{
+                            Notify({
+                                message:res.msg
+                            })
+                            this.checkShow = false
+                        }
+                    })
+
+                }else{
+                    Notify({message:checkSearchResult.msg})
+                }
+
+            },
+            checkSearchIccid (iccid) {
+                if(!iccid){
+                    return {
+                        state:0,
+                        msg:'请输入ICCID'
+                    }
+                }
+                if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != "89") && (iccid.length != 13 && iccid.length != 11 && iccid.length != 15 && iccid.length != 16)) {
+                    return{
+                        state:0,
+                        msg:'ICCID有误,请检查'
+                    };
+                }
+                return{
+                    state:1
+                }
+            },
+            inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf( elem, i);
             },
         }

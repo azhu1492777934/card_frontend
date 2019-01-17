@@ -408,22 +408,22 @@
                     .then(res=>{
                         if(res.state==1){
 
-                            this.userInfo.account.elb = res.data.elb;
-                            this.userInfo.account.rmb = res.data.rmb;
-
-                            setStorage('userInfo',this.userInfo,'obj');
-
-                            this.$store.commit('userInfo/changeUserInfo',this.userInfo);
-
                             this.rechargeShow = false;
 
                             if(/<[^>]+>/.test(res.data)){
                                 document.write(res.data);
 
-                            }else if(res.data && res.data.substr(0,4)=='http'){
+                            }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
                                 location.href = res.data
 
                             }else {
+                                this.userInfo.account.elb = res.data.elb;
+                                this.userInfo.account.rmb = res.data.rmb;
+
+                                setStorage('userInfo',this.userInfo,'obj');
+
+                                this.$store.commit('userInfo/changeUserInfo',this.userInfo);
+
                                 Notify({
                                     message:'充值成功',
                                     background:'#60ce53'
@@ -432,7 +432,7 @@
                                     setStorage('check_iccid',_this.planInfo.iccid);
                                     location.href = res.data.return_url
                                 },2000)
-                            }
+                            }//纯钻石支付
                         }else{
                             this.rechargeShow = false;
                             Notify({

@@ -37,7 +37,7 @@
     .check-card-wrap {
         padding: 0 40px;
         .scanTop-wrap {
-            padding: 35px 0 70px;
+            padding: 35px 0 90px;
             text-align: center;
             img {
                 display: block;
@@ -153,7 +153,7 @@
     import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
     import cardButton from '../../components/button'
-    import wx from 'weixin-js-sdk'
+    // import wx from 'weixin-js-sdk'
 
     export default {
         name: "home",
@@ -186,7 +186,6 @@
                     this.recording_show = true
                 }
             }
-
 
             let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card');
 
@@ -302,7 +301,7 @@
                 let _this = this;
 
                 if(this.client_type=='wechat'){
-                    wx.scanQRCode({
+                    this.wx.scanQRCode({
                         needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                         scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
                         success: function (res) {
