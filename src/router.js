@@ -41,6 +41,7 @@ const card_check = r => require.ensure([], () => r(require('./views/card/check')
 const question = r => require.ensure([], () => r(require('./views/question/index')), 'question');
 const find_plan = r => require.ensure([], () => r(require('./views/question/question_1')), 'question');//流量通话未增加
 const revoke_plan = r => require.ensure([], () => r(require('./views/question/question_2')), 'question');//无法使用
+const release_plan=r=>require.ensure([],()=>r(require('./views/question/question_3')),'question')//解约自动续约套餐
 
 Vue.use(Router)
 
@@ -94,6 +95,14 @@ export const constantRouterMap = [{
             component: revoke_plan,
             meta: {
                 title: '唤醒套餐',
+                requireAuth: true,
+            }
+        },
+        {
+            path: 'question/release_plan',
+            component: release_plan,
+            meta: {
+                title: '套餐解约',
                 requireAuth: true,
             }
         }, {
