@@ -7,6 +7,7 @@ import store from '../src/store/index'
 import 'normalize.css'
 import '../src/assets/css/reset.css'
 import '../src/assets/less/common.less'
+import '../src/assets/css/SourceHanSansCNRegular.css'
 
 import 'lib-flexible/flexible'
 import vueWeChatTitle from 'vue-wechat-title'
