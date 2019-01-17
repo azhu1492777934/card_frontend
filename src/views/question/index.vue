@@ -28,6 +28,8 @@
        }
        ul{
            padding-top: 20px;
+           text-align:left;
+           margin-left:77px;
            li{
               padding: 40px 0;
                border-bottom: 1px solid #f5f5f5;
