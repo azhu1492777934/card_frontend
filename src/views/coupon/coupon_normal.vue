@@ -137,11 +137,12 @@
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
             }else{
-                this.router.push('/weixin/new_auth')
+                this.$router.push('/weixin/new_auth')
             }
         },
         methods: {
             exchange:function () {
+                let _this = this;
                 if(!this.coupon_code){
                     Notify({message:'请输入兑换码'})
                     return
@@ -154,14 +155,13 @@
                     no:this.coupon_code
                 }).then(res=>{
                     if(res.state==1){
-                        let _this = this;
                         Notify({
                             message:'兑换成功',
                             background:'#60ce53'
                         })
                         setTimeout(function () {
                             setStorage('check_iccid',_this.iccid)
-                            _this.$router.push({path:'/app/card/usage'});
+                            _this.$router.push({path:'/wexin/card/usage'});
                         },2000)
                     }else{
                         Notify({message:res.msg})
