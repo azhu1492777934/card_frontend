@@ -8,7 +8,8 @@ const state ={
             elb:0
         },
         nickname:'eLink',
-        avatar:''
+        avatar:'',
+        user_id:""
     }//用户信息
 }
 
