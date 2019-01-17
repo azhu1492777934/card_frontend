@@ -218,7 +218,6 @@
                                 account: res.data.account,
                                 avatar: res.data.avatar,
                                 nickname: res.data.nickname,
-                                user_id:res.data.id
                             }
 
                             setStorage('userInfo', UserInfo, 'obj');

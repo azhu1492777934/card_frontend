@@ -9,7 +9,6 @@ const state ={
         },
         nickname:'eLink',
         avatar:'',
-        user_id:""
     }//用户信息
 }
 
