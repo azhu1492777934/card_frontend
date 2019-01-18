@@ -310,7 +310,7 @@ export default {
     },
     recharge:function() {
      
-
+        let _this=this;
 
       let planInfo = null,
         ref_plan_type_index = 0; //当前套餐索引
@@ -340,9 +340,11 @@ export default {
       setStorage("planInfo", planInfo, "obj");
 
      //获取当前包月套餐信息
-    _get("/releaseApi/v1/app/plans/renew_info", {
-        user_id: getStorage("userInfo","obj").account.user_id,
+        _get("/releaseApi/v1/app/plans/renew_info", {
+        user_id: getStorage("userInfo").account.user_id
+        // user_id: 14,
         rating_id:planInfo.id
+
       }).then(res => {
         if (res.state == 1) {
           setStorage("monthlyMsg", res.data,"obj");
@@ -350,7 +352,11 @@ export default {
           Notify({ message: res.msg });
         }
       });
-      this.$router.push({ path: "/weixin/recharge" });
+
+    //暂时就这么解决吧
+      setTimeout(function(){
+            _this.$router.push({ path: "/weixin/recharge" });
+      },0)
     }
   }
 };

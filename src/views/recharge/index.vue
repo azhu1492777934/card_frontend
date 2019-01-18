@@ -13,7 +13,7 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div>
+                    <div v-if="!item.is_first"> 
                         <p class="discount-rmb">{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
@@ -26,14 +26,22 @@
                         <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">{{item.give_elb}}</em>ELB
                         </p><!--多充值支付-->
                     </div>
-                </li>
-                <li class="monthly ">
-                    <div>
-                        <p class="discount-rmb">1.5元</p>
-                        <span  class="line"></span>
 
+
+                    <div class="monthlyPlan" v-if="item.is_first">
+                        <p class="monthlyPlan-first" v-if="item.is_first">
+                            <span>首月</span>
+                            <span>{{item.price+"元"}}</span>
+                        </p>
+
+                        <p class="monthlyPlan-rmb">{{item.is_first?item.first_price+"元":item.price+"元"}}</p>
+                        
+                         <span class="line"></span>
+
+                        <p class="monthlyDes">使用钻石连续包月</p>
                     </div>
-                </li>  
+
+                </li> 
                 <li class="special"></li>
             </ul>
             <div class="choice-wrap">
@@ -245,7 +253,25 @@
                 user_rmb = this.userInfo.account.rmb;
             }
             this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
-            console.log(this.new_recharge_list );
+            
+             /*
+            * 增加包月套餐
+            * 条件限制:存在钻石用量
+            * */
+            if(this.userInfo.account.rmb > 0){
+                 const monthlyMsg=getStorage("monthlyMsg","obj");
+                 monthlyMsg.give_elb=0;
+                 if(monthlyMsg.is_first){
+                    monthlyMsg.pay_money=monthlyMsg.first_price;
+                 }else{
+                    monthlyMsg.pay_money=monthlyMsg.price;
+                 }
+                 monthlyMsg.pay_type="monthly_recharge";
+
+                 monthlyMsg.is_renew=true;
+                this.new_recharge_list.push(monthlyMsg);
+            }
+
         },
         methods: {
             changedCheck: function (type) {
@@ -331,6 +357,13 @@
                     _this = this;
 
                 rechargeInfo.pay_type=='diamond_charge'?param.status = 1 : param.status = 0;
+
+
+                rechargeInfo.pay_type=='monthly_recharge'?param.status = 1 : param.status = 0;
+
+                //判断是否开启自动续费
+                rechargeInfo.is_renew?param.is_renew=true:param.is_renew=false;
+
                 if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'){
                     param.recharge_price = rechargeInfo.pay_money
                 }
@@ -411,7 +444,7 @@
                 }
 
                 this.rechargeShow = true;
-
+                
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state==1){
@@ -698,14 +731,43 @@
                 border: 1PX solid #e6e6e6;
                 border-radius: 16px;
                 -webkit-text-size-adjust: none;
+              
                 &.special {
                     border-color: transparent;
                     visibility: hidden
                 }
-                &.monthly{
-                    background:url("../../assets/imgs/recharge_success/tuhaoGold.png")no-repeat;
-                    background-size:100% 100%;
+                .monthlyPlan{
+                        font-family:SourceHanSansSC-Regular;
+                        font-weight:400;
+                        vertical-align:top;
+                        background:linear-gradient(-45deg,rgba(255,222,123,1),rgba(250,197,84,1),rgba(255,209,120,1),rgba(247,194,80,1));
+                        border-radius: 16px;
+                    .monthlyPlan-first{
+                        font-size:20px;
+                        color:rgba(255,255,255,1);
+                        display:flex;
+                        justify-content:space-between;
+                        margin:10px 0 12px 0;
+                        >span:nth-child(1){
+                            margin-left:12px;
+                        }
+                        >span:nth-child(2){
+                            text-decoration:line-through;
+                            color:rgba(44,37,29,1);
+                            margin-right:9px;
+                        }
+                    }
+                    .monthlyPlan-rmb{
+                        font-size:38px;
+                        color:rgba(44,37,29,1);
+                    }
+                    .monthlyDes{
+                        font-size:20px;
+                        color:rgba(131,96,25,1);
+                    }
+
                 }
+               
                 .line {
                     display: block;
                     width: 60px;
@@ -737,13 +799,12 @@
                 }
 
                 &.checked {
-                    border-color: #c89439;
+                    border-color: #c89439 ;
                     box-shadow: 0 50px 0 #fff;
 
-                    .discount-rmb {
+                    .discount-rmb,.monthlyPlan-rmb {
                         color: #fd720d;
                     }
-
                     &::after {
                         position: absolute;
                         right: 0;
