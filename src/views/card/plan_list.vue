@@ -326,7 +326,7 @@
 
      //获取当前包月套餐信息
         _get("/releaseApi/v1/app/plans/renew_info", {
-        user_id: getStorage("userInfo","obj").account.user_id
+        user_id: getStorage("userInfo","obj").account.user_id,
         // user_id: 14,
         rating_id:planInfo.id
 
