@@ -18,6 +18,7 @@ var domain_production = {
 
 module.exports = {
     devServer: {
+        port:8080,
         disableHostCheck:true,
         proxy: {
             '/api': {
@@ -28,10 +29,11 @@ module.exports = {
                 }
             },
             '/accountCenter':{
-                target:domain_test.accountCenter,
+                // target:domain_test.accountCenter,
+                target:'http://uc-test.api.china-m2m.com',
                 changeOrigin:true,
                 pathRewrite:{
-                    '^/accountCenter':'http://uc.api.china-m2m.com'
+                    '^/accountCenter':''
                 }
             },
             '/releaseApi':{

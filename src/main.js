@@ -17,23 +17,21 @@ import {_get} from "./http";
 const wx = require('weixin-js-sdk');
 Vue.prototype.wx = wx
 
-router.afterEach((to,from)=>{
-    _get('/api/v1/app/sign_info')
-        .then(res=>{
-            if(res.state==1){
-                wx.config({
-                    debug: false,
-                    appId: res.data.appId,
-                    signature: res.data.sign,
-                    timestamp: res.data.timestamp,
-                    nonceStr: res.data.noncestr,
-                    // timestamp:Math.round(new Date().getTime() / 1000),
-                    // nonceStr:new Date().getMilliseconds()+'0'+Math.floor(Math.random()*10000),
-                    jsApiList: ["scanQRCode"]
-                })
-            }
-        })
-})
+// router.afterEach((to,from)=>{
+//     _get('/api/v1/app/sign_info')
+//         .then(res=>{
+//             if(res.state==1){
+//                 wx.config({
+//                     debug: false,
+//                     appId: res.data.appId,
+//                     signature: res.data.sign,
+//                     timestamp: res.data.timestamp,
+//                     nonceStr: res.data.noncestr,
+//                     jsApiList: ["scanQRCode"]
+//                 })
+//             }
+//         })
+// })
 
 Vue.config.productionTip = false
 Vue.use(globalFunction)

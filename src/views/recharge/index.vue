@@ -471,6 +471,8 @@
                                 })
                                 setTimeout(function () {
                                     setStorage('check_iccid',_this.planInfo.iccid);
+                                    alert(res.data.return_url);
+                                    // _this.$router.push({path:'/weixin/card/usage'});
                                     location.href = res.data.return_url
                                 },2000)
                             }//纯钻石支付

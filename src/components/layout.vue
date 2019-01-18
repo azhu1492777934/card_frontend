@@ -36,6 +36,19 @@
             }),
         },
         created(){
+
+            //手表扫码跳转
+            if(getUrlParam('iccid')){
+                let watch_iccid = getUrlParam('iccid');
+                if(checkICCID(watch_iccid).state==1){
+                    setStorage('watch_card',watch_iccid)
+                    setStorage('watchAutoSearch',1);
+                }
+            }else{
+                removeStorage('watch_card');
+                removeStorage('watchAutoSearch');
+            }
+
             document.addEventListener("plusready",this.plusReady,false);
         },
         mounted() {
@@ -45,10 +58,14 @@
             /*获取用户信息*/
             if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') {
 
+                if(this.client_type!='app'){
+                    if(getStorage('userInfo','obj')){
+                        this.$store.commit('userInfo/changeUserStatus', true);
+                    }
+                }
+
                 if (getStorage('token')) {
-
                     this.getUserInfo();//获取用户信息
-
                 } else {
 
                     if (getUrlParam('data')) {
@@ -156,14 +173,17 @@
                             let watch_iccid = getUrlParam('iccid');
                             if(checkICCID(watch_iccid).state==1){
                                 setStorage('watch_card',watch_iccid)
+                                setStorage('watchAutoSearch',1);
                             }
                         }else{
                             removeStorage('watch_card');
+                            removeStorage(watchAutoSearch)
                         }
 
                         // 授权
                         _get('/accountCenter/v2/oauth/authorize?' + codeParam({
                             client_type: this.client_type,
+                            // redirect_uri: 'http://cardfronttest.china-m2m.com'+redirect_uri,
                             redirect_uri: 'http://cardserver-test.china-m2m.com'+redirect_uri,
                             scope: 'userinfo',
                             state: this.state
@@ -222,8 +242,10 @@
 
                             setStorage('userInfo', UserInfo, 'obj');
 
-                            this.$store.commit('userInfo/changeUserStatus', true);
-                            this.$store.commit('userInfo/changeUserInfo', UserInfo);
+                            if(this.client_type == 'wechat' || this.client_type == 'alipay'){
+                                this.$store.commit('userInfo/changeUserStatus', true);
+                                this.$store.commit('userInfo/changeUserInfo', UserInfo);
+                            }
 
                         } else if (res.error == "11002") {
 

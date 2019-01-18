@@ -101,7 +101,7 @@
                 background-color: #fff;
                 line-height: 1;
                 font-size: 24px;
-                border-bottom: 1px solid #f0f0f0;
+                border-bottom: 1PX solid #f0f0f0;
                 box-sizing: border-box;
                 &:last-child {
                     border-bottom: none;
@@ -149,7 +149,7 @@
 
 <script>
     // @ is an alias to /src
-    import {setStorage, formatterCardTime, getStorage,getUrlParam,checkBrowser,checkICCID} from '../../utilies'
+    import {setStorage, formatterCardTime, getStorage,removeStorage,getUrlParam,checkBrowser,checkICCID} from '../../utilies'
     import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
     import cardButton from '../../components/button'
@@ -191,6 +191,11 @@
 
             if(scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state==1){
 
+                if(getStorage('watchAutoSearch') > 2){
+                    removeStorage('watch_card');
+                    removeStorage('watchAutoSearch');
+                }
+
                 if(getStorage('watch_card_timestamp')){
 
                     var watch_card_timestamp = getStorage('watch_card_timestamp')
@@ -217,6 +222,7 @@
 
                     this.processCheckIccid(scanWatchCardIccid);//自动查询
                 }
+
 
             }else{
                if(scanWatchCardIccid){
@@ -277,6 +283,13 @@
                 _post('/api/v1/app/new_auth/check_auth_',{
                     iccid:iccid,
                 }).then(res=>{
+                    console.log(res);
+
+                    let autoCount = getStorage('watchAutoSearch');
+                    if(autoCount){
+                        autoCount++;
+                        setStorage('watchAutoSearch',autoCount);
+                    }
                     if(res.state==1){
                         setStorage('check_iccid',iccid);
                         if(res.data.status==1){
