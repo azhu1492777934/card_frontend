@@ -459,6 +459,7 @@
         data() {
             const _this = this;
             return {
+                client_type:checkBrowser(),
                 iccid: '',
                 load_plan: true,
                 load_plan_msg: '获取卡详情信息,请等候',
@@ -634,11 +635,22 @@
 
         },
         mounted() {
+
             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            if (checkBrowser() != 'alipay' || checkBrowser() != 'wechat' || checkBrowser()!='app') {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 330) + 'px';
-            } else {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 360) + 'px';
+            let is_ios  = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())
+
+            if(this.client_type == 'wechat' || this.client_type == 'alipay'){
+
+               if(is_ios){
+                   this.$refs.mySwiper.$el.style.height = (clientHeight - 400) + 'px'
+               }else{
+                   this.$refs.mySwiper.$el.style.height = (clientHeight - 360) + 'px'
+               }
+            }else if(this.client_type=='app'){
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 320) + 'px'
+            }
+            else{
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 340) + 'px'
             }
         },
         methods: {
