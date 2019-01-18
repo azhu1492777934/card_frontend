@@ -14,9 +14,10 @@
 
       <div class="release-plan-bottom">
         <div>签约时间:{{item.created_at}}</div>
-        <card-button @clickThrotle="releasePlan" :btnText="'解约'"></card-button>
+        <card-button @clickThrotle="releasePlan(item.renew_id)" :btnText="'解约'"></card-button>
       </div>
     </div>
+
   </div>
 </template>
 
@@ -30,6 +31,10 @@ body,
 .release-plan-wrap {
   display: flex;
   align-items: center;
+  .border-radius-10 {
+    width: 80%;
+    border-radius: 10px;
+  }
   .release-plan-content {
     width: 726px;
     height: 188px;
@@ -111,9 +116,9 @@ body,
 
 <script>
 // @ is an alias to /src
-import { _post,_get } from "../../http";
+import { _post, _get } from "../../http";
 import { getStorage } from "../../utilies";
-import { Notify } from "vant";
+import { Notify, Dialog } from "vant";
 import cardButton from "../../components/button";
 
 export default {
@@ -121,32 +126,49 @@ export default {
 
   data() {
     return {
-      planList: [
-        
-      ]
+      planList: [],
     };
   },
   components: {
-    cardButton
+    cardButton: cardButton,
   },
   created() {
-      this.getList();
+    this.getList();
   },
   methods: {
     getList: function() {
       let _this = this;
+
+      //分页记得改，暂时先这样
       _get("/releaseApi/v1/app/plans/renew_list/0/99", {
-        user_id: getStorage("userInfo","obj").account.user_id,
+        user_id: getStorage("userInfo", "obj").account.user_id
       }).then(res => {
         if (res.state == 1) {
-          _this.planList=res.data.list;
+          _this.planList = res.data.list;
         } else {
           Notify({ message: res.msg });
         }
       });
     },
-    releasePlan:function(){
+    releasePlan: function(id) {
 
+      Dialog.confirm({
+        message: "请确认是否需要解约套餐？"
+      })
+        .then(() => {
+          let _this = this;
+          _post("/releaseApi//v1/app/plans/cancel_renew", {
+            renew_id: id
+          }).then(res => {
+            if (res.state == 1) {
+              Notify({ message: res.msg });
+              _this.getList();
+            } else {
+              Notify({ message: res.msg });
+            }
+          });
+        })
+        .catch(() => {});
     }
   }
 };
