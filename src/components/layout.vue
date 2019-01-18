@@ -46,7 +46,7 @@
                 }
             }else{
                 removeStorage('watch_card');
-                removeStorage(watchAutoSearch)
+                removeStorage('watchAutoSearch');
             }
 
             document.addEventListener("plusready",this.plusReady,false);
