@@ -27,6 +27,13 @@
                         </p><!--多充值支付-->
                     </div>
                 </li>
+                <li class="monthly ">
+                    <div>
+                        <p class="discount-rmb">1.5元</p>
+                        <span  class="line"></span>
+
+                    </div>
+                </li>  
                 <li class="special"></li>
             </ul>
             <div class="choice-wrap">
@@ -238,6 +245,7 @@
                 user_rmb = this.userInfo.account.rmb;
             }
             this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
+            console.log(this.new_recharge_list );
         },
         methods: {
             changedCheck: function (type) {
@@ -693,6 +701,10 @@
                 &.special {
                     border-color: transparent;
                     visibility: hidden
+                }
+                &.monthly{
+                    background:url("../../assets/imgs/recharge_success/tuhaoGold.png")no-repeat;
+                    background-size:100% 100%;
                 }
                 .line {
                     display: block;

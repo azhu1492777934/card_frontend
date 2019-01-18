@@ -340,15 +340,12 @@ export default {
       setStorage("planInfo", planInfo, "obj");
 
      //获取当前包月套餐信息
-        let _this=this;
-        _get("/releaseApi/v1/app/plans/renew_info", {
-        // user_id: getStorage("userInfo").account.user_id
-        user_id: 12,
+    _get("/releaseApi/v1/app/plans/renew_info", {
+        user_id: getStorage("userInfo","obj").account.user_id,
         rating_id:planInfo.id
-
       }).then(res => {
         if (res.state == 1) {
-          setStorage("monthlyMsg", res.data);
+          setStorage("monthlyMsg", res.data,"obj");
         } else {
           Notify({ message: res.msg });
         }
