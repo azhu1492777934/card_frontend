@@ -157,7 +157,7 @@ export default {
       })
         .then(() => {
           let _this = this;
-          _post("/releaseApi//v1/app/plans/cancel_renew", {
+          _get("/releaseApi/v1/app/plans/cancel_renew", {
             renew_id: id
           }).then(res => {
             if (res.state == 1) {
