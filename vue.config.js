@@ -37,7 +37,7 @@ module.exports = {
                 }
             },
             '/releaseApi':{
-                target:domain_test.card_server2,
+                target:"http://cardserver_mac.china-m2m.com",
                 changeOrigin:true,
                 pathRewrite:{
                     '^/releaseApi':""

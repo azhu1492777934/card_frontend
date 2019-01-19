@@ -17,7 +17,7 @@
         <card-button @clickThrotle="releasePlan(item.renew_id)" :btnText="'解约'"></card-button>
       </div>
     </div>
-
+    <div v-if="planList.length==0" class="warnMsg">暂无自动续费套餐信息</div>
   </div>
 </template>
 
@@ -31,6 +31,10 @@ body,
 .release-plan-wrap {
   display: flex;
   align-items: center;
+  .warnMsg{
+    text-align:center;
+    width:100%;
+  }
   .border-radius-10 {
     width: 80%;
     border-radius: 10px;
