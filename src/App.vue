@@ -14,6 +14,12 @@
        components:{
             [Notify.name]:Notify
        },
+        created(){
+            let loading = document.getElementsByClassName('fixed-wrap-loading')[0];
+            if(loading){
+                document.body.removeChild(loading);
+            }
+        },
         methods: {
             refreshToken() {
                 _get("/accountCenter/v2/auth/refresh?" + codeParam({
