@@ -52,7 +52,7 @@
             height: 80px;
             margin-bottom: 50px;
             align-items: center;
-            border: 2px solid #38b5ed;
+            border: 1PX solid #38b5ed;
             border-radius: 7px;
             input {
                 flex: 6;
@@ -187,7 +187,7 @@
                 }
             }
 
-            let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card');
+            let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card'); //watch_card 兼容 授权时跳转问题
 
             if(scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state==1){
 
@@ -206,14 +206,8 @@
                         setStorage('check_iccid',scanWatchCardIccid)
                         setStorage('watch_card_timestamp',setTime);
                         this.processCheckIccid(scanWatchCardIccid);//自动查询
-                    }else{
-                        let isWatchCardResult  = checkICCID(scanWatchCardIccid);
-                        if(isWatchCardResult.state){
-                            this.iccid = scanWatchCardIccid
-                        }else{
-                            Notify({message:isWatchCardResult.msg})
-                        }
                     }
+
                 }else{
                     this.iccid = scanWatchCardIccid;
                     setStorage('check_iccid',scanWatchCardIccid)
@@ -283,7 +277,6 @@
                 _post('/api/v1/app/new_auth/check_auth_',{
                     iccid:iccid,
                 }).then(res=>{
-                    console.log(res);
 
                     let autoCount = getStorage('watchAutoSearch');
                     if(autoCount){

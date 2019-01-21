@@ -650,7 +650,7 @@
                 this.$refs.mySwiper.$el.style.height = (clientHeight - 320) + 'px'
             }
             else{
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 340) + 'px'
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 330) + 'px'
             }
         },
         methods: {

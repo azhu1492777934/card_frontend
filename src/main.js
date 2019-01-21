@@ -5,33 +5,40 @@ import './registerServiceWorker'
 import store from '../src/store/index'
 
 import 'normalize.css'
-import '../src/assets/css/reset.css'
-import '../src/assets/less/common.less'
-import '../src/assets/css/SourceHanSansCNRegular.css'
+require( '../src/assets/css/reset.css')
+require( '../src/assets/less/common.less')
+require('../src/assets/css/SourceHanSansCNRegular.css')
 
 import 'lib-flexible/flexible'
 import vueWeChatTitle from 'vue-wechat-title'
 import globalFunction from '../src/utilies/global_function'//全局函数
 import {_get} from "./http";
+import {checkBrowser} from "./utilies";
 
 const wx = require('weixin-js-sdk');
 Vue.prototype.wx = wx
 
-// router.afterEach((to,from)=>{
-//     _get('/api/v1/app/sign_info')
-//         .then(res=>{
-//             if(res.state==1){
-//                 wx.config({
-//                     debug: false,
-//                     appId: res.data.appId,
-//                     signature: res.data.sign,
-//                     timestamp: res.data.timestamp,
-//                     nonceStr: res.data.noncestr,
-//                     jsApiList: ["scanQRCode"]
-//                 })
-//             }
-//         })
-// })
+router.afterEach((to,from)=>{
+    if(checkBrowser()=='wechat'){
+
+        if(to.path=='/weixin/new_auth'){
+            _get('/api/v1/app/sign_info')
+                .then(res=>{
+                    if(res.state==1){
+                        wx.config({
+                            debug: false,
+                            appId: res.data.appId,
+                            signature: res.data.sign,
+                            timestamp: res.data.timestamp,
+                            nonceStr: res.data.noncestr,
+                            jsApiList: ["scanQRCode"]
+                        })
+                    }
+                })
+        }
+
+    }
+})
 
 Vue.config.productionTip = false
 Vue.use(globalFunction)

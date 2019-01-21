@@ -3,10 +3,10 @@
         <div class="plan-type-wrap">
             <div class="plan-type-inner-wrap">
                 <span
-                    ref="ref_plan_type"
-                    @click="planTypeClikc(index)"
-                    v-for="(item,index) in plan_type_name"
-                    :class="{'active_type':index==cur_plan_type_index}">{{item}}</span>
+                        ref="ref_plan_type"
+                        @click="planTypeClikc(index)"
+                        v-for="(item,index) in plan_type_name"
+                        :class="{'active_type':index==cur_plan_type_index}">{{item}}</span>
             </div>
         </div>
         <div class="van-swipe-wrap" ref="vanSwiperWwrap">
@@ -19,7 +19,7 @@
                             <div class="plan-info-wrap">
                                 <p class="plan-name">{{ inner_item.name }}</p>
                                 <p class="plan-limited-wrap">
-                                <span class="limited-num" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
+                                    <span class="limited-num" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
                                     <span class="limited-num" v-show="inner_item.is_elb_deductible!=0">可抵扣{{inner_item.max_deductible_elb}}个ELB</span>
                                 </p>
                                 <p class="plan-desc">
@@ -70,7 +70,7 @@
             align-items: center;
             padding: 20px 0;
             .plan-type-inner-wrap {
-                border: 1px solid #dca85f;
+                border: 1PX solid #dca85f;
                 border-radius: 46px;
             }
             span {
@@ -99,7 +99,7 @@
                 margin: 0 auto;
                 display: flex;
                 color: #868686;
-                border: 1px solid #e6e6e6;
+                border: 1PX solid #e6e6e6;
                 border-radius: 10px;
                 margin-bottom: 25px;
                 align-items: center;
@@ -149,7 +149,7 @@
 
                 //当前选中样式
                 &.activedPlan {
-                    border: 1px solid #dca85f;
+                    border: 1PX solid #dca85f;
                     box-shadow: 0 0 30px 0 #eae9e9;
                     .plan-name {
                         color: #fd720d;
@@ -273,18 +273,14 @@
             let clientHeight =
                 document.documentElement.clientHeight || document.body.clientHeight;
 
-     if (
-                checkBrowser() == "wechat" ||
-                checkBrowser() == "alipay" ||
-                checkBrowser() == "app"
-            ) {
+            if (checkBrowser() == "wechat" || checkBrowser() == "alipay") {
                 this.$refs.vanSwiperWwrap.style.height = clientHeight - 180 + "px";
             } else {
                 this.$refs.vanSwiperWwrap.style.height = clientHeight - 120 + "px";
             }
-  },
-  methods: {
-    swiperOnChange: function (index) {
+        },
+        methods: {
+            swiperOnChange: function (index) {
                 this.cur_plan_type_index = index;
                 this.choose_plan_index = 0;
             },
@@ -297,7 +293,6 @@
                 this.choose_plan_index = index;
             },
             recharge: function () {
-                let _this=this;
                 let planInfo = null,
                     ref_plan_type_index = 0;//当前套餐索引
                 for (let i = 0; i < this.$refs.ref_plan_type.length; i++) {
@@ -324,26 +319,20 @@
 
                 setStorage("planInfo", planInfo, "obj");
 
-     //获取当前包月套餐信息
-        _get("/releaseApi/v1/app/plans/renew_info", {
-        user_id: getStorage("userInfo","obj").account.user_id,
-        // user_id: 14,
-        rating_id:planInfo.id
-
-      }).then(res => {
-        if (res.state == 1) {
-          setStorage("monthlyMsg", res.data,"obj");
-        } else {
-          Notify({ message: res.msg });
+                //获取当前包月套餐信息
+                // _get("/releaseApi/v1/app/plans/renew_info", {
+                //     user_id: getStorage("userInfo", "obj").account.user_id,
+                //     rating_id: planInfo.id
+                // }).then(res => {
+                //     if (res.state == 1) {
+                //         setStorage("monthlyMsg", res.data, "obj");
+                //     } else {
+                //         Notify({message: res.msg});
+                //     }
+                // });
+                this.$router.push({path: "/weixin/recharge"});
+            }
         }
-      });
-
-    //暂时就这么解决吧
-      setTimeout(function(){
-            _this.$router.push({ path: "/weixin/recharge" });
-      },0)
-    }
-  }
-};
+    };
 </script>
 

@@ -5,11 +5,11 @@
                 <input type="text" placeholder="请输入手机号码" maxlength="11" v-model="phone"/>
             </div>
             <div class="code-wrap">
-                <input type="text" placeholder="请输入验证码" maxlength="10" v-model="code"/>
+                <input type="number" placeholder="请输入验证码" maxlength="10" v-model="code"/>
                 <button :disabled="btnCode_disabled" class="getCode" @click="getCode">{{codeText}}</button>
             </div>
             <div class="btn-login-wrap">
-                <button @click="login">登录</button>
+                <button :disabled="loginDisabled" @click="login">绑定账户</button>
             </div>
         </div>
     </div>
@@ -32,6 +32,7 @@
                 client_type: '',
                 btnCode_disabled:false,
                 time:null,
+                loginDisabled:false,
             }
         },
         components: {
@@ -60,6 +61,7 @@
                     Notify({message: '您的手机号码有误'})
                     return
                 } else {
+                    this.loginDisabled = true;
                     _post("/accountCenter/v2/user/bind?" + codeParam({},'post'), {
                         mobile: this.phone,
                         code: this.code,
@@ -69,6 +71,7 @@
                         gender: this.decrypt_data.sex,
                         avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
+                        this.loginDisabled = false;
                         if (res.error == 0) {
                             let _this = this;
                             setStorage("token", res.data);
@@ -188,8 +191,8 @@
                 }
                 button {
                     display: inline-block;
-                    width: 200px;
-                    padding: 12px 30px;
+                    width: 180px;
+                    padding: 15px 0;
                     border-radius: 6px;
                     color: #23B0FE;
                     line-height: 1;

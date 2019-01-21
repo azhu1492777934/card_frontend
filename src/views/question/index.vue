@@ -9,8 +9,11 @@
                 <a href="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</a>
             </li>
             <li>
-                <a href="/weixin/question/release_plan">3.解约自动续费套餐</a>
+                <a @click="toRefund" href="javascript:;">3.套餐退款</a>
             </li>
+            <!--<li>-->
+                <!--<a href="/weixin/question/release_plan">3.解约自动续费套餐</a>-->
+            <!--</li>-->
         </ul>
     </div>
 </template>
@@ -56,7 +59,7 @@
 
 <script>
     // @ is an alias to /src
-
+    import {getStorage} from "../../utilies";
     export default {
         name: "home",
         data() {
@@ -71,8 +74,12 @@
            
         },
         methods: {
-           login:function () {
-               
+           toRefund(){
+               if(getStorage('checkArgument')==1){
+                  this.$router.push({path:'/weixin/refund'});
+               }else{
+                   this.$router.push({path:'/weixin/refund/argument'});
+               }//是否显示退款协议
            }
         }
     };

@@ -7,7 +7,7 @@
 <script>
     import {Notify} from 'vant'
     import {_get} from "./http";
-    import {codeParam,getStorage} from "./utilies";
+    import {codeParam,getStorage,setStorage} from "./utilies";
 
     export default {
         name: 'App',
@@ -30,11 +30,26 @@
 
                             Notify({message:'为了您的账号安全,请绑定手机号码'})
 
+                            let redirect_url = this.GetUrlRelativePath();
+
+                            setStorage('authorized_redirect_uri',redirect_url);
+
                             setTimeout(function () {
                                 _this.$router.push({path: '/login'})
                             },2000)
                         }
                     })
+            },
+
+            GetUrlRelativePath() {
+                let url = document.location.toString(),
+                    arrUrl = url.split("//"),
+                    start = arrUrl[1].indexOf("/"),
+                    relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+                if (relUrl.indexOf("?") != -1) {
+                    relUrl = relUrl.split("?")[0];
+                }
+                return relUrl;
             },
         }
     }

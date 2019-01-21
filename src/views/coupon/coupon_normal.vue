@@ -7,11 +7,11 @@
             </div>
             <div class="iccid-wrap">
                 <div class="iccid-desc">兑换礼包卡号为：</div>
-                <div class="iccid" id="iccid">{{ iccid }}</div>
+                <div class="iccid">{{ iccid }}</div>
             </div>
 
             <div class="coupon-code-wrap">
-                <span>券号:</span>
+                <span>券号：</span>
                 <input v-model="coupon_code" maxlength="15" placeholder="请输入兑换码">
             </div>
 
@@ -23,7 +23,7 @@
 </template>
 
 <style lang="less">
-    html,body,#app{height: 100%;}
+    html,body,#app,.inner-wrap{height: 100%;}
     .coupon-wrap {
         position: relative;
         height: calc(100% - 44px);
@@ -66,21 +66,23 @@
             .iccid {
                 text-align: center;
                 color: #1ba0fe;
-                font-size: 55px;
+                font-size: 48px;
+                box-sizing: border-box;
             }
 
         }
         .coupon-code-wrap {
-            display: flex;
+            /*display: flex;*/
             justify-content: center;
             align-items: center;
             padding: 180px 25px 0;
             span{
-                flex: .7;
+                display: inline-block;
                 font-size: 40px;
             }
             input {
-                flex: 3;
+                display: inline-block;
+                width: 73%;
                 padding: 20px 0 20px 15px;
                 font-size: 30px;
                 color: #000;
@@ -137,7 +139,10 @@
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
             }else{
-                this.$router.push('/weixin/new_auth')
+                Notify({message:'您的ICCID号码丢失了'})
+                setTimeout(function () {
+                    this.$router.push('/weixin/new_auth')
+                },2000)
             }
         },
         methods: {
@@ -161,7 +166,7 @@
                         })
                         setTimeout(function () {
                             setStorage('check_iccid',_this.iccid)
-                            _this.$router.push({path:'/wexin/card/usage'});
+                            _this.$router.push({path:'/weixin/card/usage'});
                         },2000)
                     }else{
                         Notify({message:res.msg})

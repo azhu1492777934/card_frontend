@@ -16,7 +16,20 @@ var domain_production = {
     accountCenter : 'http://uc.api.china-m2m.com',
 }
 
+const CompressionPlugin = require('compression-webpack-plugin');
+
 module.exports = {
+    configureWebpack:config=>{
+        if(process.env.NODE_ENV === 'production'){
+            return{
+                plugins:[new CompressionPlugin({
+                    test:/\.js$|\.html$|\.css/,
+                    threshold:1024, //对超过1k的数据进行压缩
+                    deleteOriginalAssets:false//是否删除源文件
+                })]
+            }
+        }
+    },
     devServer: {
         port:8080,
         disableHostCheck:true,

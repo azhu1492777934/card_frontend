@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="inner-wrap">
         <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
         <router-view/>
     </div>
@@ -19,7 +19,7 @@
         data() {
             return {
                 // decrypt_data: {},
-                client_type: '',//微信/支付宝环境
+                client_type:  checkBrowser(),//微信/支付宝环境
                 state: '',//防跨域攻击
                 appContext: false,//是否app环境
             }
@@ -53,16 +53,13 @@
         },
         mounted() {
             //授权
-            this.client_type = checkBrowser();
-
-            /*获取用户信息*/
             if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') {
 
                 if(this.client_type!='app'){
                     if(getStorage('userInfo','obj')){
                         this.$store.commit('userInfo/changeUserStatus', true);
                     }
-                }
+                }//app环境隐藏顶部个人信息
 
                 if (getStorage('token')) {
                     this.getUserInfo();//获取用户信息
@@ -125,7 +122,7 @@
 
                                             let _this = this;
 
-                                            this.$store.commit('userInfo/changeUserStatus', false);
+                                            // this.$store.commit('userInfo/changeUserStatus', false);
 
                                             Notify({message:'为了您的用户安全,请绑定手机号码'});
 
@@ -177,7 +174,7 @@
                             }
                         }else{
                             removeStorage('watch_card');
-                            removeStorage(watchAutoSearch)
+                            removeStorage('watchAutoSearch');
                         }
 
                         // 授权
