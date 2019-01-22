@@ -238,6 +238,14 @@
                 iccid: getStorage("check_iccid")
             }).then(res => {
                 if (res.state == 1) {
+
+                    if(JSON.stringify(res.data)=='{}'){
+
+                        this.load_plan_list = true;
+                        this.load_plan_msg = '此卡暂无套餐'
+                        return
+                    }
+
                     this.load_plan_list = false;
                     this.plan_list = res.data;
 

@@ -4,7 +4,8 @@
             <img src="../../assets/imgs/card/lookup/scanTop.png" alt="">
         </div>
         <div class="search-wrap">
-            <input v-model="iccid" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
+            <input @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
+            <span v-show="showClearBtn" @click="clearInputIccid" class="clearIccid">&times;</span>
             <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
             <span v-show="client_type!='app'" class="icon-scanTip"></span>
         </div>
@@ -58,6 +59,14 @@
                 flex: 6;
                 padding-left: 20px;
                 font-size: 30px;
+            }
+            .clearIccid{
+                position: relative;
+                right: 20px;
+                font-size: 50px;
+                color: #888;
+                line-height: .8;
+                cursor: pointer;
             }
             .icon-scan {
                 font-size: 78px;
@@ -165,6 +174,7 @@
                 iccid: '',
                 checkShow: false,//查询遮罩
                 client_type: checkBrowser(),//当前客户端环境 微信/支付宝
+                showClearBtn:false
             }
         },
         components: {
@@ -172,10 +182,7 @@
             cardButton
         },
         created() {
-            if(getStorage('check_iccid')){
-
-                this.iccid = getStorage('check_iccid');
-            }
+            let _this = this;
 
             if (getStorage('recording_list','arr')) {
                 let local_recording_list = getStorage('recording_list','arr')
@@ -186,6 +193,16 @@
                     this.recording_show = true
                 }
             }
+
+            if(getStorage('new_auth_search_iccid')){
+                this.iccid = getStorage('new_auth_search_iccid')
+            }else if(getStorage('check_iccid')){
+                this.iccid = getStorage('check_iccid');
+            }
+
+            this.$watch('iccid', this.debounce((newQuery) => {
+                _this.handleIccidFocus()
+            }, 500))
 
             let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card'); //watch_card 兼容 授权时跳转问题
 
@@ -227,11 +244,11 @@
         methods: {
             searchIccid: function (iccid) {
                 if (!iccid) {
-                    Notify({message:'请输入ICCID'});
+                    Notify({message: '请输入ICCID'});
                     return
                 }
                 if (!this.checkSearchIccid(iccid).state) {
-                    Notify({message:this.checkSearchIccid(iccid).msg});
+                    Notify({message: this.checkSearchIccid(iccid).msg});
                     return
                 }
                 this.processCheckIccid(iccid);
@@ -246,6 +263,7 @@
                     this.recording_list.map(function (item, index) {
                         if (item.iccid == iccid) {
                             item.searchTime = formatterCardTime().searchTime
+                            item.millisecond = formatterCardTime().millisecond
                             isExist = true;
                         }
                     });
@@ -267,35 +285,36 @@
 
                 this.recording_list.sort(this.compare('millisecond'));
 
-                if(this.recording_list.length>20){
+                if (this.recording_list.length > 20) {
                     this.recording_list.splice(20)
                 }
 
-                setStorage('recording_list', this.recording_list,'arr')
+                setStorage('recording_list', this.recording_list, 'arr')
 
                 //查询
-                _post('/api/v1/app/new_auth/check_auth_',{
-                    iccid:iccid,
-                }).then(res=>{
+                _post('/api/v1/app/new_auth/check_auth_', {
+                    iccid: iccid,
+                }).then(res => {
 
                     let autoCount = getStorage('watchAutoSearch');
-                    if(autoCount){
+                    if (autoCount) {
                         autoCount++;
-                        setStorage('watchAutoSearch',autoCount);
+                        setStorage('watchAutoSearch', autoCount);
                     }
-                    if(res.state==1){
-                        setStorage('check_iccid',iccid);
-                        if(res.data.status==1){
-                            _this.$router.push({path:'/weixin/card/usage'});
-                        }else if(res.data.status==2){
-                            setStorage('check_realNameSource',res.data.source)
-                            _this.$router.push({path:'/weixin/new_card/real_name'});
-                        }else if(res.data.status==3){
-                            _this.$router.push({path:'/weixin/card/plan_list'});
+                    if (res.state == 1) {
+                        setStorage('check_iccid', res.data.iccid);
+                        setStorage('new_auth_search_iccid',iccid);
+                        if (res.data.status == 1) {
+                            _this.$router.push({path: '/weixin/card/usage'});
+                        } else if (res.data.status == 2) {
+                            setStorage('check_realNameSource', res.data.source)
+                            _this.$router.push({path: '/weixin/new_card/real_name'});
+                        } else if (res.data.status == 3) {
+                            _this.$router.push({path: '/weixin/card/plan_list'});
                         }
-                    }else{
+                    } else {
                         Notify({
-                            message:res.msg
+                            message: res.msg
                         })
                         _this.checkShow = false
                     }
@@ -303,26 +322,26 @@
 
             },
 
-            scanIccid(){
+            scanIccid() {
                 let _this = this;
 
-                if(this.client_type=='wechat'){
+                if (this.client_type == 'wechat') {
                     this.wx.scanQRCode({
                         needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
                         scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
                         success: function (res) {
                             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                            if(result &&( result.length==19 || result.length==20 )){
+                            if (result && (result.length == 19 || result.length == 20)) {
                                 _this.iccid = (result.replace(/[^0-9]*/g, ""));
                                 _this.processCheckIccid(_this.iccid)
-                            }else{
-                                Notify({message:'请扫描正确的ICCID'});
+                            } else {
+                                Notify({message: '请扫描正确的ICCID'});
                             }
                         }
                     });
-                }else if(this.client_type=='alipay'){
+                } else if (this.client_type == 'alipay') {
 
-                    ap.scan(function(res){
+                    ap.scan(function (res) {
                         var result = res.code; // 当needResult 为 1 时，扫码返回的结果
 
                         _this.iccid = (result.replace(/[^0-9]*/g, ""));
@@ -343,43 +362,68 @@
                 }
             },
 
-            checkSearchIccid:function (iccid) {
-                if(!iccid){
+            checkSearchIccid: function (iccid) {
+                if (!iccid) {
                     return {
-                        state:0,
-                        msg:'请输入ICCID'
+                        state: 0,
+                        msg: '请输入ICCID'
                     }
                 }
                 if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != "89") && (iccid.length != 13 && iccid.length != 11 && iccid.length != 15 && iccid.length != 16)) {
-                    return{
-                        state:0,
-                        msg:'ICCID有误,请检查'
+                    return {
+                        state: 0,
+                        msg: 'ICCID有误,请检查'
                     };
                 }
-                return{
-                    state:1
+                return {
+                    state: 1
                 }
             },
 
-            deleteIccid:function (iccid) {
-                let deleteIndex = -1 ;
-                for(let i = 0;i<this.recording_list.length;i++){
-                    if(this.recording_list[i].iccid==iccid){
+            deleteIccid: function (iccid) {
+                let deleteIndex = -1;
+                for (let i = 0; i < this.recording_list.length; i++) {
+                    if (this.recording_list[i].iccid == iccid) {
                         deleteIndex = i
                         break
                     }
                 }
-                if(deleteIndex>=0){
-                    this.recording_list.splice(deleteIndex,1);
-                    setStorage('recording_list',this.recording_list,'arr');
+                if (deleteIndex >= 0) {
+                    this.recording_list.splice(deleteIndex, 1);
+                    setStorage('recording_list', this.recording_list, 'arr');
                 }
 
-                if(!this.recording_list.length){
+                if (!this.recording_list.length) {
                     this.recording_show = false
                 }
+            },
+            handleIccidFocus() {
+                if (this.iccid) {
+                    this.showClearBtn = true
+                } else {
+                    this.showClearBtn = false
+                }
+            },
+            clearInputIccid() {
+                this.iccid = '';
+                this.showClearBtn = false
+            },
+            iccidBlur(){
+                this.showClearBtn = false
+            },
+            debounce(func, delay) {
+                let timer
+                return (...args) => {
+                    if (timer) {
+                        clearTimeout(timer)
+                    }
+                    timer = setTimeout(() => {
+                        func.apply(this, args)
+                    }, delay)
+                }
             }
-        }
 
+        }
     };
 </script>
 

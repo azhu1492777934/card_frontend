@@ -47,10 +47,14 @@
                 </p>
                 <div class="card-flow-detail">
                     <div class="card-used-data-wrap">
-                        <p>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}}
-                            已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</p>
-                        <p>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}}
-                            已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</p>
+                        <p>
+                            <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}}</span>
+                            <span>已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</span>
+                        </p>
+                        <p>
+                            <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}}</span>
+                            <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
+                        </p>
                     </div>
                     <div @click="toConnnection" class="to-flow-wrap">
                         <a> 流量用量详情> </a>

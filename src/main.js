@@ -16,8 +16,11 @@ import globalFunction from '../src/utilies/global_function'//全局函数
 import {_get} from "./http";
 import {checkBrowser} from "./utilies";
 
+import global_variables from '../src/utilies/domain'
+
 const wx = require('weixin-js-sdk');
 Vue.prototype.wx = wx
+Vue.prototype.global_variables = global_variables
 
 router.afterEach((to,from)=>{
     if(checkBrowser()=='wechat'){

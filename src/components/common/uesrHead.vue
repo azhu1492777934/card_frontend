@@ -15,7 +15,7 @@
                           <i class="icon-user-size icon-elb"></i>
                           {{getUserInfo.account.elb}}
                       </span>
-                <span @click="showDoc" class="icon-question">?</span>
+                <span @click="showDoc" class="icon-question">!</span>
             </div>
         </div>
     </div>
