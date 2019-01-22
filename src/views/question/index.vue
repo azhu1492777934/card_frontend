@@ -8,9 +8,9 @@
             <li>
                 <a href="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</a>
             </li>
-            <li>
-                <a @click="toRefund" href="javascript:;">3.套餐退款</a>
-            </li>
+            <!--<li>-->
+                <!--<a @click="toRefund" href="javascript:;">3.套餐退款</a>-->
+            <!--</li>-->
             <!--<li>-->
                 <!--<a href="/weixin/question/release_plan">3.解约自动续费套餐</a>-->
             <!--</li>-->

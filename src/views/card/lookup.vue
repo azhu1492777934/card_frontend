@@ -4,7 +4,7 @@
             <img src="../../assets/imgs/card/lookup/scanTop.png" alt="">
         </div>
         <div class="search-wrap">
-            <input @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
+            <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
             <span v-show="showClearBtn" @click="clearInputIccid" class="clearIccid">&times;</span>
             <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
             <span v-show="client_type!='app'" class="icon-scanTip"></span>
@@ -406,6 +406,7 @@
             },
             clearInputIccid() {
                 this.iccid = '';
+                this.$refs.iccidDom.focus()
                 this.showClearBtn = false
             },
             iccidBlur(){

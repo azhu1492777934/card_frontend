@@ -36,6 +36,8 @@ const card_usage = r => require.ensure([], () => r(require('./views/card/usage')
 const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection');//卡连接详情
 const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check');//卡检测
 
+//儿童手表卡
+const children_card = r => require.ensure([], () => r(require('./views/watch_card/index')), 'children_card');//手表卡
 
 //问题中心
 const question = r => require.ensure([], () => r(require('./views/question/index')), 'question');
@@ -207,6 +209,12 @@ export const constantRouterMap = [{
             component: card_check,
             meta: {
                 title: '卡检测'
+            }
+        },{
+            path:'card/watch',
+            component:children_card,
+            meta:{
+                title: '手表号码查询'
             }
         }],
 }, {
