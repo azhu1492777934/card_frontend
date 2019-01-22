@@ -149,14 +149,14 @@ export const constantRouterMap = [{
             path: 'speedup/plan_80',
             component: speedup_80,
             meta: {
-                title: '80G加速包',
+                title: '加速包',
                 requireAuth: true,
             }
         }, {
             path: 'speedup/plan_500',
             component: speedup_500,
             meta: {
-                title: '500G加速包',
+                title: '加速包',
                 requireAuth: true,
             }
         }, {
@@ -203,7 +203,7 @@ export const constantRouterMap = [{
                 requireAuth: true,
             }
         }, {
-            path: '/card/check',
+            path: 'card/check',
             component: card_check,
             meta: {
                 title: '卡检测'
