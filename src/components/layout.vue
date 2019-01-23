@@ -114,12 +114,15 @@
 
                                         } else if (this.client_type == 'wechat') {
 
-                                            setStorage('decrypt_data', res.data.data, 'obj');
+                                            let wechatUserData =  res.data.data;
+                                            if(wechatUserData.unionid){
+                                                wechatUserData.openid = wechatUserData.unionid
+                                            }
+                                            setStorage('decrypt_data', wechatUserData, 'obj');
                                         }
 
                                         //login
                                         _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
-                                            // uuid: res.data.data.openid,
                                             uuid: getStorage('decrypt_data', 'obj').openid,
                                             code: res.data.code
                                         }).then(res => {

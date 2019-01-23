@@ -1,6 +1,6 @@
 <template>
     <div class="plan-wrap">
-        <div class="plan-type-wrap">
+        <div ref="refPLanTitle" class="plan-type-wrap">
             <div class="plan-type-inner-wrap">
                 <span
                         ref="ref_plan_type"
@@ -40,7 +40,7 @@
             </van-swipe>
         </div>
 
-        <div v-show="!load_plan_list" class="btn-recharge-wrap">
+        <div ref="refPlanButton" v-show="!load_plan_list" class="btn-recharge-wrap">
             <button @click="recharge">充值</button>
         </div>
 
@@ -272,21 +272,25 @@
                         this.cur_plan_type_index = 1;
                         this.$refs.swiperVant.swipeTo(1);
                     }
+
+                    let _this = this;
+                    this.$nextTick(()=>{
+                        let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                            refPLanTitle = _this.$refs.refPLanTitle.offsetHeight,
+                            refPlanButton =  _this.$refs.refPlanButton.offsetHeight;
+                        if(_this.client_type == 'wechat' || _this.client_type == 'alipay'){
+                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44)+'px'
+                        }else{
+                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton)+'px'
+                        }
+                    })
+
                 } else {
                     this.load_plan_msg = res.msg;
                 }
             });
         },
-        mounted() {
-            let clientHeight =
-                document.documentElement.clientHeight || document.body.clientHeight;
-
-            if (checkBrowser() == "wechat" || checkBrowser() == "alipay") {
-                this.$refs.vanSwiperWwrap.style.height = clientHeight - 180 + "px";
-            } else {
-                this.$refs.vanSwiperWwrap.style.height = clientHeight - 120 + "px";
-            }
-        },
+        mounted() {},
         methods: {
             swiperOnChange: function (index) {
                 this.cur_plan_type_index = index;

@@ -62,11 +62,11 @@
 </script>
 
 <style lang="less">
-    html, body, #app {
-        max-height: 100%;
+    html, body, #app ,.inner-wrap{
+        height: 100%;
+        min-height: 100%;
         background-color: #fff;
     }
-
     #app {
         max-width: 750px;
         margin: 0 auto;
@@ -75,16 +75,5 @@
         -moz-osx-font-smoothing: grayscale;
         text-align: center;
         color: #2c3e50;
-    }
-
-    #nav {
-        padding: 30px;
-        a {
-            font-weight: bold;
-            color: #2c3e50;
-            &.router-link-exact-active {
-                color: #42b983;
-            }
-        }
     }
 </style>

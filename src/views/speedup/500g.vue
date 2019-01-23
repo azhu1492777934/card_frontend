@@ -17,7 +17,7 @@
 </template>
 
 <style lang="less">
-
+    .speedup-wrap-parent,.speedup-wrap{height: 100%;min-height: 100%}
 </style>
 
 <script>

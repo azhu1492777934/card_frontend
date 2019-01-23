@@ -15,6 +15,7 @@
 
 <style lang="less">
     .speedup-wrap{
+        position: relative;
         .title {
             padding: 35px 0;
             background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);

@@ -2,7 +2,7 @@
     <div class="plan-usage-wrap">
         <div v-show="!load_plan">
 
-            <div class="card-info-wrap">
+            <div ref="refCardInfo" class="card-info-wrap">
                 <div class="operation-logo-wrap">
                     <img :src="filterCardInfo.operator_logo" alt="">
                 </div>
@@ -25,46 +25,47 @@
                 </div>
             </div>
 
-            <div v-if="filterCardInfo.is_flow_card" class="card-used-wrap">
-                <p class="card-surplus-flow">
-                    <span>剩余流量</span>
-                    <span>{{this.filterCardInfo.flow_card_usage.detail_right}}</span>
-                </p>
-                <div class="card-flow-detail">
-                    <div class="card-used-data-wrap">
-                        <p>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}}</p>
-                        <p>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</p>
+            <div ref="refCardData">
+                <div v-if="filterCardInfo.is_flow_card" class="card-used-wrap">
+                    <p class="card-surplus-flow">
+                        <span>剩余流量</span>
+                        <span>{{this.filterCardInfo.flow_card_usage.detail_right}}</span>
+                    </p>
+                    <div class="card-flow-detail">
+                        <div class="card-used-data-wrap">
+                            <p>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}}</p>
+                            <p>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</p>
+                        </div>
+                        <div @click="toConnnection" class="to-flow-wrap">
+                            <a> 流量用量详情> </a>
+                        </div>
                     </div>
-                    <div @click="toConnnection" class="to-flow-wrap">
-                        <a> 流量用量详情> </a>
+                </div>
+                <div v-else class="card-used-wrap">
+                    <p class="card-surplus-flow">
+                        <span>剩余流量</span>
+                        <span>{{this.filterCardInfo.watch_card_usage.detail_right}}</span>
+                    </p>
+                    <div class="card-flow-detail">
+                        <div class="card-used-data-wrap">
+                            <p>
+                                <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}}</span>
+                                <span>已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</span>
+                            </p>
+                            <p>
+                                <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}}</span>
+                                <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
+                            </p>
+                        </div>
+                        <div @click="toConnnection" class="to-flow-wrap">
+                            <a> 流量用量详情> </a>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div v-else class="card-used-wrap">
-                <p class="card-surplus-flow">
-                    <span>剩余流量</span>
-                    <span>{{this.filterCardInfo.watch_card_usage.detail_right}}</span>
-                </p>
-                <div class="card-flow-detail">
-                    <div class="card-used-data-wrap">
-                        <p>
-                            <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}}</span>
-                            <span>已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</span>
-                        </p>
-                        <p>
-                            <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}}</span>
-                            <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
-                        </p>
-                    </div>
-                    <div @click="toConnnection" class="to-flow-wrap">
-                        <a> 流量用量详情> </a>
-                    </div>
-                </div>
-            </div>
-
 
             <div class="card-plan-wrap">
-                <p class="card-plan-wrap-title">
+                <p ref="refPlanTitle" class="card-plan-wrap-title">
                     <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
                           :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
                 </p>
@@ -162,7 +163,7 @@
 
             </div>
 
-            <div class="btn-recharge-wrap">
+            <div ref="refCardButton" class="btn-recharge-wrap">
                 <button @click="recharge">套餐查询</button>
                 <a href="/weixin/coupon/index">卡券兑换</a>
             </div>
@@ -628,6 +629,19 @@
                         this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false
                         this.hasOrderPlan = this.usageInfo.orders.length ? true : false
 
+                        let _this = this;
+                        this.$nextTick(()=>{
+                            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                refCardInfo = _this.$refs.refCardInfo.offsetHeight,
+                                refCardData = _this.$refs.refCardData.offsetHeight,
+                                refCardButton = _this.$refs.refCardButton.offsetHeight,
+                                refPlanTitle =  _this.$refs.refPlanTitle.offsetHeight;
+                            if(_this.client_type == 'wechat' || _this.client_type == 'alipay'){
+                                _this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - 44)+'px'
+                            }else{
+                                _this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle)+'px'
+                            }
+                        })
 
                     } else {
                         this.load_plan_msg = res.msg;
@@ -638,25 +652,7 @@
             }
 
         },
-        mounted() {
-
-            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-            let is_ios  = /iphone|ipad|ipod/.test(window.navigator.userAgent.toLowerCase())
-
-            if(this.client_type == 'wechat' || this.client_type == 'alipay'){
-
-               if(is_ios){
-                   this.$refs.mySwiper.$el.style.height = (clientHeight - 400) + 'px'
-               }else{
-                   this.$refs.mySwiper.$el.style.height = (clientHeight - 360) + 'px'
-               }
-            }else if(this.client_type=='app'){
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 320) + 'px'
-            }
-            else{
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 330) + 'px'
-            }
-        },
+        mounted() {},
         methods: {
             planTypeClikc: function (index) {
                 this.cur_plan_type_index = index;

@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="speedup-wrap-parent">
         <speedup :list="list"  @rechargeSpeedup="recharge_80"></speedup>
         <!--app支付-->
         <app-pay :appPay="speedupAppPay"
@@ -17,7 +17,7 @@
 </template>
 
 <style lang="less">
-
+    .speedup-wrap-parent,.speedup-wrap{height: 100%;min-height: 100%}
 </style>
 
 
