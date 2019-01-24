@@ -13,18 +13,18 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div    :class="{'monthlyPlan ':item.is_first==true,'midPlan':item.is_first==false}">  
-                         <div class="monthlyTop " v-if="item.is_first==true">
+                     <div class="monthlyTop midPlan" v-if="item.is_first==true">
                             <div class="monthlyFirst">首月</div>
                             <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
                         </div>
-                        <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" >{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
+                    <div    :class="{'monthlyPlan ':item.is_first==true}">  
+                        <p class="discount-rmb">{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
                         <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
                             可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>元<br>无ELB赠送
                         </p><!--钻石支付-->
-                        <p class="monthlyDes" v-if="item.is_renew">使用钻石连续包月</p>
+                        <p class="monthlyDes" v-if="item.is_first==false">使用钻石连续包月</p>
                         <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
 
                         <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">{{item.give_elb}}</em>ELB
@@ -255,7 +255,7 @@
             * 条件限制:存在钻石用量
             * */
 
-            if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
+            // if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
                  const monthlyMsg=getStorage("monthlyMsg","obj");
                  console.log(monthlyMsg);
                  monthlyMsg.give_elb=0;
@@ -268,8 +268,7 @@
 
                  monthlyMsg.is_renew=true;
                 this.new_recharge_list.push(monthlyMsg);
-                console.log(this.new_recharge_list);
-            }
+            // }
 
         },
         methods: {
@@ -356,7 +355,7 @@
                     _this = this;
 
                 rechargeInfo.pay_type=='diamond_charge'?param.status = 1 : param.status = 0;
-                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'||rechargeInfo.pay_type=='monthly_recharge'){
+                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'){
                     param.recharge_price = rechargeInfo.pay_money
                 }
 
@@ -369,8 +368,8 @@
 
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
-                    param.is_renew=rechargeInfo.is_renew;
-                if(rechargeInfo.is_renew==true){
+                    
+                if(param.is_renew==true){
                     param.price=rechargeInfo.first_price;
                 }else{
                     param.price = this.planInfo.price;
@@ -442,7 +441,7 @@
                 }
 
                 this.rechargeShow = true;
-                console.log(param);
+
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state==1){
@@ -733,54 +732,10 @@
                     border-color: transparent;
                     visibility: hidden
                 }
-               
-                 .midPlan{
-            vertical-align:middle;
-            padding-top:25px;
-        }
-        .monthlyPlan{
-            vertical-align:top ;
-            border-radius:16px;
-            background:linear-gradient(-45deg,rgba(255,222,123,1),rgba(250,197,84,1),rgba(255,209,120,1),rgba(247,194,80,1));
-        }
-        .monthlyTop{
-            margin-top:10px;
-            display:flex ;
-            justify-content: space-between ;
-            >div:nth-child(1){
-                margin-left:12px;
-            }
-            >div:nth-child(2){
-                margin-right:9px;
-            }
-        }
-
-        .monthlyDes{
-            font-size:20px;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            color:rgba(131,96,25,1);
-        }
-        .monthlyFirst{
-            font-size:20px;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            color:rgba(255,255,255,1);
-        }
-        .monthlyMoney{
-            font-size:20px;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            text-decoration:line-through;
-            color:rgba(44,37,29,1);
-        }
-        .monthly-rmb{
-            margin-top:12px;
-            font-size:38px !important;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            color:rgba(44,37,29,1) !important;
-        }
+                &.monthly{
+                    background:url("../../assets/imgs/recharge_success/tuhaoGold.png")no-repeat;
+                    background-size:100% 100%;
+                }
                 .line {
                     display: block;
                     width: 60px;
@@ -897,6 +852,32 @@
         }
         //充值按钮
 
-       
+        .midPlan{
+            vertical-align:middle;
+            padding-top:25px;
+        }
+        .monthlyPlan{
+            border-radius:13px;
+            background:linear-gradient(-45deg,rgba(255,222,123,1),rgba(250,197,84,1),rgba(255,209,120,1),rgba(247,194,80,1));
+        }
+        .monthlyDes{
+            font-size:20px;
+            font-family:SourceHanSansSC-Regular;
+            font-weight:400;
+            color:rgba(131,96,25,1);
+        }
+        .monthlyFirst{
+            font-size:20px;
+            font-family:SourceHanSansSC-Regular;
+            font-weight:400;
+            color:rgba(255,255,255,1);
+        }
+        .monthlyMoney{
+            font-size:20px;
+            font-family:SourceHanSansSC-Regular;
+            font-weight:400;
+            text-decoration:line-through;
+            color:rgba(44,37,29,1);
+        }
     }
 </style>

@@ -255,7 +255,7 @@
             * 条件限制:存在钻石用量
             * */
 
-            if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
+            // if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
                  const monthlyMsg=getStorage("monthlyMsg","obj");
                  console.log(monthlyMsg);
                  monthlyMsg.give_elb=0;
@@ -269,7 +269,7 @@
                  monthlyMsg.is_renew=true;
                 this.new_recharge_list.push(monthlyMsg);
                 console.log(this.new_recharge_list);
-            }
+            // }
 
         },
         methods: {
@@ -356,7 +356,7 @@
                     _this = this;
 
                 rechargeInfo.pay_type=='diamond_charge'?param.status = 1 : param.status = 0;
-                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'||rechargeInfo.pay_type=='monthly_recharge'){
+                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'){
                     param.recharge_price = rechargeInfo.pay_money
                 }
 
@@ -369,8 +369,8 @@
 
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
-                    param.is_renew=rechargeInfo.is_renew;
-                if(rechargeInfo.is_renew==true){
+                    
+                if(param.is_renew==true){
                     param.price=rechargeInfo.first_price;
                 }else{
                     param.price = this.planInfo.price;
@@ -442,7 +442,7 @@
                 }
 
                 this.rechargeShow = true;
-                console.log(param);
+
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state==1){
@@ -775,11 +775,10 @@
             color:rgba(44,37,29,1);
         }
         .monthly-rmb{
-            margin-top:12px;
             font-size:38px !important;
             font-family:SourceHanSansSC-Regular;
             font-weight:400;
-            color:rgba(44,37,29,1) !important;
+            color:rgba(44,37,29,1);
         }
                 .line {
                     display: block;

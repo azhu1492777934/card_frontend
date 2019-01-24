@@ -356,7 +356,7 @@
                     _this = this;
 
                 rechargeInfo.pay_type=='diamond_charge'?param.status = 1 : param.status = 0;
-                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'||rechargeInfo.pay_type=='monthly_recharge'){
+                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'){
                     param.recharge_price = rechargeInfo.pay_money
                 }
 
