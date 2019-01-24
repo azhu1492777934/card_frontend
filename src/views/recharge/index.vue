@@ -724,6 +724,8 @@
                 border-radius: 16px;
                 -webkit-text-size-adjust: none;
                 &.special {
+                    min-height: 1px;
+                    margin: 0;
                     border-color: transparent;
                     visibility: hidden
                 }
