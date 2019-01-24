@@ -1,5 +1,5 @@
 <template>
-    <div @touchmove.prevent id="app">
+    <div id="app">
         <router-view  @getToken="refreshToken" v-wechat-title="$route.meta.title"/>
     </div>
 </template>
