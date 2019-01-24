@@ -36,12 +36,22 @@ const card_usage = r => require.ensure([], () => r(require('./views/card/usage')
 const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection');//卡连接详情
 const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check');//卡检测
 
+//儿童手表卡
+const children_card = r => require.ensure([], () => r(require('./views/watch_card/index')), 'children_card');//手表卡
 
 //问题中心
 const question = r => require.ensure([], () => r(require('./views/question/index')), 'question');
-const find_plan = r => require.ensure([], () => r(require('./views/question/question_1')), 'question');//流量通话未增加
-const revoke_plan = r => require.ensure([], () => r(require('./views/question/question_2')), 'question');//无法使用
-const release_plan=r=>require.ensure([],()=>r(require('./views/question/question_3')),'question')//解约自动续约套餐
+const find_plan = r => require.ensure([], () => r(require('./views/question/question_1')), 'find_plan');//流量通话未增加
+const revoke_plan = r => require.ensure([], () => r(require('./views/question/question_2')), 'revoke_plan');//无法使用
+const release_plan = r => require.ensure([], () => r(require('./views/question/question_3')), 'question')//解约自动续约套餐
+
+//退款
+const refund_plan = r => require.ensure([], () => r(require('./views/refund/list')), 'refund_plan')//退款
+const refund_applying = r => require.ensure([], () => r(require('./views/refund/applying')), 'refund_applying')//理由
+const refund_argument = r => require.ensure([], () => r(require('./views/refund/argument')), 'refund_argument')//理由
+
+
+const _404 = r => require.ensure([], () => r(require('./components/common/404')), '_404')//404
 
 Vue.use(Router)
 
@@ -97,6 +107,24 @@ export const constantRouterMap = [{
                 title: '唤醒套餐',
                 requireAuth: true,
             }
+        }, {
+            path: 'refund',
+            component: refund_plan,
+            meta: {
+                title: '退款',
+                requireAuth: true,
+            }
+        }, {
+            path: 'refund/argument',
+            component: refund_argument,
+
+        }, {
+            path: 'refund/applying',
+            component: refund_applying,
+            meta: {
+                title: '退款申请',
+                requireAuth: true,
+            }
         },
         {
             path: 'question/release_plan',
@@ -123,14 +151,14 @@ export const constantRouterMap = [{
             path: 'speedup/plan_80',
             component: speedup_80,
             meta: {
-                title: '80G加速包',
+                title: '加速包',
                 requireAuth: true,
             }
         }, {
             path: 'speedup/plan_500',
             component: speedup_500,
             meta: {
-                title: '500G加速包',
+                title: '加速包',
                 requireAuth: true,
             }
         }, {
@@ -177,15 +205,25 @@ export const constantRouterMap = [{
                 requireAuth: true,
             }
         }, {
-            path: '/card/check',
+            path: 'card/check',
             component: card_check,
             meta: {
                 title: '卡检测'
+            }
+        },{
+            path:'card/watch',
+            component:children_card,
+            meta:{
+                title: '手表号码查询'
             }
         }],
 }, {
     path: '/',
     redirect: '/weixin/new_auth'
+}, {
+    path: '*',
+    component: _404
+
 }]
 
 const router = new Router({

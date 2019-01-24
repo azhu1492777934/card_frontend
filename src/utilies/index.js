@@ -24,7 +24,7 @@ function formatterCardTime() {
 
     return {
         searchTime: o.month + '-' + o.date + ' ' + o.hours + ':' + o.minutes,
-        millisecond: date.getTime()
+        millisecond:  new Date().getTime()
     }
 }//记录查询时间
 

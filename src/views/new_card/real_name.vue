@@ -28,7 +28,7 @@
                 <span>手机号</span>
                 <input v-model="info_phone" placeholder="请输入" type="number">
             </div>
-            <div>
+            <div class="code-wrap">
                 <input v-model="info_code" placeholder="请输入验证码" type="number">
                 <button @click="getCode" class="btn-code" :disabled="disabled_code">{{countDownMsg}}</button>
             </div>
@@ -134,6 +134,13 @@
                 }
                 &:last-child {
                     border-bottom: none;
+                }
+                &.code-wrap{
+                    justify-content: space-between;
+                    input{
+                        display: inline-block;
+                        max-width: 60%;
+                    }
                 }
             }
             .icon-scan {
@@ -506,11 +513,11 @@
 
                             clearInterval(this.timer);
                             this.disabled_code = true;
-                            this.countDownMsg = this.countDown + 's后重新获取';
+                            this.countDownMsg = this.countDown + 's';
 
                             this.timer = setInterval(function () {
                                 _this.countDown--;
-                                _this.countDownMsg = _this.countDown + 's重新获取'
+                                _this.countDownMsg = _this.countDown + 's'
                                 if (_this.countDown <= 0) {
                                     clearInterval(_this.timer);
                                     _this.countDownMsg = '获取验证码';
