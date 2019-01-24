@@ -122,10 +122,10 @@
 		                                    </span>
                                         </div>
                                         
-                                        <div class="prefer_use" v-if="usagePlanLength > 1">
-                                        		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 1000">优先使用</a>
-                                        		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 0">取消优先</a>
-                                        </div>
+                                        <!--<div class="prefer_use" v-if="usagePlanLength > 1">-->
+                                        		<!--<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 1000">优先使用</a>-->
+                                        		<!--<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 0">取消优先</a>-->
+                                        <!--</div>-->
                                     </div>
                                 </li>
                             </ul>
