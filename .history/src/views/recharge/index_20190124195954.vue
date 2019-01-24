@@ -13,7 +13,7 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div    :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">  
+                    <div    :class="{'monthlyPlan ':item.is_first==true,'midPlan':item.is_first==false}">  
                          <div class="monthlyTop " v-if="item.is_first==true">
                             <div class="monthlyFirst">首月</div>
                             <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
@@ -355,7 +355,7 @@
                 let param = {},
                     _this = this;
 
-                rechargeInfo.pay_type=='diamond_charge'||rechargeInfo.pay_type=='monthly_recharge'?param.status = 1 : param.status = 0;
+                rechargeInfo.pay_type=='diamond_charge'||?param.status = 1 : param.status = 0;
                 if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'||rechargeInfo.pay_type=='monthly_recharge'){
                     param.recharge_price = rechargeInfo.pay_money
                 }
@@ -738,7 +738,7 @@
                
                  .midPlan{
             vertical-align:middle;
-            padding-top:30px;
+            padding-top:25px;
         }
         .monthlyPlan{
             vertical-align:top ;

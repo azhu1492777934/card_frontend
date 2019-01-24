@@ -13,8 +13,8 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div    :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">  
-                         <div class="monthlyTop " v-if="item.is_first==true">
+                    <div    :class="{'monthlyPlan ':item.is_renew==true,}">  
+                         <div class="monthlyTop " v-if="item.is_first==true" >
                             <div class="monthlyFirst">首月</div>
                             <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
                         </div>
@@ -738,7 +738,7 @@
                
                  .midPlan{
             vertical-align:middle;
-            padding-top:30px;
+            padding-top:25px;
         }
         .monthlyPlan{
             vertical-align:top ;

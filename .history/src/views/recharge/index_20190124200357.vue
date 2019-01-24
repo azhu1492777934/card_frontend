@@ -738,7 +738,7 @@
                
                  .midPlan{
             vertical-align:middle;
-            padding-top:30px;
+            padding-top:25px;
         }
         .monthlyPlan{
             vertical-align:top ;
