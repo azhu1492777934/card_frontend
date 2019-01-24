@@ -56,12 +56,6 @@
             }
 
         },
-        // mounted() {
-        //     //授权
-        //
-        //     /*end 获取用户信息*/
-        //
-        // },
         methods: {
             plusReady(){
                 localStorage.setItem("token",plus.storage.getItem("appToken"));
@@ -73,13 +67,12 @@
 
                     if(this.client_type!='app'){
 
-                        if(getStorage('version')!=this.global_variables.version){
+                        if( (this.client_type=='wechat' && getStorage('wechat_version')!=this.global_variables.version) ||
+
+                            (this.client_type=='alipay' && getStorage('alipay_version')!=this.global_variables.version)
+                        ){
                             removeStorage('token');
                             removeStorage('auth_data');
-                        }
-
-                        if(getStorage('userInfo','obj')){
-                            this.$store.commit('userInfo/changeUserStatus', true);
                         }
 
                     }//app环境隐藏顶部个人信息
@@ -148,8 +141,6 @@
 
                                                 let _this = this;
 
-                                                // this.$store.commit('userInfo/changeUserStatus', false);
-
                                                 Notify({message:'为了您的用户安全,请绑定手机号码'});
 
                                                 setTimeout(function () {
@@ -177,8 +168,8 @@
                             }else{
                                 removeStorage('auth_data');
                                 removeStorage('token');
-
-                                location.reload();
+                                Notify({message:'请退出当前网页,重新进入;若操作无效,请联系我司客服人员,谢谢您的支持与配合'})
+                                // location.reload();
                             }
                             /*
                            * end 已授权操作
@@ -213,7 +204,12 @@
                                 .then(res => {
                                     if (res.error == 0) {
 
-                                        setStorage('version',this.global_variables.version);
+                                        if(this.client_type=='wechat'){
+                                            setStorage('wechat_version',this.global_variables.version);
+                                        }else if(this.client_type=='alipay'){
+                                            setStorage('alipay_version',this.global_variables.version);
+                                        }
+
                                         location.href = res.data;
 
                                     } else if (res.error == '11002') {
@@ -280,8 +276,6 @@
                     message: '钻石：翼联会员体系下通用虚拟货币,可以用于:购买套餐,充值话费,游戏娱乐,购买优惠商品;\nELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等'
                 })
             },
-
-
 
         }
     }
