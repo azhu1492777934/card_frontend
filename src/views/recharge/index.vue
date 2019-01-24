@@ -13,11 +13,7 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-<<<<<<< HEAD
                     <div v-if="!item.is_first" :class="{'monthlyPlan midPlan':item.is_first==false}"> 
-=======
-                    <div>
->>>>>>> 8b36ce38155e8fcb1cdd37f05e76321fd8ecd789
                         <p class="discount-rmb">{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
