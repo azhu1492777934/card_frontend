@@ -13,7 +13,7 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div v-if="!item.is_first" :class="{'monthlyPlan midPlan':item.is_first==false}"> 
+                    <div  :class="{'monthlyPlan midPlan':item.is_first==true}"> 
                         <p class="discount-rmb">{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
@@ -850,6 +850,15 @@
         .midPlan{
             vertical-align:middle;
             padding-top:25px;
+        }
+        .monthlyPlan{
+            background:linear-gradient(-45deg,rgba(255,222,123,1),rgba(250,197,84,1),rgba(255,209,120,1),rgba(247,194,80,1));
+        }
+        .monthlyDes{
+            font-size:20px;
+            font-family:SourceHanSansSC-Regular;
+            font-weight:400;
+            color:rgba(131,96,25,1);
         }
     }
 </style>
