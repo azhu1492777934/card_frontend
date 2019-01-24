@@ -107,14 +107,19 @@
                                         </p><!--流量卡-->
                                         <div class="speedup-wrap"
                                              v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
-                                    <span v-if="item.planCellInfo.key!='MG500'">
-                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_80">
-                                            购买加速包
-                                        </a>
-                                    </span>
-                                            <span v-else>
-                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500"></a>
-                                    </span>
+		                                    <span v-if="item.planCellInfo.key!='MG500'">
+		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_80">
+		                                            购买加速包
+		                                        </a>
+		                                    </span>
+		                                            <span v-else>
+		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500"></a>
+		                                    </span>
+                                        </div>
+                                        
+                                        <div class="prefer_use" v-if="usagePlanLength > 1">
+                                        		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 1000">优先使用</a>
+                                        		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 0">取消优先</a>
                                         </div>
                                     </div>
                                 </li>
@@ -345,6 +350,25 @@
                     border-radius: 8px;
                 }
             }
+            .usage-plan-wrap li .plan-date-wrap .prefer_use a{
+        		    /*position: absolute;
+			    width: auto;
+			    left: 0;
+			    bottom: 0;
+			    padding: .17333rem .1rem;
+			    border-radius: .08rem;
+			    color: #fff;
+			    background-image: linear-gradient(167deg,#00d2ff,#3a7bd5);*/
+			    
+			    display: inline-block;
+			    margin-top: .2rem;
+			    padding: .17333rem 0;
+			    width: 2rem;
+			    border-radius: .08rem;
+			    color: #fff;
+			    background-image: linear-gradient(167deg,#00d2ff,#3a7bd5);
+			    text-align: center;
+            }
             .usage-plan-wrap, .order-plan-wrap {
                 width: 100%;
                 overflow-y: auto;
@@ -357,7 +381,7 @@
                         border-bottom: none;
                     }
                     .plan-info-wrap {
-                        flex: 4;
+                        flex: 3.5;
                         text-align: left;
                         .plan-name {
                             padding: 20px 0;
@@ -382,14 +406,23 @@
                         }
                         .speedup-wrap {
                             a {
-                                position: absolute;
+                                /*position: absolute;
                                 width: auto;
                                 right: 0;
                                 bottom: 0;
                                 padding: 13px;
                                 border-radius: 6px;
                                 color: #fff;
-                                background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);
+                                background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);*/
+                                
+                                display: inline-block;
+							    margin-top: .2rem;
+							    padding: .17333rem 0;
+							    width: 2rem;
+							    border-radius: .08rem;
+							    color: #fff;
+							    background-image: linear-gradient(167deg,#00d2ff,#3a7bd5);
+							    text-align: center;
                             }
                         }
 
@@ -451,7 +484,7 @@
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import {Notify, Popup} from 'vant';
     import {getStorage, setStorage, toDecimal, checkBrowser} from "../../utilies";
-    import {_get} from "../../http";
+    import {_post,_get} from "../../http";
     import RouterLink from "vant/packages/mixins/router-link";
 
     export default {
@@ -492,6 +525,7 @@
                     }//流量卡
                 },
                 hasUsagePlan: false,
+                usagePlanLength:0,
                 hasOrderPlan: false,
                 usageInfo: {},
                 swiperOption: {
@@ -500,7 +534,8 @@
                             _this.cur_plan_type_index = this.activeIndex
                         }
                     }
-                }
+                },
+                prefer_priority:0
             }
         },
         components: {
@@ -622,6 +657,7 @@
 
                         // 是否显示套餐
                         this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false
+                        this.usagePlanLength = this.usageInfo.usage.plans.length;
                         this.hasOrderPlan = this.usageInfo.orders.length ? true : false
 
 
@@ -650,7 +686,7 @@
                 this.$refs.mySwiper.$el.style.height = (clientHeight - 320) + 'px'
             }
             else{
-                this.$refs.mySwiper.$el.style.height = (clientHeight - 340) + 'px'
+                this.$refs.mySwiper.$el.style.height = (clientHeight - 330) + 'px'
             }
         },
         methods: {
@@ -699,6 +735,29 @@
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
+            prefer_use_operate: function (iccid,rating_id,priority,source){
+            		if(priority == 1000){
+            			this.prefer_priority = 0
+            		}else if(priority == 0){
+            			this.prefer_priority = 1000
+            		}
+            		console.log(this.prefer_priority)
+            		_post('/api/v1/app/plans/stick', {
+            			iccid: iccid,
+            			rating_id:rating_id,
+            			priority:this.prefer_priority,
+            			source:source
+        			}).then(res => {
+                    if (res.state==1) {
+                        Notify({
+                            message: res.msg
+                        });
+                        setTimeout(function(){
+                        		location.reload();
+                        },1000)
+                    }
+                })
+            }
         }
     };
 </script>

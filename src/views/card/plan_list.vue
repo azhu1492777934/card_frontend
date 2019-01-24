@@ -234,7 +234,7 @@
         },
         created() {
             //处理套餐数据
-            _get("/api/v1/app/plan_list", {
+            _get("/releaseApi/v1/app/plan_list", {
                 iccid: getStorage("check_iccid")
             }).then(res => {
                 if (res.state == 1) {
@@ -333,15 +333,14 @@
       }).then(res => {
         if (res.state == 1) {
           setStorage("monthlyMsg", res.data,"obj");
+            _this.$router.push({ path: "/weixin/recharge" });
+
         } else {
           Notify({ message: res.msg });
         }
       });
 
-    //暂时就这么解决吧
-      setTimeout(function(){
-            _this.$router.push({ path: "/weixin/recharge" });
-      },0)
+  
     }
   }
 };

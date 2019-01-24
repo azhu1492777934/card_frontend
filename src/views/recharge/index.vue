@@ -13,14 +13,14 @@
 
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div v-if="!item.is_first"> 
+                    <div v-if="!item.is_first" :class="{'monthlyPlan midPlan':item.is_first==false}"> 
                         <p class="discount-rmb">{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
                         <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
                             可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>元<br>无ELB赠送
                         </p><!--钻石支付-->
-
+                        <p class="monthlyDes" v-if="item.is_first==false">使用钻石连续包月</p>
                         <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
 
                         <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">{{item.give_elb}}</em>ELB
@@ -260,6 +260,7 @@
             * */
             if(this.userInfo.account.rmb > 0){
                  const monthlyMsg=getStorage("monthlyMsg","obj");
+                 console.log(monthlyMsg);
                  monthlyMsg.give_elb=0;
                  if(monthlyMsg.is_first){
                     monthlyMsg.pay_money=monthlyMsg.first_price;
@@ -377,7 +378,13 @@
 
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
-                param.price = this.planInfo.price;
+                    
+                if(param.is_renew==true){
+                    param.price=rechargeInfo.first_price;
+                }else{
+                    param.price = this.planInfo.price;
+                }
+
                 param.user_id = this.userInfo.account.user_id;
                 param.env = this.client_type;
 
@@ -445,7 +452,7 @@
 
                 this.rechargeShow = true;
                 
-                _post('/api/v1/pay/weixin/create',param)
+                _post('/releaseApi/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state==1){
 
@@ -471,7 +478,7 @@
                                 })
                                 setTimeout(function () {
                                     setStorage('check_iccid',_this.planInfo.iccid);
-                                    alert(res.data.return_url);
+                                    // alert(res.data.return_url);
                                     // _this.$router.push({path:'/weixin/card/usage'});
                                     location.href = res.data.return_url
                                 },2000)
@@ -884,5 +891,10 @@
 
         }
         //充值按钮
+
+        .midPlan{
+            vertical-align:middle;
+            padding-top:25px;
+        }
     }
 </style>

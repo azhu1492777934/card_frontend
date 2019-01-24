@@ -29,8 +29,7 @@ body,
   height: 100%;
 }
 .release-plan-wrap {
-  display: flex;
-  align-items: center;
+ 
   .warnMsg{
     text-align:center;
     width:100%;
@@ -45,7 +44,6 @@ body,
     background: url("../../assets/imgs/question/release_plan _bg.png") no-repeat;
     background-size: 100%;
     margin: 0 auto;
-
     .release-plan-top {
       width: 100%;
       height: 135px;
@@ -162,10 +160,11 @@ export default {
         .then(() => {
           let _this = this;
           _get("/releaseApi/v1/app/plans/cancel_renew", {
-            renew_id: id
+            renew_id: id,
+            user_id:getStorage("userInfo","obj").account.user_id
           }).then(res => {
             if (res.state == 1) {
-              Notify({ message: res.msg });
+              Notify({ message: res.msg,background:'#60ce53' });
               _this.getList();
             } else {
               Notify({ message: res.msg });
