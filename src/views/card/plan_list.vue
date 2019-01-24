@@ -19,11 +19,13 @@
                             <div class="plan-info-wrap">
                                 <p class="plan-name">{{ inner_item.name }}</p>
                                 <p class="plan-limited-wrap">
-                                    <span class="limited-num" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
+                                    <span class="limited-num"
+                                          v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
                                     <span class="limited-num" v-show="inner_item.is_elb_deductible!=0">可抵扣{{inner_item.max_deductible_elb}}个ELB</span>
                                 </p>
                                 <p class="plan-desc">
-                                    {{ inner_item.describe ? inner_item.describe:inner_item.remark?inner_item.remark:'' }}
+                                    {{ inner_item.describe ? inner_item.describe:inner_item.remark?inner_item.remark:''
+                                    }}
                                 </p>
                             </div>
                             <div class="plan-price-wrap">
@@ -32,7 +34,8 @@
                             </div>
                             <span class="plan-selected"></span>
                             <!--选中状态-->
-                            <span class="icon-sell-done" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span>
+                            <span class="icon-sell-done"
+                                  v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span>
                             <!--售罄-->
                         </li>
                     </ul>
@@ -40,7 +43,7 @@
             </van-swipe>
         </div>
 
-        <div ref="refPlanButton" v-show="!load_plan_list" class="btn-recharge-wrap">
+        <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
             <button @click="recharge">充值</button>
         </div>
 
@@ -189,6 +192,9 @@
 
         .btn-recharge-wrap {
             padding: 40px 32px;
+            &.noDataHide{
+                display: none;
+            }
             button {
                 display: block;
                 width: 100%;
@@ -213,6 +219,7 @@
 
         data() {
             return {
+                client_type:checkBrowser(),
                 moth_plan: null,
                 accumulated_plan: null,
                 speedup_plan: null,
@@ -239,7 +246,7 @@
             }).then(res => {
                 if (res.state == 1) {
 
-                    if(JSON.stringify(res.data)=='{}'){
+                    if (JSON.stringify(res.data) == '{}') {
 
                         this.load_plan_list = true;
                         this.load_plan_msg = '此卡暂无套餐'
@@ -331,25 +338,21 @@
 
                 setStorage("planInfo", planInfo, "obj");
 
-     //获取当前包月套餐信息
-        _get("/api/v1/app/plans/renew_info", {
-        user_id: getStorage("userInfo","obj").account.user_id,
-        // user_id: 14,
-        rating_id:planInfo.id
+                //获取当前包月套餐信息
+                _get("/api/v1/app/plans/renew_info", {
+                    user_id: getStorage("userInfo", "obj").account.user_id,
+                    rating_id: planInfo.id
+                }).then(res => {
+                    if (res.state == 1) {
+                        setStorage("monthlyMsg", res.data, "obj");
+                        this.$router.push({path: "/weixin/recharge"});
 
-      }).then(res => {
-        if (res.state == 1) {
-          setStorage("monthlyMsg", res.data,"obj");
-            _this.$router.push({ path: "/weixin/recharge" });
-
-        } else {
-          Notify({ message: res.msg });
+                    } else {
+                        Notify({message: res.msg});
+                    }
+                });
+            }
         }
-      });
-
-  
-    }
-  }
-};
+    };
 </script>
 
