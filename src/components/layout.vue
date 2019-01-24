@@ -72,9 +72,16 @@
                 if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') {
 
                     if(this.client_type!='app'){
+
+                        if(getStorage('version')!=this.global_variables.version){
+                            removeStorage('token');
+                            removeStorage('auth_data');
+                        }
+
                         if(getStorage('userInfo','obj')){
                             this.$store.commit('userInfo/changeUserStatus', true);
                         }
+
                     }//app环境隐藏顶部个人信息
 
                     if (getStorage('token')) {
@@ -206,7 +213,8 @@
                                 .then(res => {
                                     if (res.error == 0) {
 
-                                        location.href = res.data
+                                        setStorage('version',this.global_variables.version);
+                                        location.href = res.data;
 
                                     } else if (res.error == '11002') {
 
