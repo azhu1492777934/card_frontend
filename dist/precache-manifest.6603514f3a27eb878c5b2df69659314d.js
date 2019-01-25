@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/css/_404.b9a49c55.css"
   },
   {
-    "revision": "56584cee2b3caf06a15a",
+    "revision": "19f9f9fcdc1a2eefa0a3",
     "url": "/css/app.65a6586c.css"
   },
   {
-    "revision": "56584cee2b3caf06a15a",
-    "url": "/js/app.4e26ed60.js"
+    "revision": "19f9f9fcdc1a2eefa0a3",
+    "url": "/js/app.1afbd196.js"
   },
   {
     "revision": "8e0b7e530ac60ac96646",
@@ -160,8 +160,8 @@ self.__precacheManifest = [
     "url": "/js/refund_applying.3c3e117c.js"
   },
   {
-    "revision": "0f00994b3d2700281c80",
-    "url": "/js/Layout.e2fd732d.js"
+    "revision": "d0c8f9f70df2555fa065",
+    "url": "/js/Layout.13df40a4.js"
   },
   {
     "revision": "ebff1aa716de58cc1d18",
@@ -232,14 +232,6 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
-    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
-    "url": "/img/bg-check-wrap@3x.3f342771.png"
-  },
-  {
-    "revision": "9713b21819c4019befecd095069977df",
-    "url": "/img/bg-check-wrap@2x.9713b218.png"
-  },
-  {
     "revision": "1d7515ee61c3f659227318b4050955ed",
     "url": "/img/mobile_sim@2x.1d7515ee.png"
   },
@@ -258,6 +250,14 @@ self.__precacheManifest = [
   {
     "revision": "9e02095f31a07b972244f1c714c1dfe7",
     "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
+    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
+    "url": "/img/bg-check-wrap@3x.3f342771.png"
+  },
+  {
+    "revision": "9713b21819c4019befecd095069977df",
+    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "3d0fc424b703032ca595090e99f8354b",
@@ -304,11 +304,11 @@ self.__precacheManifest = [
     "url": "/img/bg_no_plan.275be51a.svg"
   },
   {
-    "revision": "0fc4db9505d820e36b21cbec78961c57",
+    "revision": "610c17e46bf73d4ba840fc516ed82a2a",
     "url": "/index.html"
   },
   {
-    "revision": "0f00994b3d2700281c80",
+    "revision": "d0c8f9f70df2555fa065",
     "url": "/css/Layout.c59a8b7e.css"
   },
   {
