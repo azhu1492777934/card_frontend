@@ -502,7 +502,7 @@
             return {
                 client_type:checkBrowser(),
                 iccid: '',
-                load_plan: true,
+                load_plan: false,
                 load_plan_msg: '',
                 watch_source: [5, 10, 12, 17, 18, 20, 22],
                 auth_status: ['未实名', '审核中', '审核不通过'],
@@ -684,6 +684,7 @@
                         })
 
                     } else {
+                        this.load_plan = true
                         this.load_plan_msg = res.msg;
                     }
                 })

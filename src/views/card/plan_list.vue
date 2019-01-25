@@ -234,7 +234,7 @@
                 moth_plan: null,
                 accumulated_plan: null,
                 speedup_plan: null,
-                load_plan_list: true,
+                load_plan_list: false,
                 load_plan_msg: "",
                 plan_type: [],
                 plan_type_name: [],
@@ -306,6 +306,7 @@
                     })
 
                 } else {
+                    this.load_plan_list = true;
                     this.load_plan_msg = res.msg;
                 }
             });
