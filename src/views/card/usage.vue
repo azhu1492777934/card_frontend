@@ -122,10 +122,10 @@
 		                                    </span>
                                         </div>
                                         
-                                        <!--<div class="prefer_use" v-if="usagePlanLength > 1">-->
-                                        		<!--<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 1000">优先使用</a>-->
-                                        		<!--<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 0">取消优先</a>-->
-                                        <!--</div>-->
+                                        <div class="prefer_use" v-if="usagePlanLength > 1">
+                                        		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 1000">优先使用</a>
+                                        		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 0">取消优先</a>
+                                        </div>
                                     </div>
                                 </li>
                             </ul>
@@ -356,15 +356,7 @@
                 }
             }
             .usage-plan-wrap li .plan-date-wrap .prefer_use a{
-        		    /*position: absolute;
-			    width: auto;
-			    left: 0;
-			    bottom: 0;
-			    padding: .17333rem .1rem;
-			    border-radius: .08rem;
-			    color: #fff;
-			    background-image: linear-gradient(167deg,#00d2ff,#3a7bd5);*/
-			    
+                position: relative;
 			    display: inline-block;
 			    margin-top: .2rem;
 			    padding: .17333rem 0;
@@ -373,6 +365,7 @@
 			    color: #fff;
 			    background-image: linear-gradient(167deg,#00d2ff,#3a7bd5);
 			    text-align: center;
+                z-index: 99;
             }
             .usage-plan-wrap, .order-plan-wrap {
                 width: 100%;
@@ -741,7 +734,6 @@
             		}else if(priority == 0){
             			this.prefer_priority = 1000
             		}
-            		console.log(this.prefer_priority)
             		_post('/api/v1/app/plans/stick', {
             			iccid: iccid,
             			rating_id:rating_id,

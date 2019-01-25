@@ -257,7 +257,6 @@
 
             if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
                  const monthlyMsg=getStorage("monthlyMsg","obj");
-                 console.log(monthlyMsg);
                  monthlyMsg.give_elb=0;
                  if(monthlyMsg.is_first){
                     monthlyMsg.pay_money=monthlyMsg.first_price;
@@ -268,7 +267,6 @@
 
                  monthlyMsg.is_renew=true;
                 this.new_recharge_list.push(monthlyMsg);
-                console.log(this.new_recharge_list);
             }
 
         },
@@ -352,7 +350,6 @@
                     return
                 }
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
-                console.log(rechargeInfo);
                 let param = {},
                     _this = this;
 
@@ -443,7 +440,6 @@
                 }
 
                 this.rechargeShow = true;
-                console.log(param);
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state==1){
