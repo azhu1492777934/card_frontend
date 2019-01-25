@@ -2,7 +2,7 @@ import axios from 'axios'
 import qs from 'qs'
 import {getStorage} from "../utilies";
 
-axios.defaults.timeout =  10000;
+// axios.defaults.timeout =  10000;
 
 axios.interceptors.request.use(function (config) {
 
@@ -23,11 +23,18 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     return response.data
 },err => {
-    let errCode = err.response.status;
-    return Promise.resolve({
-        state:0,
-        msg:'服务出小差啦('+errCode+')'
-    })
+
+    if(Object.prototype.toString.call(err)=='[object object]'){
+        return Promise.resolve({
+            state:0,
+            msg:'服务出小差啦('+ err.response.status+')'
+        })
+    }else{
+        return Promise.resolve({
+            state:0,
+            msg:'服务出小差啦'
+        })
+    }
 })
 
 
