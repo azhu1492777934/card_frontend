@@ -22,7 +22,7 @@ const wx = require('weixin-js-sdk');
 Vue.prototype.wx = wx
 Vue.prototype.global_variables = global_variables
 
-/*router.afterEach((to,from)=>{
+router.afterEach((to,from)=>{
     if(checkBrowser()=='wechat'){
 
         if(to.path=='/weixin/new_auth'){
@@ -42,7 +42,7 @@ Vue.prototype.global_variables = global_variables
         }
 
     }
-})*/
+})
 
 Vue.config.productionTip = false
 Vue.use(globalFunction)
