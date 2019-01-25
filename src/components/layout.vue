@@ -73,6 +73,11 @@
 
                     if(this.client_type!='app'){
 
+                        if(getStorage('userInfo','obj')){
+
+                            this.$store.commit('userInfo/changeUserStatus', true);
+                        }
+
                         if( (this.client_type=='wechat' && getStorage('wechat_version')!=this.global_variables.version) ||
 
                             (this.client_type=='alipay' && getStorage('alipay_version')!=this.global_variables.version)
