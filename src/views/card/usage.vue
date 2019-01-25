@@ -179,7 +179,7 @@
             <p class="showTip">{{load_plan_msg}}</p>
         </van-popup><!--获取详情遮罩-->
 
-        <div v-show="load_plan" class="fixed-wrap-loading">
+        <div v-show="load_plan_msg==''" class="fixed-wrap-loading">
             <div class="spinner"></div>
         </div>
 
@@ -495,7 +495,6 @@
         data() {
             const _this = this;
             return {
-                test:true,
                 client_type:checkBrowser(),
                 iccid: '',
                 load_plan: true,
@@ -559,6 +558,7 @@
                     iccid: getStorage('check_iccid'),
                 }).then(res => {
                     if (res.state==1) {
+                        this.load_plan_msg = res.msg
                         this.load_plan = false;
                         this.usageInfo = res.data;
 

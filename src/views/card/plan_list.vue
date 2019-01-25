@@ -51,7 +51,7 @@
             <p class="showTip">{{load_plan_msg}}</p>
         </van-popup>
 
-        <div v-show="load_plan_list" class="fixed-wrap-loading">
+        <div v-show="load_plan_msg==''" class="fixed-wrap-loading">
             <div class="spinner"></div>
         </div>
 
@@ -257,6 +257,8 @@
                         this.load_plan_msg = '此卡暂无套餐'
                         return
                     }
+
+                    this.load_plan_msg = res.msg;
 
                     this.load_plan_list = false;
                     this.plan_list = res.data;
