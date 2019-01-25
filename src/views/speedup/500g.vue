@@ -143,6 +143,7 @@
                     }else{
                         param.pay_type = 'ALIPAY'
                     }
+                    param.open_id = this.userInfo.account.user_id; //app修改openid参数
                 }else if(this.client_type == 'wechat'){
                     param.pay_type = 'WEIXIN'
                 }else if(this.client_type == 'alipay'){
