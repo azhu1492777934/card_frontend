@@ -50,6 +50,11 @@
         <van-popup :close-on-click-overlay="false" v-model="load_plan_list">
             <p class="showTip">{{load_plan_msg}}</p>
         </van-popup>
+
+        <div v-show="load_plan_list" class="fixed-wrap-loading">
+            <div class="spinner"></div>
+        </div>
+
     </div>
 </template>
 
@@ -224,7 +229,7 @@
                 accumulated_plan: null,
                 speedup_plan: null,
                 load_plan_list: true,
-                load_plan_msg: "正在加载套餐中,请等候",
+                load_plan_msg: "",
                 plan_type: [],
                 plan_type_name: [],
                 cur_plan_type_index: 0, //当前选中套餐类型

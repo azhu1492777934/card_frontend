@@ -169,7 +169,7 @@
             </div>
 
             <div ref="refCardButton" class="btn-recharge-wrap">
-                <button @click="recharge">套餐查询</button>
+                <button @click="recharge">充值续费</button>
                 <a href="/weixin/coupon/index">卡券兑换</a>
             </div>
         </div>
@@ -178,6 +178,11 @@
         <van-popup :close-on-click-overlay="false" v-model="load_plan">
             <p class="showTip">{{load_plan_msg}}</p>
         </van-popup><!--获取详情遮罩-->
+
+        <div v-show="load_plan" class="fixed-wrap-loading">
+            <div class="spinner"></div>
+        </div>
+
     </div>
 </template>
 
@@ -490,10 +495,11 @@
         data() {
             const _this = this;
             return {
+                test:true,
                 client_type:checkBrowser(),
                 iccid: '',
                 load_plan: true,
-                load_plan_msg: '获取卡详情信息,请等候',
+                load_plan_msg: '',
                 watch_source: [5, 10, 12, 17, 18, 20, 22],
                 auth_status: ['未实名', '审核中', '审核不通过'],
                 card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
