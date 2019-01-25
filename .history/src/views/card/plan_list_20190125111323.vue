@@ -335,7 +335,7 @@
                 }
                 if(planInfo.is_can_renew==0){
                     delete planInfo.first_price;
-                    delete planInfo.is_can_renew;
+                    delete 
                 }
                 planInfo.iccid = getStorage("check_iccid");
 

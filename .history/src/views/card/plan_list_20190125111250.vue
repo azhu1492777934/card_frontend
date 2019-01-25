@@ -333,10 +333,7 @@
                     Toast("此套餐已售罄, 请更换套餐");
                     return;
                 }
-                if(planInfo.is_can_renew==0){
-                    delete planInfo.first_price;
-                    delete planInfo.is_can_renew;
-                }
+                if(planInfo.is_can_renew==0)
                 planInfo.iccid = getStorage("check_iccid");
 
                 setStorage("planInfo", planInfo, "obj");

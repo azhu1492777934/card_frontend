@@ -352,7 +352,7 @@
                     return
                 }
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
-                console.log(rechargeInfo);
+                console.log()
                 let param = {},
                     _this = this;
 
