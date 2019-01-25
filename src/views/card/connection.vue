@@ -4,7 +4,7 @@
             <div v-show="cur_checked" class="connection-title-wrap">
                 <span>连接开始</span>
                 <span>用量(KB)</span>
-                <span>持续时间</span>
+                <span>持续时间(s)</span>
             </div>
             <div class="flow-data-wrap">
                 <ul v-show="cur_checked">
@@ -18,14 +18,14 @@
 
             <div v-show="!cur_checked" class="connection-title-wrap">
                 <span>连接开始</span>
-                <span>通话(min)</span>
-                <span>持续时间</span>
+                <span>呼叫号码</span>
+                <span>持续时间(min)</span>
             </div>
-            <div class="flow-data-wrap">
-                <ul v-show="cur_checked">
+            <div class="flow-data-wrap no-padding-top">
+                <ul v-show="!cur_checked">
                     <li v-for="(item,index) in connection_voice_list">
                         <span>{{item.time}}</span>
-                        <span>{{item.data}}</span>
+                        <span>{{/[\u4e00-\u9fa5\u767e\u5343\u96f6]/.test(item.number)? item.number:item.number.substr(0,3)+'xxxx'+item.number.substr(8,item.number.length) }}</span>
                         <span>{{item.duration}}</span>
                     </li>
                 </ul>
@@ -85,6 +85,9 @@
                 }
             }
         }
+        .no-padding-top{
+            padding-top: 0px;
+        }
         .connection-footer{
             position: fixed;
             left: 0;
@@ -142,6 +145,7 @@
                         }
                         if(res.data.data.length && res.data.voice.length){
                             this.hasVocie = true
+                            this.connection_voice_list = res.data.voice
                         }else{
                             this.load_connection_msg = true;
                             this.load_connection_msg = '暂无连接数据'
@@ -149,6 +153,8 @@
                     }else{
                         this.load_connection_msg = res.msg
                     }
+
+                    console.log(this.connection_voice_list)
                 })
             }
 
