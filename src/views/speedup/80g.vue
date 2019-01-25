@@ -63,9 +63,6 @@
             }
         },
         created() {
-
-            this.client_type = 'app';
-
             if(getStorage('userInfo','obj')) {
                 this.userInfo = getStorage('userInfo','obj');
             }

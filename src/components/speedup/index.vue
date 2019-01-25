@@ -1,6 +1,6 @@
 <template>
    <div class="speedup-wrap">
-       <div class="title">购买加速包</div>
+       <!--<div class="title">购买加速包</div>-->
        <ul class="recharge-wrap">
            <li @click="chooseItem(index)" v-for="(item,index) in list" :class="[{'choose-active':activeIndex==index}]">
                <span>{{item.name}}</span>

@@ -29,11 +29,6 @@ axios.interceptors.response.use(function (response) {
             state:0,
             msg:'服务出小差啦('+ err.response.status+')'
         })
-    }else{
-        return Promise.resolve({
-            state:0,
-            msg:'服务出小差啦'
-        })
     }
 })
 

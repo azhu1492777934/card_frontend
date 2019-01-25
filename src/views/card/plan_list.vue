@@ -52,7 +52,13 @@
         </van-popup>
 
         <div v-show="load_plan_msg==''" class="fixed-wrap-loading">
-            <div class="spinner"></div>
+            <div id="loading-common-center">
+                <div id="loading-common-center-inner">
+                    <div class="loading-object" id="first_object"></div>
+                    <div class="loading-object" id="second_object"></div>
+                    <div class="loading-object" id="third_object"></div>
+                </div>
+            </div>
         </div>
 
     </div>
