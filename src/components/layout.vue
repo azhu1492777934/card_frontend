@@ -2,6 +2,9 @@
     <div class="inner-wrap">
         <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
         <router-view/>
+        <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
+            <p class="showTip">加载用户信息,请等候</p>
+        </van-popup>
     </div>
 </template>
 
@@ -10,7 +13,7 @@
     import {Notify} from 'vant'
     import {mapState} from 'vuex'
     import userHeader from './common/uesrHead'
-    import {Dialog} from 'vant'
+    import {Dialog,Popup} from 'vant'
     import {_post, _get} from "../http";
     import {codeParam, checkBrowser, setStorage, getStorage, removeStorage,getUrlParam,checkICCID} from "../utilies";
 
@@ -22,12 +25,15 @@
                 client_type:  checkBrowser(),//微信/支付宝环境
                 state: '',//防跨域攻击
                 appContext: false,//是否app环境
+
+                load_user_msg:false,
             }
         },
         components: {
             userHeader,
             [Dialog.name]: Dialog,
             [Notify.name]:Notify,
+            [Popup.name]:Popup,
         },
         computed: {
             ...mapState({
@@ -243,8 +249,10 @@
             },
             getUserInfo() {
                 //获取用户信息
+                this.load_user_msg = true;//用户信息遮罩
                 _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
                     .then(res => {
+                        this.load_user_msg = false;
                         if (res.error == 0) {
 
                             let UserInfo = {
