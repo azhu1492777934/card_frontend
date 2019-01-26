@@ -141,12 +141,17 @@
                     if(res.state==1){
                         this.connection_flow_list = res.data.data
                         if(res.data.data.length || res.data.voice.length){
-                            this.load_connection = false
+                            this.load_connection = false;
                         }
                         if(res.data.data.length && res.data.voice.length){
-                            this.hasVocie = true
+                            this.hasVocie = true;
                             this.connection_voice_list = res.data.voice
-                        }else{
+                        }else if(!res.data.data.length && res.data.voice.length){
+                            this.hasVocie = false;//关闭切换按钮
+                            this.connection_voice_list = res.data.voice
+                            this.cur_checked = false;//关闭流量链接详情按钮
+
+                        } else{
                             this.load_connection_msg = true;
                             this.load_connection_msg = '暂无连接数据'
                         }

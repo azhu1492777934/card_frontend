@@ -414,15 +414,6 @@
                         }
                         .speedup-wrap {
                             a {
-                                /*position: absolute;
-                                width: auto;
-                                right: 0;
-                                bottom: 0;
-                                padding: 13px;
-                                border-radius: 6px;
-                                color: #fff;
-                                background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);*/
-                                
                                 display: inline-block;
 							    margin-top: .2rem;
 							    padding: .17333rem 0;
