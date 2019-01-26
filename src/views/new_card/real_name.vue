@@ -610,7 +610,8 @@
 
                 _post('/api/v1/app/bind/imei', param)
                     .then(res => {
-                        if (res.state) {
+                        if (res.state==1) {
+                            Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
                             location.href = '/api/v1/app/jump/taobao?imei='+this.info_imei+'&iccid='+this.info_iccid+'&source='+this.card_source;
                         } else {
                             if(res.msg){

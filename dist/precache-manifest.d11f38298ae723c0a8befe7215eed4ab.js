@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/css/_404.b9a49c55.css"
   },
   {
-    "revision": "b63b310b0c7cbd8c5037",
+    "revision": "318ba6429b1b7190cc9f",
     "url": "/css/app.f82b8cea.css"
   },
   {
-    "revision": "b63b310b0c7cbd8c5037",
-    "url": "/js/app.40bdb437.js"
+    "revision": "318ba6429b1b7190cc9f",
+    "url": "/js/app.226e3252.js"
   },
   {
     "revision": "8e0b7e530ac60ac96646",
@@ -128,12 +128,12 @@ self.__precacheManifest = [
     "url": "/js/question.c1f4a2b7.js"
   },
   {
-    "revision": "3eaff7bb20a6197c8f6c",
+    "revision": "77021589fa6b3d19f374",
     "url": "/css/real_name.49362bec.css"
   },
   {
-    "revision": "3eaff7bb20a6197c8f6c",
-    "url": "/js/real_name.48afcd22.js"
+    "revision": "77021589fa6b3d19f374",
+    "url": "/js/real_name.c07fd5af.js"
   },
   {
     "revision": "277fa2e746e72e67c9cf",
@@ -232,6 +232,14 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
+    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
+    "url": "/img/bg-check-wrap@3x.3f342771.png"
+  },
+  {
+    "revision": "9713b21819c4019befecd095069977df",
+    "url": "/img/bg-check-wrap@2x.9713b218.png"
+  },
+  {
     "revision": "1d7515ee61c3f659227318b4050955ed",
     "url": "/img/mobile_sim@2x.1d7515ee.png"
   },
@@ -250,14 +258,6 @@ self.__precacheManifest = [
   {
     "revision": "9e02095f31a07b972244f1c714c1dfe7",
     "url": "/img/telcom_sim@3x.9e02095f.png"
-  },
-  {
-    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
-    "url": "/img/bg-check-wrap@3x.3f342771.png"
-  },
-  {
-    "revision": "9713b21819c4019befecd095069977df",
-    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "3d0fc424b703032ca595090e99f8354b",
@@ -304,7 +304,7 @@ self.__precacheManifest = [
     "url": "/img/bg_no_plan.275be51a.svg"
   },
   {
-    "revision": "e7716ca163feb1a172926986981e022f",
+    "revision": "75cb14e32d06ea86f75e24f5ec244730",
     "url": "/index.html"
   },
   {
