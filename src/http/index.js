@@ -23,12 +23,18 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response) {
     return response.data
 },err => {
-
-    if(Object.prototype.toString.call(err)=='[object object]'){
-        return Promise.resolve({
-            state:0,
-            msg:'服务出小差啦('+ err.response.status+')'
-        })
+    if(err.response){
+        if(err.response.status){
+            return Promise.resolve({
+                state:0,
+                msg:'服务出小差啦('+ err.response.status+')'
+            })
+        }else{
+            return Promise.resolve({
+                state:0,
+                msg:'服务出小差了(0)'
+            })
+        }
     }
 })
 

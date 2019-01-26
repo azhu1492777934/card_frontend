@@ -7,7 +7,7 @@
         </van-popup>
 
         <van-popup :close-on-click-overlay="false" v-model="authrized_failed">
-            <p class="showTip">由于授权失败，您的账户存在安全问题，将暂时无法进行任何操作!请联系我司客服，我们将为您尽快解决问题。</p>
+            <p class="showTip">由于授权失败，您的账户存在安全问题，将暂时无法进行任何操作!请联系我司客服，我们将尽快为您解决问题。</p>
         </van-popup>
 
     </div>
@@ -106,7 +106,7 @@
                             * 已授权操作 重定向后操作
                             * */
 
-                            if (getStorage('state') == getUrlParam('state')) {
+                            // if (getStorage('state') == getUrlParam('state')) {  放开校验
 
                                 //解密data
                                 _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
@@ -181,19 +181,19 @@
                                     }
                                 })
                                 // end 状态
-                            } else {
-                                let _this =this;
-                                removeStorage('auth_data');
-                                removeStorage('token');
-
-                                Dialog.alert({
-                                    title: '授权失败',
-                                    message: '您的账号暂时无法使用，充值查询将受到影响，请与我司客服联系，我们将尽快为您解决。',
-                                }).then(() => {
-                                    _this.authrized_failed = true;
-                                })
-
-                            }
+                            // } else {
+                            //     let _this =this;
+                            //     removeStorage('auth_data');
+                            //     removeStorage('token');
+                            //
+                            //     Dialog.alert({
+                            //         title: '授权失败',
+                            //         message: '您的账号暂时无法使用，充值查询将受到影响，请与我司客服联系，我们将尽快为您解决。',
+                            //     }).then(() => {
+                            //         _this.authrized_failed = true;
+                            //     })
+                            //
+                            // }
                             /*
                            * end 已授权操作
                            * */
