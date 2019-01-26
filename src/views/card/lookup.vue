@@ -295,7 +295,6 @@
                 _post('/api/v1/app/new_auth/check_auth_', {
                     iccid: iccid,
                 }).then(res => {
-
                     let autoCount = getStorage('watchAutoSearch');
                     if (autoCount) {
                         autoCount++;

@@ -1,7 +1,6 @@
 <template>
     <div class="plan-usage-wrap">
         <div v-show="!load_plan">
-
             <div ref="refCardInfo" class="card-info-wrap">
                 <div class="operation-logo-wrap">
                     <img :src="filterCardInfo.operator_logo" alt="">
@@ -121,7 +120,7 @@
 		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500"></a>
 		                                    </span>
                                         </div>
-                                        
+
                                         <div class="prefer_use" v-if="usagePlanLength > 1">
                                         		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 1000">优先使用</a>
                                         		<a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)" v-if="item.priority == 0">取消优先</a>
@@ -248,7 +247,6 @@
                             flex: 3;
                         }
                         &:last-child {
-                            /*flex: 1;*/
                             text-align: right;
                         }
                     }
@@ -484,7 +482,6 @@
     import {Notify, Popup} from 'vant';
     import {getStorage, setStorage, toDecimal, checkBrowser} from "../../utilies";
     import {_post,_get} from "../../http";
-    import RouterLink from "vant/packages/mixins/router-link";
 
     export default {
         name: "home",
@@ -538,13 +535,14 @@
             }
         },
         components: {
-            RouterLink,
             [Notify.name]: Notify,
             [Popup.name]: Popup,
             swiper,
             swiperSlide
         },
         created() {
+
+            // this.load_plan_msg = '1233';
 
             if (getStorage('check_iccid')) {
 

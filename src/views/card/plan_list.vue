@@ -74,7 +74,6 @@
     @import "../../assets/less/common";
 
     .plan-wrap {
-        height: calc(100% - 44px);
         .van-swipe {
             height: 100%;
         }
@@ -285,13 +284,13 @@
                         }
                     }
 
-                    if (
-                        this.plan_type_name.length > 1 &&
-                        this.plan_type_name[0] != "月套餐"
-                    ) {
-                        this.cur_plan_type_index = 1;
-                        this.$refs.swiperVant.swipeTo(1);
-                    }
+                    // if (
+                    //     this.plan_type_name.length > 1 &&
+                    //     this.plan_type_name[0] != "月套餐"
+                    // ) {
+                    //     this.cur_plan_type_index = 1;
+                    //     this.$refs.swiperVant.swipeTo(1);
+                    // }
 
                     let _this = this;
                     this.$nextTick(()=>{
@@ -352,6 +351,10 @@
 
                 setStorage("planInfo", planInfo, "obj");
 
+                if(!getStorage('userInfo','obj')){
+                    Notify({message:'请在微信或支付宝客服端打开充值,或手动刷新当前页'});
+                    return
+                }
                 //获取当前包月套餐信息
                 _get("/api/v1/app/plans/renew_info", {
                     user_id: getStorage("userInfo", "obj").account.user_id,
