@@ -22,8 +22,6 @@
 
 <script>
     // @ is an alias to /src
-    import speedup from '../../components/speedup/index'
-    import appPay from '../../components/common/appPay'
     import {Notify,Popup} from 'vant'
     import {_post,_get} from "../../http";
     import {getStorage,checkBrowser} from "../../utilies";
@@ -31,8 +29,8 @@
     export default {
         name: "home",
         components: {
-            speedup,
-            appPay,
+            speedup:()=>import('../../components/speedup/index'),
+            appPay:()=>import('../../components/common/appPay'),
             [Popup.name]:Popup,
         },
         data() {
