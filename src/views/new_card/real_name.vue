@@ -608,6 +608,7 @@
                     alibind: true,
                 };
 
+                Notify({message:'正在绑定手机号码,请等候'});
                 _post('/api/v1/app/bind/imei', param)
                     .then(res => {
                         if (res.state==1) {

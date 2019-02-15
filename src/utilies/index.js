@@ -86,7 +86,7 @@ function codeParam(param, type) {
         timestamp: Math.round(new Date().getTime() / 1000),
         version: 'v1',
         format: 'json',
-        app_key: 'SMBQpaBWvVZPkpcBvDwQswDWxm',
+        app_key: 'XznBRoBGEgoCUtZbDbtL0G1QhE',
         nonce:new Date().getMilliseconds()+'0'+Math.floor(Math.random()*10000)
     };
 
@@ -97,7 +97,7 @@ function codeParam(param, type) {
     for (var i in sortParm) {
         row_sign += i + '=' + sortParm[i] + '&'
     }
-    row_sign += 'dcdAlgyn1GxxageKCqKxHYSIInCqDtkIgZaubdkpqVbDJ';
+    row_sign += 'EThOWYkcwsrrCEsFTbgvHFWLaEJwrThDcYqrPbIuhufVp';
     sign = md5(row_sign);
     commParam.sign = sign;
 

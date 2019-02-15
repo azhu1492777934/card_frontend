@@ -105,6 +105,7 @@
         .plan-list-wrap {
             height: 100%;
             overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
             li {
                 position: relative;
                 width: 90%;
