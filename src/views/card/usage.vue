@@ -74,7 +74,7 @@
                             <ul v-if="hasUsagePlan" class="usage-plan-wrap">
                                 <li v-for="(item,index) in usageInfo.usage.plans">
                                     <div class="plan-info-wrap">
-                                        <p class="plan-name">{{item.name}}</p>
+                                        <p class="plan-name">{{item.rps_name}}</p>
                                         <div class="plan-describe">
                                             <!--/*套餐描述-->
                                             <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
@@ -311,6 +311,12 @@
                     padding-top: 20px;
                     p {
                         padding-bottom: 15px;
+                        span{
+                            &:first-child{
+                                display: inline-block;
+                                width: 220px;
+                            }
+                        }
                     }
 
                 }
@@ -618,11 +624,11 @@
                                 this.filterCardInfo.watch_card_usage.detail_right = '无限'//右侧详情
 
                             } else {
-                                this.filterCardInfo.watch_card_usage.total_flow = this.usageInfo.usage.total + 'MB' //总用量
-                                this.filterCardInfo.watch_card_usage.detail_right = toDecimal((this.usageInfo.usage.total - this.usageInfo.usage.used)) + 'MB'//右侧详情
+                                this.filterCardInfo.watch_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total)  //总用量
+                                this.filterCardInfo.watch_card_usage.detail_right = this.flowUnit(this.usageInfo.usage.total - this.usageInfo.usage.used)//右侧详情
                             }
 
-                            this.filterCardInfo.watch_card_usage.used_flow = toDecimal(this.usageInfo.usage.used) + 'MB' //已使用流量
+                            this.filterCardInfo.watch_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used) //已使用流量
 
                             if (this.usageInfo.noMaxVoice == 1) {
                                 this.filterCardInfo.watch_card_usage.total_voice = '无限'
@@ -645,11 +651,11 @@
                             }
 
                             if (this.usageInfo.source != 6 && this.usageInfo.usage.noMax != 1) {
-                                this.filterCardInfo.flow_card_usage.total_flow = toDecimal(this.usageInfo.usage.total / 1024) + 'GB'
-                                this.filterCardInfo.flow_card_usage.detail_right = toDecimal((this.usageInfo.usage.total - this.usageInfo.usage.used) / 1024) + 'GB'
+                                this.filterCardInfo.flow_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total)
+                                this.filterCardInfo.flow_card_usage.detail_right = this.flowUnit(this.usageInfo.usage.total - this.usageInfo.usage.used)
                             }
 
-                            this.filterCardInfo.flow_card_usage.used_flow = toDecimal(this.usageInfo.usage.used / 1024) + 'GB'
+                            this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used)
 
                         }//流量卡
 
@@ -728,6 +734,9 @@
             },
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
+            },
+            flowUnit:function(num){
+                return num >= 1000 ? toDecimal(num/1000)+'GB': toDecimal(num) + 'MB'
             },
             prefer_use_operate: function (iccid,rating_id,priority,source){
             		if(priority == 1000){
