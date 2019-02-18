@@ -363,7 +363,7 @@
 
                 setStorage("planInfo", planInfo, "obj");
 
-                if (this.client_type != 'alipay' || this.client_type == 'wechat') {
+                if (this.client_type != 'alipay' && this.client_type != 'wechat') {
                     Notify({message: '请在微信或支付宝客服端打开充值'});
                     return
                 }

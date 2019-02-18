@@ -10,6 +10,8 @@ require( '../src/assets/css/reset.css')
 require( '../src/assets/less/common.less')
 require('../src/assets/css/SourceHanSansCNRegular.css')
 
+// require('./mock')
+
 import 'lib-flexible/flexible'
 import vueWeChatTitle from 'vue-wechat-title'
 import globalFunction from '../src/utilies/global_function'//全局函数
