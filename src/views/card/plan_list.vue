@@ -3,15 +3,16 @@
         <div ref="refPLanTitle" class="plan-type-wrap">
             <div class="plan-type-inner-wrap">
                 <span
-                        ref="ref_plan_type"
-                        @click="planTypeClikc(index)"
-                        v-for="(item,index) in plan_type_name"
-                        :class="{'active_type':index==cur_plan_type_index}">{{item}}</span>
+                    ref="ref_plan_type"
+                    @click="planTypeClikc(index)"
+                    v-for="(item,index) in plan_type_name"
+                    :class="{'active_type':index==cur_plan_type_index}">{{item}}
+                </span>
             </div>
         </div>
         <div class="van-swipe-wrap" ref="vanSwiperWwrap">
-            <van-swipe ref="swiperVant" :show-indicators="false" @change="swiperOnChange">
-                <van-swipe-item v-for="(item,index) in plan_type" :key="item">
+            <swiper ref="swiperVant" :options="swiperOption">
+                <swiper-slide v-for="(item,index) in plan_type" :key="item" :class="item">
                     <ul class="plan-list-wrap">
                         <li @click="choosePlanClick(inner_index)"
                             v-for="(inner_item,inner_index) in plan_list[item]"
@@ -39,8 +40,8 @@
                             <!--售罄-->
                         </li>
                     </ul>
-                </van-swipe-item>
-            </van-swipe>
+                </swiper-slide>
+            </swiper>
         </div>
 
         <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
@@ -65,16 +66,11 @@
 </template>
 
 <style lang="less">
-    html,
-    body,
-    #app {
-        height: 100%;
-    }
-
+    @import "~swiper/dist/css/swiper.min.css";
     @import "../../assets/less/common";
-
+    html, body, #app {height: 100%;}
     .plan-wrap {
-        .van-swipe {
+        .swiper-container{
             height: 100%;
         }
         .plan-type-wrap {
@@ -104,7 +100,7 @@
         //套餐列表
         .plan-list-wrap {
             height: 100%;
-            overflow-y: auto;
+            overflow: auto;
             -webkit-overflow-scrolling: touch;
             li {
                 position: relative;
@@ -203,7 +199,7 @@
 
         .btn-recharge-wrap {
             padding: 40px 32px;
-            &.noDataHide{
+            &.noDataHide {
                 display: none;
             }
             button {
@@ -220,17 +216,18 @@
 </style>
 
 <script>
-    import {Swipe, SwipeItem, Toast, Popup} from "vant";
+    import {swiper, swiperSlide} from 'vue-awesome-swiper'
+    import {Toast, Popup, Notify, List} from "vant";
     import {setStorage, getStorage, checkBrowser} from "../../utilies";
     import {_get} from "../../http";
-    import {Notify} from "vant";
     // @ is an alias to /src
     export default {
         name: "home",
 
         data() {
+            const _this = this;
             return {
-                client_type:checkBrowser(),
+                client_type: checkBrowser(),
                 moth_plan: null,
                 accumulated_plan: null,
                 speedup_plan: null,
@@ -241,14 +238,28 @@
                 cur_plan_type_index: 0, //当前选中套餐类型
                 choose_plan_index: 0, //当前选中套餐
                 plan_list: {},
-                ref_plan_type: null
+                ref_plan_type: null,
+                swiperOption: {
+                    on: {
+                        slideChangeTransitionEnd: function (swiper) {
+                            _this.cur_plan_type_index = this.activeIndex
+                        }
+                    }
+                }
             };
         },
         components: {
-            [Swipe.name]: Swipe,
-            [SwipeItem.name]: SwipeItem,
             [Toast.name]: Toast,
-            [Popup.name]: Popup
+            [Popup.name]: Popup,
+            [List.name]: List,
+            swiper,
+            swiperSlide,
+
+        },
+        computed: {
+            swiper() {
+                return this.$refs.swiperVant.swiper
+            }
         },
         created() {
             //处理套餐数据
@@ -285,23 +296,23 @@
                         }
                     }
 
-                    // if (
-                    //     this.plan_type_name.length > 1 &&
-                    //     this.plan_type_name[0] != "月套餐"
-                    // ) {
-                    //     this.cur_plan_type_index = 1;
-                    //     this.$refs.swiperVant.swipeTo(1);
-                    // }
+                    if (
+                        this.plan_type_name.length > 1 &&
+                        this.plan_type_name[0] != "月套餐"
+                    ) {
+                        this.cur_plan_type_index = 1;
+                        this.swiper.slideTo(1, 500, false);
+                    }
 
                     let _this = this;
-                    this.$nextTick(()=>{
+                    this.$nextTick(() => {
                         let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                             refPLanTitle = _this.$refs.refPLanTitle.offsetHeight,
-                            refPlanButton =  _this.$refs.refPlanButton.offsetHeight;
-                        if(_this.client_type == 'wechat' || _this.client_type == 'alipay'){
-                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44)+'px'
-                        }else{
-                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton)+'px'
+                            refPlanButton = _this.$refs.refPlanButton.offsetHeight;
+                        if (_this.client_type == 'wechat' || _this.client_type == 'alipay') {
+                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
+                        } else {
+                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton) + 'px'
                         }
                     })
 
@@ -320,7 +331,7 @@
             planTypeClikc: function (index) {
                 this.cur_plan_type_index = index;
                 this.choose_plan_index = 0;
-                this.$refs.swiperVant.swipeTo(index);
+                this.swiper.slideTo(index);
             },
             choosePlanClick: function (index) {
                 this.choose_plan_index = index;
@@ -352,8 +363,8 @@
 
                 setStorage("planInfo", planInfo, "obj");
 
-                if(!getStorage('userInfo','obj')){
-                    Notify({message:'请在微信或支付宝客服端打开充值,或手动刷新当前页'});
+                if (this.client_type != 'alipay' || this.client_type == 'wechat') {
+                    Notify({message: '请在微信或支付宝客服端打开充值'});
                     return
                 }
                 //获取当前包月套餐信息
