@@ -6,8 +6,10 @@
                     <img :src="filterCardInfo.operator_logo" alt="">
                 </div>
                 <div class="card-info-detail">
-                    <p>MSISDN:{{filterCardInfo.msisdn}}</p>
+                    <p v-if="filterCardInfo.is_watch_card">手表手机号:{{filterCardInfo.msisdn}}</p>
+                    <p v-else>MSISDN:{{filterCardInfo.msisdn}}</p>
                     <p>ICCID:{{usageInfo.iccid}}(编码:{{usageInfo.source}})</p>
+                    <p v-if="usageInfo!='864319031839011'">IMEI:{{usageInfo.imei}}</p>
                     <div class="card-state-wrap">
                         <div>
                             <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
@@ -232,11 +234,11 @@
                         font-size: 36px;
                         color: #31b3ef;
                     }
-                    &:nth-child(2) {
-                        padding-bottom: 35px;
-                        font-size: 28px;
+                    /*&:nth-child(2) {*/
+                        /*padding-bottom: 35px;*/
+                        font-size: 24px;
                         color: #017ef9;
-                    }
+                    /*}*/
                 }
 
                 .card-state-wrap {
@@ -256,11 +258,14 @@
                     span, em, a {
                         display: inline-block;
                         margin-right: 15px;
-                        padding: 5px 10px;
+                        padding: 0 10px;
+                        height: 36px;
+                        line-height: 36px;
+                        /*padding: 5px 10px;*/
+                        font-size: 22px;
                         border: 1PX solid #3bce9e;
                         color: #3bce9e;
                         border-radius: 6px;
-                        line-height: 1;
                         -webkit-text-size-adjust: none;
                         &:last-child {
                             margin-right: 0;
@@ -273,7 +278,7 @@
                         background-color: #38b5ed;
                     }
                     a {
-                        padding: 5px 20px;
+                        padding: 0 20px;
                     }
                 }
 
@@ -624,11 +629,16 @@
                                 this.filterCardInfo.watch_card_usage.detail_right = '无限'//右侧详情
 
                             } else {
-                                this.filterCardInfo.watch_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total)  //总用量
-                                this.filterCardInfo.watch_card_usage.detail_right = this.flowUnit(this.usageInfo.usage.total - this.usageInfo.usage.used)//右侧详情
+                                this.filterCardInfo.watch_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total,0,1)  //总用量
+                                this.filterCardInfo.watch_card_usage.detail_right =
+                                    this.flowUnit(0,{
+                                        watchCard:true,
+                                        total:this.usageInfo.usage.total,
+                                        used:this.usageInfo.usage.used
+                                    },0 )//右侧详情
                             }
 
-                            this.filterCardInfo.watch_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used) //已使用流量
+                            this.filterCardInfo.watch_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used,0,0) //已使用流量
 
                             if (this.usageInfo.noMaxVoice == 1) {
                                 this.filterCardInfo.watch_card_usage.total_voice = '无限'
@@ -651,11 +661,16 @@
                             }
 
                             if (this.usageInfo.source != 6 && this.usageInfo.usage.noMax != 1) {
-                                this.filterCardInfo.flow_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total)
-                                this.filterCardInfo.flow_card_usage.detail_right = this.flowUnit(this.usageInfo.usage.total - this.usageInfo.usage.used)
+                                this.filterCardInfo.flow_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total,0,1)
+                                this.filterCardInfo.flow_card_usage.detail_right =
+                                    this.flowUnit(0,{
+                                        flowCard:true,
+                                        total:this.usageInfo.usage.total,
+                                        used:this.usageInfo.usage.used
+                                    },0)
                             }
 
-                            this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used)
+                            this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used,0,0)
 
                         }//流量卡
 
@@ -735,8 +750,33 @@
             inArray: function (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
-            flowUnit:function(num){
-                return num >= 1000 ? toDecimal(num/1000)+'GB': toDecimal(num) + 'MB'
+            /*
+            * num:流量数据
+            * detailRight：右侧剩余流量
+            * isTotal:是否为总流量
+            * */
+            flowUnit:function(num,detailRight,isTotal){
+                if(Object.prototype.toString.call(detailRight)=='[object Object]' && detailRight.watchCard){
+                    if(detailRight.total==detailRight.used){
+                        return '0.00MB'
+                    }else{
+                        return toDecimal(detailRight.total-detailRight.used) + 'MB'
+                    }
+                }
+
+                if(Object.prototype.toString.call(detailRight)=='[object Object]' && detailRight.flowCard){
+                    if(detailRight.total == detailRight.used){
+                        return '0.00GB'
+                    }else{
+                        return toDecimal(toDecimal(detailRight.total/1024) - toDecimal(detailRight.used/1000))+'GB'
+                    }
+                }
+
+                if(isTotal){
+                    return num >= 1024 ? toDecimal(num/1024)+'GB' : toDecimal(num) + 'MB'
+                } else{
+                    return num >= 1000 ? toDecimal(num/1000)+'GB' : toDecimal(num) + 'MB'
+                }
             },
             prefer_use_operate: function (iccid,rating_id,priority,source){
             		if(priority == 1000){
