@@ -1,12 +1,12 @@
 <template>
     <div class="inner-wrap">
         <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
-        <router-view/>
+        <router-view @getUserData="getUserInfo" />
         <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
             <p class="showTip">{{load_user_info}}</p>
         </van-popup>
 
-        <van-popup :close-on-click-overlay="false" v-model="authrized_failed">
+        <van-popup :close-on-click-overlay="false" v-model="authorized_failed">
             <p class="showTip">由于授权失败，您的账户存在安全问题，将暂时无法进行任何操作!请联系我司客服，我们将为您尽快解决问题。</p>
         </van-popup>
 
@@ -31,7 +31,7 @@
                 appContext: false,//是否app环境
                 load_user_msg: false,
                 load_user_info:'加载用户信息,请等候',
-                authrized_failed:false,//授权失败信息
+                authorized_failed:false,//授权失败信息
             }
         },
         components: {
@@ -106,7 +106,7 @@
                             * 已授权操作 重定向后操作
                             * */
 
-                            if (getStorage('state') == getUrlParam('state')) {
+                            // if (getStorage('state') == getUrlParam('state')) {
 
                                 //解密data
                                 _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
@@ -164,9 +164,7 @@
                                                 }, 2000)
 
                                             } else {
-                                                Notify({
-                                                    message: res.msg
-                                                })
+                                                this.this.showAuthorityError('L')
                                             }
                                         })
                                     } else if (res.error == '11002') {
@@ -174,26 +172,23 @@
                                         this.$emit('getToken')
 
                                     } else {
-
-                                        Notify({
-                                            message: res.msg
-                                        })
+                                        this.this.showAuthorityError('B')
                                     }
                                 })
                                 // end 状态
-                            } else {
-                                let _this =this;
-                                removeStorage('auth_data');
-                                removeStorage('token');
-
-                                Dialog.alert({
-                                    title: '授权失败',
-                                    message: '您的账号暂时无法使用，充值查询将受到影响，请与我司客服联系，我们将尽快为您解决。',
-                                }).then(() => {
-                                    _this.authrized_failed = true;
-                                })
-
-                            }
+                            // } else {
+                            //     let _this =this;
+                            //     removeStorage('auth_data');
+                            //     removeStorage('token');
+                            //
+                            //     Dialog.alert({
+                            //         title: '授权失败',
+                            //         message: '您的账号暂时无法使用，充值查询将受到影响，请与我司客服联系，我们将尽快为您解决。',
+                            //     }).then(() => {
+                            //         _this.authrized_failed = true;
+                            //     })
+                            //
+                            // }
                             /*
                            * end 已授权操作
                            * */
@@ -265,13 +260,11 @@
                             this.$emit('getToken')
 
                         } else {
-
-                            Notify({message: res.msg});
+                            this.showAuthorityError('A')
                         }
                     })
 
             },// 获取用户信息
-
             showDoc() {
                 Dialog.alert({
                     message: '钻石：翼联会员体系下通用虚拟货币,可以用于:购买套餐,充值话费,游戏娱乐,购买优惠商品;\nELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等'
@@ -320,13 +313,22 @@
                             this.$emit('getToken')
 
                         } else {
-
-                            Notify({
-                                message: res.msg
-                            })
+                            this.this.showAuthorityError('C')
                         }
                     })
             },//授权操作
+            showAuthorityError(flag){
+                let _this = this;
+                let _flag = flag ? flag : '';
+                Dialog.alert({
+                    title: '账号异常',
+                    message: '您的账户信息存在问题,无法进行操作,请联系我司客服工作人员,我们将尽快为您解决问题'+_flag+'。',
+                }).then(() => {
+                    _this.load_user_msg = true;
+                    _this.load_user_info  = '账号异常'+_flag;
+
+                })
+            }
 
         }
     }
