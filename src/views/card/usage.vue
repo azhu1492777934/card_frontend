@@ -8,8 +8,8 @@
                 <div class="card-info-detail">
                     <p v-if="filterCardInfo.is_watch_card">手表手机号:{{filterCardInfo.msisdn}}</p>
                     <p v-else>MSISDN:{{filterCardInfo.msisdn}}</p>
-                    <p>ICCID:{{usageInfo.iccid}}(编码:{{usageInfo.source}})</p>
-                    <p v-if="usageInfo!='864319031839011'">IMEI:{{usageInfo.imei}}</p>
+                    <p :class="{ 'p-t-45' : (!usageInfo.imei || usageInfo.imei=='864319031839011')}">ICCID:{{usageInfo.iccid}}(编码:{{usageInfo.source}})</p>
+                    <p v-if="usageInfo.imei && usageInfo.imei!='864319031839011'">IMEI:{{usageInfo.imei}}</p>
                     <div class="card-state-wrap">
                         <div>
                             <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
@@ -34,7 +34,7 @@
                     </p>
                     <div class="card-flow-detail">
                         <div class="card-used-data-wrap">
-                            <p>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}}</p>
+                            <p>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}} / </p>
                             <p>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</p>
                         </div>
                         <div @click="toConnnection" class="to-flow-wrap">
@@ -50,11 +50,11 @@
                     <div class="card-flow-detail">
                         <div class="card-used-data-wrap">
                             <p>
-                                <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}}</span>
+                                <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}} / </span>
                                 <span>已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</span>
                             </p>
                             <p>
-                                <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}}</span>
+                                <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}} / </span>
                                 <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
                             </p>
                         </div>
@@ -202,6 +202,9 @@
     html {
         background-color: #fbfafa;
     }
+    .p-t-45{
+        padding-bottom: 45px !important;
+    }
 
     .plan-usage-wrap {
         .cl-state-warning {
@@ -305,6 +308,7 @@
                 }
             }
             .card-flow-detail {
+                position: relative;
                 display: flex;
                 align-items: center;
                 > div {
@@ -316,17 +320,11 @@
                     padding-top: 20px;
                     p {
                         padding-bottom: 15px;
-                        span{
-                            &:first-child{
-                                display: inline-block;
-                                width: 220px;
-                            }
-                        }
                     }
-
                 }
                 .to-flow-wrap {
-                    min-width: 270px;
+                    position: absolute;
+                    right: 0;
                     text-align: right;
                     a {
                         display: inline-block;
