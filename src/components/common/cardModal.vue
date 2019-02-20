@@ -1,17 +1,17 @@
 <template>
     <div class="card-dialog-wrap">
         <div class="card-dialog van-dialog">
-            <div class="card-dialog_header van-dialog__header">
-                {{dialogObj.title}}
-            </div>
+            <!--<div class="card-dialog_header van-dialog__header">-->
+                <!--{{dialogData.title}}-->
+            <!--</div>-->
             <div class="van-dialog__message van-dialog__message--has-title">
-                {{dialogObj.content}}
+                {{dialogData.content}}
             </div>
             <div class="van-hairline--top van-dialog__footer van-dialog__footer--buttons">
-                <button @click="dialogCancel" class="van-button van-button--default van-button--large van-dialog__cancel">
+                <button v-show="dialogData.showCancel" @click="dialogCancel" class="van-button van-button--default van-button--large van-dialog__cancel">
                     <span class="van-button__text">取消</span>
                 </button>
-                <button @click="dialConfirm" class="van-button van-button--default van-button--large van-dialog__confirm van-hairline--left">
+                <button @click="dialogConfirm" class="van-button van-button--default van-button--large van-dialog__confirm van-hairline--left">
                     <span class="van-button__text">确认</span>
                 </button>
             </div>
@@ -21,9 +21,9 @@
 
 <script>
     export default {
-        name: "dialog",
+        name: "cardModal",
         props:{
-            dialogObj:{
+            dialogData:{
                 type:Object
             }
         },
@@ -32,8 +32,8 @@
                 this.$emit('dialogCancel')
 
             },
-            dialConfirm(){
-                this.$emit('dialConfirm')
+            dialogConfirm(){
+                this.$emit('dialogConfirm')
             }
 
         }
