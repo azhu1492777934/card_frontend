@@ -162,7 +162,6 @@
     import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
     import cardButton from '../../components/button'
-    // import wx from 'weixin-js-sdk'
 
     export default {
         name: "home",
@@ -182,6 +181,13 @@
             cardButton
         },
         created() {
+
+            _get('/iot/v1/baseSetting/remember_request').then(res=>{
+                 if(res.state==2){
+                     location.href = res.link
+                 }
+            })
+
             let _this = this;
 
             if (getStorage('recording_list','arr')) {
