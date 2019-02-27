@@ -193,7 +193,7 @@
                 isDisabled:false,
                 showNormalResult:false,//卡检测正常时
                 showOtherResult:false,//其他检测结果
-                otherResultMsg:'卡尚未实名,是否立即实名',
+                otherResultMsg:'',
                 checkType:'',//卡未实名,未激活,无套餐
                 objCheckResult:null,//检查结果
             }
@@ -215,7 +215,7 @@
                         success: function (res) {
                             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
                             if(result &&( result.length==19 || result.length==20 )){
-                                _this.iccid = (result.replace(/[^0-9]*/g, ""));
+                                _this.iccid = (result.replace(/\s*]*/g, ""));
                                 _this.processCheckIccid(_this.iccid)
                             }else{
                                 Notify({message:'请扫描正确的ICCID'});
@@ -227,7 +227,7 @@
                     ap.scan(function(res){
                         var result = res.code; // 当needResult 为 1 时，扫码返回的结果
 
-                        _this.iccid = (result.replace(/[^0-9]*/g, ""));
+                        _this.iccid = (result.replace(/\s*/g, ""));
                         _this.processCheckIccid(_this.iccid)
                     });
                 }
@@ -251,35 +251,46 @@
                         this.showResult = true;
                         this.objCheckResult = res;
 
-                        if(res.state==1){
+                        if(res.state){
+                            if(res.state==1){
 
-                            this.showNormalResult = true
-                        }else {
-                            this.checkType = res.state;
+                                this.showNormalResult = true
+                            }else {
+                                this.checkType = res.state;
 
-                            if(res.state=='11001'){
-                                this.otherResultMsg = '未查询到此卡相关信息，请检查您的卡号是否正确';
-                            }
-                            if(res.state=='11002'){
-                                this.otherResultMsg = '卡尚未实名，是否立即实名'
-                            }
-                            if(res.state=='11003'){
-                                this.otherResultMsg = '卡未激活，是否激活此卡'
-                            }
-                            if(res.state=='11004'){
-                                this.otherResultMsg = '卡暂无套餐，是否前往充值'
-                            }
-                            if(this.operatorType==1){
-
+                                if(res.state=='11001'){
+                                    this.showOtherResult = true;
+                                    this.otherResultMsg = '未查询到此卡相关信息，请检查您的卡号是否正确';
+                                }
+                                if(res.state=='11002'){
+                                    this.showOtherResult = true;
+                                    this.otherResultMsg = '卡尚未实名，是否立即实名'
+                                }
+                                if(res.state=='11003'){
+                                    this.showOtherResult = true;
+                                    this.otherResultMsg = '卡未激活，是否激活此卡'
+                                }
+                                if(res.state=='11004'){
+                                    this.showOtherResult = true;
+                                    this.otherResultMsg = '卡暂无套餐，是否前往充值'
+                                }
                                 if(res.stata=='11005'){
-                                    this.otherResultMsg = '卡限速中'
+                                    this.showOtherResult = true;
+                                    this.otherResultMsg = '基站信号弱,请切换套餐'
                                 }
-                                if(res.stata=='11006'){
-                                    this.otherResultMsg = '深圳移动未下发套餐'
+                                if(res.state=='11007'){
+                                    this.showOtherResult = true;
+                                    this.otherResultMsg = '卡已停机,是否前往充值'
+                                }
+                                if(this.operatorType==1){
+                                    if(res.stata=='11006'){
+                                        this.showOtherResult = true;
+                                        this.otherResultMsg = '深圳移动未下发套餐'
+                                    }
                                 }
                             }
-
-                            this.showOtherResult = true
+                        }else{
+                            Notify({message:res.msg});
                         }
                     })
                 }else{
@@ -303,7 +314,7 @@
 
                 if(this.checkType=='11003'){
                     _post('/api/v1/app/activated', {
-                        iccid: '8934564565432345'
+                        iccid: this.iccid
                     })
                         .then(res => {
                             this.showOtherResult = false
@@ -318,10 +329,15 @@
                         })
 
                 }
-                if(this.checkType=='11004'){
+                if(this.checkType=='11004' || this.checkType=='11007'){
                     setStorage('check_iccid',this.iccid);
                     this.$router.push({path:'/weixin/card/plan_list'});
                 }
+                if(this.checkType=='11005'){
+                    setStorage('check_iccid',this.iccid);
+                    this.$router.push({path:'/weixin/card/usage'})
+                }
+
             }
 
         }

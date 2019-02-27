@@ -34,8 +34,10 @@
                     </p>
                     <div class="card-flow-detail">
                         <div class="card-used-data-wrap">
-                            <p>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}} / </p>
-                            <p>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</p>
+                            <p>
+                                <span>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}} / </span>
+                                <span>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</span>
+                            </p>
                         </div>
                         <div @click="toConnnection" class="to-flow-wrap">
                             <a> 流量用量详情> </a>
