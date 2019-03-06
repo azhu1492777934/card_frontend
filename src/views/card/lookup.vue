@@ -28,6 +28,9 @@
         <van-popup :close-on-click-overlay="false" v-model="checkShow">
             <p class="showTip">正在检测中,请等候</p>
         </van-popup>
+
+        <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
+
     </div>
 </template>
 
@@ -173,7 +176,8 @@
                 iccid: '',
                 checkShow: false,//查询遮罩
                 client_type: checkBrowser(),//当前客户端环境 微信/支付宝
-                showClearBtn:false
+                showClearBtn:false,
+                forbidden_click:true, //防止用户在未授权是进行业务操作
             }
         },
         components: {
@@ -181,6 +185,10 @@
             cardButton
         },
         created() {
+
+            if(getStorage('token')){
+                this.forbidden_click = false
+            }
 
             _get('/iot/v1/baseSetting/remember_request').then(res=>{
                  if(res.state==2){

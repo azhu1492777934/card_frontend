@@ -263,7 +263,7 @@
         },
         created() {
             //处理套餐数据
-            _get("/releaseApi/v1/app/plan_list", {
+            _get("/api/v1/app/plan_list", {
                 iccid: getStorage("check_iccid")
             }).then(res => {
                 if (res.state == 1) {

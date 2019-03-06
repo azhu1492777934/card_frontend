@@ -5,11 +5,6 @@
         <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
             <p class="showTip">{{load_user_info}}</p>
         </van-popup>
-
-        <van-popup :close-on-click-overlay="false" v-model="authorized_failed">
-            <p class="showTip">由于授权失败，您的账户存在安全问题，将暂时无法进行任何操作!请联系我司客服，我们将为您尽快解决问题。</p>
-        </van-popup>
-
     </div>
 </template>
 
@@ -31,7 +26,6 @@
                 appContext: false,//是否app环境
                 load_user_msg: false,
                 load_user_info:'加载用户信息,请等候',
-                authorized_failed:false,//授权失败信息
             }
         },
         components: {
@@ -75,6 +69,7 @@
             authorized() {
                 if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') {
 
+
                     if (this.client_type != 'app') {
 
                         if (getStorage('userInfo', 'obj')) {
@@ -87,7 +82,7 @@
                             (this.client_type == 'alipay' && getStorage('alipay_version') != this.global_variables.version)
                         ) {
                             removeStorage('token');
-                            removeStorage('auth_data');
+                            // removeStorage('auth_data');
                             removeStorage('state');
                         }
 
@@ -96,111 +91,13 @@
                     if (getStorage('token')) {
                         this.getUserInfo();//获取用户信息
                     } else {
-
-                        if (getUrlParam('data')) {
-                            setStorage('auth_data', getUrlParam('data'))
-                        }
-
-                        if (getStorage('auth_data')) {
-                            /*
-                            * 已授权操作 重定向后操作
-                            * */
-
-                            // if (getStorage('state') == getUrlParam('state')) {
-
-                                //解密data
-                                _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
-                                    data: getStorage('auth_data')
-                                }).then(res => {
-
-                                    if (res.error == 0) {
-
-                                        if (this.client_type == 'alipay') {
-
-                                            let aliUser = {
-                                                uuid: res.data.data.user_id,
-                                                openid: res.data.data.user_id,
-                                                headimgurl: res.data.data.avatar,
-                                                gender: res.data.data.gender == 'm' ? 1 : 2,
-                                                nickname: res.data.data.nick_name
-                                            }
-
-                                            setStorage('decrypt_data', aliUser, 'obj');
-
-
-                                        } else if (this.client_type == 'wechat') {
-
-                                            let wechatUserData = res.data.data;
-                                            if (wechatUserData.unionid) {
-                                                wechatUserData.openid = wechatUserData.unionid
-                                            }
-                                            setStorage('decrypt_data', wechatUserData, 'obj');
-                                        }
-
-                                        //login
-                                        _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
-                                            uuid: getStorage('decrypt_data', 'obj').openid,
-                                            code: res.data.code
-                                        }).then(res => {
-
-                                            if (res.error == 0) {
-
-                                                setStorage('token', res.data);//获取token
-
-                                                this.getUserInfo();//获取用户信息
-
-                                            } else if (res.error == '11002') {
-
-                                                this.$emit('getToken')
-
-                                            } else if (res.error == '30005' || res.error == '11003') {
-
-                                                let _this = this;
-
-                                                Notify({message: '为了您的用户安全,请绑定手机号码'});
-
-                                                setTimeout(function () {
-                                                    _this.$router.push({path: '/login'})
-                                                }, 2000)
-
-                                            } else {
-                                                this.this.showAuthorityError('L')
-                                            }
-                                        })
-                                    } else if (res.error == '11002') {
-
-                                        this.$emit('getToken')
-
-                                    } else {
-                                        this.this.showAuthorityError('B')
-                                    }
-                                })
-                                // end 状态
-                            // } else {
-                            //     let _this =this;
-                            //     removeStorage('auth_data');
-                            //     removeStorage('token');
-                            //
-                            //     Dialog.alert({
-                            //         title: '授权失败',
-                            //         message: '您的账号暂时无法使用，充值查询将受到影响，请与我司客服联系，我们将尽快为您解决。',
-                            //     }).then(() => {
-                            //         _this.authrized_failed = true;
-                            //     })
-                            //
-                            // }
-                            /*
-                           * end 已授权操作
-                           * */
-                        } else {
-                            let _this = this;
-                            Dialog.alert({
-                                title: '授权',
-                                message: '为了您的账号安全，我们需要您对本站进行授权操作并绑定账号。'
-                            }).then(() => {
-                                _this.authorizedRediect()
-                            })
-                        }
+                        let _this = this;
+                        Dialog.alert({
+                            title: '授权',
+                            message: '为了您的账号安全，我们需要您对本站进行授权操作并绑定账号。'
+                        }).then(() => {
+                            _this.authorizedRediect()
+                        })
                     }
 
                 } else {
@@ -271,7 +168,7 @@
                 })
             },
             authorizedRediect() {
-                this.state = Math.random().toString(36).substr(2);
+                this.state = Math.random().toString(36).substr(2) + new Date().getTime();
                 setStorage('state', this.state);
 
                 //获取当前重定向地址
@@ -293,7 +190,8 @@
                 // 授权
                 _get('/accountCenter/v2/oauth/authorize?' + codeParam({
                     client_type: this.client_type,
-                    redirect_uri: this.global_variables.authorized_redirect_url + redirect_uri,
+                    // redirect_uri: this.global_variables.authorized_redirect_url + redirect_uri,
+                    redirect_uri:this.global_variables.authorized_redirect_url + '/authority',
                     scope: 'userinfo',
                     state: this.state
                 }, 'get'))

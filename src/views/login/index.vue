@@ -12,11 +12,14 @@
                 <button :disabled="loginDisabled" @click="login">绑定账户</button>
             </div>
         </div>
+        <van-popup :close-on-click-overlay="false" v-model="isLoginError">
+            <p class="showTip">{{loginErrorMsg}}</p>
+        </van-popup>
     </div>
 </template>
 
 <script>
-    import {Notify} from 'vant'
+    import {Notify,Popup} from 'vant'
     import {_post,_get} from "../../http";
     import {getStorage, getUrlParam, setStorage,codeParam, checkBrowser} from "../../utilies";
 
@@ -33,10 +36,13 @@
                 btnCode_disabled:false,
                 time:null,
                 loginDisabled:false,
+                isLoginError:false, // 当前用户是否会绑定用户失败
+                loginErrorMsg:'', // 绑定失败信息
             }
         },
         components: {
-            [Notify.name]: Notify
+            [Notify.name]: Notify,
+            [Popup.name] : Popup
         },
         created() {
 
@@ -97,11 +103,12 @@
                             let redirect_uri = getStorage('authorized_redirect_uri');
 
                             setTimeout(function () {
-                                location.href = redirect_uri;
+                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/new_auth';
                             },2000)
 
                         } else{
-                            Notify({message:res.msg})
+                            this.isLoginError = true;
+                            res.msg ? this.loginErrorMsg = res.msg : this.loginErrorMsg = '绑定用户失败，请反馈我司客服。'
                         }
                     })
                 }

@@ -130,7 +130,7 @@
 <script>
     import {mapState} from 'vuex'
     import {DatetimePicker, Area, Popup,Notify} from 'vant';
-    import {setStorage,getStorage,removeStorage,checkBrowser} from "../../utilies";
+    import {setStorage,getStorage,checkBrowser} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -345,10 +345,6 @@
                 this.showDate = false;
             },//取消日期弹窗
             recharge:function () {
-                if(!this.userInfo.account.user_id){
-                    Notify({message:'请在支付宝或微信环境中充值'});
-                    return
-                }
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
                 let param = {},
                     _this = this;
