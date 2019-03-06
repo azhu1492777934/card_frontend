@@ -190,7 +190,9 @@
                 this.forbidden_click = false
             }
 
-            _get('/iot/v1/baseSetting/remember_request').then(res=>{
+            _get('/iot/v1/baseSetting/remember_request',{
+                type:this.client_type
+            }).then(res=>{
                  if(res.state==2){
                      location.href = res.link
                  }
