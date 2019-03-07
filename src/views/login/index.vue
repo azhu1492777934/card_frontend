@@ -117,10 +117,18 @@
                 if (this.phone == '') {
                     Notify({message: '请输入您的手机号码'})
                     return
-                } else if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
+                } else if (!(/^(13[0-9]|14[5679]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
                     Notify({message: '请填写正确的手机号码'})
                     return
                 } else {
+                    let pre_three_num = this.phone.substr(0,3),
+                        watch_card = ['145','146'];
+                    if(watch_card.includes(pre_three_num)){
+                        Notify({message:'请使用本人手机号码绑定账号，请勿使用手表手机号。'});
+                        return
+                    }else{
+                        Notify({message:'温馨提示：请使用本人手机号绑定账号。'});
+                    }
                     this.countDownFun();
                     _post("/accountCenter/v2/verify/send?" + codeParam({},'post'), {
                         mobile: this.phone
