@@ -157,7 +157,7 @@
                             this.$emit('getToken')
 
                         } else {
-                            this.showAuthorityError('A')
+                            this.showAuthorityError('A'+res.error)
                         }
                     })
 
@@ -211,7 +211,7 @@
                             this.$emit('getToken')
 
                         } else {
-                            this.this.showAuthorityError('C')
+                            this.this.showAuthorityError('C'+res.error)
                         }
                     })
             },//授权操作
