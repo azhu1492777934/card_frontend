@@ -185,18 +185,13 @@
             cardButton
         },
         created() {
+            if(this.client_type != 'wechat' || this.client_type != 'alipay' || this.client_type != 'app'){
+                this.forbidden_click  =false
+            }
 
             if(getStorage('token')){
                 this.forbidden_click = false
             }
-
-            _get('/iot/v1/baseSetting/remember_request',{
-                type:this.client_type
-            }).then(res=>{
-                 if(res.state==2){
-                     location.href = res.link
-                 }
-            })
 
             let _this = this;
 

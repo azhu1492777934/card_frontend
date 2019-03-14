@@ -363,7 +363,7 @@
 
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
-                    param.is_renew=rechargeInfo.is_renew;
+                param.is_renew=rechargeInfo.is_renew;
                 if(rechargeInfo.is_renew==true){
                     param.price=rechargeInfo.first_price;
                 }else{
