@@ -161,7 +161,7 @@
 
 <script>
     // @ is an alias to /src
-    import {setStorage, formatterCardTime, getStorage,removeStorage,getUrlParam,checkBrowser,checkICCID} from '../../utilies'
+    import {setStorage, formatterCardTime, getStorage,removeStorage,getUrlParam,checkBrowser} from '../../utilies'
     import {Popup , Notify} from 'vant'
     import {_post,_get} from "../../http";
     import cardButton from '../../components/button'

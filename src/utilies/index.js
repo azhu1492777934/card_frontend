@@ -82,12 +82,13 @@ function objKeySort(obj) {
 }//排序参数
 
 function codeParam(param, type) {
-    let commParam = {
-        timestamp: Math.round(new Date().getTime() / 1000),
+    let timeSpan = getStorage('timeSpan') == 0 ? 0 : getStorage('timeSpan'),
+        commParam = {
+        timestamp: (new Date()).getTime() +  parseInt(timeSpan)  ,
         version: 'v1',
         format: 'json',
         app_key: 'XznBRoBGEgoCUtZbDbtL0G1QhE',
-        nonce:new Date().getMilliseconds()+'0'+Math.floor(Math.random()*10000)
+        nonce: new Date().getMilliseconds()+'0'+Math.floor(Math.random()*10000)
     };
 
     let newParam = Object.assign(param, commParam),
@@ -155,7 +156,33 @@ function inArray (elem, arr, i) {
     return arr == null ? -1 : arr.indexOf(elem, i);
 }
 
+function getCardServerToken(params) {
+
+    if(JSON.stringify(params)!='{}'){
+
+        let paramsBak = {};
+        // let paramsBak = {...params};
+        for(var i in params){
+            if( typeof(params[i]) != 'undefined'){
+                paramsBak[i] =  params[i];
+            }
+        }
+        paramsBak.salt = 'qhyl@#6688';
+        let sortParams = objKeySort(paramsBak);
+        let str = ''
+        for(let i in sortParams){
+            str+=`${i}=${sortParams[i]}&`
+        }
+        str = str.substr(0,str.length-1);
+
+        str = sha1(str);
+        str = md5(str);
+        return str
+    }
+}
+
 export {
+    getCardServerToken,
     setStorage,
     getStorage,
     removeStorage,

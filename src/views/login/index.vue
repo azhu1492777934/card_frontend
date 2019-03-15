@@ -122,9 +122,9 @@
                     return
                 } else {
                     let pre_three_num = this.phone.substr(0,3),
-                        watch_card = ['145','146'];
+                        watch_card = ['145','146','166','177','199'];
                     if(watch_card.includes(pre_three_num)){
-                        Notify({message:'请使用本人手机号码绑定账号，请勿使用手表手机号。'});
+                        Notify({message:'不支持以145,146,166,177,199开头的手机号码'});
                         return
                     }else{
                         Notify({message:'温馨提示：请使用本人手机号绑定账号。'});

@@ -18,7 +18,10 @@
                             v-for="(inner_item,inner_index) in plan_list[item]"
                             :class="{'activedPlan':inner_index==choose_plan_index,'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0}">
                             <div class="plan-info-wrap">
-                                <p class="plan-name">{{ inner_item.name }}</p>
+                                <p :class="{'plan-icon-recommend':inner_item.is_recommend}" class="plan-name">
+                                    <span v-if="inner_item.is_recommend" class="iconfont icon-recommend"></span>
+                                    {{ inner_item.name }}
+                                </p>
                                 <p class="plan-limited-wrap">
                                     <span class="limited-num"
                                           v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
@@ -129,9 +132,18 @@
                     font-size: 24px;
                     .plan-name {
                         padding: 20px 0 10px;
-                        font-size: 26px;
+                        font-size: 30px;
                         color: #2c251d;
                         font-weight: 500;
+                    }
+                    .plan-icon-recommend{
+                        padding: 20px 0 20px 60px;
+                    }
+                    .icon-recommend{
+                        position: absolute;
+                        top: 5px;
+                        left: 40px;
+                        font-size: 60px;
                     }
                     .plan-limited-wrap {
                         .limited-num {
@@ -146,6 +158,7 @@
                         }
                     }
                     .plan-desc {
+                        font-size: 28px;
                         padding-bottom: 20px;
                     }
                 }

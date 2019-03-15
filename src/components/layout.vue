@@ -41,6 +41,9 @@
             }),
         },
         created() {
+            // 时间差
+            setStorage('timeSpan',0);
+
             //手表扫码跳转
             if (getUrlParam('iccid')) {
                 let watch_iccid = getUrlParam('iccid');
@@ -152,11 +155,18 @@
                                 })
 
                             }
-                        } else if (res.error == "11002") {
+                        } else if (res.error == '11002') {
 
                             this.$emit('getToken')
 
-                        } else {
+                        } else if(res.error == '10007'){
+                            let curTimeStamp = (new Date()).getTime(),
+                                timeSpan = res.extra - curTimeStamp;
+
+                            setStorage('timeSpan',timeSpan);
+                            this.getUserInfo();
+                        }
+                        else{
                             this.showAuthorityError('A'+res.error)
                         }
                     })
