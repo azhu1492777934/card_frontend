@@ -62,14 +62,31 @@ const _404 = r => require.ensure([], () => r(require('./components/common/404'))
 const authority_middle = r => require.ensure([], () => r(require('./views/authority')), 'authority_middle') // 授权中间页
 
 
+
+/*
+* mifi公众号页面
+* */
+
+// mifi 绑定手机号码页
+
+const mifi_binding = r => require.ensure([], () => r(require('./views/mifi/binding')), 'mifi_binding') // 授权中间页
+
+
+
+
+
 Vue.use(Router)
 
 export const constantRouterMap = [{
     path: '/login',
     component: login,
     meta: {
-        title: '登录',
+        title: '用户绑定',
     }
+},{
+    path: '/mifi/binding',
+    component:mifi_binding,
+    meta:{ title:'用户绑定' }
 }, {
     path: '/weixin',
     component: Layout,
@@ -265,6 +282,12 @@ export const constantRouterMap = [{
 
     ],
 }, {
+    path:'/mifi',
+    component:Layout,
+    // children:[{
+    //
+    // }]
+},{
     path: '/',
     redirect: '/weixin/card/lookup'
 }, {
