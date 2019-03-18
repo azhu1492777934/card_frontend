@@ -89,7 +89,7 @@
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
             }else{
-                this.$router.push({path:'/weixin/new_auth'})
+                this.$router.push({path:'/weixin/card/lookup'})
             }
         },
 

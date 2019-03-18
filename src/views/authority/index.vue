@@ -46,12 +46,12 @@
                         if (this.redirect_uri && getStorage('check_iccid')) {
                             _this.$router.push(this.redirect_uri);
                         } else {
-                            _this.$router.push('/weixin/new_auth');
+                            _this.$router.push('/weixin/card/lookup');
                         }
                     })
                 }
             } else {
-                this.$router.push('/weixin/new_auth')
+                this.$router.push('/weixin/card/lookup')
             }
 
         },
@@ -111,7 +111,7 @@
                         if (this.redirect_uri &&  getStorage('check_iccid')) {
                             this.$router.push(this.redirect_uri);
                         } else {
-                            this.$router.push('/weixin/new_auth');
+                            this.$router.push('/weixin/card/lookup');
                         }
 
                     } else if (res.error == '11002') {

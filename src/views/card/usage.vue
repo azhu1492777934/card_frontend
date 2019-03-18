@@ -20,7 +20,7 @@
                         </div>
                         <div>
                             <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                            <a href="/weixin/question">?</a>
+                            <router-link to="/weixin/question/index">?</router-link>
                         </div>
                     </div>
                 </div>
@@ -173,7 +173,7 @@
 
             <div ref="refCardButton" class="btn-recharge-wrap">
                 <button @click="recharge">充值续费</button>
-                <a href="/weixin/coupon/index">卡券兑换</a>
+                <router-link to="/weixin/coupon/index" >卡券兑换</router-link>
             </div>
         </div>
 
@@ -699,7 +699,7 @@
                     }
                 })
             } else {
-                this.$router.push({path: '/weixin/new_auth'})
+                this.$router.push({path: '/weixin/card/lookup'})
             }
 
         },

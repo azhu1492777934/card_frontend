@@ -15,7 +15,7 @@
     import userHeader from './common/uesrHead'
     import {Dialog, Popup} from 'vant'
     import {_post, _get} from "../http";
-    import {codeParam, checkBrowser, setStorage, getStorage, removeStorage, getUrlParam, checkICCID} from "../utilies";
+    import {codeParam, checkBrowser, setStorage, getStorage, removeStorage, getUrlParam, checkICCID,getCardServerToken} from "../utilies";
 
     export default {
         name: 'App',

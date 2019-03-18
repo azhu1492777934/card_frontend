@@ -124,12 +124,16 @@
             </div>
         </van-popup><!--app支付选择-->
 
+        <card-modal v-show="isShowCardDialog" :dialogData="cardDialogData" @dialogConfirm="planDialogConfirm"></card-modal>
+
+
     </div>
 </template>
 
 <script>
+    // import cardModal from '../../components/common/cardModal'
     import {mapState} from 'vuex'
-    import {DatetimePicker, Area, Popup,Notify} from 'vant';
+    import {DatetimePicker, Area, Popup,Notify,Dialog} from 'vant';
     import {setStorage,getStorage,removeStorage,checkBrowser} from "../../utilies";
     import {_post} from "../../http";
 
@@ -144,7 +148,9 @@
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
             [Popup.name]: Popup,
-            [Notify.name]:Notify
+            [Notify.name]:Notify,
+            [Dialog.name]:Dialog,
+            cardModal:()=>import('../../components/common/cardModal')
         },
         data() {
             return {
@@ -207,6 +213,13 @@
                     type:true,//true 为微信，false 为支付宝
                 },
 
+                isShowCardDialog:false,
+                cardDialogData:{
+                    // title:'重新授权',
+                    content:'检测到您的账号目前没有授权，将影响到您的套餐充值等业务。微信授权过程中请勿进行任何操作，感谢您的支持与配合。',
+                    showCancel:false,
+                }
+
             }
         },
         created() {
@@ -267,7 +280,6 @@
 
                  monthlyMsg.is_renew=true;
                 this.new_recharge_list.push(monthlyMsg);
-                console.log(this.new_recharge_list);
             }
 
         },
@@ -346,12 +358,33 @@
                 this.showDate = false;
             },//取消日期弹窗
             recharge:function () {
-                if(!this.userInfo.account.user_id){
-                    Notify({message:'请在支付宝或微信环境中充值'});
+
+                if(this.client_type=='wechat'||this.client_type=='alipay'){
+
+                    if(!getStorage('userInfo','obj')){
+                        if(getStorage('token')){
+
+                            this.load_plan_msg = 'userInfo'
+                            this.cardDialogData.content = '您的账号目前无个人信息，将影响到您的套餐充值业务。重新获取您的用户信息。'
+                            this.isShowCardDialog = true;
+
+                        }else if(!getStorage('token')){
+
+                            this.load_plan_msg = 'authorized'
+                            setStorage('authorized_redirect_uri', '/weixin/recharge')
+                            this.isShowCardDialog = true;
+                        }
+
+                        return
+                    }
+                }else if(this.client_type=='pc'||this.client_type=='mobile'){
+                    Dialog.alert({
+                        message: '请在支付宝或微信客户端充值。'
+                    })
                     return
                 }
+
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
-                console.log()
                 let param = {},
                     _this = this;
 
@@ -559,7 +592,23 @@
             closePayType(){
                 this.appPay.type = true;
                 this.appPay.show = false
-            }
+            },
+
+            planDialogConfirm(){
+                this.isShowCardDialog = false;
+
+                if(this.load_plan_msg=='authorized'){
+
+                    removeStorage('token');
+                    removeStorage('auth_data');
+                    removeStorage('state');
+                    location.reload();
+
+                }else if(this.load_plan_msg=='userInfo'){
+
+                    this.$emit('getUserData');
+                }
+            },//重新授权
         },
     }
 </script>

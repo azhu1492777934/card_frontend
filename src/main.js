@@ -27,7 +27,7 @@ Vue.prototype.global_variables = global_variables
 router.afterEach((to,from)=>{
     if(checkBrowser()=='wechat'){
 
-        if(to.path=='/weixin/new_auth'){
+        if(to.path=='/weixin/card/lookup'){
             _get('/api/v1/app/sign_info')
                 .then(res=>{
                     if(res.state==1){

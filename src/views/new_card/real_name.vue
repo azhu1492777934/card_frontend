@@ -49,198 +49,12 @@
         <van-popup v-model="showItem.showCodeWrap" :close-on-click-overlay="false">
             <p class="showTip">{{showItem.showCodeMsg}}</p>
         </van-popup>
-
-        <van-popup v-model="showItem.showVerifyCode" :close-on-click-overlay="false" class="verify-code-wrap">
-            <div class="verify-code-inner">
-                <p class="title">提示<span @click="hideCodeVerify" class="btn-close">&times</span></p>
-                <p class="text-left">实名校验码将用于下一步实名步骤中</p>
-                <p class="code-wrap">校验码:<input id="j-verify-code" v-model="verifyCode"/>
-                    <button data-clipboard-action="copy" data-clipboard-target="#j-verify-code" class="j-btn-copy">
-                        复制校验码
-                    </button>
-                </p>
-                <p class="">
-                    <button @click="bindImei" class="j-btn-next">下一步实名</button>
-                </p>
-            </div>
-        </van-popup>
     </div>
 </template>
 
-<style lang="less">
-    input, button {
-        border: none;
-        outline: none;
-    }
-    .text-left{text-align: left;}
-
-    .fixed-wrap-imei {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 99;
-    }
-
-    .check-imei-info {
-        position: relative;
-        top: 40%;
-        width: 80%;
-        margin: 0 auto;
-        padding: 30px;
-        background: #fff;
-        color: #333;
-        text-align: center;
-        font-size: 24px;
-        border-radius: 5px;
-    }
-
-    .card-activated-wrap {
-        .tip-wrap {
-            padding: 18px 60px;
-            font-size: 26px;
-            line-height: 1.3;
-            color: #ff562f;
-            background-color: #fff1ee;
-            text-align: left;
-        }
-        .info-wrap {
-            font-size: 30px;
-            background-color: #fff;
-            .tip-imei {
-                padding: 30px 40px;
-                margin: 0;
-                background-color: #f7f7f7;
-                color: #616161;
-                font-size: 28px;
-                text-align: left;
-                line-height: 1.3;
-            }
-            div {
-                display: flex;
-                padding: 33px 0;
-                margin: 0 40px;
-                align-items: center;
-                border-bottom: 1px solid #e6e6e6;
-                span {
-                    width: 1.4rem;
-                    text-align: left;
-                    color: #2c251d;
-                }
-                input {
-                    flex: 6;
-                    font-size: 30px;
-                }
-                &:last-child {
-                    border-bottom: none;
-                }
-                &.code-wrap{
-                    justify-content: space-between;
-                    input{
-                        display: inline-block;
-                        max-width: 60%;
-                    }
-                }
-            }
-            .icon-scan {
-                font-size: 52px;
-                color: #e4a750;
-                line-height: .8;
-            }
-            .btn-code {
-                padding: 17px 30px;
-                font-size: 26px;
-                color: #fff;
-                background-color: #dca85f;
-                border-radius: 10px;
-            }
-        }
-        .btn-next-wrap {
-            display: block;
-            margin: 80px 30px 30px;
-            button {
-                width: 100%;
-                color: #fff;
-                background: #e4a750;
-                padding: 23px;
-                font-size: 34px;
-                border-radius: 10px;
-            }
-        }
-        .tutorial-wrap {
-            padding-left: 30px;
-            text-align: left;
-            a {
-                text-decoration: none;
-                color: #c84512;
-                font-size: 26px;
-            }
-        }
-
-        .verify-code-wrap{
-            width: 100%;
-            background-color: transparent;
-        }
-
-        .verify-code-inner {
-            align-items: center;
-            position: relative;
-            width: 90%;
-            margin: 0 auto;
-            padding: 25px;
-            background-color: #fff;
-            color: #333;
-            font-size: 32px;
-            box-sizing: border-box;
-            border-radius: 10px;
-            p {
-                padding-bottom: 25px;
-                &:last-child {
-                    padding: 25px 0;
-                    text-align: right;
-                }
-            }
-
-            button {
-                padding: 15px 30px;
-                border-radius: 8px;
-                color: #fff;
-                font-size: 26px;
-                background-color: #e4a750;
-            }
-
-            .title {
-                font-size: 38px;
-                text-align: center;
-            }
-
-            .btn-close {
-                position: absolute;
-                top: 20px;
-                right: 20px;
-                line-height: .9;
-                color: #e4a750;
-            }
-
-            .code-wrap {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-            }
-
-            .code-wrap input {
-                width: 150px
-            }
-        }
-
-    }
-</style>
-
 <script>
-    import {Popup, Notify, Dialog} from 'vant';
+    import {Popup, Notify} from 'vant';
     import {_get, _post} from "../../http";
-    import Clipboard from 'clipboard';
     import {getStorage, inArray,getUrlParam} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
@@ -301,7 +115,7 @@
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    this.$router.push({'path':'/weixin/new_auth'});
+                    this.$router.push({'path':'/weixin/card/lookup'});
                 }
             }
             if(getUrlParam('source')){
@@ -310,7 +124,7 @@
                 if(getStorage('check_realNameSource')){
                     this.card_source = getStorage('check_realNameSource');
                 }else{
-                    this.$router.push({'path':'/weixin/new_auth'});
+                    this.$router.push({'path':'/weixin/card/lookup'});
                 }
             }
 
@@ -333,36 +147,8 @@
                 }
                 this.showItem.showFixedWrap = false
             })//检测是否是大佬账户
-
-            if(this.card_source==18 || this.card_source ==19){
-                _get('/api/v1/app/find_puk', {
-                    iccid: this.info_iccid
-                }).then(res => {
-                    if(res.state==1){
-                        this.isVerifyCode = true;
-                        this.verifyCode = res.data
-                    }else{
-                        if(res.msg){
-                            this.showItem.showCodeWrap = true;
-                            this.showItem.showCodeMsg = res.msg
-                        }
-                    }
-                })//检测是否是大佬账户
-            }
-
         },
-        mounted(){
-            var clipboard = new Clipboard('.j-btn-copy');
-
-            clipboard.on('success', function(e) {
-                Notify({message:'实名校验码已复制到剪切板',background:'#60ce53'});
-                e.clearSelection();
-            });
-
-            clipboard.on('error', function(e) {
-                Notify({message:'复制校验失败,请手动长按复制校验码'})
-            });
-        },
+        mounted(){},
         methods: {
             hideCodeVerify(){
                 this.showItem.showVerifyCode = false
@@ -586,16 +372,7 @@
                     return
                 }
 
-                if(this.card_source==18 || this.card_source ==19){
-                    if(this.isVerifyCode && this.verifyCode){
-                        this.showItem.showVerifyCode = true
-                    }else if(this.isVerifyCode && !this.verifyCode){
-                        Notify({message:'暂时无法实名,请稍后再试'});
-                        return
-                    }
-                }else{
-                    this.bindImei();
-                }
+                this.bindImei();
             },
             bindImei(){
                 let param = {
@@ -633,4 +410,176 @@
         }
     };
 </script>
+
+<style lang="less">
+    input, button {
+        border: none;
+        outline: none;
+    }
+    .text-left{text-align: left;}
+
+    .fixed-wrap-imei {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 99;
+    }
+
+    .check-imei-info {
+        position: relative;
+        top: 40%;
+        width: 80%;
+        margin: 0 auto;
+        padding: 30px;
+        background: #fff;
+        color: #333;
+        text-align: center;
+        font-size: 24px;
+        border-radius: 5px;
+    }
+
+    .card-activated-wrap {
+        .tip-wrap {
+            padding: 18px 60px;
+            font-size: 26px;
+            line-height: 1.3;
+            color: #ff562f;
+            background-color: #fff1ee;
+            text-align: left;
+        }
+        .info-wrap {
+            font-size: 30px;
+            background-color: #fff;
+            .tip-imei {
+                padding: 30px 40px;
+                margin: 0;
+                background-color: #f7f7f7;
+                color: #616161;
+                font-size: 28px;
+                text-align: left;
+                line-height: 1.3;
+            }
+            div {
+                display: flex;
+                padding: 33px 0;
+                margin: 0 40px;
+                align-items: center;
+                border-bottom: 1px solid #e6e6e6;
+                span {
+                    width: 1.4rem;
+                    text-align: left;
+                    color: #2c251d;
+                }
+                input {
+                    flex: 6;
+                    font-size: 30px;
+                }
+                &:last-child {
+                    border-bottom: none;
+                }
+                &.code-wrap{
+                    justify-content: space-between;
+                    input{
+                        display: inline-block;
+                        max-width: 60%;
+                    }
+                }
+            }
+            .icon-scan {
+                font-size: 52px;
+                color: #e4a750;
+                line-height: .8;
+            }
+            .btn-code {
+                padding: 17px 30px;
+                font-size: 26px;
+                color: #fff;
+                background-color: #dca85f;
+                border-radius: 10px;
+            }
+        }
+        .btn-next-wrap {
+            display: block;
+            margin: 80px 30px 30px;
+            button {
+                width: 100%;
+                color: #fff;
+                background: #e4a750;
+                padding: 23px;
+                font-size: 34px;
+                border-radius: 10px;
+            }
+        }
+        .tutorial-wrap {
+            padding-left: 30px;
+            text-align: left;
+            a {
+                text-decoration: none;
+                color: #c84512;
+                font-size: 26px;
+            }
+        }
+
+        .verify-code-wrap{
+            width: 100%;
+            background-color: transparent;
+        }
+
+        .verify-code-inner {
+            align-items: center;
+            position: relative;
+            width: 90%;
+            margin: 0 auto;
+            padding: 25px;
+            background-color: #fff;
+            color: #333;
+            font-size: 32px;
+            box-sizing: border-box;
+            border-radius: 10px;
+            p {
+                padding-bottom: 25px;
+                &:last-child {
+                    padding: 25px 0;
+                    text-align: right;
+                }
+            }
+
+            button {
+                padding: 15px 30px;
+                border-radius: 8px;
+                color: #fff;
+                font-size: 26px;
+                background-color: #e4a750;
+            }
+
+            .title {
+                font-size: 38px;
+                text-align: center;
+            }
+
+            .btn-close {
+                position: absolute;
+                top: 20px;
+                right: 20px;
+                line-height: .9;
+                color: #e4a750;
+            }
+
+            .code-wrap {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+            }
+
+            .code-wrap input {
+                width: 150px
+            }
+        }
+
+    }
+</style>
+
+
 

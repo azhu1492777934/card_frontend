@@ -387,8 +387,7 @@
                 }).then(res => {
                     if (res.state == 1) {
                         setStorage("monthlyMsg", res.data, "obj");
-                        this.$router.push({path: "/weixin/recharge"});
-
+                        this.$router.push({path: "/weixin/recharge/index"});
                     } else {
                         Notify({message: res.msg});
                     }

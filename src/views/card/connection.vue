@@ -158,8 +158,6 @@
                     }else{
                         this.load_connection_msg = res.msg
                     }
-
-                    console.log(this.connection_voice_list)
                 })
             }
 

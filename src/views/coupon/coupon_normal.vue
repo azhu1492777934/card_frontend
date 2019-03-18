@@ -141,7 +141,7 @@
             }else{
                 Notify({message:'您的ICCID号码丢失了'})
                 setTimeout(function () {
-                    this.$router.push('/weixin/new_auth')
+                    this.$router.push('/weixin/card/lookup')
                 },2000)
             }
         },

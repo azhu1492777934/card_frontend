@@ -87,7 +87,7 @@
                                 background:'#60ce53'
                             });
                             setTimeout(function () {
-                                _this.$router.push({path:'/weixin/new_auth'})
+                                _this.$router.push({path:'/weixin/card/lookup'})
                             },2000)
                         } else if (res.error == "11002") {
 
@@ -103,7 +103,7 @@
                             let redirect_uri = getStorage('authorized_redirect_uri');
 
                             setTimeout(function () {
-                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/new_auth';
+                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
                             },2000)
 
                         } else{

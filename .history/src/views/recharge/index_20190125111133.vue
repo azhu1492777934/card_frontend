@@ -257,7 +257,6 @@
 
             if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
                  const monthlyMsg=getStorage("monthlyMsg","obj");
-                 console.log(monthlyMsg);
                  monthlyMsg.give_elb=0;
                  if(monthlyMsg.is_first){
                     monthlyMsg.pay_money=monthlyMsg.first_price;
