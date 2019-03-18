@@ -391,6 +391,7 @@
                         if (res.state==1) {
                             Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
                             let ua = navigator.userAgent.toLowerCase();
+                            console.log(ua.match(/MicroMessenger/i));
                             if(ua.match(/MicroMessenger/i) == "micromessenger"){
                                 this.$router.push('/weixin/new_card/to_tb');
                             }else{
