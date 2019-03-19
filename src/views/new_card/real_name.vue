@@ -147,6 +147,8 @@
                 }
                 this.showItem.showFixedWrap = false
             })//检测是否是大佬账户
+
+
         },
         mounted(){},
         methods: {
@@ -390,12 +392,28 @@
                     .then(res => {
                         if (res.state==1) {
                             Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
-                            let ua = navigator.userAgent.toLowerCase();
-                            if(ua.match(/MicroMessenger/i) == "micromessenger"){
-                                this.$router.push('/weixin/new_card/to_tb');
-                            }else{
-                                location.href = '/api/v1/app/jump/taobao?imei='+this.info_imei+'&iccid='+this.info_iccid+'&source='+this.card_source;
-                            }
+                            // let ua = navigator.userAgent.toLowerCase();
+                            // if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                            //     this.$router.push('/weixin/new_card/to_tb');
+                            // }else{
+                            //     location.href = '/api/v1/app/jump/taobao?imei='+this.info_imei+'&iccid='+this.info_iccid+'&source='+this.card_source;
+                            // }
+                             _get('/api/v1/app/jump/taobao', {
+                                    imei: this.info_imei,iccid:this.info_iccid,source:this.card_source
+                                }).then(res => {
+                                    if(res.data.indexOf("taobao")!=-1){
+                                        let ua = navigator.userAgent.toLowerCase();
+                                         if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                                            this.$router.push('/weixin/new_card/to_tb');
+                                        }else{
+                                            location.href = res.data;
+                                        }
+                                    }else{
+                                        location.href = res.data;
+                                    }
+                                })
+
+
                         } else {
                             if(res.msg){
                                 Notify({message: res.msg,})
