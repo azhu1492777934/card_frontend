@@ -178,7 +178,7 @@
                     if(res.state==1){
                         Notify({message:'退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候'})
                         setTimeout(function(){
-                            _this.$router.push({path:'/weixin/refund'});
+                            _this.$router.push({path:'/weixin/refund/index'});
                         },2000)
                     }else{
                         Notify({message:res.msg})
