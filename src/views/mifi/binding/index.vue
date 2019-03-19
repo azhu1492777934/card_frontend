@@ -39,10 +39,11 @@
                     avatar:'https://b-ssl.duitang.com/uploads/item/201408/30/20140830092153_z24Vw.png',
                     nickname:'yoyoyo~'
                 } || getStorage('decrypt_data','obj'),
+                load_user_msg:false,
                 iccid:'',
                 decrypt_data: {},//用户数据
-                phone: "",
-                code: "",
+                phone: '',
+                code: '',
                 codeText: "获取验证码",
                 countdown: 60,
                 client_type: checkBrowser(),
@@ -101,13 +102,19 @@
                             let _this = this;
                             setStorage("token", res.data);
 
-                            Notify({
-                                message:'账户绑定成功',
-                                background:'#60ce53'
-                            });
-                            setTimeout(function () {
-                                _this.$router.push({path:'/weixin/card/lookup'})
-                            },2000)
+                            this.getUserInfo();
+
+
+                            // Notify({
+                            //     message:'账户绑定成功',
+                            //     background:'#60ce53'
+                            // });
+
+
+                            // setTimeout(function () {
+                            //     _this.$router.push({path:'/weixin/card/lookup'})
+                            // },2000)
+
                         } else if (res.error == "11002") {
 
                             this.$emit("getToken");
@@ -189,8 +196,110 @@
                     }
                 }, 1000)
             },
-            bindIot:function () {
-                _post()
+
+            getUserInfo() {
+                //获取用户信息
+                this.load_user_msg = true;//用户信息遮罩
+                _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
+                    .then(res => {
+                        if (res.error == 0) {
+
+                            if (res.data && JSON.stringify(res.data) != '{}') {
+                                let UserInfo = {
+                                    account: res.data.account,
+                                    avatar: res.data.avatar,
+                                    nickname: res.data.nickname,
+                                }
+
+                                setStorage('userInfo', UserInfo, 'obj');
+
+                                if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                                    this.$store.commit('userInfo/changeUserStatus', true);
+                                    this.$store.commit('userInfo/changeUserInfo', UserInfo);
+                                }
+
+                                this.bindIot({
+                                    iccid:this.iccid,
+                                    phone:this.phone,
+                                    user_id:res.data.account.user_id
+                                });
+
+                                this.load_user_msg = false;
+
+                            } else {
+
+                                let _this = this;
+
+                                Dialog.alert({
+                                    title: '账号异常',
+                                    message: '您的账户信息存在问题,无法进行操作,请联系我司客服工作人员,我们将尽快为您解决问题。',
+                                }).then(() => {
+                                    _this.load_user_msg = true;
+                                    _this.load_user_info  = '账号异常';
+
+                                })
+
+                            }
+                        } else if (res.error == '11002') {
+
+                            this.$emit('getToken')
+
+                        } else if(res.error == '10007'){
+                            let curTimeStamp = (new Date()).getTime(),
+                                timeSpan = res.extra - curTimeStamp;
+
+                            setStorage('timeSpan',timeSpan);
+                            this.getUserInfo();
+                        }
+                        else{
+                            this.showAuthorityError('A-1'+res.error)
+                        }
+                    })
+
+            },// 获取用户信息
+
+            bindIot (params) {
+                _post('/api/bindIotUser',{
+                    iccid:params.iccid,
+                    user_id:params.user_id,
+                    phone:params.phone
+                }).then(res=>{
+                    if(res.state==1){
+                        Notify({
+                            message:'账户绑定成功',
+                            background:'#60ce53'
+                        });
+
+                        this.iotCheckICCID(params.iccid);
+                    }
+                })
+            },
+            iotCheckICCID(iccid){
+                _post('/api/v1/app/new_auth/check_auth_',{
+                    iccid:iccid
+                })
+                    .then(res=>{
+                        if(res.state==1){
+                            if (res.data.status == 1) {
+                                this.$router.push({path: '/mifi/card/index'}); // 实名成功
+                            } else if (res.data.status == 2) {
+                                setStorage('check_realNameSource', res.data.source)
+                                this.$router.push({path: '/weixin/new_card/real_name'}); // 实名
+                            }
+                        }
+                    })
+            },
+            showAuthorityError(flag){
+                let _this = this;
+                let _flag = flag ? flag : '';
+                Dialog.alert({
+                    title: '账号异常',
+                    message: '您的账户信息存在问题,无法进行操作,请联系我司客服工作人员,我们将尽快为您解决问题'+_flag+'。',
+                }).then(() => {
+                    _this.load_user_msg = true;
+                    _this.load_user_info  = '账号异常'+_flag;
+
+                })
             }
         }
     }

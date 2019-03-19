@@ -1,7 +1,7 @@
 <template>
     <div class="check-card-wrap">
         <div class="scanTop-wrap">
-            <img src="../../assets/imgs/card/lookup/scanTop.png" alt="">
+            <img src="../../../assets/imgs/card/lookup/scanTop.png" alt="">
         </div>
         <div class="search-wrap">
             <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
@@ -29,14 +29,12 @@
             <p class="showTip">正在检测中,请等候</p>
         </van-popup>
 
-        <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
-
     </div>
 </template>
 
 <style lang="less">
-    @import "../../assets/less/utitlies";
-    @import "../../assets/less/common";
+    @import "../../../assets/less/utitlies";
+    @import "../../../assets/less/common";
 
     .check-card-wrap {
         padding: 0 40px;
@@ -82,7 +80,7 @@
                 right: 0;
                 width: 221px;
                 height: 73px;
-                background-image: url("../../assets/imgs/card/lookup/scanTip.png");
+                background-image: url("../../../assets/imgs/card/lookup/scanTip.png");
                 background-size: 100% 100%;
             }
         }
@@ -161,10 +159,10 @@
 
 <script>
     // @ is an alias to /src
-    import {setStorage, formatterCardTime, getStorage,removeStorage,getUrlParam,checkBrowser} from '../../utilies'
+    import {setStorage, formatterCardTime, getStorage,removeStorage,getUrlParam,checkBrowser} from '../../../utilies'
     import {Popup , Notify} from 'vant'
-    import {_post,_get} from "../../http";
-    import cardButton from '../../components/button'
+    import {_post,_get} from "../../../http";
+    import cardButton from '../../../components/button/index'
 
     export default {
         name: "home",
@@ -177,7 +175,6 @@
                 checkShow: false,//查询遮罩
                 client_type: checkBrowser(),//当前客户端环境 微信/支付宝
                 showClearBtn:false,
-                forbidden_click:true, //防止用户在未授权是进行业务操作
             }
         },
         components: {
@@ -185,9 +182,6 @@
             cardButton
         },
         created() {
-            if(this.client_type != 'wechat' || this.client_type != 'alipay' || this.client_type != 'app' || getStorage('token')){
-                this.forbidden_click  =false
-            }
 
             let _this = this;
 
@@ -243,9 +237,9 @@
 
 
             }else{
-               if(scanWatchCardIccid){
-                   Notify({message:this.checkSearchIccid(scanWatchCardIccid).msg});
-               }
+                if(scanWatchCardIccid){
+                    Notify({message:this.checkSearchIccid(scanWatchCardIccid).msg});
+                }
             }
         },
         methods: {
