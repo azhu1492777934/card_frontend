@@ -33,7 +33,7 @@
         methods:{
            checkArgument(){
                setStorage('checkArgument',1);
-               this.$router.push({path:'/weixin/refund'})
+               this.$router.push({path:'/weixin/refund/index'})
            }
         }
     }
