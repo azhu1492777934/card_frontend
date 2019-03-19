@@ -390,13 +390,12 @@
                     .then(res => {
                         if (res.state==1) {
                             Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
-                            // let ua = navigator.userAgent.toLowerCase();
-                            // console.log(ua.match(/MicroMessenger/i));
-                            // if(ua.match(/MicroMessenger/i) == "micromessenger"){
-                            //     this.$router.push('/weixin/new_card/to_tb');
-                            // }else{
+                            let ua = navigator.userAgent.toLowerCase();
+                            if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                                this.$router.push('/weixin/new_card/to_tb');
+                            }else{
                                 location.href = '/api/v1/app/jump/taobao?imei='+this.info_imei+'&iccid='+this.info_iccid+'&source='+this.card_source;
-                            // }
+                            }
                         } else {
                             if(res.msg){
                                 Notify({message: res.msg,})
