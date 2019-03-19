@@ -404,7 +404,7 @@
                                     if(res.data.indexOf("taobao")!=-1){
                                         let ua = navigator.userAgent.toLowerCase();
                                          if(ua.match(/MicroMessenger/i) == "micromessenger"){
-                                            this.$router.push('/weixin/new_card/to_tb');
+                                            this.$router.push({path:'to_tb',query:{url:res.data}});
                                         }else{
                                             location.href = res.data;
                                         }

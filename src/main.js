@@ -44,6 +44,13 @@ router.afterEach((to,from)=>{
         }
 
     }
+
+    //VUE路由在IOS微信浏览器下不变
+    const u = navigator.userAgent.toLowerCase()
+    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return
+    if (to.path !== global.location.pathname) {
+      location.assign(to.fullPath)
+    }
 })
 
 Vue.config.productionTip = false
