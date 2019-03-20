@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/js/_404.e08bc7bc.js"
   },
   {
-    "revision": "d64a2d08840536f029de",
+    "revision": "bf3aa9d86747dd64354a",
     "url": "/css/app.9acfb0a8.css"
   },
   {
-    "revision": "d64a2d08840536f029de",
-    "url": "/js/app.e862c478.js"
+    "revision": "bf3aa9d86747dd64354a",
+    "url": "/js/app.93f140bf.js"
   },
   {
     "revision": "8eb147eb961761727e13",
@@ -176,12 +176,12 @@ self.__precacheManifest = [
     "url": "/js/plan_list.7ff9ee5c.js"
   },
   {
-    "revision": "554e2f803570a99b8f93",
+    "revision": "93b4ae7ac3ff5d182f25",
     "url": "/css/question.4a3349ab.css"
   },
   {
-    "revision": "554e2f803570a99b8f93",
-    "url": "/js/question.ef1705a8.js"
+    "revision": "93b4ae7ac3ff5d182f25",
+    "url": "/js/question.25f0b3d0.js"
   },
   {
     "revision": "2d755e86ac83ffb0a5d2",
@@ -312,6 +312,14 @@ self.__precacheManifest = [
     "url": "/img/SourceHanSansCNRegular.da0808e9.svg"
   },
   {
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
+  },
+  {
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
+  },
+  {
     "revision": "f5f322478286641bd9887a155e35f222",
     "url": "/img/btn.f5f32247.png"
   },
@@ -346,14 +354,6 @@ self.__precacheManifest = [
   {
     "revision": "9e02095f31a07b972244f1c714c1dfe7",
     "url": "/img/telcom_sim@3x.9e02095f.png"
-  },
-  {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
-  },
-  {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "3d0fc424b703032ca595090e99f8354b",
@@ -404,7 +404,7 @@ self.__precacheManifest = [
     "url": "/img/safari.39d9e849.png"
   },
   {
-    "revision": "b162aa4b13987be7137d22bd081fa193",
+    "revision": "06b81dd10782021ec28476685ed8538a",
     "url": "/index.html"
   },
   {

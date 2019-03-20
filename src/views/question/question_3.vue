@@ -142,7 +142,7 @@ export default {
       let _this = this;
 
       //分页记得改，暂时先这样
-      _get("/releaseApi/v1/app/plans/renew_list/0/99", {
+      _get("/api/v1/app/plans/renew_list/0/99", {
         user_id: getStorage("userInfo", "obj").account.user_id
       }).then(res => {
         if (res.state == 1) {
@@ -159,7 +159,7 @@ export default {
       })
         .then(() => {
           let _this = this;
-          _get("/releaseApi/v1/app/plans/cancel_renew", {
+          _get("/api/v1/app/plans/cancel_renew", {
             renew_id: id,
             user_id:getStorage("userInfo","obj").account.user_id
           }).then(res => {
