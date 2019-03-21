@@ -1,6 +1,6 @@
 <template>
     <div>
-        测试
+        <!--调用授权 启动页-->
     </div>
 </template>
 
@@ -22,8 +22,8 @@
 
                 if (getStorage('token')) {
                     // 判断当前卡是否走完实名流程
-                    if (getStorage('mifi_iccid')) {
-                        this.iccid = getStorage('mifi_iccid');
+                    if (getStorage('check_iccid')) {
+                        this.iccid = getStorage('check_iccid');
                         this.checkIccid(this.iccid);
                     } else {
                         // 前往查卡页面
@@ -44,8 +44,13 @@
                         this.$router.push({path: '/mifi/card/index'}); // 实名成功
                     } else if (res.data.status == 2) {
                         setStorage('check_realNameSource', res.data.source)
-                        this.$router.push({path: '/weixin/new_card/real_name'}); // 实名
+                        this.$router.push({
+                            path: '/weixin/new_card/real_name',
+                            query: { source: 'mifi' }
+                        }); // 实名
                     }
+                    // 是否已经走过实名流程 拦截用户进入详情页
+
                 })
             }
         }

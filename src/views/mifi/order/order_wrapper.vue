@@ -1,10 +1,10 @@
 <template>
-    
+    <router-view/>
 </template>
 
 <script>
     export default {
-        name: "plan_list"
+        name: "order_wrapper"
     }
 </script>
 

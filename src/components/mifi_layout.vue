@@ -5,6 +5,19 @@
         <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
             <p class="showTip">{{load_user_info}}</p>
         </van-popup>
+
+
+        <!--子组件公用拦截-->
+        <van-popup :close-on-click-overlay="false" v-model="showError">
+            <p class="showTip">{{errorMsg}}</p>
+        </van-popup>
+
+        <!--子组件公共loading-->
+        <div class="loading-wrap" v-show="showLoading">
+            <div class="loading-inner">
+                <van-loading size="50px"/>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -13,7 +26,7 @@
     import {Notify} from 'vant'
     import {mapState} from 'vuex'
     import userHeader from './common/uesrHead'
-    import {Dialog, Popup} from 'vant'
+    import {Dialog, Popup,Loading} from 'vant'
     import {_post, _get} from "../http";
     import {codeParam, checkBrowser, setStorage, getStorage, removeStorage, getUrlParam, checkICCID,getCardServerToken} from "../utilies";
 
@@ -33,11 +46,18 @@
             [Dialog.name]: Dialog,
             [Notify.name]: Notify,
             [Popup.name]: Popup,
+            [Loading.name]: Loading
         },
         computed: {
             ...mapState({
                 isShowUser: state => state.userInfo.showUser,
-                authorizeUserInfo: state => state.userInfo.userInfoInner
+                authorizeUserInfo: state => state.userInfo.userInfoInner,
+
+                // mifiCommon
+                showLoading: state => state.mifiCommon.intercept.loading,
+                showError: state => state.mifiCommon.intercept.show,
+                errorMsg: state => state.mifiCommon.intercept.errorMsg,
+
             }),
         },
         created() {

@@ -2,7 +2,7 @@
     <div class="binding-wrap">
         <div class="userInfo">
             <div class="table-cell">
-                <img :src="userInfo.avatar" alt="头像">
+                <img :src="userInfo.headimgurl" alt="头像">
                 <p>欢迎你，{{userInfo.nickname}}</p>
             </div>
         </div>
@@ -35,10 +35,10 @@
     export default {
         data() {
             return {
-                userInfo:{
-                    avatar:'https://b-ssl.duitang.com/uploads/item/201408/30/20140830092153_z24Vw.png',
+                userInfo:getStorage('decrypt_data','obj') || {
+                    avatar:'',
                     nickname:'yoyoyo~'
-                } || getStorage('decrypt_data','obj'),
+                } ,
                 load_user_msg:false,
                 iccid:'',
                 decrypt_data: {},//用户数据
@@ -284,7 +284,12 @@
                                 this.$router.push({path: '/mifi/card/index'}); // 实名成功
                             } else if (res.data.status == 2) {
                                 setStorage('check_realNameSource', res.data.source)
-                                this.$router.push({path: '/weixin/new_card/real_name'}); // 实名
+                                this.$router.push({
+                                    path: '/weixin/new_card/real_name',
+                                    query:{
+                                        source:'mifi'
+                                    }
+                                }); // 实名
                             }
                         }
                     })
@@ -386,9 +391,7 @@
                     color: #443f37;
                     font-size: 36px;
                     background-image: linear-gradient( 45deg, #f0b546 10%, #fdd47a 100%);
-
                 }
-
             }
         }
     }

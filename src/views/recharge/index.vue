@@ -130,7 +130,7 @@
 <script>
     import {mapState} from 'vuex'
     import {DatetimePicker, Area, Popup,Notify} from 'vant';
-    import {setStorage,getStorage,checkBrowser} from "../../utilies";
+    import {setStorage,getStorage,checkBrowser,getUrlParam} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -435,6 +435,9 @@
                     param.start_time = this.val_date
                 }
 
+                getUrlParam('source')=='mifi' ? param.type = 1 : param.type = 0;
+
+
                 this.rechargeShow = true;
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
@@ -446,16 +449,12 @@
                                 document.write(res.data);
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
-                                location.href = res.data
-
+                                if(getUrlParam('source')=='mifi'){
+                                    location.href = global_variables.authorized_redirect_url + '/mifi/card/index'
+                                }else{
+                                    location.href = res.data
+                                }
                             }else {
-                                // this.userInfo.account.elb = res.data.elb;
-                                // this.userInfo.account.rmb = res.data.rmb;
-                                //
-                                // setStorage('userInfo',this.userInfo,'obj');
-                                //
-                                // this.$store.commit('userInfo/changeUserInfo',this.userInfo);
-
                                 Notify({
                                     message:'充值成功',
                                     background:'#60ce53'

@@ -63,7 +63,6 @@ const _404 = r => require.ensure([], () => r(require('./components/common/404'))
 const authority_middle = r => require.ensure([], () => r(require('./views/authority')), 'authority_middle') // 授权中间页
 
 
-
 /*
 * mifi公众号页面
 * */
@@ -77,11 +76,23 @@ const logical_page = r => require.ensure([], () => r(require('./views/mifi/autho
 const mifi_binding = r => require.ensure([], () => r(require('./views/mifi/binding')), 'mifi_binding');
 
 // mifi 卡查询相关
-const mifi_card_lookup = r => require.ensure([], () => r(require('./views/mifi/card/lookup')), 'mifi_card_lookup'); // 查卡
-const mifi_card_group = r => require.ensure([], () => r(require('./views/mifi/card/plan_group')), 'mifi_card_group'); // 套餐组页
-const mifi_card_list = r => require.ensure([], () => r(require('./views/mifi/card/plan_list')), 'mifi_card_list'); // 套餐列表页
-const mifi_card_info = r => require.ensure([], () => r(require('./views/mifi/card/index')), 'mifi_card_info'); // 卡状态详情
 const mifi_card_wrapper = r => require.ensure([], () => r(require('./views/mifi/card/mifi_card_wrapper')), 'mifi_card_wrapper') // 卡父组件页
+const mifi_card_lookup = r => require.ensure([], () => r(require('./views/mifi/card/lookup')), 'mifi_card_lookup'); // 查卡
+const mifi_card_info = r => require.ensure([], () => r(require('./views/mifi/card/index')), 'mifi_card_info'); // 卡状态详情
+
+// mifi 订单
+const mifi_order_wrapper = r => require.ensure([], () => r(require('./views/mifi/order/order_wrapper')), 'mifi_order_wrapper')
+const mifi_order = r => require.ensure([], () => r(require('./views/mifi/order/index')), 'mifi_order')
+
+// mifi 套餐
+const mifi_plan_wrapper = r => require.ensure([], () => r(require('./views/mifi/plan/plan_wrapper')), 'mifi_plan_wrapper');
+const mifi_plan_group = r => require.ensure([], () => r(require('./views/mifi/plan/plan_group')), 'mifi_plan_group'); // 套餐组页
+const mifi_plan_list = r => require.ensure([], () => r(require('./views/mifi/plan/plan_list')), 'mifi_plan_list'); // 套餐列表页
+const mifi_plan_usage = r => require.ensure([], () => r(require('./views/mifi/plan/usage')), 'mifi_plan_usage'); // 套餐用量
+
+// mifi 卡券
+const mifi_coupon_wrapper = r => require.ensure([], () => r(require('./views/mifi/coupon/coupon_wrapper')), 'mifi_coupon_wrapper');
+const mifi_coupon_index = r => require.ensure([], () => r(require('./views/mifi/coupon/index')), 'mifi_coupon_index');
 
 
 Vue.use(Router)
@@ -89,11 +100,11 @@ Vue.use(Router)
 export const constantRouterMap = [{
     path: '/login',
     component: login,
-    meta: { title: '用户绑定',}
-},{
+    meta: {title: '用户绑定',}
+}, {
     path: '/binding',
-    component:mifi_binding,
-    meta:{ title:'用户绑定' }
+    component: mifi_binding,
+    meta: {title: '用户绑定'}
 }, {
     path: '/weixin',
     component: Layout,
@@ -223,48 +234,48 @@ export const constantRouterMap = [{
             ]
         }, {
             path: 'card',
-            component:new_card_wrapper,
+            component: new_card_wrapper,
             children: [{
                 path: 'lookup',
                 component: card_lookup,
-                    meta: {
-                        title: '查询',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'usage',
-                    component: card_usage,
-                    meta: {
-                        title: '详情',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'plan_list',
-                    component: plan_list,
-                    meta: {
-                        title: '套餐列表',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'connection',
-                    component: card_connection,
-                    meta: {
-                        title: '连接详情',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'check',
-                    component: card_check,
-                    meta: {
-                        title: '卡检测'
-                    }
-                }, {
-                    path: 'watch',
-                    component: children_card,
-                    meta: {
-                        title: '手表号码查询'
-                    }
-                }]
+                meta: {
+                    title: '查询',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'usage',
+                component: card_usage,
+                meta: {
+                    title: '详情',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'plan_list',
+                component: plan_list,
+                meta: {
+                    title: '套餐列表',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'connection',
+                component: card_connection,
+                meta: {
+                    title: '连接详情',
+                    requireAuth: true,
+                }
+            }, {
+                path: 'check',
+                component: card_check,
+                meta: {
+                    title: '卡检测'
+                }
+            }, {
+                path: 'watch',
+                component: children_card,
+                meta: {
+                    title: '手表号码查询'
+                }
+            }]
         }, {
             path: 'recharge',
             component: recharge_wrapper,
@@ -289,38 +300,62 @@ export const constantRouterMap = [{
 
     ],
 }, {
-    path:'/mifi',
-    component:mifi_layout,
-    children:[{
-        path:'index',
-        component:mifi_index,
-    },{
+    path: '/mifi',
+    component: mifi_layout,
+    children: [{
+        path: 'index',
+        component: mifi_index,
+    }, {
         path: 'transaction',
         component: logical_page,
-    },{
-        path:'card',
-        component:mifi_card_wrapper,
-        children:[{
-            path:'index',
-            component:mifi_card_info,
-            meta:{ title: '卡信息' }
-        },{
-            path:'lookup',
-            component:mifi_card_lookup,
-            meta:{ title:'查询' }
-        },{
-            path:'plan_group',
-            component:mifi_card_group,
-            meta:{ title:'查询' }
-        },{
-            path:'plan_list',
-            component:mifi_card_list,
-            meta:{ title:'查询' }
+    }, {
+        path: 'card',
+        component: mifi_card_wrapper,
+        children: [{
+            path: 'index',
+            component: mifi_card_info,
+            meta: {title: '卡信息'}
+        }, {
+            path: 'lookup',
+            component: mifi_card_lookup,
+            meta: {title: '查询'}
         }]
+    }, {
+        path: 'order',
+        component: mifi_order_wrapper,
+        children: [{
+            path: 'index',
+            component: mifi_order,
+            meta: {title: '订单'}
+        }]
+    }, {
+        path: 'plan',
+        component: mifi_plan_wrapper,
+        children: [{
+            path: 'usage',
+            component: mifi_plan_usage,
+            meta: {title: '套餐用量'}
+        }, {
+            path: 'group',
+            component: mifi_plan_group,
+            meta: {title: '套餐组'}
+        }, {
+            path: 'list',
+            component: mifi_plan_list,
+            meta: {title: '套餐列表'}
+        }]
+    },{
+       path:'coupon',
+       component:mifi_coupon_wrapper,
+       children:[{
+           path:'index',
+           component:mifi_coupon_index,
+           meta: {title: '卡券兑换'}
+       }]
     }]
-},{
+}, {
     path: '/',
-    redirect: '/weixin/card/lookup'
+    redirect: '/mifi/index'
 }, {
     path: '/authority',
     component: authority_middle,

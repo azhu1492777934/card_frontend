@@ -34,6 +34,7 @@ axios.interceptors.request.use(function (config) {
 axios.interceptors.response.use(function (response){
     return response.data
 },err => {
+    console.log(err);
     if(Object.prototype.toString.call(err)=='[object object]' || Object.prototype.toString.call(err)=='[object Error]'){
         return Promise.resolve({
             state:0,

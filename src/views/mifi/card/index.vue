@@ -3,61 +3,160 @@
         <div class="top-info">
             <div class="top-info-left">
                 <p>
-                    近期查询<span class="iconfont icon-refresh"></span>
+                    近期查询<span @click="refreshCard" class="iconfont icon-refresh"></span>
                 </p>
-                <p>{{iccid}}</p>
+                <p>{{iccid}}({{usageInfo.source}})</p>
                 <div class="card-status-wrap">
                     <div>
-                        <span class="card-status status-gradient">未实名</span>
-                        <span class="card-status status-gradient">未激活</span>
+                        <span class="card-status"
+                            :class="usageInfo.auth_status>=3?'status-gradient':'status-gradient-warning'">
+                            {{filterCardInfo.real_name_state}}
+                        </span>
+
+                        <span class="card-status"
+                              v-if="filterCardInfo.device_state==''"
+                              :class="usageInfo.status>=3?'status-gradient':'status-gradient-green'">
+                            {{filterCardInfo.card_str_state}}
+                        </span>
+
+                        <span class="card-status"
+                              :class="filterCardInfo.device_state.code==1?'status-gradient-green':'status-gradient-warning'"
+                              v-if="filterCardInfo.device_state!=''">
+                            {{filterCardInfo.device_state.state}}
+                        </span>
                     </div>
                     <div>
                         <span class="card-question">?</span>
-                        <span class="card-change">去变更> </span>
+                        <router-link to="/mifi/card/lookup" class="card-change"> 去变更> </router-link>
                     </div>
                 </div>
             </div>
             <span class="divider"></span>
-            <div class="top-info-right">
+            <router-link to="/weixin/new_card/real_name" class="top-info-right">
                 <span class="iconfont icon-user"></span>
                 <p>去实名</p>
-            </div>
+            </router-link>
 
         </div>
-        <div class="card-function-wrap">
+        <div v-if="usageInfo.auth_status!=1" class="card-function-wrap">
             <div class="function-group-wrap">
-                <div>
+                <div @click="buyPlan">
                     <span class="iconfont icon-cart"></span>
                     <p>购买套餐</p>
                 </div>
                 <span class="divider"></span>
-                <div class="item-function-wrap">
+                <div @click="flowCheck" class="item-function-wrap">
                     <span class="iconfont icon-info"></span>
                     <p>流量查询</p>
                 </div>
                 <span class="divider"></span>
-                <div>
+                <div @click="checkOrder">
                     <span class="iconfont icon-txt"></span>
                     <p>订单查询</p>
                 </div>
             </div>
             <div class="function-group-wrap">
-                <div>
+                <div @click="couponExchange">
                     <span class="iconfont icon-coupon"></span>
                     <p>卡券兑换</p>
                 </div>
             </div>
         </div>
+        <div class="real-name-wrap" v-if="usageInfo.auth_status==1">
+            <img src="../../../assets/imgs/mifi/common/real_name.png" alt="">
+        </div>
     </div>
 </template>
 
 <script>
+    import {getStorage} from "../../../utilies";
+    import {_get} from "../../../http";
     export default {
         name: "index",
         data(){
             return{
-                iccid:'8986 0422 9901 0293 0385',
+                iccid:getStorage('check_iccid'),
+                auth_status: ['未实名', '审核中', '审核不通过'],
+                card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
+                usageInfo:{},
+                filterCardInfo: {
+                    msisdn: '',
+                    device_state: '',//机卡状态
+                    card_str_state: '',//卡状态
+                    real_name_state: '',//实名状态
+                    refresh_actived: '',//刷新卡状态/激活
+                    is_watch_card: false,//手表卡
+                    is_flow_card: false,//流量卡
+                },
             }
+        },
+        created(){
+            // 请求卡状态
+            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true})
+
+            _get('/api//v1/app/cards/status/usage',{
+                iccid:this.iccid,
+                type:1
+            }).then(res=>{
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false})
+                if(res.state==1){
+                    this.usageInfo = res.data;
+
+                    if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
+                        this.auth_status.push('手淘实名');
+                    } else {
+                        this.auth_status.push('已实名');
+                    }//实名增加状态
+
+                    this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
+
+                    if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.usageInfo.imei) {
+                        if (!this.usageInfo.imei || !this.usageInfo.fenli) {
+                            this.filterCardInfo.device_state = {state: '机卡已绑定', code: 1}
+                        } else {
+                            if (this.usageInfo.status == 2) {
+                                this.filterCardInfo.device_state = {state: '机卡已分离停机', code: 2}
+                            } else {
+                                this.filterCardInfo.device_state = {state: '机卡分离', code: 2}
+                            }
+                        }
+                    }//机卡状态
+
+                    this.filterCardInfo.card_str_state = this.card_state[this.usageInfo.status];//卡状态
+
+                    // if (this.usageInfo.status == 2) {
+                    //     this.filterCardInfo.refresh_actived = '激活'
+                    // } else {
+                    //     this.filterCardInfo.refresh_actived = '刷新'
+                    // }
+
+                }else{
+                    this.$store.commit('mifiCommon/changeErrStatus',{
+                        show:true,
+                        errorMsg:res.msg ?res.msg:'获取数据信息失败，请稍后再试'
+                    })
+                }
+            })
+        },
+        methods:{
+            refreshCard(){
+                window.location.reload()
+            },
+            buyPlan(){
+                this.$router.push('/mifi/plan/group');
+            },
+            flowCheck(){
+                this.$router.push('/mifi/plan/usage');
+            },
+            checkOrder(){
+                this.$router.push('/mifi/order/index');
+            },
+            couponExchange(){
+                this.$router.push('/mifi/coupon/index');
+            },
+            inArray (elem, arr, i) {
+                return arr == null ? -1 : arr.indexOf(elem, i);
+            },
         }
     }
 </script>
@@ -120,6 +219,13 @@
                 .status-gradient{
                     background-image: linear-gradient( 45deg, #93c8fb 25%, #497fb1 100%);
                 }
+                .status-gradient-green{
+                    background-image: linear-gradient( 45deg, #a0d890 25%, #69b152 100%);
+                }
+                .status-gradient-warning{
+                    background-image: linear-gradient(45deg, #f3a179 25%, #e04b4b 100%);
+                }
+
                 .card-status{
                     width: 120px;
                     padding: 5px 0;
@@ -172,6 +278,14 @@
             .icon-coupon{
                 padding-top: 2px;
                 font-size: 60px !important;
+            }
+        }
+        .real-name-wrap{
+            img{
+                display: block;
+                width: 90%;
+                margin: 0 auto;
+                height: auto;
             }
         }
     }

@@ -105,7 +105,7 @@
 
                         setStorage('token', res.data);//获取token
 
-                        if (this.redirect_uri &&  getStorage('mifi_iccid')) {
+                        if (this.redirect_uri &&  getStorage('check_iccid')) {
                             this.$router.push(this.redirect_uri);
                         } else {
                             this.$router.push('/mifi/card/lookup');

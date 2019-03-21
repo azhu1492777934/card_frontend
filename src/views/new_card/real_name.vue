@@ -115,7 +115,11 @@
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    this.$router.push({'path':'/weixin/card/lookup'});
+                    if(getUrlParam('source')=='mifi'){
+                        this.$router.push({path:'/mifi/card/lookup'})
+                    }else{
+                        this.$router.push({'path':'/weixin/card/lookup'});
+                    }
                 }
             }
             if(getUrlParam('source')){
@@ -124,7 +128,11 @@
                 if(getStorage('check_realNameSource')){
                     this.card_source = getStorage('check_realNameSource');
                 }else{
-                    this.$router.push({'path':'/weixin/card/lookup'});
+                    if(getUrlParam('source')=='mifi'){
+                        this.$router.push({path:'/mifi/card/lookup'})
+                    }else{
+                        this.$router.push({'path':'/weixin/card/lookup'});
+                    }
                 }
             }
 
