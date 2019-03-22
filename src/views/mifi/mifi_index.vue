@@ -26,8 +26,7 @@
                         this.iccid = getStorage('check_iccid');
                         this.checkIccid(this.iccid);
                     } else {
-                        // 前往查卡页面
-                        this.$router.push('/mifi/card/lookup')
+                        this.$router.push({path:'/mifi/card/lookup'})
                     }
                 }
 
@@ -42,15 +41,13 @@
                 }).then(res => {
                     if (res.data.status == 1) {
                         this.$router.push({path: '/mifi/card/index'}); // 实名成功
-                    } else if (res.data.status == 2) {
+                    } else if (res.data.status == 2 || res.data.status == 3) {
                         setStorage('check_realNameSource', res.data.source)
                         this.$router.push({
                             path: '/weixin/new_card/real_name',
                             query: { source: 'mifi' }
                         }); // 实名
                     }
-                    // 是否已经走过实名流程 拦截用户进入详情页
-
                 })
             }
         }

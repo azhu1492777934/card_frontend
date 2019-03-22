@@ -78,7 +78,7 @@
                         avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
                         this.loginDisabled = false;
-                        if (res.error == 0) {
+                        if (res.error == 0 ) {
                             let _this = this;
                             setStorage("token", res.data);
 
@@ -102,9 +102,7 @@
 
                             let redirect_uri = getStorage('authorized_redirect_uri');
 
-                            setTimeout(function () {
-                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
-                            },2000)
+                            getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
 
                         } else{
                             this.isLoginError = true;

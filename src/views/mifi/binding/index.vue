@@ -98,23 +98,16 @@
                         avatar: this.decrypt_data.headimgurl
                     }).then((res) => {
                         this.loginDisabled = false;
-                        if (res.error == 0) {
-                            setStorage("token", res.data);
+                        if (res.error == 0 || res.error == 30002) {
 
+                            if(res.error==0){
+                                setStorage("token", res.data);
+                            }
                             this.getUserInfo();
 
                         } else if (res.error == "11002") {
 
                             this.$emit("getToken");
-
-                        } else if(res.error == 30002){
-
-                            Notify({
-                                message:'帐户绑定成功',
-                                background:'#60ce53'
-                            })
-
-                            this.getUserInfo();
 
                         } else{
                             this.isLoginError = true;
@@ -268,13 +261,11 @@
                         if(res.state==1){
                             if (res.data.status == 1) {
                                 this.$router.push({path: '/mifi/card/index'}); // 实名成功
-                            } else if (res.data.status == 2) {
+                            } else if (res.data.status == 2 || res.data.status == 3) {
                                 setStorage('check_realNameSource', res.data.source)
                                 this.$router.push({
                                     path: '/weixin/new_card/real_name',
-                                    query:{
-                                        source:'mifi'
-                                    }
+                                    query:{from:'mifi'}
                                 }); // 实名
                             }
                         }

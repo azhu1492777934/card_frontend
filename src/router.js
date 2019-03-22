@@ -306,9 +306,6 @@ export const constantRouterMap = [{
         path: 'index',
         component: mifi_index,
     }, {
-        path: 'transaction',
-        component: logical_page,
-    }, {
         path: 'card',
         component: mifi_card_wrapper,
         children: [{
@@ -357,9 +354,14 @@ export const constantRouterMap = [{
     path: '/',
     redirect: '/mifi/index'
 }, {
+    // cardserver 授权业务处理
     path: '/authority',
     component: authority_middle,
 }, {
+    // mifi 授权业务处理
+    path: '/mifi/transaction',
+    component: logical_page,
+},{
     path: '*',
     component: _404
 }]

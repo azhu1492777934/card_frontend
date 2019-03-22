@@ -40,15 +40,11 @@
                         title: '绑定失败',
                         message: '您的账号信息绑定失败,请重新授权绑定。',
                     }).then(() => {
-                        if (this.redirect_uri && getStorage('mifi')) {
-                            _this.$router.push(this.redirect_uri);
-                        } else {
-                            _this.$router.push('/mifi/card/lookup');
-                        }
+                        _this.$router.push('/mifi/index');
                     })
                 }
             } else {
-                // this.$router.push('/weixin/card/lookup')
+                this.$router.push('/weixin/card/lookup')
             }
 
         },
@@ -96,6 +92,8 @@
                 })
             }, // 解密data
             login(res){
+                let _this =this;
+
                 _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
                     uuid: getStorage('decrypt_data', 'obj').openid,
                     code: res.data.code
@@ -104,12 +102,7 @@
                     if (res.error == 0) {
 
                         setStorage('token', res.data);//获取token
-
-                        if (this.redirect_uri &&  getStorage('check_iccid')) {
-                            this.$router.push(this.redirect_uri);
-                        } else {
-                            this.$router.push('/mifi/card/lookup');
-                        }
+                        getStorage('check_iccid') ? this.$router.push('/mifi/card/index') : this.$router.push('/mifi/card/lookup');
 
                     } else if (res.error == '11002') {
 

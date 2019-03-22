@@ -128,7 +128,7 @@
                 if(getStorage('check_realNameSource')){
                     this.card_source = getStorage('check_realNameSource');
                 }else{
-                    if(getUrlParam('source')=='mifi'){
+                    if(getUrlParam('from')=='mifi'){
                         this.$router.push({path:'/mifi/card/lookup'})
                     }else{
                         this.$router.push({'path':'/weixin/card/lookup'});
@@ -398,7 +398,20 @@
                     .then(res => {
                         if (res.state==1) {
                             Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
-                            location.href = '/api/v1/app/jump/taobao?imei='+this.info_imei+'&iccid='+this.info_iccid+'&source='+this.card_source;
+                            _get('/api/v1/app/jump/taobao', {
+                                imei: this.info_imei,iccid:this.info_iccid,source:this.card_source
+                            }).then(res => {
+                                if(res.data.indexOf("taobao")!=-1){
+                                    let ua = navigator.userAgent.toLowerCase();
+                                    if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                                        this.$router.push({path:'to_tb',query:{url:res.data}});
+                                    }else{
+                                        location.href = res.data;
+                                    }
+                                }else{
+                                    location.href = res.data;
+                                }
+                            })
                         } else {
                             if(res.msg){
                                 Notify({message: res.msg,})

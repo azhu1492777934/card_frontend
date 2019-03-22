@@ -11,6 +11,7 @@ require( '../src/assets/less/common.less')
 require('../src/assets/css/SourceHanSansCNRegular.css')
 
 // require('./mock')
+require('../src/assets/js/sha1.min')
 
 import 'lib-flexible/flexible'
 import vueWeChatTitle from 'vue-wechat-title'

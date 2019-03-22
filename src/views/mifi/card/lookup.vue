@@ -182,11 +182,11 @@
 
                         if (res.data.status == 1) {
                             _this.$router.push({path: '/mifi/card/index'});
-                        } else if (res.data.status == 2) {
+                        } else if (res.data.status == 2 || res.data.status == 3) {
                             setStorage('check_realNameSource', res.data.source)
                             _this.$router.push({
                                 path: '/weixin/new_card/real_name',
-                                query:{source:'mifi'}
+                                query:{from:'mifi'}
                             });
                         }
                     } else {
@@ -366,7 +366,6 @@
             }
         }
         .recording-wrap {
-            background-color: #000;
             .recording-list-wrap {
                 max-height: 260px;
                 overflow: auto;

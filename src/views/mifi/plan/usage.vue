@@ -177,30 +177,7 @@
         },
         created() {
 
-            // const mock_list = [
-            //     {
-            //         "activated_at": "2018-08-27 14:37:08",
-            //         "expired_at": "2019-02-27 23:59:59",
-            //         "id": 3961,
-            //         "remaining_flow": 143,
-            //         "remaining_voice": 115,
-            //         "total_flow": 184,
-            //         "total_voice": 120
-            //     },
-            //     {
-            //         "activated_at": "2019-03-20 00:00:00",
-            //         "expired_at": "2019-09-20 23:59:59",
-            //         "id": 9125,
-            //         "remaining_flow": 194,
-            //         "remaining_voice": 200,
-            //         "total_flow": 194,
-            //         "total_voice": 200
-            //     }
-            // ]
-
-
-
-            _get('/api/v1/app/order/status',{
+            _get('/api/v1/app/cards/plan/all',{
                 iccid:this.iccid
             }).then(res=>{
 

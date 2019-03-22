@@ -204,8 +204,8 @@
                 setStorage('state', this.state);
 
                 //获取当前重定向地址
-                let redirect_uri = this.GetUrlRelativePath();
-                setStorage('authorized_redirect_uri', redirect_uri);
+                // let redirect_uri = this.GetUrlRelativePath();
+                // setStorage('authorized_redirect_uri', redirect_uri);
 
                 //存储手表二维码ICCID
                 // if (getUrlParam('iccid')) {
