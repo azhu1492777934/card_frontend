@@ -10,6 +10,8 @@ require( '../src/assets/css/reset.css')
 require( '../src/assets/less/common.less')
 require('../src/assets/css/SourceHanSansCNRegular.css')
 
+require('../src/assets/js/sha1.min')
+
 // require('./mock')
 
 import 'lib-flexible/flexible'
