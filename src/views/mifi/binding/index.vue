@@ -36,7 +36,7 @@
         data() {
             return {
                 userInfo:getStorage('decrypt_data','obj') || {
-                    avatar:'',
+                    headimgurl:require('../../../assets/imgs/mifi/common/avatar.jpeg'),
                     nickname:'yoyoyo~'
                 } ,
                 load_user_msg:false,
@@ -99,21 +99,9 @@
                     }).then((res) => {
                         this.loginDisabled = false;
                         if (res.error == 0) {
-                            let _this = this;
                             setStorage("token", res.data);
 
                             this.getUserInfo();
-
-
-                            // Notify({
-                            //     message:'账户绑定成功',
-                            //     background:'#60ce53'
-                            // });
-
-
-                            // setTimeout(function () {
-                            //     _this.$router.push({path:'/weixin/card/lookup'})
-                            // },2000)
 
                         } else if (res.error == "11002") {
 
@@ -126,11 +114,7 @@
                                 background:'#60ce53'
                             })
 
-                            let redirect_uri = getStorage('authorized_redirect_uri');
-
-                            setTimeout(function () {
-                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
-                            },2000)
+                            this.getUserInfo();
 
                         } else{
                             this.isLoginError = true;
@@ -157,20 +141,20 @@
                     }
                     this.countDownFun();
 
-                    // _post("/accountCenter/v2/verify/send?" + codeParam({},'post'), {
-                    //     mobile: this.phone
-                    // }).then((res) => {
-                    //     if (res.error == 0) {
-                    //         Notify({
-                    //             message:'验证码发送成功',
-                    //             background:'#60ce53'
-                    //         })
-                    //     } else if(res.error == "11002") {
-                    //         this.$emit("getToken");
-                    //     } else {
-                    //         Notify({message:res.msg})
-                    //     }
-                    // })
+                    _post("/accountCenter/v2/verify/send?" + codeParam({},'post'), {
+                        mobile: this.phone
+                    }).then((res) => {
+                        if (res.error == 0) {
+                            Notify({
+                                message:'验证码发送成功',
+                                background:'#60ce53'
+                            })
+                        } else if(res.error == "11002") {
+                            this.$emit("getToken");
+                        } else {
+                            Notify({message:res.msg})
+                        }
+                    })
                 }
             },
             countDownFun() {
@@ -221,7 +205,8 @@
                                 this.bindIot({
                                     iccid:this.iccid,
                                     phone:this.phone,
-                                    user_id:res.data.account.user_id
+                                    user_id:res.data.account.user_id,
+                                    code:this.code,
                                 });
 
                                 this.load_user_msg = false;
@@ -259,10 +244,11 @@
             },// 获取用户信息
 
             bindIot (params) {
-                _post('/api/bindIotUser',{
+                _post('/api/v1/app/bind/iccid_userid',{
                     iccid:params.iccid,
                     user_id:params.user_id,
-                    phone:params.phone
+                    mobile:params.phone,
+                    code:params.code
                 }).then(res=>{
                     if(res.state==1){
                         Notify({
