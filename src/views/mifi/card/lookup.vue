@@ -52,16 +52,16 @@
             cardButton
         },
         created() {
-
+            this.$store.commit('mifiCommon/changeErrStatus',{show:false});
             let _this = this;
 
             if (getStorage('recording_list','arr')) {
-                let local_recording_list = getStorage('recording_list','arr')
+                let local_recording_list = getStorage('recording_list','arr');
 
                 if(local_recording_list.length){
 
                     this.recording_list = local_recording_list;
-                    this.recording_show = true
+                    this.recording_show = true;
                 }
             }
 
@@ -73,7 +73,7 @@
 
             this.$watch('iccid', this.debounce((newQuery) => {
                 _this.handleIccidFocus()
-            }, 500))
+            }, 500));
 
             let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card'); //watch_card 兼容 授权时跳转问题
 
@@ -86,19 +86,19 @@
 
                 if(getStorage('watch_card_timestamp')){
 
-                    var watch_card_timestamp = getStorage('watch_card_timestamp')
+                    var watch_card_timestamp = getStorage('watch_card_timestamp');
                     var cur_date = new Date().getTime();
 
                     if(cur_date>watch_card_timestamp){
                         let setTime  = new Date().getTime()+(1*60*1000);
-                        setStorage('check_iccid',scanWatchCardIccid)
+                        setStorage('check_iccid',scanWatchCardIccid);
                         setStorage('watch_card_timestamp',setTime);
                         this.processCheckIccid(scanWatchCardIccid);//自动查询
                     }
 
                 }else{
                     this.iccid = scanWatchCardIccid;
-                    setStorage('check_iccid',scanWatchCardIccid)
+                    setStorage('check_iccid',scanWatchCardIccid);
                     let setTime  = new Date().setTime(new Date().getTime()+1*60*1000);
                     setStorage('watch_card_timestamp',setTime);
 
@@ -183,7 +183,7 @@
                         if (res.data.status == 1) {
                             _this.$router.push({path: '/mifi/card/index'});
                         } else if (res.data.status == 2 || res.data.status == 3) {
-                            setStorage('check_realNameSource', res.data.source)
+                            setStorage('check_realNameSource', res.data.source);
                             _this.$router.push({
                                 path: '/weixin/new_card/real_name',
                                 query:{from:'mifi'}

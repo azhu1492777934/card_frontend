@@ -48,7 +48,7 @@
                     Notify({message: '您的兑换码有误,请检查'})
                     return
                 }
-                this.btnDisabled = true
+                this.btnDisabled = true;
                 _post('/api/v1/app/coupon/exchange', {
                     iccid: this.iccid,
                     no: this.coupon_code

@@ -42,11 +42,14 @@
                     </ul>
                 </swiper-slide>
             </swiper>
+            <div ref="refPlanButton" class="btn-recharge-wrap" >
+                <button :class="{'noDataHide':JSON.stringify(plan_list) == '{}'}" @click="recharge">前往充值</button>
+            </div>
+        </div>
+        <div v-if="JSON.stringify(plan_list) == '{}'">
+            <img src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
         </div>
 
-        <div ref="refPlanButton" class="btn-recharge-wrap">
-            <button @click="recharge">前往充值</button>
-        </div>
     </div>
 </template>
 
@@ -95,29 +98,40 @@
             if(getStorage('check_iccid')){
 
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+                this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
                 _get("/api/v1/app/plan_group/plan_list", {
                     iccid: getStorage("check_iccid"),
                     plan_group_id:this.plan_group_id,
                 }).then(res => {
                     this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
+                    let refPlanButton = 0;
 
                     if (res.state == 1) {
-
-                        if (JSON.stringify(res.data) == '{}') {
-
+                        if (JSON.stringify(res.data) != '{}') {
+                            refPlanButton = this.$refs.refPlanButton.offsetHeight;
+                            this.plan_list = res.data;
+                            this.processPlsn();
+                        }else{
                             this.$store.commit('mifiCommon/changeErrStatus',{
                                 show:true,
-                                errorMsg:'此卡暂无套餐'
+                                errorMsg : res.msg ? res.msg : '获取数据信息失败，请稍后再试'
                             })
-                            return
                         }
-                        this.plan_list = res.data;
-                        this.processPlsn();
+                        this.$nextTick(() => {
+                            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                refPLanTitle = this.$refs.refPLanTitle.offsetHeight;
+
+                            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                                this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
+                            } else {
+                                this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton ) + 'px'
+                            }
+                        })
                     } else {
                         this.$store.commit('mifiCommon/changeErrStatus',{
                             show:true,
-                            errorMsg:res.msg ? res.msg : '获取数据信息失败，请稍后再试'
+                            errorMsg : res.msg ? res.msg : '获取数据信息失败，请稍后再试'
                         })
                     }
                 });
@@ -213,17 +227,6 @@
                     this.cur_plan_type_index = 1;
                     this.swiper.slideTo(1, 500, false);
                 }
-
-                this.$nextTick(() => {
-                    let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                        refPLanTitle = this.$refs.refPLanTitle.offsetHeight,
-                        refPlanButton = this.$refs.refPlanButton.offsetHeight;
-                    if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                        this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
-                    } else {
-                        this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton) + 'px'
-                    }
-                })
             }
         }
     };
@@ -378,13 +381,14 @@
         }
 
         .btn-recharge-wrap {
-            &.noDataHide {
-                display: none;
-            }
+            padding: 40px 0;
+            height: 80px;
             button {
+                &.noDataHide {
+                    display: none;
+                }
                 width: 565px;
                 height: 80px;
-                margin: 40px 0;
                 color: #443f37;
                 font-size: 36px;
                 border-radius: 80px;

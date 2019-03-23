@@ -92,13 +92,14 @@
         },
         created(){
             // 请求卡状态
-            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true})
+            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+            this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
             _get('/api//v1/app/cards/status/usage',{
                 iccid:this.iccid,
                 type:1
             }).then(res=>{
-                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false})
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                 if(res.state==1){
                     this.usageInfo = res.data;
 

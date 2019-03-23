@@ -43,17 +43,6 @@
 
             </swiper>
         </div>
-
-        <!--loading-->
-        <div class="loading-wrap" v-show="intercept.loading">
-            <van-loading size="50px" />
-        </div>
-
-        <!--错误信息拦截-->
-        <van-popup :close-on-click-overlay="false" v-model="intercept.show">
-            <p class="showTip">{{intercept.errorMsg}}</p>
-        </van-popup>
-
     </div>
 </template>
 
@@ -81,11 +70,6 @@
                 orderStatusList:['已退款','待支付','已支付','已到账'],
                 statusIndex: 0,
                 orderListObj: {},
-                intercept:{
-                    loading:true,
-                    show:false,
-                    errorMsg:'',
-                },
                 swiperOption: {
                     on: {
                         slideChangeTransitionEnd: function (swiper) {
@@ -96,12 +80,14 @@
             }
         },
         created(){
+            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+            this.$store.commit('mifiCommon/changeErrStatus',{show:false});
             _get('/api/v1/app/order/status',{
                 iccid:this.iccid
             }).then(res=>{
                 this.intercept.loading = false;
                 if(res.state==1){
-                    this.orderListObj = res.data
+                    this.orderListObj = res.data;
                     this.$nextTick(() => {
                         let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                             orderTop = this.$refs.orderTop.offsetHeight;
@@ -113,8 +99,10 @@
                     })
 
                 }else{
-                    this.intercept.show = true;
-                    res.msg ? this.intercept.errorMsg = res.msg : this.intercept.errorMsg = '获取订单数据失败,请稍后再试'
+                    this.$store.commit('mifiCommon/changeErrStatus',{
+                        show:true,
+                        errorMsg:res.msg ? res.msg : '获取数据信息失败，请稍后再试'
+                    })
                 }
 
             })

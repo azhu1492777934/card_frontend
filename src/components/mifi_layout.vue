@@ -59,6 +59,14 @@
                 errorMsg: state => state.mifiCommon.intercept.errorMsg,
 
             }),
+            showError:{
+                get(){
+                    return this.$store.state.mifiCommon.intercept.show
+                },
+                set(payload){
+                    return this.$store.state.mifiCommon.intercept.show = payload.show
+                }
+            }
         },
         created() {
             // 时间差

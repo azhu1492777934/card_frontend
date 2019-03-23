@@ -11,12 +11,15 @@
             </p>
         </div>
        <div class="group-list-wrap">
-           <ul ref="planGroup">
+           <ul v-if="JSON.stringify(group_list)!='[]'" ref="planGroup" >
                <li v-for="(item,index) in group_list" @click="toPlanList(index)">
                     <span>{{item.plan_group_name}}</span>
                     <span class="iconfont icon-rightArrow"></span>
                </li>
            </ul>
+           <div v-else ref="planGroup">
+               <img src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
+           </div>
        </div>
     </div>
 </template>
@@ -38,32 +41,26 @@
                 this.iccid = getStorage('check_iccid');
 
                 // 初始化请求
-                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true})
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+                this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
                 _get('/api/v1/app/plan_group_list',{
                     iccid:this.iccid
                 }).then(res=>{
 
-                    this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false})
-
+                    this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     if(res.state==1){
                         this.group_list = res.data;
-                        if(JSON.stringify(res.data)=='[]'){
-                            this.intercept.hasPlan = true;
-                        }else{
-                            this.$nextTick(()=>{
-                                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                                    refBanner = this.$refs.banner.offsetHeight,
-                                    refTitle = this.$refs.title.offsetHeight;
-
-                                if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                                    this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 44 - 40) + 'px'
-                                } else {
-                                    this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 40) + 'px'
-                                }
-                            })
-                        }
-
+                        this.$nextTick(()=>{
+                            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                refBanner = this.$refs.banner.offsetHeight,
+                                refTitle = this.$refs.title.offsetHeight;
+                            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                                this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 44 - 40) + 'px'
+                            } else {
+                                this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 40) + 'px'
+                            }
+                        })
                     }else{
                         this.$store.commit('mifiCommon/changeErrStatus',{
                             show:true,

@@ -13,13 +13,14 @@
         </div>
         <div class="swipe-wrap" ref="SwiperWwrap">
 
-            <swiper v-if="JSON.stringify(usageListObj)!='{}'" ref="mySwiper" :options="swiperOption">
+            <swiper ref="mySwiper" :options="swiperOption">
 
                 <swiper-slide v-for="(item,index) in statusList" :key="index">
                     <ul v-show="usageListObj[index].length>0" class="plan-list-wrap">
                         <li
                             v-for="(inner_item,inner_index) in usageListObj[index]"
                             :class="`flow-status-bg-${index}`"
+                            @click="toConnection({type:index})"
                         >
                             <div class="usage-left"
                                 :class="{
@@ -58,7 +59,7 @@
 
                                 <!-- 不同时存在流量及通话-->
                                 <!--<div class="data-wrap">-->
-                                <div class="data-wrap" v-if=" (inner_item.total_flow && !inner_item.total_voice ) || (!inner_item.total_flow && inner_item.total_voice ) ">
+                                <div class="data-wrap" v-if="( (inner_item.total_flow && !inner_item.total_voice ) || (!inner_item.total_flow && inner_item.total_voice ) ) && index!=3 ">
                                     <p>套餐时长</p>
                                     <p v-if="index==1">{{ clacDaysSpan(inner_item.activated_at,inner_item.expired_at) }}天</p>
                                     <p v-if="index==0 || index==2">{{ clacDaysSpan(today,inner_item.expired_at) }}天</p>
@@ -109,25 +110,12 @@
                     </ul>
                     <div class="no-data-wrap" v-show="usageListObj[index].length==0">
                         <img class="noOrderPic" src="../../../assets/imgs/mifi/common/noData@2x.png" alt="暂无数据">
-                        <router-link to="/mifi/card/plan_group" class="to-buy-plan">去下单</router-link>
+                        <router-link to="/mifi/plan/group" class="to-buy-plan">去下单</router-link>
                     </div>
                 </swiper-slide>
 
             </swiper>
         </div>
-
-
-        <!--loading-->
-        <div class="loading-wrap" v-show="intercept.loading">
-            <div class="loading-inner">
-                <van-loading size="50px"/>
-            </div>
-        </div>
-
-        <!--错误信息拦截-->
-        <van-popup :close-on-click-overlay="false" v-model="intercept.show">
-            <p class="showTip">{{intercept.errorMsg}}</p>
-        </van-popup>
     </div>
 </template>
 
@@ -161,11 +149,6 @@
                     2: [],
                     3: [],
                 },
-                intercept: {
-                    loading: false,
-                    show: false,
-                    errorMsg: '',
-                },
                 swiperOption: {
                     on: {
                         slideChangeTransitionEnd: function (swiper) {
@@ -176,20 +159,16 @@
             }
         },
         created() {
-
+            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+            this.$store.commit('mifiCommon/changeErrStatus',{show:false});
             _get('/api/v1/app/cards/plan/all',{
                 iccid:this.iccid
             }).then(res=>{
-
-                this.intercept.loading = false;
-
                 if(res.state==1){
-
-                    if(JSON.stringify(res.data)!='[]'){
-
-                        this.usageListObj = res.data
-
-                        this.usageListObj.map((item, index) => {
+                    this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
+                    if(JSON.stringify(res.data.data)!='[]'){
+                        let  serverList = res.data.data;
+                        serverList.map((item, index) => {
                             if ((new Date(item.activated_at.replace(/-/g, '/')).getTime() - this.timeStamp > 0)) {
                                 // 未启动套餐
                                 this.usageListObj[1].push(item)
@@ -206,7 +185,6 @@
                                     }
 
                                 }// 未过期套餐
-
                             }
                         })
                     }
@@ -221,10 +199,11 @@
                     })
 
                 }else{
-                    this.intercept.show = true;
-                    res.msg ? this.intercept.errorMsg = res.msg : this.intercept.errorMsg = '获取订单数据失败,请稍后再试'
+                    this.$store.commit('mifiCommon/changeErrStatus',{
+                        show:true,
+                        errorMsg:res.msg ? res.msg : '获取数据信息失败，请稍后再试'
+                    })
                 }
-
             })
         },
         methods: {
@@ -232,6 +211,16 @@
                 this.statusIndex = index;
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
+            toConnection(params){
+                if(params.type!=0){
+                    return
+                }else{
+                    this.$router.push({
+                        path:'/weixin/card/connection',
+                        from:'mifi'
+                    })
+                }
+            }
         }
     }
 </script>
