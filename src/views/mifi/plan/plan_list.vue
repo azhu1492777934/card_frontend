@@ -112,11 +112,6 @@
                             refPlanButton = this.$refs.refPlanButton.offsetHeight;
                             this.plan_list = res.data;
                             this.processPlsn();
-                        }else{
-                            this.$store.commit('mifiCommon/changeErrStatus',{
-                                show:true,
-                                errorMsg : res.msg ? res.msg : '获取数据信息失败，请稍后再试'
-                            })
                         }
                         this.$nextTick(() => {
                             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
