@@ -61,13 +61,12 @@
                     this.btnDisabled = false;
                     if (res.state == 1) {
                         Notify({
-                            message: '兑换成功',
+                            message: res.msg ? res.msg : '兑换成功',
                             background: '#60ce53'
                         })
                         setTimeout(function () {
-                            setStorage('check_iccid', _this.iccid)
                             _this.$router.push({path: '/mifi/card/index'});
-                        }, 2000)
+                        }, 1500)
                     } else {
                         Notify({message: res.msg})
                     }

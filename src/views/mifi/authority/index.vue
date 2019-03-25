@@ -9,7 +9,7 @@
 <script>
     import {Dialog, Popup} from 'vant'
     import {_post} from "../../../http";
-    import {getUrlParam, getStorage, setStorage, removeStorage, codeParam, checkBrowser} from "../../../utilies";
+    import {getUrlParam, getStorage, setStorage, removeStorage, codeParam, checkBrowser,GetUrlRelativePath} from "../../../utilies";
 
     export default {
         name: "index",
@@ -91,7 +91,8 @@
 
                     } else if (res.error == '11002') {
 
-                        this.$emit('getToken')
+                        setStorage('refreshUrl',GetUrlRelativePath());
+                        this.$emit("getToken",{from:'mifi'});
 
                     } else {
                         this.showAuthorityError('B' + res.error)
@@ -113,7 +114,8 @@
 
                     } else if (res.error == '11002') {
 
-                        this.$emit('getToken')
+                        setStorage('refreshUrl',GetUrlRelativePath());
+                        this.$emit('getToken',{from:'mifi'})
 
                     } else if (res.error == '30005' || res.error == '11003') {
 
@@ -123,7 +125,7 @@
                             title: '绑定信息',
                             message: '为了您的账号安全，需要绑定您的手机号码',
                         }).then(() => {
-                            _this.$router.push({path: '/binding'})
+                            _this.$router.push({path: '/binding'});
                         })
 
                     } else {

@@ -30,7 +30,7 @@
 <script>
     import {Notify,Popup} from 'vant'
     import {_post,_get} from "../../../http";
-    import {getStorage, getUrlParam, setStorage,codeParam, checkBrowser,checkICCID} from "../../../utilies";
+    import {getStorage, getUrlParam, setStorage,codeParam, checkBrowser,checkICCID,GetUrlRelativePath} from "../../../utilies";
 
     export default {
         data() {
@@ -103,11 +103,18 @@
                             if(res.error==0){
                                 setStorage("token", res.data);
                             }
+
+                            Notify({
+                                message:'账户绑定成功',
+                                background:'#60ce53'
+                            });
+
                             this.getUserInfo();
 
                         } else if (res.error == "11002") {
 
-                            this.$emit("getToken");
+                            setStorage('refreshUrl',GetUrlRelativePath());
+                            this.$emit("getToken",{from:'mifi'});
 
                         } else{
                             this.isLoginError = true;
@@ -143,7 +150,8 @@
                                 background:'#60ce53'
                             })
                         } else if(res.error == "11002") {
-                            this.$emit("getToken");
+                            setStorage('refreshUrl',GetUrlRelativePath());
+                            this.$emit("getToken",{from:'mifi'});
                         } else {
                             Notify({message:res.msg})
                         }
@@ -220,7 +228,8 @@
                             }
                         } else if (res.error == '11002') {
 
-                            this.$emit('getToken')
+                            setStorage('refreshUrl',GetUrlRelativePath());
+                            this.$emit("getToken",{from:'mifi'});
 
                         } else if(res.error == '10007'){
                             let curTimeStamp = (new Date()).getTime(),

@@ -26,16 +26,16 @@
                         </span>
                     </div>
                     <div>
-                        <span class="card-question">?</span>
+                        <router-link to="/weixin/question/index" class="card-question">?</router-link>
                         <router-link to="/mifi/card/lookup" class="card-change"> 去变更> </router-link>
                     </div>
                 </div>
             </div>
             <span class="divider"></span>
-            <router-link to="/weixin/new_card/real_name" class="top-info-right">
+            <div @click="toRealName" class="top-info-right">
                 <span class="iconfont icon-user"></span>
                 <p>去实名</p>
-            </router-link>
+            </div>
 
         </div>
         <div v-if="usageInfo.auth_status!=1" class="card-function-wrap">
@@ -69,7 +69,7 @@
 </template>
 
 <script>
-    import {getStorage} from "../../../utilies";
+    import {getStorage,setStorage} from "../../../utilies";
     import {_get} from "../../../http";
     export default {
         name: "index",
@@ -163,6 +163,10 @@
             inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
+            toRealName(){
+                setStorage('check_realNameSource',this.usageInfo.source);
+                this.$router.push({path:'/weixin/new_card/real_name'});
+            }
         }
     }
 </script>
@@ -239,11 +243,13 @@
                     color: #fff;
                 }
                 .card-question{
+                    display: inline-block;
                     width: 35px;
                     height: 35px;
                     border-radius: 50%;
                     line-height: 33px;
                     color: #fff;
+                    text-align: center;
                     background-color: #ffc641;
                 }
                 .card-change{

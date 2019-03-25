@@ -148,7 +148,7 @@
         },
         data() {
             return {
-
+                isOriginPrice:getStorage('originPrice'),
                 rechargeShow:false,//创建订单遮罩
                 recharge_list: [
                     {
@@ -346,7 +346,7 @@
                 this.showDate = false;
             },//取消日期弹窗
             recharge:function () {
-                if (!this.userInfo.user_id) {
+                if (!this.userInfo.account.user_id) {
                     Notify({message:'请在微信或支付宝客户端充值'});
                     return
                 }
@@ -454,6 +454,7 @@
                                 document.write(res.data);
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
+
                                 if(getUrlParam('from')=='mifi'){
                                     location.href = global_variables.authorized_redirect_url + '/mifi/card/index'
                                 }else{
@@ -465,8 +466,13 @@
                                     background:'#60ce53'
                                 })
                                 setTimeout(function () {
-                                    setStorage('check_iccid',_this.planInfo.iccid);
-                                    location.href = res.data.return_url
+
+                                    if(getUrlParam('from')=='mifi'){
+                                        location.href = global_variables.authorized_redirect_url + '/mifi/card/index'
+                                    }else{
+                                        location.href = res.data.return_url
+                                    }
+
                                 },2000)
                             }//纯钻石支付
                         }else{

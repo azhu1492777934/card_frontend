@@ -191,6 +191,17 @@ function Today() {
     return `${year}-${month}-${date}`;
 }
 
+function GetUrlRelativePath() {
+    let url = document.location.toString(),
+        arrUrl = url.split("//"),
+        start = arrUrl[1].indexOf("/"),
+        relUrl = arrUrl[1].substring(start);//stop省略，截取从start开始到结尾的所有字符
+    if (relUrl.indexOf("?") != -1) {
+        relUrl = relUrl.split("?")[0];
+    }
+    return relUrl;
+}//获取当前路径
+
 export {
     getCardServerToken,
     setStorage,
@@ -205,4 +216,5 @@ export {
     getUrlParam,
     inArray,
     Today,
+    GetUrlRelativePath
 }

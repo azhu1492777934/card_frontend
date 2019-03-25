@@ -46,7 +46,7 @@
                 <button :class="{'noDataHide':JSON.stringify(plan_list) == '{}'}" @click="recharge">前往充值</button>
             </div>
         </div>
-        <div v-if="JSON.stringify(plan_list) == '{}'">
+        <div v-if="showNoData">
             <img src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
         </div>
 
@@ -65,6 +65,7 @@
         data() {
             const _this = this;
             return {
+                showNoData: false,
                 plan_group_id:getStorage('plan_group_id'),
                 client_type: checkBrowser(),
                 plan_type: [],
@@ -112,17 +113,19 @@
                             refPlanButton = this.$refs.refPlanButton.offsetHeight;
                             this.plan_list = res.data;
                             this.processPlsn();
-                        }
-                        this.$nextTick(() => {
-                            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                                refPLanTitle = this.$refs.refPLanTitle.offsetHeight;
+                            this.$nextTick(() => {
+                                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                    refPLanTitle = this.$refs.refPLanTitle.offsetHeight;
 
-                            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                                this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
-                            } else {
-                                this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton ) + 'px'
-                            }
-                        })
+                                if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                                    this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
+                                } else {
+                                    this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton ) + 'px'
+                                }
+                            })
+                        }else {
+                            this.showNoData = true;
+                        }
                     } else {
                         this.$store.commit('mifiCommon/changeErrStatus',{
                             show:true,
@@ -191,7 +194,7 @@
                         setStorage("monthlyMsg", res.data, "obj");
                         this.$router.push({
                             path: "/weixin/recharge/index",
-                            query: { source: 'mifi' },
+                            query: { from: 'mifi' },
                         });
                     } else {
                         Notify({message: res.msg});

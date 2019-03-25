@@ -17,7 +17,7 @@
                     <span class="iconfont icon-rightArrow"></span>
                </li>
            </ul>
-           <div v-else ref="planGroup">
+           <div v-if="showNoData">
                <img src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
            </div>
        </div>
@@ -32,6 +32,7 @@
         name: "plan_group",
         data(){
             return {
+                showNoData: false,
                 iccid:getStorage('check_iccid'),
                 group_list:[],
             }
@@ -52,16 +53,21 @@
                     this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     if(res.state==1){
                         this.group_list = res.data;
-                        this.$nextTick(()=>{
-                            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                                refBanner = this.$refs.banner.offsetHeight,
-                                refTitle = this.$refs.title.offsetHeight;
-                            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                                this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 44 - 40) + 'px'
-                            } else {
-                                this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 40) + 'px'
-                            }
-                        })
+
+                        if(JSON.stringify(res.data)!='[]'){
+                            this.$nextTick(()=>{
+                                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                    refBanner = this.$refs.banner.offsetHeight,
+                                    refTitle = this.$refs.title.offsetHeight;
+                                if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                                    this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 44 - 40) + 'px'
+                                } else {
+                                    this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 40) + 'px'
+                                }
+                            })
+                        }else{
+                            this.showNoData = true;
+                        }
                     }else{
                         this.$store.commit('mifiCommon/changeErrStatus',{
                             show:true,
@@ -104,6 +110,7 @@
         }
         .group-list-wrap{
             padding: 0 54px;
+            -webkit-overflow-scrolling:touch;
             ul{
                 overflow: auto;
             }

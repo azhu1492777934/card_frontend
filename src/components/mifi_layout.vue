@@ -27,7 +27,7 @@
     import userHeader from './common/uesrHead'
     import {Dialog, Popup,Loading} from 'vant'
     import {_post, _get} from "../http";
-    import {codeParam, checkBrowser, setStorage, getStorage, removeStorage, getUrlParam, checkICCID,getCardServerToken} from "../utilies";
+    import {codeParam, checkBrowser, setStorage, getStorage, removeStorage, getUrlParam, checkICCID,getCardServerToken,GetUrlRelativePath} from "../utilies";
 
     export default {
         name: 'App',
@@ -185,7 +185,8 @@
                             }
                         } else if (res.error == '11002') {
 
-                            this.$emit('getToken')
+                            setStorage('refreshUrl',GetUrlRelativePath());
+                            this.$emit("getToken",{from:'mifi'});
 
                         } else if(res.error == '10007'){
                             let curTimeStamp = (new Date()).getTime(),
@@ -245,7 +246,8 @@
 
                         } else if (res.error == '11002') {
 
-                            this.$emit('getToken')
+                            setStorage('refreshUrl',GetUrlRelativePath());
+                            this.$emit('getToken',{from:'mifi'})
 
                         } else {
                             this.this.showAuthorityError('C'+res.error)

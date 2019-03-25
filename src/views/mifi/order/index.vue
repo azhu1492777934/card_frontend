@@ -119,7 +119,7 @@
                 setStorage('planInfo',params.rate_plan,'obj');
                 this.$router.push({
                     path:'/weixin/recharge/index',
-                    query: { source: 'mifi' },
+                    query: { from: 'mifi' },
                 });
 
             }
@@ -182,6 +182,7 @@
             padding: 25px 23px;
             background-color: #efeaea;
             box-sizing: border-box;
+            -webkit-overflow-scrolling: touch;
             .order-list-wrap{
                 height: 100%;
                 overflow-y: auto;
