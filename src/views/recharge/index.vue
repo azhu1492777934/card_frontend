@@ -148,6 +148,7 @@
         },
         data() {
             return {
+
                 rechargeShow:false,//创建订单遮罩
                 recharge_list: [
                     {
@@ -345,6 +346,10 @@
                 this.showDate = false;
             },//取消日期弹窗
             recharge:function () {
+                if (!this.userInfo.user_id) {
+                    Notify({message:'请在微信或支付宝客户端充值'});
+                    return
+                }
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
                 let param = {},
                     _this = this;
@@ -435,7 +440,7 @@
                     param.start_time = this.val_date
                 }
 
-                getUrlParam('source')=='mifi' ? param.type = 1 : param.type = 0;
+                getUrlParam('from')=='mifi' ? param.type = 1 : param.type = 0;
 
 
                 this.rechargeShow = true;
@@ -449,7 +454,7 @@
                                 document.write(res.data);
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
-                                if(getUrlParam('source')=='mifi'){
+                                if(getUrlParam('from')=='mifi'){
                                     location.href = global_variables.authorized_redirect_url + '/mifi/card/index'
                                 }else{
                                     location.href = res.data

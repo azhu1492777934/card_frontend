@@ -45,7 +45,7 @@
                         setStorage('check_realNameSource', res.data.source)
                         this.$router.push({
                             path: '/weixin/new_card/real_name',
-                            query: { source: 'mifi' }
+                            query: { from: 'mifi' }
                         }); // 实名
                     }
                 })

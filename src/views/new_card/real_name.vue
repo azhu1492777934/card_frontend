@@ -115,7 +115,7 @@
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    if(getUrlParam('source')=='mifi'){
+                    if(getUrlParam('from')=='mifi'){
                         this.$router.push({path:'/mifi/card/lookup'})
                     }else{
                         this.$router.push({'path':'/weixin/card/lookup'});

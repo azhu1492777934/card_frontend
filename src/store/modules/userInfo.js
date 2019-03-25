@@ -9,7 +9,8 @@ const state ={
         },
         nickname:'eLink',
         avatar:'',
-    }//用户信息
+    },//用户信息
+    decrypt_data:getStorage('decrypt_data','obj')
 }
 
 
@@ -21,7 +22,11 @@ const getters ={
 const mutations = {
     changeUserInfo(state,info){
         state.userInfoInner = getStorage('userInfo','obj');
-        state.userInfoInner = info
+        state.userInfoInner = info;
+        if(state.decrypt_data){
+            state.userInfoInner.nickname = state.decrypt_data.nickname;
+            state.userInfoInner.avatar = state.decrypt_data.headimgurl;
+        }
     },
     changeUserStatus(state,userStatus){
         state.showUser = userStatus

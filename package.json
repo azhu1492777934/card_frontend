@@ -36,25 +36,6 @@
     "vuex": "^3.0.1",
     "weixin-js-sdk": "^1.4.0-test"
   },
-  "postcss": {
-    "plugins": {
-      "autoprefixer": {},
-      "postcss-pxtorem": {
-        "rootValue": 75,
-        "propList": [
-          "*"
-        ],
-        "selectorBlackList": [
-          "van-toast",
-          "van-picker",
-          "van-popup",
-          "van-notify",
-          "van-dialog",
-          "van-button"
-        ]
-      }
-    }
-  },
   "browserslist": [
     "> 1%",
     "last 2 versions",

@@ -22,7 +22,6 @@
 </template>
 
 <script>
-
     import {Notify} from 'vant'
     import {mapState} from 'vuex'
     import userHeader from './common/uesrHead'
@@ -57,7 +56,6 @@
                 showLoading: state => state.mifiCommon.intercept.loading,
                 showError: state => state.mifiCommon.intercept.show,
                 errorMsg: state => state.mifiCommon.intercept.errorMsg,
-
             }),
             showError:{
                 get(){
