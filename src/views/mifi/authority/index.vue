@@ -31,8 +31,10 @@
 
                 if (this.client_type == 'wechat' || this.client_type == 'alipay') {
 
-                    if (getStorage('state') == getUrlParam('state') && getStorage('state') && getUrlParam('state')) {
+                    if (getStorage('state') && getUrlParam('state') && getStorage('state') == getUrlParam('state')) {
+
                         this.decryptData();
+
                     } else {
                         let _this = this;
                         removeStorage('token');
@@ -46,7 +48,7 @@
                         })
                     }
                 } else {
-                    this.$router.push('/weixin/card/lookup')
+                    this.$router.push('/weixin/card/lookup');
                 }
 
             }else{

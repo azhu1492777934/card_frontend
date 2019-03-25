@@ -351,9 +351,6 @@ export const constantRouterMap = [{
        }]
     }]
 }, {
-    path: '/',
-    redirect: '/mifi/index'
-}, {
     // cardserver 授权业务处理
     path: '/authority',
     component: authority_middle,
