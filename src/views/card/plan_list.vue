@@ -107,10 +107,12 @@
             -webkit-overflow-scrolling: touch;
             li {
                 position: relative;
+                display: flex;
                 width: 90%;
                 min-height: 95px;
                 margin: 0 auto;
-                display: flex;
+                padding: 0 15px;
+                box-sizing: border-box;
                 color: #868686;
                 border: 1PX solid #e6e6e6;
                 border-radius: 10px;
@@ -126,7 +128,6 @@
                 //套餐信息
                 .plan-info-wrap {
                     flex: 5;
-                    padding: 0 40px;
                     box-sizing: border-box;
                     text-align: left;
                     font-size: 24px;
@@ -142,7 +143,7 @@
                     .icon-recommend{
                         position: absolute;
                         top: 5px;
-                        left: 40px;
+                        left: 10px;
                         font-size: 60px;
                     }
                     .plan-limited-wrap {
