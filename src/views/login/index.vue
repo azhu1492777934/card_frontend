@@ -61,11 +61,11 @@
         methods: {
             login() {
                 if (this.phone == '' && this.code == '') {
-                    Notify({message: '请填写您的登录信息'})
-                    return
+                    Notify({message: '请填写您的信息'});
+                    return;
                 } else if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
-                    Notify({message: '您的手机号码有误'})
-                    return
+                    Notify({message: '您的手机号码有误'});
+                    return;
                 } else {
                     this.loginDisabled = true;
                     _post("/accountCenter/v2/user/bind?" + codeParam({},'post'), {
@@ -99,13 +99,15 @@
                                 message:'帐户绑定成功',
                                 background:'#60ce53'
                             })
-
                             let redirect_uri = getStorage('authorized_redirect_uri');
 
                             setTimeout(function () {
                                 getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
                             },2000)
 
+                        }else if(res.error == 20014){
+                            this.code = '';
+                            Notify({message:'用户绑定超时，请重新绑定'});
                         } else{
                             this.isLoginError = true;
                             res.msg ? this.loginErrorMsg = res.msg : this.loginErrorMsg = '绑定用户失败，请反馈我司客服。'
