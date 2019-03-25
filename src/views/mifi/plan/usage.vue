@@ -164,8 +164,8 @@
             _get('/api/v1/app/cards/plan/all',{
                 iccid:this.iccid
             }).then(res=>{
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                 if(res.state==1){
-                    this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     if(JSON.stringify(res.data.data)!='[]'){
                         let  serverList = res.data.data;
                         serverList.map((item, index) => {

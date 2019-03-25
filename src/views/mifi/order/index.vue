@@ -85,7 +85,7 @@
             _get('/api/v1/app/order/status',{
                 iccid:this.iccid
             }).then(res=>{
-                this.intercept.loading = false;
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                 if(res.state==1){
                     this.orderListObj = res.data;
                     this.$nextTick(() => {
@@ -113,7 +113,7 @@
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
             toPay(params){
-                setStorage('planInfo',params.rate_plan);
+                setStorage('planInfo',params.rate_plan,'obj');
                 this.$router.push({
                     path:'/weixin/recharge/index',
                     query: { source: 'mifi' },
