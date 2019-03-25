@@ -38,6 +38,11 @@
         components: {
             [Notify.name]:Notify
         },
+        created(){
+            if(!this.iccid){
+                this.$router.push({path:'/mifi/card/lookup'});
+            }
+        },
         methods: {
             exchange() {
                 let _this = this;

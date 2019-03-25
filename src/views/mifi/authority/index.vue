@@ -27,26 +27,31 @@
         },
         created() {
 
-            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+            if(!getStorage('token')){
 
-                if (getStorage('state') == getUrlParam('state') && getStorage('state') && getUrlParam('state')) {
-                    this.decryptData();
+                if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+
+                    if (getStorage('state') == getUrlParam('state') && getStorage('state') && getUrlParam('state')) {
+                        this.decryptData();
+                    } else {
+                        let _this = this;
+                        removeStorage('token');
+                        removeStorage('state');
+
+                        Dialog.alert({
+                            title: '绑定失败',
+                            message: '您的账号信息绑定失败,请重新授权绑定。',
+                        }).then(() => {
+                            _this.$router.push('/mifi/index');
+                        })
+                    }
                 } else {
-                    let _this = this;
-                    removeStorage('token');
-                    removeStorage('state');
-
-                    Dialog.alert({
-                        title: '绑定失败',
-                        message: '您的账号信息绑定失败,请重新授权绑定。',
-                    }).then(() => {
-                        _this.$router.push('/mifi/index');
-                    })
+                    this.$router.push('/weixin/card/lookup')
                 }
-            } else {
-                this.$router.push('/weixin/card/lookup')
-            }
 
+            }else{
+                this.$router.push({path:'/mifi/card/lookup'});
+            }
         },
 
         methods: {

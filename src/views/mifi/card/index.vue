@@ -91,53 +91,58 @@
             }
         },
         created(){
-            // 请求卡状态
-            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
-            this.$store.commit('mifiCommon/changeErrStatus',{show:false});
+            if(this.iccid){
+                // 请求卡状态
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+                this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
-            _get('/api//v1/app/cards/status/usage',{
-                iccid:this.iccid,
-                type:1
-            }).then(res=>{
-                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
-                if(res.state==1){
-                    this.usageInfo = res.data;
+                _get('/api//v1/app/cards/status/usage',{
+                    iccid:this.iccid,
+                    type:1
+                }).then(res=>{
+                    this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
+                    if(res.state==1){
+                        this.usageInfo = res.data;
 
-                    if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
-                        this.auth_status.push('手淘实名');
-                    } else {
-                        this.auth_status.push('已实名');
-                    }//实名增加状态
-
-                    this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
-
-                    if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.usageInfo.imei) {
-                        if (!this.usageInfo.imei || !this.usageInfo.fenli) {
-                            this.filterCardInfo.device_state = {state: '机卡已绑定', code: 1}
+                        if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
+                            this.auth_status.push('手淘实名');
                         } else {
-                            if (this.usageInfo.status == 2) {
-                                this.filterCardInfo.device_state = {state: '机卡已分离停机', code: 2}
+                            this.auth_status.push('已实名');
+                        }//实名增加状态
+
+                        this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
+
+                        if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.usageInfo.imei) {
+                            if (!this.usageInfo.imei || !this.usageInfo.fenli) {
+                                this.filterCardInfo.device_state = {state: '机卡已绑定', code: 1}
                             } else {
-                                this.filterCardInfo.device_state = {state: '机卡分离', code: 2}
+                                if (this.usageInfo.status == 2) {
+                                    this.filterCardInfo.device_state = {state: '机卡已分离停机', code: 2}
+                                } else {
+                                    this.filterCardInfo.device_state = {state: '机卡分离', code: 2}
+                                }
                             }
-                        }
-                    }//机卡状态
+                        }//机卡状态
 
-                    this.filterCardInfo.card_str_state = this.card_state[this.usageInfo.status];//卡状态
+                        this.filterCardInfo.card_str_state = this.card_state[this.usageInfo.status];//卡状态
 
-                    // if (this.usageInfo.status == 2) {
-                    //     this.filterCardInfo.refresh_actived = '激活'
-                    // } else {
-                    //     this.filterCardInfo.refresh_actived = '刷新'
-                    // }
+                        // if (this.usageInfo.status == 2) {
+                        //     this.filterCardInfo.refresh_actived = '激活'
+                        // } else {
+                        //     this.filterCardInfo.refresh_actived = '刷新'
+                        // }
 
-                }else{
-                    this.$store.commit('mifiCommon/changeErrStatus',{
-                        show:true,
-                        errorMsg:res.msg ?res.msg:'获取数据信息失败，请稍后再试'
-                    })
-                }
-            })
+                    }else{
+                        this.$store.commit('mifiCommon/changeErrStatus',{
+                            show:true,
+                            errorMsg:res.msg ?res.msg:'获取数据信息失败，请稍后再试'
+                        })
+                    }
+                })
+            }else{
+                this.$router.push({path:'/mifi/card/lookup'});
+            }
+
         },
         methods:{
             refreshCard(){

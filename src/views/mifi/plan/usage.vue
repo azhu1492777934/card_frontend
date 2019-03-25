@@ -159,54 +159,57 @@
             }
         },
         created() {
-            this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
-            this.$store.commit('mifiCommon/changeErrStatus',{show:false});
-            _get('/api/v1/app/cards/plan/all',{
-                iccid:this.iccid
-            }).then(res=>{
-                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
-                if(res.state==1){
-                    if(JSON.stringify(res.data.data)!='[]'){
-                        let  serverList = res.data.data;
-                        serverList.map((item, index) => {
-                            if ((new Date(item.activated_at.replace(/-/g, '/')).getTime() - this.timeStamp > 0)) {
-                                // 未启动套餐
-                                this.usageListObj[1].push(item)
-                            } else {
-                                // 过期套餐
-                                if ((new Date(item.expired_at.replace(/-/g, '/')).getTime() - this.timeStamp < 0)) {
-                                    this.usageListObj[3].push(item)
-                                } else {
-                                    // 套餐失效
-                                    if (item.total_flow == 0) {
-                                        this.usageListObj[1].push(item);
-                                    } else {
-                                        this.usageListObj[0].push(item);
-                                    }
-
-                                }// 未过期套餐
-                            }
-                        })
-                    }
-                    this.$nextTick(() => {
-                        let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                            orderTop = this.$refs.orderTop.offsetHeight;
-                        if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                            this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop  - 44) + 'px'
-                        } else {
-                            this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop) + 'px'
-                        }
-                    })
-
-                }else{
-                    this.$store.commit('mifiCommon/changeErrStatus',{
-                        show:true,
-                        errorMsg:res.msg ? res.msg : '获取数据信息失败，请稍后再试'
-                    })
-                }
-            })
+            this.iccid ? this.initial() : this.$router.push({path:'/mifi/card/lookup'});
         },
         methods: {
+            initial(){
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
+                this.$store.commit('mifiCommon/changeErrStatus',{show:false});
+                _get('/api/v1/app/cards/plan/all',{
+                    iccid:this.iccid
+                }).then(res=>{
+                    this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
+                    if(res.state==1){
+                        if(JSON.stringify(res.data.data)!='[]'){
+                            let  serverList = res.data.data;
+                            serverList.map((item, index) => {
+                                if ((new Date(item.activated_at.replace(/-/g, '/')).getTime() - this.timeStamp > 0)) {
+                                    // 未启动套餐
+                                    this.usageListObj[1].push(item)
+                                } else {
+                                    // 过期套餐
+                                    if ((new Date(item.expired_at.replace(/-/g, '/')).getTime() - this.timeStamp < 0)) {
+                                        this.usageListObj[3].push(item)
+                                    } else {
+                                        // 套餐失效
+                                        if (item.total_flow == 0) {
+                                            this.usageListObj[1].push(item);
+                                        } else {
+                                            this.usageListObj[0].push(item);
+                                        }
+
+                                    }// 未过期套餐
+                                }
+                            })
+                        }
+                        this.$nextTick(() => {
+                            let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                orderTop = this.$refs.orderTop.offsetHeight;
+                            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                                this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop  - 44) + 'px'
+                            } else {
+                                this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop) + 'px'
+                            }
+                        })
+
+                    }else{
+                        this.$store.commit('mifiCommon/changeErrStatus',{
+                            show:true,
+                            errorMsg:res.msg ? res.msg : '获取数据信息失败，请稍后再试'
+                        })
+                    }
+                })
+            },
             changeStatus(index) {
                 this.statusIndex = index;
                 this.$refs.mySwiper.swiper.slideTo(index);

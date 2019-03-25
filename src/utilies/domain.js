@@ -9,7 +9,8 @@ let global_variables = {
 
 if(process.env.NODE_ENV == 'development'){
 // if(process.env.NODE_ENV == 'production'){
-    global_variables.authorized_redirect_url = 'https://cardserver.china-m2m.com'
+    global_variables.authorized_redirect_url = 'http://mifiserver-test.china-m2m.com'
+    // global_variables.authorized_redirect_url = 'https://cardserver.china-m2m.com'
 }else{
     // global_variables.authorized_redirect_url = 'http://cardserver-test.china-m2m.com'
 

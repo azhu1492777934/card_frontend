@@ -32,14 +32,15 @@
         name: "plan_group",
         data(){
             return {
-                iccid:'',
+                iccid:getStorage('check_iccid'),
                 group_list:[],
             }
         },
         created(){
-            if(getStorage('check_iccid')){
-                this.iccid = getStorage('check_iccid');
-
+            this.iccid ? this.initial() : this.$router.push({path:'/mifi/card/lookup'});
+        },
+        methods:{
+            initial(){
                 // 初始化请求
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
                 this.$store.commit('mifiCommon/changeErrStatus',{show:false});
@@ -68,12 +69,8 @@
                         })
                     }
                 })
+            },
 
-            }else{
-                this.$router.push('/mifi/card/lookup');
-            }
-        },
-        methods:{
             toPlanList(index){
                 let id = this.group_list[index].plan_group_id;
                 setStorage('plan_group_id',id);
