@@ -640,7 +640,7 @@
 
                             this.filterCardInfo.watch_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used,0,0) //已使用流量
 
-                            if (this.usageInfo.noMaxVoice == 1) {
+                            if (this.usageInfo.usage.noMaxVoice == 1) {
                                 this.filterCardInfo.watch_card_usage.total_voice = '无限'
 
                             } else {
