@@ -181,8 +181,10 @@
                         setStorage('new_auth_search_iccid',iccid);
 
                         if (res.data.status == 1) {
+                            setStorage('enterpriseRealname',1);
                             _this.$router.push({path: '/mifi/card/index'});
                         } else if (res.data.status == 2 || res.data.status == 3) {
+
                             setStorage('check_realNameSource', res.data.source);
                             _this.$router.push({
                                 path: '/weixin/new_card/real_name',

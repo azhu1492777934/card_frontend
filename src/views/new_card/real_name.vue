@@ -115,11 +115,7 @@
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    if(getUrlParam('from')=='mifi'){
-                        this.$router.push({path:'/mifi/card/lookup'})
-                    }else{
-                        this.$router.push({'path':'/weixin/card/lookup'});
-                    }
+                    (getUrlParam('from')=='mifi') ?  this.$router.push({path:'/mifi/card/lookup'}) : this.$router.push({path:'/weixin/card/lookup'})
                 }
             }
             if(getUrlParam('source')){
@@ -128,14 +124,9 @@
                 if(getStorage('check_realNameSource')){
                     this.card_source = getStorage('check_realNameSource');
                 }else{
-                    if(getUrlParam('from')=='mifi'){
-                        this.$router.push({path:'/mifi/card/lookup'})
-                    }else{
-                        this.$router.push({'path':'/weixin/card/lookup'});
-                    }
+                    (getUrlParam('from')=='mifi') ?  this.$router.push({path:'/mifi/card/lookup'}) : this.$router.push({path:'/weixin/card/lookup'})
                 }
             }
-
 
             if (inArray(this.card_source, ['18', '19', '20', '21', '22','27']) >= 0) {
                 this.card_tip = !this.card_tip
@@ -147,13 +138,13 @@
                 if (res.state==1) {
                     this.is_boss = true
                     this.showItem.showID = true;
-                    this.showItem.showName = true
+                    this.showItem.showName = true;
                 } else {
-                    this.is_boss = false
-                    this.showItem.showID = false
-                    this.showItem.showName = false
+                    this.is_boss = false;
+                    this.showItem.showID = false;
+                    this.showItem.showName = false;
                 }
-                this.showItem.showFixedWrap = false
+                this.showItem.showFixedWrap = false;
             })//检测是否是大佬账户
         },
         mounted(){},

@@ -110,7 +110,11 @@
                             this.auth_status.push('已实名');
                         }//实名增加状态
 
-                        this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
+                        if(this.usageInfo.auth_status==0 && getStorage('enterpriseRealname')==1){
+                            this.filterCardInfo.real_name_state = '已实名';
+                        }else{
+                            this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
+                        }
 
                         if (this.inArray(this.usageInfo.source, [1, 5]) >= 0 && this.usageInfo.imei) {
                             if (!this.usageInfo.imei || !this.usageInfo.fenli) {
