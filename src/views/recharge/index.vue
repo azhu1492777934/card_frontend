@@ -366,7 +366,7 @@
 
                 }
 
-                param.iccid = this.planInfo.iccid;
+                param.iccid = this.planInfo.iccid || getStorage('check_iccid');
                 param.rating_id = this.planInfo.id;
                 param.is_renew=rechargeInfo.is_renew;
                 if(rechargeInfo.is_renew==true){
@@ -456,7 +456,8 @@
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
 
                                 if(getUrlParam('from')=='mifi'){
-                                    location.href = this.global_variables.authorized_redirect_url + '/mifi/card/index'
+
+                                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
                                 }else{
                                     location.href = res.data
                                 }
@@ -465,10 +466,11 @@
                                     message:'充值成功',
                                     background:'#60ce53'
                                 })
+
                                 setTimeout(function () {
 
                                     if(getUrlParam('from')=='mifi'){
-                                        location.href = this.global_variables.authorized_redirect_url + '/mifi/card/index'
+                                        location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
                                     }else{
                                         location.href = res.data.return_url
                                     }
