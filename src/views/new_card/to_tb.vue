@@ -161,6 +161,14 @@
             this.imei = getUrlParam('imei');
             this.source = getUrlParam('source');
             this.qrSrc = 'http://cardserver_test.china-m2m.com/qrcode?iccid=' + this.iccid + '&imei=' + this.imei
+
+
+            let ua = navigator.userAgent.toLowerCase();
+            if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                return false;
+            }else{
+                location.href = this.$route.query.url;
+            }
         },
         mounted() {
 
