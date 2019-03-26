@@ -270,7 +270,7 @@
 
                     this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
 
-                }else if(this.plan_list.is_can_renew == 1){
+                }else if(this.planInfo.is_can_renew == 1){
 
                     this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 2) : this.activeIndex = 0;
                 }
