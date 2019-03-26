@@ -312,6 +312,7 @@
                         setStorage('watchAutoSearch', autoCount);
                     }
                     if (res.state == 1) {
+                        setStorage('originPrice',res.data.default_price);
                         setStorage('check_iccid', res.data.iccid);
                         setStorage('new_auth_search_iccid',iccid);
                         if (res.data.status == 1) {

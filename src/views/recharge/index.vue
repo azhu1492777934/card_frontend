@@ -10,15 +10,17 @@
                 <em class="title-line rotate-180"></em>
             </div>
             <ul class="discount-wrap">
-
-                <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100" data-elb="20"
+                <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"
+                    data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div    :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">  
-                         <div class="monthlyTop " v-if="item.is_first==true">
+                    <div
+                            :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">
+                        <div class="monthlyTop " v-if="item.is_first==true">
                             <div class="monthlyFirst">首月</div>
                             <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
                         </div>
-                        <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" >{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
+                        <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}">
+                            {{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
                         <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
@@ -31,13 +33,6 @@
                         </p><!--多充值支付-->
                     </div>
                 </li>
-                <!--<li class="monthly ">-->
-                <!--<div>-->
-                <!--<p class="discount-rmb">1.5元</p>-->
-                <!--<span  class="line"></span>-->
-
-                <!--</div>-->
-                <!--</li>  -->
                 <li class="special"></li>
             </ul>
             <div class="choice-wrap">
@@ -51,7 +46,8 @@
                         <input :checked="check_date" type="radio">
                         <span>选择时间</span>
                     </div>
-                    <input @click="showChooseDate" v-show="check_date" id="dateSelector" v-model="val_date" readonly placeholder="请选择时间"
+                    <input @click="showChooseDate" v-show="check_date" id="dateSelector" v-model="val_date" readonly
+                           placeholder="请选择时间"
                            type="text">
                 </div><!--生效日期-->
                 <div v-show="isShowChoice.showCode">
@@ -129,8 +125,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import {DatetimePicker, Area, Popup,Notify} from 'vant';
-    import {setStorage,getStorage,checkBrowser} from "../../utilies";
+    import {DatetimePicker, Area, Popup, Notify} from 'vant';
+    import {setStorage, getStorage, checkBrowser} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -144,11 +140,12 @@
             [DatetimePicker.name]: DatetimePicker,
             [Area.name]: Area,
             [Popup.name]: Popup,
-            [Notify.name]:Notify
+            [Notify.name]: Notify
         },
         data() {
             return {
-                rechargeShow:false,//创建订单遮罩
+                showOriginPrice:getStorage('originPrice'),
+                rechargeShow: false,//创建订单遮罩
                 recharge_list: [
                     {
                         pay_type: 'diamond_charge',
@@ -173,16 +170,16 @@
                         give_elb: 0
                     }
                 ],//充值列表数据
-                new_recharge_list:[],
+                new_recharge_list: [],
 
                 minDate: new Date(),
                 maxDate: new Date(this.getEndDate().endYear, this.getEndDate().endMonth, this.getEndDate().endDay),
                 currentDate: new Date(),
 
-                isShowChoice:{
-                    showDate:true,
-                    showELB:true,
-                    showCode:true,
+                isShowChoice: {
+                    showDate: true,
+                    showELB: true,
+                    showCode: true,
                 },
 
                 check_date: false,
@@ -196,44 +193,44 @@
                 activeIndex: 0,//当前选择充值方式索引
                 showDate: false,//选择时间弹出
 
-                userInfo:'',//用户信息
-                openid:'', //用户openid
-                planInfo:getStorage('planInfo','obj'),//当前充值套餐信息
+                userInfo: '',//用户信息
+                openid: '', //用户openid
+                planInfo: getStorage('planInfo', 'obj'),//当前充值套餐信息
 
-                client_type:checkBrowser(),
+                client_type: checkBrowser(),
 
-                appPay:{
-                    show:false,
-                    type:true,//true 为微信，false 为支付宝
+                appPay: {
+                    show: false,
+                    type: true,//true 为微信，false 为支付宝
                 },
 
             }
         },
         created() {
-            if(getStorage('decrypt_data','obj')){
-                this.open_id = getStorage('decrypt_data','obj').openid
+            if (getStorage('decrypt_data', 'obj')) {
+                this.open_id = getStorage('decrypt_data', 'obj').openid
             }
 
-            if(!this.planInfo){
-                this.$router.push({'path':'/card/plan_list'});
+            if (!this.planInfo) {
+                this.$router.push({'path': '/card/plan_list'});
             }
 
-            if(this.planInfo){
-                if(this.planInfo.is_elb_deductible==0){
+            if (this.planInfo) {
+                if (this.planInfo.is_elb_deductible == 0) {
                     this.isShowChoice.showELB = false
                 }
             }//是否显示ELB
 
-            if(getStorage('newCard')){
-                if(getStorage('newCard')==1){
+            if (getStorage('newCard')) {
+                if (getStorage('newCard') == 1) {
                     this.isShowChoice.showELB = false;
                     this.isShowChoice.showCode = false;
                     this.isShowChoice.showDate = false;
                 }
             }//新卡默认不显示所有选择
 
-            if(getStorage('isSpeedUp')){
-                if(getStorage('isSpeedUp')==1){
+            if (getStorage('isSpeedUp')) {
+                if (getStorage('isSpeedUp') == 1) {
                     this.isShowChoice.showDate = false;
                 }
             }//加速包默认不显示生效时间
@@ -245,28 +242,38 @@
             let user_rmb = 0;
             this.userInfo = this.authorizedUserInfo;
 
-            if(this.userInfo.account.rmb > 0) {
+            if (this.userInfo.account.rmb > 0) {
                 user_rmb = this.userInfo.account.rmb;
             }
-            this.new_recharge_list = this.filterRechargeList(user_rmb,this.planInfo.price);//根据套餐价格过滤充值参数
-            
-             /*
-            * 增加包月套餐
-            * 条件限制:存在钻石用量
-            * */
+            this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);//根据套餐价格过滤充值参数
 
-            if(this.userInfo.account.rmb > 0 &&this.planInfo.is_can_renew==1){
-                 const monthlyMsg=getStorage("monthlyMsg","obj");
-                 monthlyMsg.give_elb=0;
-                 if(monthlyMsg.is_first){
-                    monthlyMsg.pay_money=monthlyMsg.first_price;
-                 }else{
-                    monthlyMsg.pay_money=monthlyMsg.price;
-                 }
-                 monthlyMsg.pay_type="monthly_recharge";
+            /*
+           * 增加包月套餐
+           * 条件限制:存在钻石用量
+           * */
 
-                 monthlyMsg.is_renew=true;
+            if (this.userInfo.account.rmb > 0 && this.planInfo.is_can_renew == 1) {
+                const monthlyMsg = getStorage("monthlyMsg", "obj");
+                monthlyMsg.give_elb = 0;
+                if (monthlyMsg.is_first) {
+                    monthlyMsg.pay_money = monthlyMsg.first_price;
+                } else {
+                    monthlyMsg.pay_money = monthlyMsg.price;
+                }
+                monthlyMsg.pay_type = "monthly_recharge";
+
+                monthlyMsg.is_renew = true;
                 this.new_recharge_list.push(monthlyMsg);
+            }else if(this.userInfo.account.rmb <= 0 ){
+
+                if( this.planInfo.is_can_renew != 1){
+
+                    this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
+
+                }else if(this.plan_list.is_can_renew == 1){
+
+                    this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 2) : this.activeIndex = 0;
+                }
             }
 
         },
@@ -275,7 +282,7 @@
                 switch (type) {
                     case 'date':
                         this.check_date = !this.check_date;
-                        if(!this.check_date){
+                        if (!this.check_date) {
                             this.val_date = this.getToday()
                         }
                         break;
@@ -300,155 +307,154 @@
                 }
                 return value;
             },
-            getToday:function (val) {
+            getToday: function (val) {
                 let date = new Date();
-                if(val){
+                if (val) {
                     date = new Date(val);
                 }
                 let year = date.getFullYear(),
                     month = date.getMonth() + 1,
                     day = date.getDate();
-                if(month<10){
-                    month = '0' +month
+                if (month < 10) {
+                    month = '0' + month
                 }
-                if(day<10){
+                if (day < 10) {
                     day = '0' + day
                 }
-                return year+'-'+month+'-'+day
+                return year + '-' + month + '-' + day
             },
-            getEndDate:function () {
+            getEndDate: function () {
                 let date = new Date();
                 date.setDate(date.getDate() + 90);
                 let end_month = date.getMonth() + 1,
                     end_date = date.getDate(),
                     end_year = date.getFullYear();
-                if(end_month<10){
+                if (end_month < 10) {
                     end_month = '0' + end_month
                 }
-                if(end_date<10){
+                if (end_date < 10) {
                     end_date = '0' + end_date
                 }
                 return {
-                    endDay:end_date,
-                    endMonth:end_month-1,
-                    endYear:end_year
+                    endDay: end_date,
+                    endMonth: end_month - 1,
+                    endYear: end_year
                 }
             },
-            showChooseDate:function () {
+            showChooseDate: function () {
                 this.showDate = true;
             },
-            dateConfirm:function (value) {
+            dateConfirm: function (value) {
                 this.val_date = this.getToday(value);
                 this.showDate = false;
             },//确定弹窗
-            dateCancel:function () {
+            dateCancel: function () {
                 this.showDate = false;
             },//取消日期弹窗
-            recharge:function () {
+            recharge: function () {
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
                 let param = {},
                     _this = this;
 
-                rechargeInfo.pay_type=='diamond_charge'||rechargeInfo.pay_type=='monthly_recharge'?param.status = 1 : param.status = 0;
-                if(rechargeInfo.pay_type=='over_charge' || rechargeInfo.pay_type=='normal_charge'||rechargeInfo.pay_type=='monthly_recharge'){
+                rechargeInfo.pay_type == 'diamond_charge' || rechargeInfo.pay_type == 'monthly_recharge' ? param.status = 1 : param.status = 0;
+                if (rechargeInfo.pay_type == 'over_charge' || rechargeInfo.pay_type == 'normal_charge' || rechargeInfo.pay_type == 'monthly_recharge') {
                     param.recharge_price = rechargeInfo.pay_money
                 }
 
-                if(this.client_type=='alipay'||this.client_type=='wechat'){
+                if (this.client_type == 'alipay' || this.client_type == 'wechat') {
                     param.open_id = this.open_id;
-                }else if(this.client_type =='app'){
+                } else if (this.client_type == 'app') {
                     param.open_id = this.userInfo.account.user_id
 
                 }
 
                 param.iccid = this.planInfo.iccid;
                 param.rating_id = this.planInfo.id;
-                param.is_renew=rechargeInfo.is_renew;
-                if(rechargeInfo.is_renew==true){
-                    param.price=rechargeInfo.first_price;
-                }else{
+                param.is_renew = rechargeInfo.is_renew;
+                if (rechargeInfo.is_renew == true) {
+                    param.price = rechargeInfo.first_price;
+                } else {
                     param.price = this.planInfo.price;
                 }
 
                 param.user_id = this.userInfo.account.user_id;
                 param.env = this.client_type;
 
-                if(this.client_type=='app'){
-                    if(this.appPay.type){
+                if (this.client_type == 'app') {
+                    if (this.appPay.type) {
                         param.pay_type = 'WEIXIN'
-                    }else{
+                    } else {
                         param.pay_type = 'ALIPAY'
                     }
-                }else if(this.client_type == 'wechat'){
+                } else if (this.client_type == 'wechat') {
                     param.pay_type = 'WEIXIN'
-                }else if(this.client_type == 'alipay'){
+                } else if (this.client_type == 'alipay') {
                     param.pay_type = 'ALIPAY'
                 }
 
 
-
-                if(this.check_elb){
+                if (this.check_elb) {
                     let userElb = parseInt(this.userInfo.account.rmb);
-                    if(!this.val_elb){
-                        Notify({message:'请输入ELB抵扣数'})
+                    if (!this.val_elb) {
+                        Notify({message: '请输入ELB抵扣数'})
                         return
                     }
-                    if(this.planInfo.is_elb_deductible==0){
-                        Notify({message:'此套餐不可抵扣ELB'})
+                    if (this.planInfo.is_elb_deductible == 0) {
+                        Notify({message: '此套餐不可抵扣ELB'})
                         return
                     }
-                    if( !(/^[1-9]\d*$/.test(this.val_elb)) ){
-                        Notify({message:'ELB最低抵扣数额为1'})
+                    if (!(/^[1-9]\d*$/.test(this.val_elb))) {
+                        Notify({message: 'ELB最低抵扣数额为1'})
                         return
                     }
-                    if(this.val_elb>userElb){
-                        Notify({message:'您的ELB余额不足'})
+                    if (this.val_elb > userElb) {
+                        Notify({message: '您的ELB余额不足'})
                         return
                     }
-                    if(this.planInfo.is_elb_deductible==1 && this.val_elb > this.planInfo.max_deductible_elb){
-                        Notify({message:'此套餐ELB最大抵扣值为'+this.planInfo.max_deductible_elb})
+                    if (this.planInfo.is_elb_deductible == 1 && this.val_elb > this.planInfo.max_deductible_elb) {
+                        Notify({message: '此套餐ELB最大抵扣值为' + this.planInfo.max_deductible_elb})
                         return
                     }
-                    if(this.val_elb>=this.planInfo.price){
-                        Notify({message:'ELB抵扣数不能超过套餐总值'})
+                    if (this.val_elb >= this.planInfo.price) {
+                        Notify({message: 'ELB抵扣数不能超过套餐总值'})
                         return
                     }
                     param.elb_deduction = this.val_elb
 
                 }
-                if(this.check_coupon){
-                    if(!this.val_coupon){
-                        Notify({message:'请输入券码'})
+                if (this.check_coupon) {
+                    if (!this.val_coupon) {
+                        Notify({message: '请输入券码'})
                         return
-                    }else{
+                    } else {
                         param.coupon_no = this.val_coupon
                     }
                 }
-                if(this.check_date){
-                    if(!this.val_date){
-                        Notify({message:'请选择套餐生效时间'})
+                if (this.check_date) {
+                    if (!this.val_date) {
+                        Notify({message: '请选择套餐生效时间'})
                         return
-                    }else{
+                    } else {
                         param.start_time = this.val_date
                     }
-                }else{
+                } else {
                     param.start_time = this.val_date
                 }
 
                 this.rechargeShow = true;
-                _post('/api/v1/pay/weixin/create',param)
-                    .then(res=>{
-                        if(res.state==1){
+                _post('/api/v1/pay/weixin/create', param)
+                    .then(res => {
+                        if (res.state == 1) {
 
                             this.rechargeShow = false;
 
-                            if(/<[^>]+>/.test(res.data)){
+                            if (/<[^>]+>/.test(res.data)) {
                                 document.write(res.data);
 
-                            }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
+                            } else if (res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0, 4) == 'http') { //app
                                 location.href = res.data
 
-                            }else {
+                            } else {
                                 // this.userInfo.account.elb = res.data.elb;
                                 // this.userInfo.account.rmb = res.data.rmb;
                                 //
@@ -457,100 +463,100 @@
                                 // this.$store.commit('userInfo/changeUserInfo',this.userInfo);
 
                                 Notify({
-                                    message:'充值成功',
-                                    background:'#60ce53'
+                                    message: '充值成功',
+                                    background: '#60ce53'
                                 })
                                 setTimeout(function () {
-                                    setStorage('check_iccid',_this.planInfo.iccid);
+                                    setStorage('check_iccid', _this.planInfo.iccid);
                                     location.href = res.data.return_url
-                                },2000)
+                                }, 2000)
                             }//纯钻石支付
-                        }else{
+                        } else {
                             this.rechargeShow = false;
                             Notify({
-                                message:res.msg
+                                message: res.msg
                             })
                         }
                     })
             },
-            normalPay(){
+            normalPay() {
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
-                if(this.client_type=='app'){
+                if (this.client_type == 'app') {
 
-                    if(rechargeInfo.pay_type=='diamond_charge' && this.userInfo.account.rmb > this.planInfo.price){
+                    if (rechargeInfo.pay_type == 'diamond_charge' && this.userInfo.account.rmb > this.planInfo.price) {
                         this.appPay.show = false
                         this.recharge()
-                    }else{
+                    } else {
                         this.appPay.show = true
                     }
-                }else{
+                } else {
                     this.recharge()
                 }
 
             },//普通支付
-            FinalAppPay(){
+            FinalAppPay() {
                 this.recharge();
             },//app支付
 
-            filterRechargeList:function (rmb,planPrice) {
-                return this.recharge_list.filter(item=>{
-                    if(item.pay_type=='normal_charge'){
+            filterRechargeList: function (rmb, planPrice) {
+                return this.recharge_list.filter(item => {
+                    if (item.pay_type == 'normal_charge') {
                         item.pay_money = planPrice;
                     }
-                    if(rmb<=0 ){
-                        if(planPrice>100&&planPrice<=200){
-                            return (item.pay_type ==='over_charge' && item.pay_money == 200 )
-                                || item.pay_type ==='normal_charge'
-                        }else if(planPrice>200&&planPrice<=300){
-                            return (item.pay_type ==='over_charge' && item.pay_money >200)
-                                || item.pay_type ==='normal_charge'
+                    if (rmb <= 0) {
+                        if (planPrice > 100 && planPrice <= 200) {
+                            return (item.pay_type === 'over_charge' && item.pay_money == 200)
+                                || item.pay_type === 'normal_charge'
+                        } else if (planPrice > 200 && planPrice <= 300) {
+                            return (item.pay_type === 'over_charge' && item.pay_money > 200)
+                                || item.pay_type === 'normal_charge'
 
-                        }else if(planPrice>300){
-                            return item.pay_type ==='normal_charge'
-                        }else{
-                            return item.pay_money >=0
+                        } else if (planPrice > 300) {
+                            return item.pay_type === 'normal_charge'
+                        } else {
+                            return item.pay_money >= 0
                                 && item.pay_type != 'diamond_charge'
                         }
-                    }else{
-                        if(item.pay_type==='diamond_charge'){
-                            if(planPrice<rmb){
+                    } else {
+                        if (item.pay_type === 'diamond_charge') {
+                            if (planPrice < rmb) {
                                 item.user_rmb = planPrice
-                            }else{
+                            } else {
                                 item.user_rmb = rmb
                             }
                         }
-                        if(planPrice>100&&planPrice<=200){
-                            return item.pay_type ==='diamond_charge'
-                                ||(item.pay_type ==='over_charge' && item.pay_money <=200 )
-                                || item.pay_type ==='normal_charge'
+                        if (planPrice > 100 && planPrice <= 200) {
+                            return item.pay_type === 'diamond_charge'
+                                || (item.pay_type === 'over_charge' && item.pay_money <= 200)
+                                || item.pay_type === 'normal_charge'
 
 
-                        }else if(planPrice>200&&planPrice<=300){
-                            return item.pay_type ==='diamond_charge'
-                                || (item.pay_type ==='over_charge' && item.pay_money >200)
-                                || item.pay_type ==='normal_charge'
+                        } else if (planPrice > 200 && planPrice <= 300) {
+                            return item.pay_type === 'diamond_charge'
+                                || (item.pay_type === 'over_charge' && item.pay_money > 200)
+                                || item.pay_type === 'normal_charge'
 
 
-                        }else if(planPrice>300){
-                            return item.pay_type ==='diamond_charge'
-                                || item.pay_type ==='normal_charge'
-                        }else{
-                            return item.pay_money >=0
+                        } else if (planPrice > 300) {
+                            return item.pay_type === 'diamond_charge'
+                                || item.pay_type === 'normal_charge'
+                        } else {
+                            return item.pay_money >= 0
                         }
 
                     }
 
                 })
             },//用户rmb,套餐价格planPrice
-            changePayType(type){
-                if(type){
+            changePayType(type) {
+                if (type) {
                     this.appPay.type = true
-                }else{
+                } else {
                     this.appPay.type = false
                 }
             },
 
-            closePayType(){
+            closePayType() {
                 this.appPay.type = true;
                 this.appPay.show = false
             }
@@ -560,13 +566,10 @@
 
 <style lang="less" scoped>
     @import "../../assets/less/common";
+
     input[type=radio] {
-        -webkit-appearance: none;
-        -moz-appearance: none;
-        appearance: none;
         position: relative;
         display: inline-block;
-        vertical-align: top;
         width: 30px;
         height: 30px;
         border: 1PX solid #bcbcbc;
@@ -574,6 +577,8 @@
         cursor: pointer;
         border-radius: 50%;
         vertical-align: text-top;
+        -webkit-appearance: none;
+        -moz-appearance: none;
     }
 
     input[type=radio]:after {
@@ -613,19 +618,19 @@
 
         text-align: left;
 
-        .border-radius-10{
+        .border-radius-10 {
             width: 80%;
             border-radius: 10px;
         }
-        .appContext-pay-wrap{
+        .appContext-pay-wrap {
             color: #333;
-            .title{
+            .title {
                 font-size: 32px;
                 font-weight: 500;
                 padding-top: 25px;
                 text-align: center;
             }
-            .content{
+            .content {
                 padding: 25px;
                 line-height: 1.5;
                 max-height: 60vh;
@@ -633,29 +638,29 @@
                 text-align: center;
                 color: #7d7e80;
                 font-size: 28px;
-                p{
+                p {
                     margin: 10px 0;
                     padding: 10px;
                 }
-                .choose_type{
+                .choose_type {
                     background-color: #f1af4c;
                     color: #fff;
                     border-radius: 5px;
                 }
             }
-            .footer{
+            .footer {
                 display: flex;
-                border-top:1PX solid #f5f5f5 ;
+                border-top: 1PX solid #f5f5f5;
                 height: 90px;
-                button{
+                button {
                     flex: 1;
                     font-size: 28px;
                     background-color: transparent;
-                    &:first-child{
+                    &:first-child {
                         color: #000;
                         border-right: 1PX solid #f5f5f5;
                     }
-                    &:last-child{
+                    &:last-child {
                         color: @primary;
                     }
                 }
@@ -728,54 +733,50 @@
                     border-color: transparent;
                     visibility: hidden
                 }
-               
-                 .midPlan{
-            vertical-align:middle;
-            padding-top:30px;
-        }
-        .monthlyPlan{
-            vertical-align:top ;
-            border-radius:16px;
-            background:linear-gradient(-45deg,rgba(255,222,123,1),rgba(250,197,84,1),rgba(255,209,120,1),rgba(247,194,80,1));
-        }
-        .monthlyTop{
-            margin-top:10px;
-            display:flex ;
-            justify-content: space-between ;
-            >div:nth-child(1){
-                margin-left:12px;
-            }
-            >div:nth-child(2){
-                margin-right:9px;
-            }
-        }
 
-        .monthlyDes{
-            font-size:20px;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            color:rgba(131,96,25,1);
-        }
-        .monthlyFirst{
-            font-size:20px;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            color:rgba(255,255,255,1);
-        }
-        .monthlyMoney{
-            font-size:20px;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            text-decoration:line-through;
-            color:rgba(44,37,29,1);
-        }
-        .monthly-rmb{
-            margin-top:12px;
-            font-size:38px !important;
-            font-family:SourceHanSansSC-Regular;
-            font-weight:400;
-            color:rgba(44,37,29,1) !important;
-        }
+                .midPlan {
+                    vertical-align: middle;
+                    padding-top: 30px;
+                }
+                .monthlyPlan {
+                    vertical-align: top;
+                    border-radius: 16px;
+                    background: linear-gradient(-45deg, rgba(255, 222, 123, 1), rgba(250, 197, 84, 1), rgba(255, 209, 120, 1), rgba(247, 194, 80, 1));
+                }
+                .monthlyTop {
+                    margin-top: 10px;
+                    display: flex;
+                    justify-content: space-between;
+                    > div:nth-child(1) {
+                        margin-left: 12px;
+                    }
+                    > div:nth-child(2) {
+                        margin-right: 9px;
+                    }
+                }
+
+                .monthlyDes {
+                    font-size: 20px;
+                    font-weight: 400;
+                    color: rgba(131, 96, 25, 1);
+                }
+                .monthlyFirst {
+                    font-size: 20px;
+                    font-weight: 400;
+                    color: rgba(255, 255, 255, 1);
+                }
+                .monthlyMoney {
+                    font-size: 20px;
+                    font-weight: 400;
+                    text-decoration: line-through;
+                    color: rgba(44, 37, 29, 1);
+                }
+                .monthly-rmb {
+                    margin-top: 12px;
+                    font-size: 38px !important;
+                    font-weight: 400;
+                    color: rgba(44, 37, 29, 1) !important;
+                }
                 .line {
                     display: block;
                     width: 60px;
@@ -892,6 +893,5 @@
         }
         //充值按钮
 
-       
     }
 </style>
