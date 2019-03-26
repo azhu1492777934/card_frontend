@@ -241,7 +241,7 @@
                 }
 
                 .card-status{
-                    width: 120px;
+                    min-width: 100px;
                     padding: 5px 0;
                     border-radius: 33px;
                     color: #fff;
