@@ -96,12 +96,12 @@
                 }).then(res => {
                     if (res.state==1) {
                         Notify({
-                            message: '成功找回套餐,即将跳转至详情页',
+                            message: '找回套餐成功',
                             background:'#60ce53'
                         })
                         setTimeout(function () {
-                           _this.$router.push({path:'/weixin/card/usage'})
-                        }, 2000)
+                            _this.$route.query.from === 'mifi' ? _this.$router.push({path:'/mifi/card/index'}) : _this.$router.push({path:'/weixin/card/usage'});
+                        }, 1500)
                     } else {
                         Notify({message: res.msg})
                     }

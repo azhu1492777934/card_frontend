@@ -26,7 +26,7 @@
                         </span>
                     </div>
                     <div>
-                        <router-link to="/weixin/question/index" class="card-question">?</router-link>
+                        <router-link :to="{path:'/weixin/question/index',query:{from:'mifi'}}" class="card-question">?</router-link>
                         <router-link to="/mifi/card/lookup" class="card-change"> 去变更> </router-link>
                     </div>
                 </div>

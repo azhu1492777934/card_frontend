@@ -32,8 +32,13 @@
         name: "argument",
         methods:{
            checkArgument(){
-               setStorage('checkArgument',1);
-               this.$router.push({path:'/weixin/refund'})
+               let from = this.$route.query.from;
+               this.$router.push({
+                   path:'/weixin/refund/index',
+                   query:{
+                       from:from,
+                   }
+               })
            }
         }
     }

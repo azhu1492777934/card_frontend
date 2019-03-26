@@ -17,7 +17,9 @@
         <card-button @clickThrotle="releasePlan(item.renew_id)" :btnText="'解约'"></card-button>
       </div>
     </div>
-    <div v-if="planList.length==0" class="warnMsg">暂无自动续费套餐信息</div>
+    <div v-if="planList.length==0" class="warnMsg">
+      <img src="../../assets/imgs/mifi/common/noData@2x.png" alt="">
+    </div>
   </div>
 </template>
 
@@ -31,8 +33,12 @@ body,
 .release-plan-wrap {
  
   .warnMsg{
-    text-align:center;
-    width:100%;
+    img{
+      display: block;
+      max-width: 100%;
+      height: auto;
+      margin: 0 auto;
+    }
   }
   .border-radius-10 {
     width: 80%;
@@ -55,13 +61,11 @@ body,
         width: 50%;
         :nth-child(1) {
           font-size: 28px;
-          font-family: SourceHanSansSC-Regular;
           font-weight: 400;
           color: rgba(51, 51, 51, 1);
         }
         :nth-child(2) {
           font-size: 24px;
-          font-family: SourceHanSansSC-Regular;
           font-weight: 400;
           margin-top: 18px;
         }
@@ -70,13 +74,11 @@ body,
         width: 50%;
         :nth-child(1) {
           font-size: 28px;
-          font-family: SourceHanSansSC-Regular;
           font-weight: 400;
           color: rgba(51, 51, 51, 1);
         }
         :nth-child(2) {
           font-size: 28px;
-          font-family: SourceHanSansSC-Regular;
           font-weight: 400;
           color: rgba(253, 114, 13, 1);
           margin-top: 15px;
@@ -93,7 +95,6 @@ body,
       > div:nth-child(1) {
         width: 50%;
         font-size: 24px;
-        font-family: SourceHanSansSC-Normal;
         font-weight: 400;
         color: rgba(149, 149, 149, 1);
       }
@@ -107,7 +108,6 @@ body,
         background: rgba(61, 185, 87, 1);
         border-radius: 18px;
         font-size: 24px;
-        font-family: SourceHanSansSC-Regular;
         font-weight: 400;
         color: rgba(255, 255, 255, 1);
       }
@@ -142,7 +142,7 @@ export default {
       let _this = this;
 
       //分页记得改，暂时先这样
-      _get("/releaseApi/v1/app/plans/renew_list/0/99", {
+      _get("/api/v1/app/plans/renew_list/0/99", {
         user_id: getStorage("userInfo", "obj").account.user_id
       }).then(res => {
         if (res.state == 1) {
@@ -159,7 +159,7 @@ export default {
       })
         .then(() => {
           let _this = this;
-          _get("/releaseApi/v1/app/plans/cancel_renew", {
+          _get("/api/v1/app/plans/cancel_renew", {
             renew_id: id,
             user_id:getStorage("userInfo","obj").account.user_id
           }).then(res => {

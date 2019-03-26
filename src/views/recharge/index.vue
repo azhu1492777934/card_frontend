@@ -442,7 +442,6 @@
 
                 getUrlParam('from')=='mifi' ? param.type = 1 : param.type = 0;
 
-
                 this.rechargeShow = true;
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
@@ -470,12 +469,12 @@
                                 setTimeout(function () {
 
                                     if(getUrlParam('from')=='mifi'){
-                                        location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
+                                        location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`
                                     }else{
                                         location.href = res.data.return_url
                                     }
 
-                                },2000)
+                                },1500);
                             }//纯钻石支付
                         }else{
                             this.rechargeShow = false;
