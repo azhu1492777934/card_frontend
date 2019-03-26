@@ -252,6 +252,7 @@
            * 条件限制:存在钻石用量
            * */
 
+
             if (this.userInfo.account.rmb > 0 && this.planInfo.is_can_renew == 1) {
                 const monthlyMsg = getStorage("monthlyMsg", "obj");
                 monthlyMsg.give_elb = 0;
@@ -264,16 +265,9 @@
 
                 monthlyMsg.is_renew = true;
                 this.new_recharge_list.push(monthlyMsg);
+
             }else if(this.userInfo.account.rmb <= 0 ){
-
-                if( this.planInfo.is_can_renew != 1){
-
-                    this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
-
-                }else if(this.planInfo.is_can_renew == 1){
-
-                    this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 2) : this.activeIndex = 0;
-                }
+                this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
             }
 
         },
