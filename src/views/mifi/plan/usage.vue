@@ -1,5 +1,5 @@
 <template>
-    <div class="order-wrap">
+    <div class="usage-wrap">
         <div ref="orderTop" class="order-top">
             <p>卡号：</p>
             <p>{{iccid}}</p>
@@ -20,88 +20,93 @@
                         <li
                             v-for="(inner_item,inner_index) in usageListObj[index]"
                             :class="`flow-status-bg-${index}`"
-                            @click="toConnection({type:index})"
                         >
-                            <div class="usage-left"
-                                :class="{
+
+                            <div v-if="index==0" class="priority-wrap">
+                                <button @click="usedPriority({iccid:iccid,source:source,id:inner_item.id,priority:inner_item.priority})" v-if="inner_item.priority==1000">优先使用</button>
+                                <button @click="usedPriority({iccid:iccid,source:source,id:inner_item.id,priority:inner_item.priority})" v-if="inner_item.priority==0">取消优先</button>
+                            </div>
+
+                            <div class="usage-data-inner-wrap">
+                                <div class="usage-left"
+                                     :class="{
                                 'simple-data':(inner_item.total_flow && !inner_item.total_voice )|| (!inner_item.total_flow && inner_item.total_voice ),
                                 'complicated-data':inner_item.total_flow && inner_item.total_voice
                                 }"
-                            >
+                                >
+                                    <p
+                                        class="complicated-date-wrap"
+                                        :class="{'l-100':inner_item.priority>=0}"
+                                        v-if="inner_item.total_flow && inner_item.total_voice && index!=3">
+                                        套餐时长
+                                        <span v-if="index==1">{{ clacDaysSpan(inner_item.activated_at,inner_item.expired_at) }}天</span>
+                                        <span v-if="index==0 || index==2">{{ clacDaysSpan(today,inner_item.expired_at) }}天</span>
+                                    </p>
 
-                                <p class="complicated-date-wrap"  v-if="inner_item.total_flow && inner_item.total_voice && index!=3">
-                                    套餐时长
-                                    <span v-if="index==1">{{ clacDaysSpan(inner_item.activated_at,inner_item.expired_at) }}天</span>
-                                    <span v-if="index==0 || index==2">{{ clacDaysSpan(today,inner_item.expired_at) }}天</span>
-                                </p>
+                                    <div class="data-wrap" v-if="inner_item.total_flow">
+                                        <p>总流量</p>
+                                        <p v-if="inner_item.total_flow<0">无限</p>
+                                        <p v-else>{{inner_item.total_flow}}/MB</p>
+                                    </div>
 
-                                <div class="data-wrap" v-if="inner_item.total_flow">
-                                    <p>总流量</p>
-                                    <p v-if="inner_item.total_flow<0">无限</p>
-                                    <p v-else>{{inner_item.total_flow}}/MB</p>
+                                    <div class="data-wrap" v-if="inner_item.total_flow">
+                                        <p>已使用</p>
+                                        <p v-if="inner_item.total_flow>0">{{inner_item.total_flow - inner_item.remaining_flow }}/MB</p>
+                                        <p v-if="inner_item.total_flow<0">{{inner_item.current_used_flow}}/MB</p>
+                                    </div>
+
+                                    <div class="data-wrap" v-if="inner_item.total_voice">
+                                        <p>总通话</p>
+                                        <p v-if="inner_item.total_voice<0"></p>
+                                        <p v-else>{{inner_item.total_voice}}/分钟</p>
+                                    </div>
+
+                                    <div class="data-wrap" v-if="inner_item.total_voice">
+                                        <p>已使用</p>
+                                        <p v-if="inner_item.total_voice>0">{{inner_item.total_voice - inner_item.remaining_voice }}/分钟</p>
+                                        <p v-if="inner_item.total_voice<0">{{inner_item.current_used_voice}}/分钟</p>
+                                    </div>
+
+                                    <!-- 不同时存在流量及通话-->
+                                    <!--<div class="data-wrap">-->
+                                    <div class="data-wrap" v-if="( (inner_item.total_flow && !inner_item.total_voice && inner_item.total_voice!=0 ) || (!inner_item.total_flow && inner_item.total_flow!=0 && inner_item.total_voice ) ) && index!=3 ">
+                                        <p>套餐时长</p>
+                                        <p v-if="index==1">{{ clacDaysSpan(inner_item.activated_at,inner_item.expired_at) }}天</p>
+                                        <p v-if="index==0 || index==2">{{ clacDaysSpan(today,inner_item.expired_at) }}天</p>
+                                    </div>
+
                                 </div>
 
-                                <div class="data-wrap" v-if="inner_item.total_flow">
-                                    <p>已使用</p>
-                                    <p>{{inner_item.total_flow - inner_item.remaining_flow }}/MB</p>
-                                </div>
+                                <div class="usage-right">
+                                    <span class="plan-status" :class="`plan-status-${index}`">{{statusList[index]}}</span>
 
-                                <div class="data-wrap" v-if="inner_item.total_voice">
-                                    <p>总通话</p>
-                                    <p v-if="inner_item.total_voice<0"></p>
-                                    <p v-else>{{inner_item.total_voice}}/分钟</p>
-                                </div>
+                                    <!--流量详情-->
+                                    <div v-if="inner_item.total_flow >= 0">
+                                        {{inner_item.remaining_flow}}<span>/MB</span>
+                                        <p>剩余流量</p>
+                                    </div>
+                                    <div v-if="inner_item.total_flow < 0">
+                                        无限
+                                        <p>剩余流量</p>
+                                    </div>
+                                    <!--./流量详情-->
 
-                                <div class="data-wrap" v-if="inner_item.total_voice">
-                                    <p>已使用</p>
-                                    <p>{{inner_item.total_voice - inner_item.remaining_voice }}/分钟</p>
+                                    <!--通话详情-->
+                                    <div v-if="!inner_item.total_flow  && inner_item.total_voice >= 0">
+                                        {{inner_item.remaining_voice}}<span>/分钟</span>
+                                        <p>剩余通话</p>
+                                    </div>
+                                    <div v-if="!inner_item.total_flow && inner_item.total_voice < 0">
+                                        无限
+                                        <p>剩余通话</p>
+                                    </div>
+                                    <!--./通话详情-->
                                 </div>
-
-                                <!-- 不同时存在流量及通话-->
-                                <!--<div class="data-wrap">-->
-                                <div class="data-wrap" v-if="( (inner_item.total_flow && !inner_item.total_voice ) || (!inner_item.total_flow && inner_item.total_voice ) ) && index!=3 ">
-                                    <p>套餐时长</p>
-                                    <p v-if="index==1">{{ clacDaysSpan(inner_item.activated_at,inner_item.expired_at) }}天</p>
-                                    <p v-if="index==0 || index==2">{{ clacDaysSpan(today,inner_item.expired_at) }}天</p>
-                                </div>
-
                             </div>
 
-                            <div class="usage-right">
-                                <span class="plan-status" :class="`plan-status-${index}`">{{statusList[index]}}</span>
-
-                                <!--流量详情-->
-                                <div v-if="inner_item.remaining_flow && inner_item.total_flow > 0">
-                                    {{inner_item.remaining_flow}}<span>/MB</span>
-                                    <p>剩余流量</p>
-                                </div>
-                                <div v-if="inner_item.total_flow && inner_item.total_flow < 0">
-                                    无限
-                                    <p>剩余流量</p>
-                                </div>
-                                <!--./流量详情-->
-
-
-                                <!--通话详情-->
-                                <div v-if="!inner_item.total_flow && inner_item.remaining_voice && inner_item.total_voice > 0">
-                                    {{inner_item.remaining_voice}}<span>/分钟</span>
-                                    <p>剩余通话</p>
-                                </div>
-                                <div v-if="!inner_item.total_flow && inner_item.remaining_voice && inner_item.total_voice < 0">
-                                    无限
-                                    <p>剩余通话</p>
-                                </div>
-                                <!--./通话详情-->
-                            </div>
 
                             <!--日期-->
-                            <div
-                                class="date-wrap"
-                                :class="{
-                                    'simple-data':(inner_item.total_flow && !inner_item.total_voice )|| (!inner_item.total_flow && inner_item.total_voice ),
-                                    'complicated-data':inner_item.total_flow && inner_item.total_voice
-                                }"
-                            >
+                            <div class="date-wrap">
                                 <span>开始时间:{{filterDate(inner_item.activated_at)}}</span>
                                 <span>结束时间:{{filterDate(inner_item.expired_at)}}</span>
                             </div>
@@ -123,7 +128,7 @@
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import {Toast, Popup, Notify, Loading} from "vant";
     import {getStorage, setStorage, checkBrowser, Today} from "../../../utilies";
-    import {_get} from '../../../http'
+    import {_get,_post} from '../../../http'
 
     export default {
         name: "index",
@@ -140,15 +145,11 @@
                 today: Today(),
                 timeStamp: new Date().getTime(),
                 iccid: getStorage('check_iccid'),
+                source:getStorage('check_realNameSource'),
                 client_type: checkBrowser(),
                 statusList: ['生效', '未启用', '失效', '过期'],
                 statusIndex: 0,
-                usageListObj: {
-                    0: [],
-                    1: [],
-                    2: [],
-                    3: [],
-                },
+                usageListObj: {},
                 swiperOption: {
                     on: {
                         slideChangeTransitionEnd: function (swiper) {
@@ -163,6 +164,7 @@
         },
         methods: {
             initial(){
+                this.usageListObj = {0: [], 1: [], 2: [], 3: [],},
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
                 this.$store.commit('mifiCommon/changeErrStatus',{show:false});
                 _get('/api/v1/app/cards/plan/all',{
@@ -172,18 +174,21 @@
                     if(res.state==1){
                         if(JSON.stringify(res.data.data)!='[]'){
                             let  serverList = res.data.data;
+
                             serverList.map((item, index) => {
                                 if ((new Date(item.activated_at.replace(/-/g, '/')).getTime() - this.timeStamp > 0)) {
                                     // 未启动套餐
                                     this.usageListObj[1].push(item)
+                                }else if((new Date(item.activated_at.replace(/-/g, '/')).getTime() - this.timeStamp == 0)){
+                                    this.usageListObj[0].push(item)
                                 } else {
                                     // 过期套餐
                                     if ((new Date(item.expired_at.replace(/-/g, '/')).getTime() - this.timeStamp < 0)) {
                                         this.usageListObj[3].push(item)
                                     } else {
                                         // 套餐失效
-                                        if (item.total_flow == 0) {
-                                            this.usageListObj[1].push(item);
+                                        if (item.remaining_flow == 0) {
+                                            this.usageListObj[2].push(item);
                                         } else {
                                             this.usageListObj[0].push(item);
                                         }
@@ -191,6 +196,10 @@
                                     }// 未过期套餐
                                 }
                             })
+
+                            if(res.data.delay_orders.length>0){
+                                this.usageListObj[1] = this.usageListObj[1].concat(res.data.delay_orders);
+                            }
                         }
                         this.$nextTick(() => {
                             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
@@ -200,6 +209,8 @@
                             } else {
                                 this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop) + 'px'
                             }
+
+                            // new this.bScroll(this.$refs.SwiperWwrap, {});
                         })
 
                     }else{
@@ -214,16 +225,32 @@
                 this.statusIndex = index;
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
-            toConnection(params){
-                if(params.type!=0){
-                    return
-                }else{
-                    this.$router.push({
-                        path:'/weixin/card/connection',
-                        from:'mifi'
-                    })
-                }
+            usedPriority(params){
+                let serverPriority ;
+                params.priority === 1000 ? serverPriority = 0 : serverPriority = 1000;
+                _post('/api/v1/app/plans/stick', {
+                    iccid: params.iccid,
+                    rating_id:params.id,
+                    priority:serverPriority,
+                    source:params.source
+                }).then(res => {
+                    if (res.state==1) {
+                        this.initial();
+                    }else{
+                        Notify({message:res.msg});
+                    }
+                })
             }
+            // toConnection(params){
+            //     if(params.type!=0){
+            //         return
+            //     }else{
+            //         this.$router.push({
+            //             path:'/weixin/card/connection',
+            //             from:'mifi'
+            //         })
+            //     }
+            // }
         }
     }
 </script>
@@ -232,7 +259,7 @@
     @import "~swiper/dist/css/swiper.min.css";
     @import "../../../assets/less/utitlies";
 
-    .order-wrap {
+    .usage-wrap {
         .swiper-container {
             height: 100%;
         }
@@ -287,15 +314,32 @@
                 overflow-y: auto;
                 -webkit-overflow-scrolling: touch;
             }
+            .priority-wrap{
+                position: absolute;
+                top: 15px;
+                z-index: 1;
+                button{
+                    padding: 5px 8px;
+                    font-size: 20px;
+                    color: #fff;
+                    border-radius: 5px;
+                    background-image: linear-gradient(45deg, #92c7fa 10%, #457bad 100%);
+                }
+            }
             li {
-                display: flex;
-                flex-wrap: wrap;
-                align-items: center;
+                position: relative;
                 min-height: 208px;
                 padding: 0 30px;
                 margin-bottom: 15px;
                 background-color: #fff;
                 border-radius: 12px;
+                .usage-data-inner-wrap{
+                    position: relative;
+                    display: flex;
+                    align-items: center;
+                    padding-top: 20px;
+                }
+
                 &.flow-status-bg-0 {
                     .bg-image('../../assets/imgs/mifi/plan/usedOrder');
                 }
@@ -399,8 +443,12 @@
                     }
 
                     .complicated-date-wrap{
+                        position: absolute;
+                        top: 15px;
                         color: #ff5519;
                     }
+                    /*存在优先使用按钮时 增加'套餐时长左边距'*/
+                    .l-100{left: 100px!important;}
                 }
                 .usage-right {
                     flex: 1.5;
@@ -429,7 +477,7 @@
                             font-size: 24px;
                         }
                         p{
-                            padding-top: 10px;
+                            padding-top: 5px;
                             font-size: 20px;
                             color: #2c251d;
                         }
@@ -440,17 +488,13 @@
                     display: flex;
                     justify-content: space-between;
                     width: 100%;
+                    padding-top: 10px;
                     font-size: 24px;
                     color: #2c251d;
-                    margin-top: -10px;
                 }
 
             }
             .no-data-wrap {
-                .noOrderPic {
-                    display: block;
-                    width: 100%;
-                }
                 .to-buy-plan {
                     display: inline-block;
                     width: 303px;

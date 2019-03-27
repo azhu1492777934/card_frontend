@@ -18,7 +18,7 @@
       </div>
     </div>
     <div v-if="planList.length==0" class="warnMsg">
-      <img src="../../assets/imgs/mifi/common/noData@2x.png" alt="">
+      <img class="noOrderPic" src="../../assets/imgs/mifi/common/noData@2x.png" alt="">
     </div>
   </div>
 </template>

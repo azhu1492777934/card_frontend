@@ -532,7 +532,7 @@
                         }
                         if(planPrice>100&&planPrice<=200){
                             return item.pay_type ==='diamond_charge'
-                                ||(item.pay_type ==='over_charge' && item.pay_money <=200 )
+                                ||(item.pay_type ==='over_charge' && item.pay_money ==200 )
                                 || item.pay_type ==='normal_charge'
 
 

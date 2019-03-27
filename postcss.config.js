@@ -1,4 +1,5 @@
 const pxtorem = require("postcss-pxtorem");
+const autoprefixer = require('autoprefixer');
 module.exports = ({ file }) => {
     let rootValue
     // vant 37.5 https://github.com/youzan/vant/issues/1181
@@ -9,6 +10,7 @@ module.exports = ({ file }) => {
     }
     return {
         plugins: [
+            autoprefixer(),
             pxtorem({
                 rootValue: rootValue,
                 propList: ['*'],

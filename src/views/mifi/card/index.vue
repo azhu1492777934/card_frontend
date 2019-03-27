@@ -5,7 +5,8 @@
                 <p>
                     近期查询<span @click="refreshCard" class="iconfont icon-refresh"></span>
                 </p>
-                <p>{{iccid}}({{usageInfo.source}})</p>
+                <p>{{iccid}}</p>
+                <!--<p>{{iccid}}({{usageInfo.source}})</p>-->
                 <div class="card-status-wrap">
                     <div>
                         <span class="card-status"
@@ -71,6 +72,7 @@
 <script>
     import {getStorage,setStorage} from "../../../utilies";
     import {_get} from "../../../http";
+    import {Toast} from 'vant';
     export default {
         name: "index",
         data(){
@@ -90,18 +92,22 @@
                 },
             }
         },
+        components:{
+            [Toast.name]:Toast,
+        },
         created(){
             if(this.iccid){
                 // 请求卡状态
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
                 this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
-                _get('/api//v1/app/cards/status/usage',{
+                _get('/api/v1/app/cards/status/usage',{
                     iccid:this.iccid,
                     type:1
                 }).then(res=>{
                     this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     if(res.state==1){
+
                         this.usageInfo = res.data;
 
                         if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
@@ -110,7 +116,7 @@
                             this.auth_status.push('已实名');
                         }//实名增加状态
 
-                        if(this.usageInfo.auth_status==0 && getStorage('enterpriseRealname')==1){
+                        if(!this.usageInfo.need_auth){
                             this.filterCardInfo.real_name_state = '已实名';
                         }else{
                             this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
@@ -168,8 +174,17 @@
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
             toRealName(){
-                setStorage('check_realNameSource',this.usageInfo.source);
-                this.$router.push({path:'/weixin/new_card/real_name'});
+                if(this.usageInfo.auth_status == 3 || this.usageInfo.auth_status == 4){
+                    Toast({
+                        position:'top',
+                        message:'此卡已实名'
+                    });
+                    return;
+                }
+                if(this.usageInfo.auth_status==0 && this.usageInfo.need_auth){
+                    setStorage('check_realNameSource',this.usageInfo.source);
+                    this.$router.push({path:'/weixin/new_card/real_name'});
+                }
             }
         }
     }
@@ -241,8 +256,7 @@
                 }
 
                 .card-status{
-                    min-width: 100px;
-                    padding: 5px 0;
+                    padding: 5px 10px;
                     border-radius: 33px;
                     color: #fff;
                 }

@@ -47,7 +47,7 @@
             </div>
         </div>
         <div v-if="showNoData">
-            <img src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
+            <img class="noOrderPic" src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
         </div>
 
     </div>
@@ -55,7 +55,7 @@
 
 <script>
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
-    import {Toast, Notify} from "vant";
+    import {Toast, Notify,Dialog} from "vant";
     import {setStorage, getStorage, checkBrowser} from "../../../utilies";
     import {_get} from "../../../http";
     // @ is an alias to /src
@@ -84,6 +84,7 @@
             };
         },
         components: {
+            [Dialog.name]: Dialog,
             [Toast.name]: Toast,
             swiper,
             swiperSlide,
@@ -139,7 +140,6 @@
             }
 
         },
-        mounted() {},
         methods: {
             swiperOnChange: function (index) {
                 this.cur_plan_type_index = index;
@@ -156,6 +156,8 @@
             recharge: function () {
 
                 let planInfo = null,
+                    _this = this,
+                    cur_date = new Date().getDate(),
                     ref_plan_type_index = 0;//当前套餐索引
                 for (let i = 0; i < this.$refs.ref_plan_type.length; i++) {
                     if (this.$refs.ref_plan_type[i].className == "active_type") {
@@ -178,13 +180,30 @@
                 }
 
                 planInfo.iccid = getStorage("check_iccid");
-
                 setStorage("planInfo", planInfo, "obj");
 
                 if (this.client_type != 'alipay' && this.client_type != 'wechat') {
                     Notify({message: '请在微信或支付宝客服端打开充值'});
                     return
                 }
+
+                if(planInfo.type==1 && planInfo.day <=30 && cur_date>=20 && cur_date <=26 ){
+
+                    Dialog.confirm({
+                        title: '温馨提示',
+                        message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
+                    }).then(() => {
+                        _this.toRechargeList(planInfo);
+                    }).catch(()=>{
+                        return
+                    })
+
+                }else{
+                    this.toRechargeList(planInfo)
+                }
+
+            },
+            toRechargeList(planInfo){
                 //获取当前包月套餐信息
                 _get("/api/v1/app/plans/renew_info", {
                     user_id: getStorage("userInfo", "obj").account.user_id,
@@ -306,13 +325,13 @@
                     .plan-limited-wrap {
                         .limited-num {
                             display: inline-block;
-                            padding: 6px 20px 4px;
+                            padding: 4px 20px;
                             margin: 0 5px 10px 0;
                             font-size: 20px;
-                            color: #f11919;
-                            background-color: #f9d8d8;
+                            color: #ffa400;
+                            background-color: #fff;
                             border-radius: 4px;
-                            line-height: 1;
+                            line-height: 1.2;
                         }
                     }
                     .plan-desc {

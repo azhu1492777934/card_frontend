@@ -243,10 +243,6 @@
 
                 }
             }
-            .noOrderPic{
-                display: block;
-                width: 100%;
-            }
         }
     }
 

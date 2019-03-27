@@ -22,10 +22,15 @@ import {checkBrowser} from "./utilies";
 import global_variables from '../src/utilies/domain'
 
 const wx = require('weixin-js-sdk');
-Vue.prototype.wx = wx
-Vue.prototype.global_variables = global_variables
+Vue.prototype.wx = wx;
+Vue.prototype.global_variables = global_variables;
 
 router.afterEach((to,from)=>{
+    const u = navigator.userAgent.toLowerCase();
+    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
+    if (to.path !== global.location.pathname) {
+        location.assign(to.fullPath);
+    };
     if(checkBrowser()=='wechat'){
 
         if(to.path=='/weixin/card/lookup'){
@@ -45,9 +50,9 @@ router.afterEach((to,from)=>{
         }
 
     }
-})
+});
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)
 

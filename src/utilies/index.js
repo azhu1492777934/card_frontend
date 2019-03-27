@@ -216,5 +216,5 @@ export {
     getUrlParam,
     inArray,
     Today,
-    GetUrlRelativePath
+    GetUrlRelativePath,
 }

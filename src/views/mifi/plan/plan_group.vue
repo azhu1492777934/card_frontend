@@ -18,7 +18,7 @@
                </li>
            </ul>
            <div v-if="showNoData">
-               <img src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
+               <img class="noOrderPic" src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
            </div>
        </div>
     </div>

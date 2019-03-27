@@ -138,7 +138,7 @@
     // @ is an alias to /src
 
     import {Notify, Popup} from 'vant';
-    import {getUrlParam} from "../../utilies";
+    import {getUrlParam,checkBrowser} from "../../utilies";
     import {_get} from "../../http";
 
     export default {
@@ -146,6 +146,7 @@
 
         data() {
             return {
+                client_type:checkBrowser(),
                 iccid: '',
                 imei: '',
                 qrSrc: '',
@@ -162,11 +163,7 @@
             this.source = getUrlParam('source');
             this.qrSrc = 'http://cardserver_test.china-m2m.com/qrcode?iccid=' + this.iccid + '&imei=' + this.imei
 
-
-            let ua = navigator.userAgent.toLowerCase();
-            if(ua.match(/MicroMessenger/i) == "micromessenger"){
-                return false;
-            }else{
+            if(this.client_type=='mobile'){
                 location.href = this.$route.query.url;
             }
         },

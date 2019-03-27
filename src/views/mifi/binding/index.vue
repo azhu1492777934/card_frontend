@@ -21,6 +21,7 @@
                 <button :disabled="loginDisabled" @click="login">绑定</button>
             </div>
         </div>
+
         <van-popup :close-on-click-overlay="false" v-model="isLoginError">
             <p class="showTip">{{loginErrorMsg}}</p>
         </van-popup>
@@ -28,7 +29,7 @@
 </template>
 
 <script>
-    import {Notify,Popup} from 'vant'
+    import {Notify,Popup,Dialog} from 'vant'
     import {_post,_get} from "../../../http";
     import {getStorage, getUrlParam, setStorage,codeParam, checkBrowser,checkICCID,GetUrlRelativePath} from "../../../utilies";
 
@@ -48,6 +49,7 @@
                 countdown: 60,
                 client_type: checkBrowser(),
                 btnCode_disabled:true,
+                is_count_down:false,//判断当前是否正则countdown
                 time:null,
                 loginDisabled:false,
                 isLoginError:false, // 当前用户是否会绑定用户失败
@@ -59,6 +61,7 @@
             }
         },
         components: {
+            [Dialog.name]: Dialog,
             [Notify.name]: Notify,
             [Popup.name] : Popup
         },
@@ -66,12 +69,12 @@
             iccid(curVal,oldVal){
                 let checkIccidResult = checkICCID(curVal);
                 checkIccidResult.state==1 ? this.checkInfo.iccid = true : this.checkInfo.iccd = false;
-                (this.checkInfo.iccid && this.checkInfo.phone) ? this.btnCode_disabled = false : this.btnCode_disabled = true
+                (this.checkInfo.iccid && this.checkInfo.phone && !this.is_count_down) ? this.btnCode_disabled = false : this.btnCode_disabled = true
             },
             phone(curVal,oldVal){
                 let checkPhoneResult = /^(13[0-9]|14[5679]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(curVal);
                 checkPhoneResult ? this.checkInfo.phone = true : this.checkInfo.phone = false;
-                (this.checkInfo.iccid && this.checkInfo.phone) ? this.btnCode_disabled = false : this.btnCode_disabled = true
+                (this.checkInfo.iccid && this.checkInfo.phone && !this.is_count_down) ? this.btnCode_disabled = false : this.btnCode_disabled = true
             }
         },
         created() {
@@ -168,6 +171,7 @@
                     if (_this.countdown <= 0) {
                         _this.codeText = '获取验证码';
                         _this.countdown = 60;
+                        _this.is_count_down = true;
                         if(this.checkInfo.iccid && this.checkInfo.phone){
                             _this.btnCode_disabled = false;
                         } else {
@@ -176,6 +180,7 @@
 
                         clearInterval(_this.timer);
                     } else {
+                        _this.is_count_down = true;
                         _this.codeText = this.countdown+'s';
                         _this.countdown--;
                     }
@@ -250,7 +255,6 @@
                     iccid:params.iccid,
                     user_id:params.user_id,
                     mobile:params.phone,
-                    code:params.code
                 }).then(res=>{
                     if(res.state==1){
                         Notify({

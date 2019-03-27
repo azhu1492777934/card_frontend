@@ -31,7 +31,6 @@
 
                             localStorage.setItem("token", res.data);
                             // let refreshUrl = getStorage('refreshUrl');
-                            //
                             // refreshUrl ? this.$router.push({path:refreshUrl}) : location.reload();
 
                             location.reload();
