@@ -82,6 +82,13 @@
         created(){
             this.iccid ? this.initial() : this.$router.push({path:'/mifi/card/lookup'});
         },
+        mounted(){
+            document.body.addEventListener('touchmove', function(e) {
+                if (!document.querySelector('.swipe-wrap').contains(e.target)) {
+                    e.preventDefault();
+                }
+            },{passive:false});
+        },
         methods:{
             initial(){
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
