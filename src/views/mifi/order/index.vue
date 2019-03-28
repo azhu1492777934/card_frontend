@@ -83,11 +83,11 @@
             this.iccid ? this.initial() : this.$router.push({path:'/mifi/card/lookup'});
         },
         mounted(){
-            document.body.addEventListener('touchmove', function(e) {
+            document.querySelector('body').addEventListener('touchmove', function(e) {
                 if (!document.querySelector('.swipe-wrap').contains(e.target)) {
                     e.preventDefault();
                 }
-            },{passive:false});
+            })
         },
         methods:{
             initial(){
@@ -99,11 +99,29 @@
                     this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     if(res.state==1){
                         this.orderListObj = res.data;
+
+                        let allOrder = res.data[0] || [],
+                            filterUnPayOrder = [],
+                            unPayOrder = [],
+                            sortAllOrder = [];
+
+                        if(allOrder.length>0){
+                            allOrder.map(item=>{
+                                if(item.status==0){
+                                    unPayOrder.push(item);
+                                }
+                            });
+                            filterUnPayOrder = allOrder.filter(item=>item.status!=0);
+                            sortAllOrder = unPayOrder.concat(filterUnPayOrder);
+                            this.orderListObj[0] = sortAllOrder;
+                        }// 优先显示未支付订单
                         this.$nextTick(() => {
                             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                                orderTop = this.$refs.orderTop.offsetHeight;
+                                orderTop = this.$refs.orderTop.offsetHeight,
+                                userHeight = getStorage('userHeight');
+
                             if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                                this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop  - 44) + 'px'
+                                this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop  - userHeight) + 'px'
                             } else {
                                 this.$refs.SwiperWwrap.style.height = (clientHeight - orderTop) + 'px'
                             }
@@ -193,7 +211,6 @@
             .order-list-wrap{
                 height: 100%;
                 overflow-y: auto;
-                -webkit-overflow-scrolling:touch;
             }
             li{
                 display: flex;

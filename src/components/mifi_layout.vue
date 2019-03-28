@@ -106,6 +106,9 @@
                         if (getStorage('userInfo', 'obj')) {
 
                             this.$store.commit('userInfo/changeUserStatus', true);
+                            let userDom = document.querySelector('.user-wrap');
+                            if(userDom) setStorage('userHeight',userDom.offsetHeight);
+
                         }
 
                         if ((this.client_type == 'wechat' && getStorage('wechat_version') != this.global_variables.version) ||
@@ -165,6 +168,10 @@
                                 if (this.client_type == 'wechat' || this.client_type == 'alipay') {
                                     this.$store.commit('userInfo/changeUserStatus', true);
                                     this.$store.commit('userInfo/changeUserInfo', UserInfo);
+
+                                    let userDom = document.querySelector('.user-wrap');
+                                    if(userDom)setStorage('userHeight',userDom.offsetHeight);
+
                                 }
 
                                 this.load_user_msg = false;

@@ -116,10 +116,11 @@
                             this.processPlsn();
                             this.$nextTick(() => {
                                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                                    refPLanTitle = this.$refs.refPLanTitle.offsetHeight;
+                                    refPLanTitle = this.$refs.refPLanTitle.offsetHeight,
+                                    userHeight = getStorage('userHeight');
 
                                 if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                                    this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
+                                    this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - userHeight) + 'px'
                                 } else {
                                     this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton ) + 'px'
                                 }

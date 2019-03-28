@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <router-view  @getToken="refreshToken" v-wechat-title="$route.meta.title"/>
-
     </div>
 </template>
 
@@ -16,7 +15,7 @@
             [Notify.name]:Notify
        },
         created(){
-            let loading = document.getElementsByClassName('fixed-wrap-loading')[0];
+            let loading = document.querySelector('.app-loading-wrap');
             if(loading){
                 document.body.removeChild(loading);
             }
@@ -32,7 +31,6 @@
                             localStorage.setItem("token", res.data);
                             // let refreshUrl = getStorage('refreshUrl');
                             // refreshUrl ? this.$router.push({path:refreshUrl}) : location.reload();
-
                             location.reload();
 
                         } else if (res.error == 11003) {

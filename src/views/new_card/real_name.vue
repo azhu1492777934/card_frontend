@@ -264,6 +264,14 @@
                         msg: '手机号码有误'
                     }
                 }
+                let pre_three_num = this.info_phone.substr(0,3),
+                    watch_card = ['145','146','166','177','199'];
+                if(watch_card.includes(pre_three_num)){
+                    return {
+                        state:0,
+                        msg:'请勿输入以145/146/166/177/199开头的手机号码'
+                    }
+                }
                 return {
                     state: 1
                 }

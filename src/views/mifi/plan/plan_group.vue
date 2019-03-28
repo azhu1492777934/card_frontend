@@ -58,9 +58,10 @@
                             this.$nextTick(()=>{
                                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                                     refBanner = this.$refs.banner.offsetHeight,
-                                    refTitle = this.$refs.title.offsetHeight;
+                                    refTitle = this.$refs.title.offsetHeight,
+                                    userHeight = getStorage('userHeight');
                                 if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                                    this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 44 - 40) + 'px'
+                                    this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - userHeight - 40) + 'px'
                                 } else {
                                     this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - 40) + 'px'
                                 }

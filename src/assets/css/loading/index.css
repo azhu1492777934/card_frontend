@@ -1,37 +1,28 @@
-.fixed-wrap-loading {position: fixed;top: 0;left: 0; width: 100%;height: 100%;z-index: 2009;background-color: #00b6f3;}
+.fixed-wrap-loading,
+.app-loading-wrap {position: fixed;top: 0;left: 0; width: 100%;height: 100%;z-index: 2009;background-color: #00b6f3;}
 
-.spinner {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    width: 100px;
-    height: 100px;
-    margin-left: -50px;
-    margin-top: -50px;
-    background-color: #fff;
-    -webkit-animation: rotateplane 1.2s infinite ease-in-out;
-    animation: rotateplane 1.2s infinite ease-in-out;
+.app-loading-wrap{display: flex;align-items:center;justify-content:center;background-color: transparent;}
+.app-loading-wrap .loader{
+    width: 50px;
+    height: 50px;
+    border: 10px solid transparent;
+    border-left-color: currentcolor;
+    border-right-color: currentcolor;
+    border-radius: 50%;
+    color: #ffcb54;
+    -webkit-animation: 1s loader-02 linear infinite;
+    animation: 1s loader-02 linear infinite;
 }
-
-@-webkit-keyframes rotateplane {
-    0% { -webkit-transform: perspective(120px) }
-    50% { -webkit-transform: perspective(120px) rotateY(180deg) }
-    100% { -webkit-transform: perspective(120px) rotateY(180deg)  rotateX(180deg) }
-}
-
-@keyframes rotateplane {
+@keyframes loader-02 {
     0% {
-        transform: perspective(120px) rotateX(0deg) rotateY(0deg);
-        -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
-    } 50% {
-          transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
-          -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
-      } 100% {
-            transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-            -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
-        }
+        -webkit-transform: rotate(0deg);
+        transform: rotate(0deg);
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }
-
 
 #loading-common-center {
     width: 100%;
@@ -76,15 +67,6 @@
     animation: third_object 1s forwards, third_object_animate 1s infinite ease-in-out;
 }
 
-@-webkit-keyframes second_object {
-    100% {
-        width: 100px;
-        height: 100px;
-        left: 48px;
-        top: 48px;
-    }
-}
-
 @keyframes second_object {
     100% {
         width: 100px;
@@ -112,19 +94,6 @@
     }
 }
 
-
-@-webkit-keyframes first_object_animate {
-    0% {
-        -webkit-transform: perspective(100px);
-    }
-    50% {
-        -webkit-transform: perspective(100px) rotateY(-180deg);
-    }
-    100% {
-        -webkit-transform: perspective(100px) rotateY(-180deg) rotateX(-180deg);
-    }
-}
-
 @keyframes first_object_animate {
     0% {
         transform: perspective(100px) rotateX(0deg) rotateY(0deg);
@@ -140,18 +109,6 @@
     }
 }
 
-@-webkit-keyframes second_object_animate {
-    0% {
-        -webkit-transform: perspective(200px);
-    }
-    50% {
-        -webkit-transform: perspective(200px) rotateY(180deg);
-    }
-    100% {
-        -webkit-transform: perspective(200px) rotateY(180deg) rotateX(180deg);
-    }
-}
-
 @keyframes second_object_animate {
     0% {
         transform: perspective(200px) rotateX(0deg) rotateY(0deg);
@@ -164,18 +121,6 @@
     100% {
         transform: perspective(200px) rotateX(180deg) rotateY(180deg);
         -webkit-transform: perspective(200px) rotateX(180deg) rotateY(180deg);
-    }
-}
-
-@-webkit-keyframes third_object_animate {
-    0% {
-        -webkit-transform: perspective(300px);
-    }
-    50% {
-        -webkit-transform: perspective(300px) rotateY(-180deg);
-    }
-    100% {
-        -webkit-transform: perspective(300px) rotateY(-180deg) rotateX(-180deg);
     }
 }
 

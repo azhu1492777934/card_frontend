@@ -63,9 +63,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="real-name-wrap" v-if="usageInfo.auth_status==1">-->
-            <!--<img src="../../../assets/imgs/mifi/common/real_name.png" alt="">-->
-        <!--</div>-->
     </div>
 </template>
 
@@ -111,6 +108,7 @@
                     this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     if(res.state==1){
 
+                        setStorage('check_realNameSource',res.data.source);
                         this.usageInfo = res.data;
 
                         // 判断当前卡状态 是都是未实名
