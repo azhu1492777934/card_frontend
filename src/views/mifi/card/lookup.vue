@@ -126,42 +126,7 @@
             },
 
             processCheckIccid: function (iccid) {
-                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true})
-                let isExist = false,
-                    _this = this;
-                if (this.recording_list.length) {
-
-                    this.recording_list.map(function (item, index) {
-                        if (item.iccid == iccid) {
-                            item.searchTime = formatterCardTime().searchTime
-                            item.millisecond = formatterCardTime().millisecond
-                            isExist = true;
-                        }
-                    });
-                    if (!isExist) {
-                        this.recording_list.push({
-                            'iccid': iccid,
-                            'searchTime': formatterCardTime().searchTime,
-                            'millisecond': formatterCardTime().millisecond
-                        })
-                    }
-                } else {
-                    this.recording_list.push({
-                        'iccid': iccid,
-                        'searchTime': formatterCardTime().searchTime,
-                        'millisecond': formatterCardTime().millisecond
-                    })
-                    this.recording_show = true;
-                }
-
-                this.recording_list.sort(this.compare('millisecond'));
-
-                if (this.recording_list.length > 20) {
-                    this.recording_list.splice(20)
-                }
-
-                setStorage('recording_list', this.recording_list, 'arr')
-
+                this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
                 //查询
                 _post('/api/v1/app/new_auth/check_auth_', {
                     iccid: iccid,
@@ -180,12 +145,16 @@
                         setStorage('check_iccid', res.data.iccid);
                         setStorage('new_auth_search_iccid',iccid);
 
-                        if (res.data.status == 1) {
-                            _this.$router.push({path: '/mifi/card/index'});
-                        } else if (res.data.status == 2 || res.data.status == 3) {
+                        this.recordingIccid({
+                            iccid:res.data.iccid,
+                            realname:(res.data.status == 2 || res.data.status == 3 ) ? false : true
+                        }); // 增加iccid实名记录
 
+                        if (res.data.status == 1) {
+                            this.$router.push({path: '/mifi/card/index'});
+                        } else if (res.data.status == 2 || res.data.status == 3) {
                             setStorage('check_realNameSource', res.data.source);
-                            _this.$router.push({
+                            this.$router.push({
                                 path: '/weixin/new_card/real_name',
                                 query:{from:'mifi'}
                             });
@@ -195,6 +164,45 @@
                     }
                 })
 
+            },
+
+            recordingIccid(params){
+                let isExist = false;
+                if (this.recording_list.length) {
+
+                    this.recording_list.map(function (item, index) {
+                        if (item.iccid == params.iccid) {
+                            item.searchTime = formatterCardTime().searchTime;
+                            item.millisecond = formatterCardTime().millisecond;
+                            item.realname = params.realname;
+                            isExist = true;
+                        }
+                    });
+                    if (!isExist) {
+                        this.recording_list.push({
+                            'iccid': params.iccid,
+                            'searchTime': formatterCardTime().searchTime,
+                            'millisecond': formatterCardTime().millisecond,
+                            'realname': params.realname,
+                        })
+                    }
+                } else {
+                    this.recording_list.push({
+                        'iccid': params.iccid,
+                        'searchTime': formatterCardTime().searchTime,
+                        'millisecond': formatterCardTime().millisecond,
+                        'realname': params.realname,
+                    })
+                    this.recording_show = true;
+                }
+
+                this.recording_list.sort(this.compare('millisecond'));
+
+                if (this.recording_list.length > 20) {
+                    this.recording_list.splice(20)
+                }
+
+                setStorage('recording_list', this.recording_list, 'arr')
             },
 
             scanIccid() {

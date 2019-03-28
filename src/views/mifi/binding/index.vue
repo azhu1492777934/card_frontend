@@ -119,6 +119,9 @@
                             setStorage('refreshUrl',GetUrlRelativePath());
                             this.$emit("getToken",{from:'mifi'});
 
+                        }else if(res.error == 20014){
+                            this.code = '';
+                            Notify({message:'用户绑定超时，请重新绑定'});
                         } else{
                             this.isLoginError = true;
                             res.msg ? this.loginErrorMsg = res.msg : this.loginErrorMsg = '绑定用户失败，请反馈我司客服。'

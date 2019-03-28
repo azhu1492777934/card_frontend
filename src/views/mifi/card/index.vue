@@ -63,9 +63,9 @@
                 </div>
             </div>
         </div>
-        <div class="real-name-wrap" v-if="usageInfo.auth_status==1">
-            <img src="../../../assets/imgs/mifi/common/real_name.png" alt="">
-        </div>
+        <!--<div class="real-name-wrap" v-if="usageInfo.auth_status==1">-->
+            <!--<img src="../../../assets/imgs/mifi/common/real_name.png" alt="">-->
+        <!--</div>-->
     </div>
 </template>
 
@@ -90,14 +90,17 @@
                     is_watch_card: false,//手表卡
                     is_flow_card: false,//流量卡
                 },
+                recording_list: getStorage('recording_list','arr') || [],//当前站点保留的查询数据
             }
         },
         components:{
             [Toast.name]:Toast,
         },
         created(){
-            if(this.iccid){
-                // 请求卡状态
+            this.iccid ?  this.initial() : this.$router.push({path:'/mifi/card/lookup'});
+        },
+        methods:{
+            initial(){
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
                 this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
@@ -109,6 +112,19 @@
                     if(res.state==1){
 
                         this.usageInfo = res.data;
+
+                        // 判断当前卡状态 是都是未实名
+                        if(this.usageInfo.auth_status==0 && this.usageInfo.need_auth){
+                            // 判断当前站点是否存在已经实名的查
+                            let checkRecordingResult = this.checkAllCardStatus();
+                            if(checkRecordingResult.state==1){
+                                this.iccid = checkRecordingResult.iccid;
+                                setStorage('check_iccid',this.iccid);
+                                this.initial()
+                            }else{
+                                this.$router.push({path:'/weixin/new_card/real_name'});
+                            }
+                        }
 
                         if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
                             this.auth_status.push('手淘实名');
@@ -136,12 +152,6 @@
 
                         this.filterCardInfo.card_str_state = this.card_state[this.usageInfo.status];//卡状态
 
-                        // if (this.usageInfo.status == 2) {
-                        //     this.filterCardInfo.refresh_actived = '激活'
-                        // } else {
-                        //     this.filterCardInfo.refresh_actived = '刷新'
-                        // }
-
                     }else{
                         this.$store.commit('mifiCommon/changeErrStatus',{
                             show:true,
@@ -149,12 +159,7 @@
                         })
                     }
                 })
-            }else{
-                this.$router.push({path:'/mifi/card/lookup'});
-            }
-
-        },
-        methods:{
+            },
             refreshCard(){
                 window.location.reload()
             },
@@ -172,6 +177,27 @@
             },
             inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
+            },
+            checkAllCardStatus(){
+                let iccid;
+                if(this.recording_list.length <=1){
+                    return{
+                        state:0
+                    }
+                }else{
+                    for(let i=0;i<this.recording_list.length;i++){
+                        if(this.recording_list[i].realname){
+                            iccid = this.recording_list[i].iccid;
+                            break
+                        }
+                    }
+                    if(iccid){
+                        return{
+                            state:1,
+                            iccid:iccid
+                        }
+                    }
+                }
             },
             toRealName(){
                 if(this.usageInfo.auth_status == 3 || this.usageInfo.auth_status == 4){

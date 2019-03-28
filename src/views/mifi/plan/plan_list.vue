@@ -335,11 +335,12 @@
                         }
                     }
                     .plan-desc {
+                        max-width: 502px;
                         letter-spacing: 1px;
                         line-height: 1.3;
                         color: #868686;
                         font-size: 24px;
-
+                        word-break: break-all;
                     }
                 }
                 .plan-price-wrap {

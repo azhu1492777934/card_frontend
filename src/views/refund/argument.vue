@@ -19,7 +19,7 @@
                 <button @click="checkArgument">同意协议</button>
             </div>
             <div>
-                <a href="/weixin/question" class="refuse_icon">拒绝协议</a>
+                <router-link to="/weixin/question/index" class="refuse_icon">拒绝协议</router-link>
             </div>
         </div>
     </div>

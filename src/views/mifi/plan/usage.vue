@@ -451,11 +451,11 @@
 
                     .complicated-date-wrap{
                         position: absolute;
-                        top: 15px;
+                        top: 17px;
                         color: #ff5519;
                     }
                     /*存在优先使用按钮时 增加'套餐时长左边距'*/
-                    .l-100{left: 100px!important;}
+                    .l-100{left: 130px!important;}
                 }
                 .usage-right {
                     flex: 1.5;
