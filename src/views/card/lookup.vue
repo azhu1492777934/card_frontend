@@ -185,12 +185,8 @@
             cardButton
         },
         created() {
-            if(this.client_type != 'wechat' || this.client_type != 'alipay' || this.client_type != 'app'){
+            if(this.client_type != 'wechat' || this.client_type != 'alipay' || this.client_type != 'app' || getStorage('token')){
                 this.forbidden_click  =false
-            }
-
-            if(getStorage('token')){
-                this.forbidden_click = false
             }
 
             let _this = this;

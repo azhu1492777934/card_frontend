@@ -264,6 +264,14 @@
                         msg: '手机号码有误'
                     }
                 }
+                let pre_three_num = this.info_phone.substr(0,3),
+                    watch_card = ['145','146','166','177','199'];
+                if(watch_card.includes(pre_three_num)){
+                    return {
+                        state:0,
+                        msg:'请勿输入以145/146/166/177/199开头的手机号码'
+                    }
+                }
                 return {
                     state: 1
                 }
@@ -392,22 +400,21 @@
                     .then(res => {
                         if (res.state==1) {
                             Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
-                             _get('/api/v1/app/jump/taobao', {
-                                    imei: this.info_imei,iccid:this.info_iccid,source:this.card_source
-                                }).then(res => {
-                                    if(res.data.indexOf("taobao")!=-1){
-                                        let ua = navigator.userAgent.toLowerCase();
-                                         if(ua.match(/MicroMessenger/i) == "micromessenger"){
-                                            this.$router.push({path:'to_tb',query:{url:res.data}});
-                                        }else{
-                                            location.href = res.data;
-                                        }
+
+                            _get('/api/v1/app/jump/taobao', {
+                                imei: this.info_imei,iccid:this.info_iccid,source:this.card_source
+                            }).then(res => {
+                                if(res.data.indexOf("taobao")!=-1){
+                                    let ua = navigator.userAgent.toLowerCase();
+                                    if(ua.match(/MicroMessenger/i) == "micromessenger"){
+                                        this.$router.push({path:'to_tb',query:{url:res.data}});
                                     }else{
                                         location.href = res.data;
                                     }
-                                })
-
-
+                                }else{
+                                    location.href = res.data;
+                                }
+                            })
                         } else {
                             if(res.msg){
                                 Notify({message: res.msg,})

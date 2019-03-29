@@ -139,7 +139,7 @@
                     iccid:getStorage('check_iccid')
                 }).then(res=>{
                     if(res.state==1){
-                        this.connection_flow_list = res.data.data
+                        this.connection_flow_list = res.data.data;
                         if(res.data.data.length || res.data.voice.length){
                             this.load_connection = false;
                         }
@@ -148,7 +148,7 @@
                             this.connection_voice_list = res.data.voice
                         }else if(!res.data.data.length && res.data.voice.length){
                             this.hasVocie = false;//关闭切换按钮
-                            this.connection_voice_list = res.data.voice
+                            this.connection_voice_list = res.data.voice;
                             this.cur_checked = false;//关闭流量链接详情按钮
 
                         } else{

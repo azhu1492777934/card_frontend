@@ -176,10 +176,14 @@
                     user_id:this.authorizedUserInfo.account.user_id
                 }).then(res=>{
                     if(res.state==1){
-                        Notify({message:'退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候'})
+                        Notify({
+                            message:'退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候',
+                            background:'#60ce53'
+                        })
                         setTimeout(function(){
                             _this.$router.push({path:'/weixin/refund/index'});
-                        },2000)
+
+                        },1500)
                     }else{
                         Notify({message:res.msg})
                     }

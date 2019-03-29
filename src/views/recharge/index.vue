@@ -125,8 +125,8 @@
 
 <script>
     import {mapState} from 'vuex'
-    import {DatetimePicker, Area, Popup, Notify} from 'vant';
-    import {setStorage, getStorage, checkBrowser} from "../../utilies";
+    import {DatetimePicker, Area, Popup,Notify} from 'vant';
+    import {setStorage,getStorage,checkBrowser,getUrlParam} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -345,7 +345,11 @@
             dateCancel: function () {
                 this.showDate = false;
             },//取消日期弹窗
-            recharge: function () {
+            recharge:function () {
+                if (!this.userInfo.account.user_id) {
+                    Notify({message:'请在微信或支付宝客户端充值'});
+                    return
+                }
                 let rechargeInfo = this.new_recharge_list[this.activeIndex];
                 let param = {},
                     _this = this;
@@ -362,7 +366,7 @@
 
                 }
 
-                param.iccid = this.planInfo.iccid;
+                param.iccid = this.planInfo.iccid || getStorage('check_iccid');
                 param.rating_id = this.planInfo.id;
                 param.is_renew = rechargeInfo.is_renew;
                 if (rechargeInfo.is_renew == true) {
@@ -435,6 +439,8 @@
                     param.start_time = this.val_date
                 }
 
+                this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
+
                 this.rechargeShow = true;
                 _post('/api/v1/pay/weixin/create', param)
                     .then(res => {
@@ -445,25 +451,17 @@
                             if (/<[^>]+>/.test(res.data)) {
                                 document.write(res.data);
 
-                            } else if (res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0, 4) == 'http') { //app
-                                location.href = res.data
-
-                            } else {
-                                // this.userInfo.account.elb = res.data.elb;
-                                // this.userInfo.account.rmb = res.data.rmb;
-                                //
-                                // setStorage('userInfo',this.userInfo,'obj');
-                                //
-                                // this.$store.commit('userInfo/changeUserInfo',this.userInfo);
-
+                            }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
+                                _this.global_variables.packed_project === 'mifi' ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                            }else {
                                 Notify({
                                     message: '充值成功',
                                     background: '#60ce53'
                                 })
+
                                 setTimeout(function () {
-                                    setStorage('check_iccid', _this.planInfo.iccid);
-                                    location.href = res.data.return_url
-                                }, 2000)
+                                    _this.global_variables.packed_project === 'mifi' ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                },1500);
                             }//纯钻石支付
                         } else {
                             this.rechargeShow = false;
@@ -521,7 +519,7 @@
                         }
                         if (planPrice > 100 && planPrice <= 200) {
                             return item.pay_type === 'diamond_charge'
-                                || (item.pay_type === 'over_charge' && item.pay_money <= 200)
+                                || (item.pay_type === 'over_charge' && item.pay_money == 200)
                                 || item.pay_type === 'normal_charge'
 
 

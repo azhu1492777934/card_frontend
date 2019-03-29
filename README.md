@@ -26,4 +26,4 @@ src/utilies/domain.js
 
 
 CDN资源引用报错后
-打包文件app.js在IOS上会出现报错。
+打包文件app.js在IOS上会出现报错。由于缓存原因可能导致安卓上短时间内不会出现报错。

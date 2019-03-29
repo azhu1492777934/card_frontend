@@ -36,7 +36,7 @@ axios.interceptors.response.use(function (response){
 },err => {
     if(Object.prototype.toString.call(err)=='[object object]' || Object.prototype.toString.call(err)=='[object Error]'){
         let msg ;
-        err.response.status ? msg = '服务出小差啦('+ err.response.status+')' : msg = '找不到资源啦'
+         err.response.status ? msg = `服务出小差啦${err.response.status}` : msg = '好像找不到资源了'
         return Promise.resolve({
             state:0,
             msg:msg

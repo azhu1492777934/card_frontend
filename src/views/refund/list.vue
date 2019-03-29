@@ -206,7 +206,7 @@
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid')
             }else{
-                this.$router.push({path:'/weixin/card/lookup'})
+                this.$route.query.from == 'mifi' ? this.$router.push({path:'/mifi/card/lookup'}) : this.$router.push({path:'/weixin/card/lookup'});
             }
         },
         methods: {
@@ -218,7 +218,7 @@
             getRefundList() {
 
                 if(this.total <= this.refundList.length && this.refundList.length!=0){
-                    Notify({message:'订单已加载完毕'})
+                    // Notify({message:'订单已加载完毕'})
                     this.finished = true;
                     this.loading = false;
                     return

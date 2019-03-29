@@ -1,7 +1,6 @@
 <template>
     <div id="app">
         <router-view  @getToken="refreshToken" v-wechat-title="$route.meta.title"/>
-
     </div>
 </template>
 
@@ -16,13 +15,13 @@
             [Notify.name]:Notify
        },
         created(){
-            let loading = document.getElementsByClassName('fixed-wrap-loading')[0];
+            let loading = document.querySelector('.app-loading-wrap');
             if(loading){
                 document.body.removeChild(loading);
             }
         },
         methods: {
-            refreshToken() {
+            refreshToken(params) {
                 _get("/accountCenter/v2/auth/refresh?" + codeParam({
                     token: getStorage('token')
                 }, 'get'))
@@ -30,19 +29,25 @@
                         if (res.error == 0) {
 
                             localStorage.setItem("token", res.data);
+                            // let refreshUrl = getStorage('refreshUrl');
+                            // refreshUrl ? this.$router.push({path:refreshUrl}) : location.reload();
                             location.reload();
 
                         } else if (res.error == 11003) {
                             let _this = this;
 
-                            Notify({message:'为了您的账号安全,请绑定手机号码'})
+                            Notify({message:'为了您的账号安全,请绑定手机号码'});
 
                             let redirect_url = this.GetUrlRelativePath();
 
                             setStorage('authorized_redirect_uri',redirect_url);
 
                             setTimeout(function () {
-                                _this.$router.push({path: '/login'})
+                                if(_this.global_variables.packed_project === 'mifi'){
+                                    _this.$router.push({path: '/binding'})
+                                }else{
+                                    _this.$router.push({path: '/login'})
+                                }
                             },2000)
                         }
                     })

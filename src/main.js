@@ -13,6 +13,7 @@ require('../src/assets/css/SourceHanSansCNRegular.css')
 require('../src/assets/js/sha1.min')
 
 // require('./mock')
+require('../src/assets/js/sha1.min')
 
 import 'lib-flexible/flexible'
 import vueWeChatTitle from 'vue-wechat-title'
@@ -23,10 +24,15 @@ import {checkBrowser} from "./utilies";
 import global_variables from '../src/utilies/domain'
 
 const wx = require('weixin-js-sdk');
-Vue.prototype.wx = wx
-Vue.prototype.global_variables = global_variables
+Vue.prototype.wx = wx;
+Vue.prototype.global_variables = global_variables;
 
 router.afterEach((to,from)=>{
+    const u = navigator.userAgent.toLowerCase();
+    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
+    if (to.path !== global.location.pathname) {
+        location.assign(to.fullPath);
+    };
     if(checkBrowser()=='wechat'){
 
         if(to.path=='/weixin/card/lookup'){
@@ -46,16 +52,9 @@ router.afterEach((to,from)=>{
         }
 
     }
+});
 
-    //VUE路由在IOS微信浏览器下不变
-    const u = navigator.userAgent.toLowerCase()
-    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return
-    if (to.path !== global.location.pathname) {
-      location.assign(to.fullPath)
-    }
-})
-
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)
 
