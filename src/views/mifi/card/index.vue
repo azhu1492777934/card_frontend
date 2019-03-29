@@ -6,7 +6,6 @@
                     近期查询<span @click="refreshCard" class="iconfont icon-refresh"></span>
                 </p>
                 <p>{{iccid}}</p>
-                <!--<p>{{iccid}}({{usageInfo.source}})</p>-->
                 <div class="card-status-wrap">
                     <div>
                         <span class="card-status"
@@ -220,6 +219,7 @@
         .top-info{
             display: flex;
             align-items: center;
+            width: 100%;
             height: 320px;
             padding: 117px 60px 0;
             box-sizing: border-box;

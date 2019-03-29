@@ -68,6 +68,7 @@
 </script>
 
 <style lang="less">
+    @import url("https://at.alicdn.com/t/font_963137_e913dtci2bg.css");
     html, body, #app ,.inner-wrap{
         height: 100%;
         min-height: 100%;

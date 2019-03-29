@@ -48,7 +48,7 @@
                         })
                     }
                 } else {
-                    this.$router.push('/weixin/card/lookup');
+                    this.$router.push('/mifi/card/lookup');
                 }
 
             }else{
@@ -110,7 +110,7 @@
                     if (res.error == 0) {
 
                         setStorage('token', res.data);//获取token
-                        getStorage('check_iccid') ? this.$router.push('/mifi/card/index') : this.$router.push('/mifi/card/lookup');
+                        getStorage('check_iccid') ? this.$router.push('/mifi/index') : this.$router.push('/mifi/card/lookup');
 
                     } else if (res.error == '11002') {
 

@@ -402,7 +402,10 @@
                             Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
 
                             _get('/api/v1/app/jump/taobao', {
-                                imei: this.info_imei,iccid:this.info_iccid,source:this.card_source
+                                imei: this.info_imei,
+                                iccid:this.info_iccid,
+                                source:this.card_source,
+                                type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
                             }).then(res => {
                                 if(res.data.indexOf("taobao")!=-1){
                                     let ua = navigator.userAgent.toLowerCase();

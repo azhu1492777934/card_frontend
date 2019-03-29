@@ -25,7 +25,13 @@
                     // 判断当前卡是否走完实名流程
                     if (getStorage('check_iccid')) {
                         this.iccid = getStorage('check_iccid');
-                        this.checkIccid(this.iccid);
+
+                        let checkRecordingResult = this.checkAllCardStatus();
+                        if(checkRecordingResult.state==1){
+                           this.$router.push({path:'/mifi/card/index'});
+                        }else{
+                            this.checkIccid(this.iccid);
+                        }
 
                     } else {
                         this.$router.push({path:'/mifi/card/lookup'});
@@ -65,6 +71,27 @@
                         Notify({message: res.msg})
                     }
                 })
+            },
+            checkAllCardStatus(){
+                let iccid;
+                if(this.recording_list.length <=1){
+                    return{
+                        state:0
+                    }
+                }else{
+                    for(let i=0;i<this.recording_list.length;i++){
+                        if(this.recording_list[i].realname){
+                            iccid = this.recording_list[i].iccid;
+                            break
+                        }
+                    }
+                    if(iccid){
+                        return{
+                            state:1,
+                            iccid:iccid
+                        }
+                    }
+                }
             },
             compare: function (property) {
                 return function (a, b) {

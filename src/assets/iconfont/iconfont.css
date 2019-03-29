@@ -1,0 +1,85 @@
+@font-face {font-family: "iconfont";
+  src: url('iconfont.eot'); /* IE9 */
+  src: url('iconfont.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('iconfont.woff') format('woff'),
+  url('iconfont.woff2') format('woff2'),
+  url('iconfont.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+ */
+  url('iconfont.svg') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-android-browser:before {
+  content: "\e6cd";
+}
+
+.icon-rightArrow:before {
+  content: "\e62b";
+}
+
+.icon-tao:before {
+  content: "\e786";
+}
+
+.icon-scan:before {
+  content: "\e6bd";
+}
+
+.icon-android:before {
+  content: "\e612";
+}
+
+.icon-recommend:before {
+  content: "\e60e";
+}
+
+.icon-apple:before {
+  content: "\e676";
+}
+
+.icon-wifi:before {
+  content: "\e601";
+}
+
+.icon-warning:before {
+  content: "\e600";
+}
+
+.icon-tutorial:before {
+  content: "\e64a";
+}
+
+.icon-info:before {
+  content: "\e60d";
+}
+
+.icon-coupon:before {
+  content: "\e60f";
+}
+
+.icon-txt:before {
+  content: "\e610";
+}
+
+.icon-refresh:before {
+  content: "\e611";
+}
+
+.icon-user:before {
+  content: "\e613";
+}
+
+.icon-cart:before {
+  content: "\e614";
+}
+
+.icon-hot:before {
+  content: "\e615";
+}
+

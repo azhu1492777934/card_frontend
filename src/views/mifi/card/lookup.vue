@@ -6,8 +6,7 @@
         <div class="search-wrap">
             <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
             <span v-show="showClearBtn" @click="clearInputIccid" class="clearIccid">&times;</span>
-            <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
-            <span v-show="client_type!='app'" class="icon-scanTip"></span>
+            <span @click="testClick" class="iconfont icon-scan bounceIn animated"></span>
         </div>
         <div class="btn-check-wrap">
             <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
@@ -113,6 +112,29 @@
             }
         },
         methods: {
+            testClick() {
+                let _this = this;
+                if (this.client_type == 'wechat') {
+                    this.wx.scanQRCode({
+                        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+                        scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+                        success: function (res) {
+                            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+
+                            _this.iccid = (result.replace(/\s*/g,""));
+                            _this.processCheckIccid(_this.iccid)
+                        }
+                    });
+                } else if (this.client_type == 'alipay') {
+
+                    ap.scan(function (res) {
+                        var result = res.code; // 当needResult 为 1 时，扫码返回的结果
+
+                        _this.iccid = (result.replace(/\s*/g,""));
+                        _this.processCheckIccid(_this.iccid)
+                    });
+                }
+            },
             searchIccid: function (iccid) {
                 if (!iccid) {
                     Notify({message: '请输入ICCID'});
@@ -207,7 +229,6 @@
 
             scanIccid() {
                 let _this = this;
-
                 if (this.client_type == 'wechat') {
                     this.wx.scanQRCode({
                         needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，

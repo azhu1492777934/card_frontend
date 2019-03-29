@@ -34,14 +34,9 @@ global_variables.packed_project === 'mifi' ? scanUrl = '/mifi/card/lookup' :  sc
 global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_info' :  scanApi = '/api/v1/app/sign_info';
 
 router.afterEach((to,from)=>{
-    const u = navigator.userAgent.toLowerCase();
-    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
-    if (to.path !== global.location.pathname) {
-        location.assign(to.fullPath);
-    };
     if(checkBrowser()=='wechat'){
         if(to.path==scanUrl){
-            _get(scanApi)
+            _get('/api/v1/app/mifi_sign_info')
                 .then(res=>{
                     if(res.state==1){
                         wx.config({
@@ -57,6 +52,12 @@ router.afterEach((to,from)=>{
         }
 
     }
+
+    const u = navigator.userAgent.toLowerCase();
+    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
+    if (to.path !== global.location.pathname) {
+        location.assign(to.fullPath);
+    };
 });
 
 Vue.config.productionTip = false;
