@@ -16,12 +16,12 @@ self.__precacheManifest = [
     "url": "/css/Not_fund.b6476c76.css"
   },
   {
-    "revision": "1f5603ce96fb6e8f0627",
-    "url": "/css/app.18d7b358.css"
+    "revision": "c4461f7537d4c81d793e",
+    "url": "/css/app.2d9c2c0b.css"
   },
   {
-    "revision": "1f5603ce96fb6e8f0627",
-    "url": "/js/app.eefd59ce.js"
+    "revision": "c4461f7537d4c81d793e",
+    "url": "/js/app.77c6e2e2.js"
   },
   {
     "revision": "6b10f62d78381937b5ab",
@@ -500,6 +500,26 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
+    "revision": "3d0fc424b703032ca595090e99f8354b",
+    "url": "/img/login_bg@2x.3d0fc424.png"
+  },
+  {
+    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
+    "url": "/img/login_bg@3x.11000d4e.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
     "revision": "114a6e12b42b9b48586dd341105188fe",
     "url": "/img/usedOrder@2x.114a6e12.png"
   },
@@ -516,32 +536,12 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@3x.4a5b90f8.png"
   },
   {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
     "revision": "0d5a5158e67bcb7a4604124715ed6fbf",
     "url": "/img/usedOrder@3x.0d5a5158.png"
   },
   {
     "revision": "be0f1e33b2553e71b117d3d3f838d32f",
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
-    "revision": "3d0fc424b703032ca595090e99f8354b",
-    "url": "/img/login_bg@2x.3d0fc424.png"
-  },
-  {
-    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
-    "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "5a3428653945c17e1c146efeee81c987",
@@ -596,7 +596,7 @@ self.__precacheManifest = [
     "url": "/img/safari.39d9e849.png"
   },
   {
-    "revision": "d46324c070891a840e64ed87657bea0b",
+    "revision": "1bdf784efe32ef9cc6e672012de5b150",
     "url": "/index.html"
   },
   {
