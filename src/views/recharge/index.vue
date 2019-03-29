@@ -442,6 +442,7 @@
                 this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
 
                 this.rechargeShow = true;
+
                 _post('/api/v1/pay/weixin/create', param)
                     .then(res => {
                         if (res.state == 1) {
@@ -452,7 +453,8 @@
                                 document.write(res.data);
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
-                                _this.global_variables.packed_project === 'mifi' ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                this.global_variables.packed_project === 'mifi' ?
+                                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
                             }else {
                                 Notify({
                                     message: '充值成功',
@@ -460,7 +462,8 @@
                                 })
 
                                 setTimeout(function () {
-                                    _this.global_variables.packed_project === 'mifi' ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                    _this.global_variables.packed_project === 'mifi' ?
+                                        location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
                                 },1500);
                             }//纯钻石支付
                         } else {

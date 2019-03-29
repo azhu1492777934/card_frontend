@@ -39,7 +39,7 @@
             </div>
 
         </div>
-        <div v-if="usageInfo.auth_status!=1" class="card-function-wrap">
+        <div class="card-function-wrap">
             <div class="function-group-wrap">
                 <div @click="buyPlan">
                     <span class="iconfont icon-cart"></span>
