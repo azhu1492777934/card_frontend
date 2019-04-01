@@ -15,7 +15,7 @@
             <swiper v-if="JSON.stringify(orderListObj)!='{}'" ref="mySwiper" :options="swiperOption">
 
                 <swiper-slide v-for="(item,index) in statusList" :key="index">
-                    <ul v-show="orderListObj[index].length>0" class="order-list-wrap">
+                    <ul v-bounce v-show="orderListObj[index].length>0" class="order-list-wrap">
                         <li v-for="(inner_item,inner_index) in orderListObj[index]">
                             <div class="order-info-wrap">
                                 <span class="order-status"

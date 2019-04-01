@@ -75,7 +75,7 @@
                 <div class="van-swipe-wrap">
                     <swiper ref="mySwiper" :options="swiperOption">
                         <swiper-slide>
-                            <ul v-if="hasUsagePlan" class="usage-plan-wrap">
+                            <ul v-bounce v-if="hasUsagePlan" class="usage-plan-wrap">
                                 <li v-for="(item,index) in usageInfo.usage.plans">
                                     <div class="plan-info-wrap">
                                         <p class="plan-name">{{item.rps_name}}</p>
@@ -291,6 +291,7 @@
         }
         .card-used-wrap {
             padding: 25px;
+            font-size: 26px;
             color: #fff;
             font-weight: 500;
             background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);
@@ -465,9 +466,9 @@
             padding: 30px 0;
             button {
                 display: inline-block;
-
                 width: 430px;
                 height: 80px;
+                font-size: 28px;
                 line-height: 80px;
                 color: #fff;
                 background: #38b5ed;

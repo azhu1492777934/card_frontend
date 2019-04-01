@@ -5,12 +5,11 @@ import cardEnv from './env/env.card';
 import mifiEnv from './env/env.mifi';
 
 let global_variables = {
-    packed_project : 'mifi', // 修改项目
+    packed_project : 'mifi1', // 修改项目
     authorized_redirect_url : '',
     version : '1.1',
     isIos:navigator.userAgent.toLowerCase().indexOf('iphone') > -1 ? true : false ,//判断是否为ios
 }
-
 /*
 * 当前打包项目
 * */

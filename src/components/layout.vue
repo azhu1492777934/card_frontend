@@ -70,7 +70,7 @@
             },
 
             authorized() {
-                if (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') {
+                if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') && process.env.NODE_ENV != 'development'  ) {
 
 
                     if (this.client_type != 'app') {

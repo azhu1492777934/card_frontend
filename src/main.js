@@ -16,6 +16,7 @@ require('../src/assets/js/sha1.min')
 require('../src/assets/js/sha1.min')
 
 import 'lib-flexible/flexible'
+import vueBounce from 'vue-bounce'
 import vueWeChatTitle from 'vue-wechat-title'
 import globalFunction from '../src/utilies/global_function'//全局函数
 import {_get} from "./http";
@@ -36,7 +37,7 @@ global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_in
 router.afterEach((to,from)=>{
     if(checkBrowser()=='wechat'){
         if(to.path==scanUrl){
-            _get('/api/v1/app/mifi_sign_info')
+            _get('/api/v1/app/sign_info')
                 .then(res=>{
                     if(res.state==1){
                         wx.config({
@@ -63,7 +64,7 @@ router.afterEach((to,from)=>{
 Vue.config.productionTip = false;
 Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)
-
+Vue.use(vueBounce)
 new Vue({
     store,
     router,
