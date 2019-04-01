@@ -1,5 +1,3 @@
-# p-activity
-
 ## Project setup
 ```
 npm install

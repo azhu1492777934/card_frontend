@@ -337,7 +337,7 @@
                         scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
                         success: function (res) {
                             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-
+                            result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1 ,result.length) : result;
                             _this.iccid = (result.replace(/\s*/g,""));
                             _this.processCheckIccid(_this.iccid)
                         }
