@@ -101,7 +101,6 @@
             }
         }
         .recording-wrap {
-            background-color: #000;
             .recording-list-wrap {
                 max-height: 260px;
                 overflow: auto;
