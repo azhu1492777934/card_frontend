@@ -161,8 +161,8 @@
             this.iccid = getUrlParam('iccid');
             this.imei = getUrlParam('imei');
             this.source = getUrlParam('source');
-            this.qrSrc = 'http://cardserver_test.china-m2m.com/qrcode?iccid=' + this.iccid + '&imei=' + this.imei
-            if(this.client_type=='mobile'){
+            this.qrSrc = 'http://cardserver_test.china-m2m.com/qrcode?iccid=' + this.iccid + '&imei=' + this.imei;
+            if(this.client_type!='wechat'){
                 location.href = this.$route.query.url;
             }
         },

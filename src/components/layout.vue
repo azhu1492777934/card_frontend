@@ -123,6 +123,7 @@
                 this.load_user_msg = true;//用户信息遮罩
                 _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
                     .then(res => {
+                        this.load_user_msg = false;
                         if (res.error == 0) {
 
                             if (res.data && JSON.stringify(res.data) != '{}') {
@@ -138,8 +139,6 @@
                                     this.$store.commit('userInfo/changeUserStatus', true);
                                     this.$store.commit('userInfo/changeUserInfo', UserInfo);
                                 }
-
-                                this.load_user_msg = false;
 
                             } else {
 
