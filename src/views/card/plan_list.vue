@@ -318,15 +318,14 @@
                         this.swiper.slideTo(1, 500, false);
                     }
 
-                    let _this = this;
                     this.$nextTick(() => {
                         let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                            refPLanTitle = _this.$refs.refPLanTitle.offsetHeight,
-                            refPlanButton = _this.$refs.refPlanButton.offsetHeight;
-                        if (_this.client_type == 'wechat' || _this.client_type == 'alipay') {
-                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
+                            refPLanTitle = this.$refs.refPLanTitle.offsetHeight,
+                            refPlanButton = this.$refs.refPlanButton.offsetHeight;
+                        if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                            this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
                         } else {
-                            _this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton) + 'px'
+                            this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton) + 'px'
                         }
                     })
 
