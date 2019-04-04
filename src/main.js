@@ -37,7 +37,7 @@ global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_in
 router.afterEach((to,from)=>{
     if(checkBrowser()=='wechat'){
         if(to.path==scanUrl){
-            _get('/api/v1/app/sign_info')
+            _get(scanApi)
                 .then(res=>{
                     if(res.state==1){
                         wx.config({

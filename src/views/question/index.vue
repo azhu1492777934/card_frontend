@@ -3,16 +3,16 @@
         <p class="title">问题中心</p>
         <ul>
             <li>
-                <router-link :to="{path:'/weixin/question/find_plan',query:{from:from}}">1.套餐充值成功，流量通话未增加</router-link>
+                <router-link to="/weixin/question/find_plan">1.套餐充值成功，流量通话未增加</router-link>
             </li>
             <li>
-                <router-link :to="{path:'/weixin/question/revoke_plan',query:{from:from}}">2.流量通话显示正常，但无法使用</router-link>
+                <router-link to="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</router-link>
             </li>
             <li>
                 <a @click="toRefund" href="javascript:;">3.套餐退款</a>
             </li>
             <li>
-                <router-link :to="{path:'/weixin/question/release_plan',query:{from:from}}">4.解约自动续费套餐</router-link>
+                <router-link to="/weixin/question/release_plan">4.解约自动续费套餐</router-link>
             </li>
         </ul>
     </div>
@@ -77,7 +77,6 @@
            toRefund(){
                this.$router.push({
                    path:'/weixin/refund/argument',
-                   query:{from:this.from}
                });
            }
         }

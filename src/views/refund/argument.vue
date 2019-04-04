@@ -26,18 +26,12 @@
 </template>
 
 <script>
-    import {setStorage} from "../../utilies";
-
     export default {
         name: "argument",
         methods:{
            checkArgument(){
-               let from = this.$route.query.from;
                this.$router.push({
                    path:'/weixin/refund/index',
-                   query:{
-                       from:from,
-                   }
                })
            }
         }
@@ -48,7 +42,7 @@
 
     .refund-argument-wrap {
         width: 94%;
-        margin: 40px auto 0;
+        margin: 0 auto;
         padding: 0 40px;
         box-sizing: border-box;
         background-color: #fff;

@@ -93,7 +93,7 @@
                             background:'#60ce53'
                         })
                         setTimeout(function () {
-                            _this.$route.query.from === 'mifi' ? _this.$router.push({path:'/mifi/card/index'}) : _this.$router.push({path:'/weixin/card/usage'});
+                            _this.global_variables.packed_project === 'mifi' ? _this.$router.push({path:'/mifi/card/index'}) : _this.$router.push({path:'/weixin/card/usage'});
                         }, 2000)
                     } else {
                         Notify({message: res.msg})

@@ -82,9 +82,15 @@
                                         <div class="plan-describe">
                                             <!--/*套餐描述-->
                                             <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
-                                                <span v-if="item.describe && item.planCellInfo.key!='MG500'">
-                                                    {{item.describe}}
-                                                </span><br>
+                                                <div v-if="item.planCellInfo.key!='MG500'">
+                                                    <p v-if="item.describe && item.describe!='None'">
+                                                        <span>{{item.describe}}</span><br/>
+                                                        <span class="">{{item.remark}}</span>
+                                                    </p>
+                                                    <p v-else>
+                                                        <span>{{item.remark}}</span>
+                                                    </p>
+                                                </div>
                                                 <span v-if="item.planCellInfo.max_high">
                                                     高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}
                                                     </span><br>
@@ -94,7 +100,7 @@
                                             </div>
                                             <div v-else>
                                                 <p v-if="item.describe && item.describe!='None'">
-                                                    <span>{{item.describe}}</span><br>
+                                                    <span>{{item.describe}}</span><br/>
                                                     <span>{{item.remark}}</span>
                                                 </p>
                                                 <p v-else>
@@ -146,7 +152,7 @@
                                             <span>月底清零,30天有效,全国通用,有效期或流量任一用完即停机，套餐包含：20G高速流量，480G中速流量，中速流量可使用加速包提升为高速流量。</span>
                                         </p>
                                         <p class="plan-describe" v-else>
-                                            <span>{{item.describe}}</span>
+                                            <span>{{item.describe}}</span><br/>
                                             <span>{{item.remark}}</span>
                                         </p>
                                         <p class="plan-orderNo">订单号:{{item.no}}</p>
@@ -685,9 +691,10 @@
                                 refCardInfo = this.$refs.refCardInfo.offsetHeight,
                                 refCardData = this.$refs.refCardData.offsetHeight,
                                 refCardButton = this.$refs.refCardButton.offsetHeight,
-                                refPlanTitle =  this.$refs.refPlanTitle.offsetHeight;
+                                refPlanTitle =  this.$refs.refPlanTitle.offsetHeight,
+                                userHeight = getStorage('userHeight') || 44;
                             if(this.client_type == 'wechat' || this.client_type == 'alipay'){
-                                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - 44)+'px'
+                                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight)+'px'
                             }else{
                                 this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle)+'px'
                             }
@@ -705,15 +712,15 @@
         },
         mounted() {},
         methods: {
-            planTypeClikc: function (index) {
+            planTypeClikc(index) {
                 this.cur_plan_type_index = index;
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
-            recharge: function () {
+            recharge() {
                 setStorage('check_iccid', this.iccid)
                 this.$router.push({path: '/weixin/card/plan_list'})
             },
-            refreshOrActivated: function () {
+            refreshOrActivated() {
                 if (this.filterCardInfo.refresh_actived == '刷新') {
                     location.reload()
                 } else {
@@ -743,7 +750,7 @@
 
                 }
             },
-            toConnnection: function () {
+            toConnnection() {
                 setStorage('check_iccid', this.iccid);
                 this.$router.push({path: '/weixin/card/connection'});
             },
@@ -755,7 +762,7 @@
             * detailRight：右侧剩余流量
             * isTotal:是否为总流量
             * */
-            flowUnit:function(num,detailRight,isTotal){
+            flowUnit(num,detailRight,isTotal){
                 if(Object.prototype.toString.call(detailRight)=='[object Object]' && detailRight.watchCard){
                     if(detailRight.total==detailRight.used){
                         return '0.00MB'
@@ -778,7 +785,7 @@
                     return num >= 1000 ? toDecimal(num/1000)+'GB' : toDecimal(num) + 'MB'
                 }
             },
-            prefer_use_operate: function (iccid,rating_id,priority,source){
+            prefer_use_operate(iccid,rating_id,priority,source){
             		if(priority == 1000){
             			this.prefer_priority = 0
             		}else if(priority == 0){

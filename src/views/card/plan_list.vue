@@ -321,9 +321,10 @@
                     this.$nextTick(() => {
                         let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                             refPLanTitle = this.$refs.refPLanTitle.offsetHeight,
-                            refPlanButton = this.$refs.refPlanButton.offsetHeight;
+                            refPlanButton = this.$refs.refPlanButton.offsetHeight,
+                            userHeight = getStorage('userHeight') || 44;
                         if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                            this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - 44) + 'px'
+                            this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton - userHeight) + 'px'
                         } else {
                             this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPLanTitle - refPlanButton) + 'px'
                         }

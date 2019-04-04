@@ -59,7 +59,7 @@
                                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                                     refBanner = this.$refs.banner.offsetHeight,
                                     refTitle = this.$refs.title.offsetHeight,
-                                    userHeight = getStorage('userHeight');
+                                    userHeight = getStorage('userHeight') || 44;
                                 if (this.client_type == 'wechat' || this.client_type == 'alipay') {
                                     this.$refs.planGroup.style.height = (clientHeight - refBanner - refTitle - userHeight - 40) + 'px'
                                 } else {
