@@ -13,23 +13,29 @@
                 <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"
                     data-elb="20"
                     :class="{'checked':index==activeIndex}">
-                    <div
-                            :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">
+                    <div :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">
+
                         <div class="monthlyTop " v-if="item.is_first==true">
                             <div class="monthlyFirst">首月</div>
                             <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
                         </div>
                         <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}">
-                            {{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
+                            {{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}
+                        </p>
+
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
                         <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
-                            可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>元<br>无ELB赠送
+                            <span class="surplus-recharge" v-if="surplus_cash >= 0">支付{{surplus_cash}}元</span>
+                            可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>钻石<br>无ELB赠送
                         </p><!--钻石支付-->
+
                         <p class="monthlyDes" v-if="item.is_renew">使用钻石连续包月</p>
+
                         <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
 
-                        <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">{{item.give_elb}}</em>ELB
+                        <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">
+                            {{item.give_elb}}</em>ELB
                         </p><!--多充值支付-->
                     </div>
                 </li>
@@ -126,7 +132,7 @@
 <script>
     import {mapState} from 'vuex'
     import {DatetimePicker, Area, Popup,Notify} from 'vant';
-    import {setStorage,getStorage,checkBrowser,getUrlParam} from "../../utilies";
+    import {setStorage,getStorage,checkBrowser,getUrlParam,toDecimal} from "../../utilies";
     import {_post} from "../../http";
 
     export default {
@@ -146,6 +152,7 @@
             return {
                 showOriginPrice:getStorage('originPrice'),
                 rechargeShow: false,//创建订单遮罩
+                surplus_cash: -1, // 钻石支付情况下，显示需要支付的价格
                 recharge_list: [
                     {
                         pay_type: 'diamond_charge',
@@ -513,6 +520,9 @@
                                 && item.pay_type != 'diamond_charge'
                         }
                     } else {
+
+                        rmb - planPrice >=0 ? this.surplus_cash = 0.00 : this.surplus_cash = toDecimal( planPrice - rmb );
+
                         if (item.pay_type === 'diamond_charge') {
                             if (planPrice < rmb) {
                                 item.user_rmb = planPrice
@@ -795,6 +805,12 @@
                 }
                 .discount-diamond {
                     padding-top: 5px;
+                    .surplus-recharge{
+                        display: block;
+                        padding: 8px 0;
+                        font-size: 24px;
+                        color: #2c251d;
+                    }
                 }
                 .discount-appendix {
                     color: #888;

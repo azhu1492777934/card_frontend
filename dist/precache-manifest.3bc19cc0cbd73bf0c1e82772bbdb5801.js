@@ -4,24 +4,24 @@ self.__precacheManifest = [
     "url": "/js/question_wrapper.f2e2300e.js"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
-  },
-  {
-    "revision": "c83eb1bbd4fc35472e2c",
-    "url": "/css/real_name.9d84af31.css"
+    "revision": "89696553cc7ba9ccadf3",
+    "url": "/css/Layout.516c47ef.css"
   },
   {
     "revision": "f2bd340bbd4c73f47b29",
     "url": "/css/Not_fund.6854cecf.css"
   },
   {
-    "revision": "a4ef7cca1309b1cf68f6",
+    "revision": "f2bd340bbd4c73f47b29",
+    "url": "/js/Not_fund.ca725c18.js"
+  },
+  {
+    "revision": "7c881d0b4f0804344aef",
     "url": "/css/app.ba82b079.css"
   },
   {
-    "revision": "a4ef7cca1309b1cf68f6",
-    "url": "/js/app.e0b165e6.js"
+    "revision": "7c881d0b4f0804344aef",
+    "url": "/js/app.8cc565e7.js"
   },
   {
     "revision": "174a8e85bd6080e09709",
@@ -312,20 +312,20 @@ self.__precacheManifest = [
     "url": "/js/Layout.939f67ee.js"
   },
   {
-    "revision": "f2bd340bbd4c73f47b29",
-    "url": "/js/Not_fund.ca725c18.js"
+    "revision": "c83eb1bbd4fc35472e2c",
+    "url": "/css/real_name.9d84af31.css"
   },
   {
     "revision": "c83eb1bbd4fc35472e2c",
     "url": "/js/real_name.47ffacba.js"
   },
   {
-    "revision": "6a76a48ce77456e06b60",
-    "url": "/css/recharge.bc5c93c3.css"
+    "revision": "aed2bef9c4a9d4ed1e5c",
+    "url": "/css/recharge.40888751.css"
   },
   {
-    "revision": "6a76a48ce77456e06b60",
-    "url": "/js/recharge.1967b962.js"
+    "revision": "aed2bef9c4a9d4ed1e5c",
+    "url": "/js/recharge.26378248.js"
   },
   {
     "revision": "5cbef753564d266ae4b4",
@@ -440,12 +440,12 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
+    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
+    "url": "/img/bg-check-wrap@3x.3f342771.png"
   },
   {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
+    "revision": "9713b21819c4019befecd095069977df",
+    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
@@ -454,6 +454,14 @@ self.__precacheManifest = [
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -470,14 +478,6 @@ self.__precacheManifest = [
   {
     "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
     "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
-    "url": "/img/bg-check-wrap@3x.3f342771.png"
-  },
-  {
-    "revision": "9713b21819c4019befecd095069977df",
-    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -552,10 +552,6 @@ self.__precacheManifest = [
     "url": "/img/unicom-logo.82459452.svg"
   },
   {
-    "revision": "113f99e2189c2ca49db2168754fc2eb5",
-    "url": "/img/mobile-logo.113f99e2.png"
-  },
-  {
     "revision": "0cba868fa977e09806638b9000636a36",
     "url": "/img/avatar.0cba868f.jpeg"
   },
@@ -574,6 +570,10 @@ self.__precacheManifest = [
   {
     "revision": "644e6e3cf5f33943747b116316694e28",
     "url": "/img/noData@2x.644e6e3c.png"
+  },
+  {
+    "revision": "113f99e2189c2ca49db2168754fc2eb5",
+    "url": "/img/mobile-logo.113f99e2.png"
   },
   {
     "revision": "4bdbe7dbdb6587c886a8290593100145",
@@ -596,12 +596,12 @@ self.__precacheManifest = [
     "url": "/img/safari.39d9e849.png"
   },
   {
-    "revision": "cb1c96362ca2453d5d4d7507db886a81",
+    "revision": "a73db559ac2cf1bce2d5da5b2bdf9b41",
     "url": "/index.html"
   },
   {
-    "revision": "89696553cc7ba9ccadf3",
-    "url": "/css/Layout.516c47ef.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
