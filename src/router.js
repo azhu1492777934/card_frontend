@@ -39,6 +39,10 @@ const card_lookup = r => require.ensure([], () => r(require('./views/card/lookup
 const card_usage = r => require.ensure([], () => r(require('./views/card/usage')), 'card_usage'); // 使用情况
 const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection'); // 卡连接详情
 const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check'); // 卡检测
+const esim_usage = r => require.ensure([], () => r(require('./views/card/esim_usage')), 'esim_usage'); // 卡检测
+const esim_plan_list = r => require.ensure([], () => r(require('./views/card/esim_plan_list')), 'esim_plan_list'); // 卡检测
+
+
 
 // 儿童手表卡
 const children_card = r => require.ensure([], () => r(require('./views/watch_card/index')), 'children_card'); // 手表卡
@@ -242,14 +246,33 @@ export const constantRouterMap = [{
                     title: '查询',
                     requireAuth: true,
                 }
-            }, {
+            }, 
+            {
+                path: 'esim_usage',
+                component: esim_usage,
+                meta: {
+                    title: 'esim详情',
+                    requireAuth: true,
+                }
+            }, 
+            {
                 path: 'usage',
                 component: card_usage,
                 meta: {
                     title: '详情',
                     requireAuth: true,
                 }
-            }, {
+            }, 
+            
+            {
+                path: 'esim_plan_list',
+                component: esim_plan_list,
+                meta: {
+                    title: 'esim套餐列表',
+                    requireAuth: true,
+                }
+            },
+            {
                 path: 'plan_list',
                 component: plan_list,
                 meta: {

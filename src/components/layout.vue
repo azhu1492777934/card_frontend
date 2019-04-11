@@ -58,20 +58,26 @@
 
             if (this.client_type == 'app') {
                 document.addEventListener("plusready", this.plusReady, false);
-            } else {
-                this.authorized()
+            } else if(/Android/i.test(navigator.userAgent)){
+                this.showHtmlcallJava2();
+            }else{
+                this.authorized();                
             }
-
+            
         },
         methods: {
+            showHtmlcallJava2(){
+                let str3 = window.jsInterface.GetToken();
+                localStorage.setItem("token", str3);
+                this.authorized();
+            },
             plusReady() {
                 localStorage.setItem("token", plus.storage.getItem("appToken"));
                 this.authorized()
             },
 
             authorized() {
-                if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') && process.env.NODE_ENV != 'development'  ) {
-
+                if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app'||/Android/i.test(navigator.userAgent)) && process.env.NODE_ENV != 'development'  ) {
 
                     if (this.client_type != 'app') {
 

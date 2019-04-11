@@ -132,7 +132,7 @@ function checkBrowser() {
             return 'alipay'
         } else if (UA.match(/MicroMessenger/i) == "micromessenger") {
             return 'wechat'
-        } else if (/(uni-app)/.test(UA)) {
+        } else if (/(uni-app)/.test(UA)||/Android/i.test(navigator.userAgent)) {
             return 'app'
         } else {
             return 'mobile'

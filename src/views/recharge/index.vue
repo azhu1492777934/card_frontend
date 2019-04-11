@@ -453,7 +453,6 @@
                 _post('/api/v1/pay/weixin/create', param)
                     .then(res => {
                         if (res.state == 1) {
-
                             this.rechargeShow = false;
 
                             if (/<[^>]+>/.test(res.data)) {
@@ -461,7 +460,7 @@
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
                                 this.global_variables.packed_project === 'mifi' ?
-                                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
                             }else {
                                 Notify({
                                     message: '充值成功',
