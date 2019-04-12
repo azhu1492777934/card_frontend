@@ -478,7 +478,6 @@
                 _post('/api/v1/pay/weixin/create',param)
                     .then(res=>{
                         if(res.state==1){
-                            alert(JSON.stringify(res));
 
                             this.rechargeShow = false;
 

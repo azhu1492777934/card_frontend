@@ -55,21 +55,27 @@
                 removeStorage('watch_card');
                 removeStorage('watchAutoSearch');
             }
-
             if (this.client_type == 'app') {
-                document.addEventListener("plusready", this.plusReady, false);
-            } else if(/Android/i.test(navigator.userAgent)){
-                this.showHtmlcallJava2();
+                let UA = navigator.userAgent.toLowerCase();
+                if(/(ylkids_android)/.test(UA)){
+                    this.showHtmlcallJava2();
+                }else if(/(ios1.1.0)/.test(UA)){
+                    let str=window.webkit.messageHandlers.getIosToken.postMessage(null);
+                    localStorage.setItem("token", str);
+                    this.authorized();
+                }
+                // document.addEventListener("plusready", this.plusReady, false);
             }else{
-                this.authorized();                
+                this.authorized();
             }
             
         },
         methods: {
             showHtmlcallJava2(){
-                let str3 = window.jsInterface.GetToken();
-                localStorage.setItem("token", str3);
-                this.authorized();
+                    let str3 = window.jsInterface.GetToken();
+                    localStorage.setItem("token", str3);
+                    this.authorized();
+                
             },
             plusReady() {
                 localStorage.setItem("token", plus.storage.getItem("appToken"));
@@ -77,10 +83,10 @@
             },
 
             authorized() {
-                if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app'||/Android/i.test(navigator.userAgent)) && process.env.NODE_ENV != 'development'  ) {
+                if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') && process.env.NODE_ENV != 'development'  ) {
 
                     if (this.client_type != 'app') {
-
+                        
                         if (getStorage('userInfo', 'obj')) {
                             this.$store.commit('userInfo/changeUserStatus', true);
                             let userDom = document.querySelector('.user-wrap');
@@ -97,7 +103,6 @@
                         }
 
                     }//app环境隐藏顶部个人信息
-
                     if (getStorage('token')) {
                         this.getUserInfo();//获取用户信息
                     } else {
@@ -132,7 +137,6 @@
                     .then(res => {
                         this.load_user_msg = false;
                         if (res.error == 0) {
-
                             if (res.data && JSON.stringify(res.data) != '{}') {
                                 let UserInfo = {
                                     account: res.data.account,

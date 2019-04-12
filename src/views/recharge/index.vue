@@ -456,7 +456,11 @@
                             this.rechargeShow = false;
 
                             if (/<[^>]+>/.test(res.data)) {
-                                document.write(res.data);
+                                 if(localStorage.getItem("currentType")=="esim"){
+                                        location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                                }else{
+                                    document.write(res.data);
+                                }
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
                                 this.global_variables.packed_project === 'mifi' ?
@@ -468,8 +472,13 @@
                                 })
 
                                 setTimeout(function () {
-                                    _this.global_variables.packed_project === 'mifi' ?
+                                    if(localStorage.getItem("currentType")=="esim"){
+                                        location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                                    }else{
+                                        _this.global_variables.packed_project === 'mifi' ?
                                         location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                    }
+                                    
                                 },1500);
                             }//纯钻石支付
                         } else {

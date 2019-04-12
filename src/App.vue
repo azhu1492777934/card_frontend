@@ -19,6 +19,8 @@
             if(loading){
                 document.body.removeChild(loading);
             }
+
+            
         },
         methods: {
             refreshToken(params) {

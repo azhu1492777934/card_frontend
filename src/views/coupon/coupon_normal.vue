@@ -166,7 +166,12 @@
                         })
                         setTimeout(function () {
                             setStorage('check_iccid',_this.iccid)
-                            _this.$router.push({path:'/weixin/card/usage'});
+                            
+                            if(localStorage.getItem("currentType")=="esim"){
+                                _this.$router.push({path:'/weixin/card/esim_usage'})
+                            }else{
+                                _this.$router.push({path:'/weixin/card/usage'})
+                            }
                         },2000)
                     }else{
                         Notify({message:res.msg})

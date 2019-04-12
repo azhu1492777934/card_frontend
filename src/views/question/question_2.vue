@@ -93,7 +93,15 @@
                             background:'#60ce53'
                         })
                         setTimeout(function () {
-                            _this.global_variables.packed_project === 'mifi' ? _this.$router.push({path:'/mifi/card/index'}) : _this.$router.push({path:'/weixin/card/usage'});
+                            if(_this.global_variables.packed_project === 'mifi' ){
+                                _this.$router.push({path:'/mifi/card/index'})
+                            }else{
+                                if(localStorage.getItem("currentType")=="esim"){
+                                    _this.$router.push({path:'/weixin/card/esim_usage'})
+                                }else{
+                                    _this.$router.push({path:'/weixin/card/usage'})
+                                }
+                            }
                         }, 2000)
                     } else {
                         Notify({message: res.msg})

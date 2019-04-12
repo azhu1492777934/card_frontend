@@ -376,11 +376,11 @@
                 planInfo.iccid = getStorage("check_iccid");
 
                 setStorage("planInfo", planInfo, "obj");
-
-                if (!getStorage("userInfo", "obj").account.user_id) {
-                    Notify({message: '请在微信或支付宝客服端打开充值'});
-                    return
-                }
+                
+                // if (this.client_type != 'alipay' && this.client_type != 'wechat') {
+                //     Notify({message: '请在微信或支付宝客服端打开充值'});
+                //     return
+                // }
                 //获取当前包月套餐信息
                 _get("/api/v1/app/plans/renew_info", {
                     user_id: getStorage("userInfo", "obj").account.user_id,

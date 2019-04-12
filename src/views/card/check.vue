@@ -335,7 +335,11 @@
                 }
                 if(this.checkType=='11005'){
                     setStorage('check_iccid',this.iccid);
-                    this.$router.push({path:'/weixin/card/usage'})
+                    if(localStorage.getItem("currentType")=="esim"){
+                        this.$router.push({path:'/weixin/card/esim_usage'})
+                    }else{
+                        this.$router.push({path:'/weixin/card/usage'})
+                    }
                 }
 
             }

@@ -87,6 +87,8 @@
                                 background:'#60ce53'
                             });
                             setTimeout(function () {
+
+                           
                                 _this.$router.push({path:'/weixin/card/lookup'})
                             },2000)
                         } else if (res.error == "11002") {
@@ -99,10 +101,12 @@
                                 message:'帐户绑定成功',
                                 background:'#60ce53'
                             })
-                            let redirect_uri = getStorage('authorized_redirect_uri');
 
-                            getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
+                           
+                                let redirect_uri = getStorage('authorized_redirect_uri');
+                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
 
+                            
                         }else if(res.error == 20014){
                             this.code = '';
                             Notify({message:'用户绑定超时，请重新绑定'});

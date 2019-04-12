@@ -793,12 +793,17 @@ export default {
   created() {
     // this.load_plan_msg = '1233';
     
+    //从卡池esim进入
+
+    if(getUrlParam("type")){
+      localStorage.setItem("currentType",getUrlParam("type"));
+
+    }
     if (getUrlParam("iccid")) {
-      //获取当前重定向地址
-      let redirect_uri = this.GetUrlRelativePath();
-      setStorage('authorized_redirect_uri', redirect_uri);
-       
+     
        this.iccid = getUrlParam("iccid");
+       localStorage.setItem("check_iccid",this.iccid);
+      
         this.getMsg();
     } else if(getStorage("check_iccid")) {
      

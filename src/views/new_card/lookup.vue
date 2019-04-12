@@ -129,7 +129,12 @@
                         if(res.state==1){
                             setStorage('check_iccid',iccid);
                             if(res.data.status==1){
-                                _this.$router.push({path:'/weixin/card/usage'});
+                                
+                                 if(localStorage.getItem("currentType")=="esim"){
+                                    _this.$router.push({path:'/weixin/card/esim_usage'})
+                                }else{
+                                    _this.$router.push({path:'/weixin/card/usage'})
+                                }
                             }else if(res.data.status==2){
                                 setStorage('check_realNameSource',res.data.source)
                                 _this.$router.push({path:'/weixin/new_card/real_name'});

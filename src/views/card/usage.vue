@@ -561,6 +561,7 @@
         created() {
 
             // this.load_plan_msg = '1233';
+            localStorage.setItem("currentType","card");
 
             if (getStorage('check_iccid')) {
 

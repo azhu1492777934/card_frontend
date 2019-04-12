@@ -311,13 +311,7 @@
                         setStorage('check_iccid', res.data.iccid);
                         setStorage('new_auth_search_iccid',iccid);
                         if (res.data.status == 1) {
-                            if(this.$route.query.isEsim){
-                            _this.$router.push({path: '/weixin/card/esim_usage'});
-                                
-                            }else{
-                            _this.$router.push({path: '/weixin/card/usage'});
-
-                            }
+                                _this.$router.push({path:'/weixin/card/usage'})
                         } else if (res.data.status == 2) {
                             setStorage('check_realNameSource', res.data.source)
                             _this.$router.push({path: '/weixin/new_card/real_name'});
