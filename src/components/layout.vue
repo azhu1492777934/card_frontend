@@ -209,7 +209,6 @@
                     removeStorage('watch_card');
                     removeStorage('watchAutoSearch');
                 }
-
                 // 授权
                 _get('/accountCenter/v2/oauth/authorize?' + codeParam({
                     client_type: this.client_type,
@@ -220,7 +219,6 @@
                 }, 'get'))
                     .then(res => {
                         if (res.error == 0) {
-
                             if (this.client_type == 'wechat') {
                                 setStorage('wechat_version', this.global_variables.version);
                             } else if (this.client_type == 'alipay') {

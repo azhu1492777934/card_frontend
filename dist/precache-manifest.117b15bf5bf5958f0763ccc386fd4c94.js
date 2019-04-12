@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/js/question_wrapper.7557d9f7.js"
   },
   {
-    "revision": "bac6bec2b7335a74e823",
+    "revision": "43991874ba0071cc40d5",
     "url": "/css/Layout.427b3232.css"
   },
   {
@@ -16,20 +16,20 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.77956993.js"
   },
   {
-    "revision": "5286d953844e6ddf37d4",
+    "revision": "612699703fdc16ddc4c1",
     "url": "/css/app.ba82b079.css"
   },
   {
-    "revision": "5286d953844e6ddf37d4",
-    "url": "/js/app.6c8038d1.js"
+    "revision": "612699703fdc16ddc4c1",
+    "url": "/js/app.7c92cd57.js"
   },
   {
-    "revision": "b3396df895e97e5973bb",
+    "revision": "65f7ca05f10875854250",
     "url": "/css/authority_middle.fa31f1bd.css"
   },
   {
-    "revision": "b3396df895e97e5973bb",
-    "url": "/js/authority_middle.30de9ef2.js"
+    "revision": "65f7ca05f10875854250",
+    "url": "/js/authority_middle.b9de4043.js"
   },
   {
     "revision": "6d75d1378c5ad4141991",
@@ -324,8 +324,8 @@ self.__precacheManifest = [
     "url": "/css/question_wrapper.ab43c2ce.css"
   },
   {
-    "revision": "bac6bec2b7335a74e823",
-    "url": "/js/Layout.6182e9b2.js"
+    "revision": "43991874ba0071cc40d5",
+    "url": "/js/Layout.0d71104e.js"
   },
   {
     "revision": "25933e281e37abcbc627",
@@ -448,6 +448,14 @@ self.__precacheManifest = [
     "url": "/img/SourceHanSansCNRegular.da0808e9.svg"
   },
   {
+    "revision": "f5f322478286641bd9887a155e35f222",
+    "url": "/img/btn.f5f32247.png"
+  },
+  {
+    "revision": "d140650fa64e0f1fc771610dba62aed7",
+    "url": "/img/bg.d140650f.png"
+  },
+  {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
@@ -472,12 +480,12 @@ self.__precacheManifest = [
     "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
-    "revision": "f5f322478286641bd9887a155e35f222",
-    "url": "/img/btn.f5f32247.png"
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
   },
   {
-    "revision": "d140650fa64e0f1fc771610dba62aed7",
-    "url": "/img/bg.d140650f.png"
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -486,14 +494,6 @@ self.__precacheManifest = [
   {
     "revision": "9713b21819c4019befecd095069977df",
     "url": "/img/bg-check-wrap@2x.9713b218.png"
-  },
-  {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
-  },
-  {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -522,10 +522,6 @@ self.__precacheManifest = [
   {
     "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
     "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
@@ -558,6 +554,10 @@ self.__precacheManifest = [
   {
     "revision": "be0f1e33b2553e71b117d3d3f838d32f",
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "2a67b73145562669220aa4639e1ad58f",
@@ -624,7 +624,7 @@ self.__precacheManifest = [
     "url": "/img/safari.39d9e849.png"
   },
   {
-    "revision": "b1debc7652d30f92f8026e025d323eec",
+    "revision": "c9a609755e16eaf3cce437d875367b23",
     "url": "/index.html"
   },
   {
