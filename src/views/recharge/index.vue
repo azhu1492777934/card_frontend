@@ -456,11 +456,8 @@
                             this.rechargeShow = false;
 
                             if (/<[^>]+>/.test(res.data)) {
-                                 if(localStorage.getItem("currentType")=="esim"){
-                                        location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
-                                }else{
+                                
                                     document.write(res.data);
-                                }
 
                             }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
                                 this.global_variables.packed_project === 'mifi' ?

@@ -20,8 +20,8 @@ let global_variables = {
 * 当前打包项目
 * */
 
-if(process.env.NODE_ENV == 'development'){
-// if(process.env.NODE_ENV == 'production'){
+// if(process.env.NODE_ENV == 'development'){
+if(process.env.NODE_ENV == 'production'){
     global_variables.authorized_redirect_url = global_variables.packed_project === 'mifi' ? global_variables.mifi_project.mifiProductionDomain : global_variables.card_project.cardProductionDomain;
 }else{
     global_variables.authorized_redirect_url = global_variables.packed_project === 'mifi' ? global_variables.mifi_project.mifiDevelopDomain : global_variables.card_project.cardDevelopDomain;

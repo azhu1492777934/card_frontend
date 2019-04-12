@@ -58,6 +58,11 @@ router.afterEach((to,from)=>{
     };
 });
 
+//适配IOS
+window.appToken=function(msg){
+    localStorage.setItem("token", msg);
+}
+
 Vue.config.productionTip = false;
 Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)

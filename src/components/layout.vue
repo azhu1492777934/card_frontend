@@ -60,9 +60,9 @@
                 if(/(ylkids_android)/.test(UA)){
                     this.showHtmlcallJava2();
                 }else if(/(ios1.1.0)/.test(UA)){
-                    let str=window.webkit.messageHandlers.getIosToken.postMessage(null);
-                    localStorage.setItem("token", str);
+                    window.webkit.messageHandlers.getIosToken.postMessage(null);
                     this.authorized();
+
                 }
                 // document.addEventListener("plusready", this.plusReady, false);
             }else{
