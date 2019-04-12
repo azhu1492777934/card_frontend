@@ -32,7 +32,7 @@
                 </div>
             </div>
             <span class="divider"></span>
-            <div @click="toRealName" class="top-info-right">
+            <div @click="toRealName" class="top-info-right" :class="{'no-need-realname': filterCardInfo.real_name_state === '已实名' || filterCardInfo.real_name_state === '手淘实名'}">
                 <span class="iconfont icon-user"></span>
                 <p>去实名</p>
             </div>
@@ -260,6 +260,9 @@
                     color: #333;
                     font-weight: 500;
                 }
+            }
+            .no-need-realname{
+                .icon-user,p{color: rgba(177, 175, 175, 0.45);}
             }
             .divider{
                 width: 3px;

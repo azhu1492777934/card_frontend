@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
+import global_variables from './utilies/domain'
 
 // layout
 const Layout = r => require.ensure([], () => r(require('./components/layout')), 'Layout');
@@ -381,6 +382,9 @@ export const constantRouterMap = [{
     // mifi 授权业务处理
     path: '/mifi/transaction',
     component: logical_page,
+},{
+    path: '/',
+    redirect:global_variables.packed_project === 'mifi' ? global_variables.mifi_project.empty_router_url : global_variables.card_project.empty_router_url
 },{
     path: '*',
     component: Not_fund

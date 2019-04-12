@@ -7,10 +7,7 @@ import store from '../src/store/index'
 import 'normalize.css'
 require('../src/assets/css/loading/index.css')
 require( '../src/assets/css/reset.css')
-require( '../src/assets/less/common.less')
 require('../src/assets/css/SourceHanSansCNRegular.css')
-
-require('../src/assets/js/sha1.min')
 
 // require('./mock')
 require('../src/assets/js/sha1.min')

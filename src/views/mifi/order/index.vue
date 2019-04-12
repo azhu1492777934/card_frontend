@@ -155,7 +155,6 @@
 <style lang="less">
     @import "~swiper/dist/css/swiper.min.css";
     @import "../../../assets/less/utitlies";
-    html, body, #app {height: 100%;}
     .order-wrap{
         .swiper-container{
             height: 100%;
