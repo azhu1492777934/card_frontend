@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/css/recharge.09c44646.css"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
-  },
-  {
-    "revision": "190740c1f46daab8d728",
-    "url": "/js/recharge.5d21699c.js"
+    "revision": "1032e9b842d57a5623bc",
+    "url": "/css/Layout.e2433345.css"
   },
   {
     "revision": "0f346331598f08cac006",
     "url": "/css/Not_fund.0aeb7cd4.css"
+  },
+  {
+    "revision": "0f346331598f08cac006",
+    "url": "/js/Not_fund.77956993.js"
   },
   {
     "revision": "cd35ef81bbd1b523b36e",
@@ -340,8 +340,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.75dd321a.js"
   },
   {
-    "revision": "0f346331598f08cac006",
-    "url": "/js/Not_fund.77956993.js"
+    "revision": "190740c1f46daab8d728",
+    "url": "/js/recharge.5d21699c.js"
   },
   {
     "revision": "a09246680833de0b4160",
@@ -540,6 +540,18 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
     "revision": "114a6e12b42b9b48586dd341105188fe",
     "url": "/img/usedOrder@2x.114a6e12.png"
   },
@@ -556,24 +568,12 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@3x.4a5b90f8.png"
   },
   {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
     "revision": "0d5a5158e67bcb7a4604124715ed6fbf",
     "url": "/img/usedOrder@3x.0d5a5158.png"
   },
   {
     "revision": "be0f1e33b2553e71b117d3d3f838d32f",
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "2a67b73145562669220aa4639e1ad58f",
@@ -652,8 +652,8 @@ self.__precacheManifest = [
     "url": "/index.html"
   },
   {
-    "revision": "1032e9b842d57a5623bc",
-    "url": "/css/Layout.e2433345.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
