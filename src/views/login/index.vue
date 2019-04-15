@@ -88,8 +88,11 @@
                             });
                             setTimeout(function () {
 
-                           
-                                _this.$router.push({path:'/weixin/card/lookup'})
+                                if(localStorage.getItem("currentType")=="esim"){
+                                    _this.$router.push({path:'/weixin/card/esim_usage'})
+                                }else{
+                                    _this.$router.push({path:'/weixin/card/lookup'})
+                                }
                             },2000)
                         } else if (res.error == "11002") {
 
@@ -102,10 +105,13 @@
                                 background:'#60ce53'
                             })
 
-                           
-                                let redirect_uri = getStorage('authorized_redirect_uri');
-                                getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
-
+                                if(localStorage.getItem("currentType")=="esim"){
+                                    location.href ='/weixin/card/esim_usage';
+                                }else{
+                                    let redirect_uri = getStorage('authorized_redirect_uri');
+                                    getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
+                                }
+                                
                             
                         }else if(res.error == 20014){
                             this.code = '';

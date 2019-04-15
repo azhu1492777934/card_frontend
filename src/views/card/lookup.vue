@@ -310,6 +310,7 @@
                         setStorage('originPrice',res.data.default_price);
                         setStorage('check_iccid', res.data.iccid);
                         setStorage('new_auth_search_iccid',iccid);
+                        localStorage.setItem("currentType","card");
                         if (res.data.status == 1) {
                                 _this.$router.push({path:'/weixin/card/usage'})
                         } else if (res.data.status == 2) {

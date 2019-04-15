@@ -100,6 +100,13 @@ const mifi_coupon_wrapper = r => require.ensure([], () => r(require('./views/mif
 const mifi_coupon_index = r => require.ensure([], () => r(require('./views/mifi/coupon/index')), 'mifi_coupon_index');
 
 
+//个人中心
+const userCenterWrap = r => require.ensure([], () => r(require('./views/userCenter/userCenterWrap')), 'userCenterWrap');
+const userCenter = r => require.ensure([], () => r(require('./views/userCenter/index')), 'userCenter');
+const rechargeRecord =  r => require.ensure([], () => r(require('./views/userCenter/rechargeRecord')), 'rechargeRecord');
+
+
+
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -320,7 +327,26 @@ export const constantRouterMap = [{
                     }
                 }
             ]
-        },
+        },{
+            path: 'userCenter',
+            component: userCenterWrap,
+            children:[
+                {
+                    path:'index',
+                    component:userCenter,
+                    meta: {
+                        title: '个人中心',
+                    }
+                },
+                {
+                    path:'rechargeRecord',
+                    component:rechargeRecord,
+                    meta: {
+                        title: '充值记录',
+                    }
+                }
+            ]
+        }
 
     ],
 }, {

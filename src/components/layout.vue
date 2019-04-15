@@ -56,7 +56,9 @@
                 removeStorage('watchAutoSearch');
             }
             if (this.client_type == 'app') {
+
                 let UA = navigator.userAgent.toLowerCase();
+                alert(UA);
                 if(/(ylkids_android)/.test(UA)){
                     this.showHtmlcallJava2();
                 }else if(/(ios1.1.0)/.test(UA)){
