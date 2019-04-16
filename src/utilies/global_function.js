@@ -23,7 +23,7 @@ function clacDaysSpan(start_at,  end_at){
 }
 
 function changedUnit(val,needUnit) {
-    let type = (Object.prototype.toString.call(val);
+    let type = Object.prototype.toString.call(val);
     if(type !== '[object Undefined]' || type !== '[object Null]') return '暂无';
     let newVal;
     if(needUnit){
