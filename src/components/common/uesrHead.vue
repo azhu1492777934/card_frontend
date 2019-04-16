@@ -15,7 +15,7 @@
                           <i class="icon-user-size icon-elb"></i>
                           {{getUserInfo.account.elb}}
                       </span>
-                <span @click="showDoc" class="icon-warning">!</span>
+                <span @click="showDoc" class="tip-wrap">!</span>
             </div>
         </div>
     </div>
@@ -112,17 +112,7 @@
         .icon-diamond-wrap {
             margin-left: 40px;
         }
-        .icon-warning {
-            width: 35px;
-            height: 35px;
-        }
-        .icon-diamond {
-            background-image: url("../../assets/imgs/app/icon-diamonds.png");
-        }
-        .icon-elb {
-            background-image: url("../../assets/imgs/app/icon-elb.png");
-        }
-        .icon-warning {
+        .tip-wrap {
             display: inline-block;
             width: 40px;
             height: 40px;
@@ -131,6 +121,12 @@
             background-color: #3BB2E6;
             color: #fff;
             text-align: center;
+        }
+        .icon-diamond {
+            background-image: url("../../assets/imgs/app/icon-diamonds.png");
+        }
+        .icon-elb {
+            background-image: url("../../assets/imgs/app/icon-elb.png");
         }
     }
 </style>
