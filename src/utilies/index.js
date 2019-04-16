@@ -159,7 +159,7 @@ function getCardServerToken(params) {
         let paramsBak = {};
         // let paramsBak = {...params};
         for (var i in params) {
-            if (typeof(params[i]) != 'undefined') {
+            if (Object.prototype.toString.call(params[i]) !== '[object Undefined]' &&  Object.prototype.toString.call(params[i]) !== '[object Null]') {
                 paramsBak[i] = params[i];
             }
         }

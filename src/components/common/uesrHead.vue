@@ -15,7 +15,7 @@
                           <i class="icon-user-size icon-elb"></i>
                           {{getUserInfo.account.elb}}
                       </span>
-                <span @click="showDoc" class="icon-question">!</span>
+                <span @click="showDoc" class="icon-warning">!</span>
             </div>
         </div>
     </div>
@@ -112,7 +112,7 @@
         .icon-diamond-wrap {
             margin-left: 40px;
         }
-        .icon-question {
+        .icon-warning {
             width: 35px;
             height: 35px;
         }
@@ -122,7 +122,7 @@
         .icon-elb {
             background-image: url("../../assets/imgs/app/icon-elb.png");
         }
-        .icon-question {
+        .icon-warning {
             display: inline-block;
             width: 40px;
             height: 40px;

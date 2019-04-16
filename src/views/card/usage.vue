@@ -119,15 +119,12 @@
                                         <p class="plan-date" v-else-if="item.expired_at">
                                             <span>有效日期:{{filterDate(item.expired_at)}}</span>
                                         </p><!--流量卡-->
-                                        <div class="speedup-wrap"
-                                             v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
+                                        <div class="speedup-wrap" v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
 		                                    <span v-if="item.planCellInfo.key!='MG500'">
-		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_80">
-		                                            购买加速包
-		                                        </a>
+		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_80">购买加速包</a>
 		                                    </span>
-		                                            <span v-else>
-		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500"></a>
+                                            <span v-else>
+		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500">购买加速包</a>
 		                                    </span>
                                         </div>
 
