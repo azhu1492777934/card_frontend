@@ -27,7 +27,10 @@
                                 >
                                     {{orderStatusList[inner_item.status+1]}}
                                 </span>
-                                <p class="plan-name">{{ inner_item.rating_name }}</p>
+                                <p class="plan-name">
+                                    <span class="iconfont icon-plan"></span>
+                                    {{ inner_item.rating_name }}
+                                </p>
                             </div>
 
                             <div class="order-price-wrap">
@@ -141,12 +144,12 @@
                 this.$refs.mySwiper.swiper.slideTo(index);
             },
             toPay(params){
+                params.rate_plan.no = params.no;
                 setStorage('planInfo',params.rate_plan,'obj');
                 this.$router.push({
                     path:'/weixin/recharge/index',
-                    query: { from: 'mifi' },
+                    query:{'un_pay_order':1}
                 });
-
             }
         }
     }
@@ -239,10 +242,17 @@
                         }
                     }
                     .plan-name{
+                        display: flex;
+                        align-items: center;
                         padding: 25px 0 0;
                         font-size: 36px;
                         color: #555;
                         font-weight: 500;
+                        .icon-plan{
+                            padding-right: 10px;
+                            color: #faa500;
+                            font-size: 30px;
+                        }
                     }
 
                 }

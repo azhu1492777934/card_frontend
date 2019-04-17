@@ -1,6 +1,5 @@
 <template>
     <div class="inner-wrap">
-        <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
         <router-view @getUserData="getUserInfo" />
         <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
             <p class="showTip">{{load_user_info}}</p>

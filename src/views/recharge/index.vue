@@ -373,6 +373,8 @@
 
                 }
 
+                if(this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
+
                 param.iccid = this.planInfo.iccid || getStorage('check_iccid');
                 param.rating_id = this.planInfo.id;
                 param.is_renew = rechargeInfo.is_renew;

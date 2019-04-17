@@ -590,11 +590,18 @@
                             this.filterCardInfo.msisdn = this.usageInfo.msisdn
                         }//判断MSISDN
 
+
                         if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
                             this.auth_status.push('手淘实名');
                         } else {
                             this.auth_status.push('已实名');
                         }//实名增加状态
+
+                        if(!this.usageInfo.need_auth){
+                            this.filterCardInfo.real_name_state = '已实名';
+                        }else{
+                            this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
+                        }
 
                         this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
 
