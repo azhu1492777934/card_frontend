@@ -143,17 +143,7 @@ export default {
             }
           }
 
-          this.$nextTick(() => {
-              let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                  // recordList = this.$refs.recordList.offsetHeight,
-                  recordButton = this.$refs.recordButton.offsetHeight,
-                  userHeight = getStorage('userHeight') || 44;
-              if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-                  this.$refs.recordList.style.height = (clientHeight - recordButton  - userHeight) + 'px'
-              } else {
-                  this.$refs.recordList.style.height = (clientHeight - recordButton ) + 'px'
-              }
-          })
+
         }
       } else {
         this.finished = true;
@@ -228,7 +218,7 @@ export default {
     font-weight:400;
     color:rgba(68,63,56,1);
     line-height:69px;
-    margin:0 auto;
+    margin:0 auto 40px auto;
   }
   .van-popup{
       width:600px;

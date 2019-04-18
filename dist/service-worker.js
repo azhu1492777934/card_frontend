@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.eb0e447a55c2bddbf021ebdaaef5c980.js"
+  "/precache-manifest.5e89f086fd2445161362a58c8c428b8d.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "p-activity"});
