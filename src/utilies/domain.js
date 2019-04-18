@@ -2,7 +2,7 @@
 * 支付中心重定向url
 * */
 let global_variables = {
-    packed_project : 'mifi', // 修改项目
+    packed_project : 'mifi1', // 修改项目
     authorized_redirect_url : '',
     version : '1.1',
     mifi_project:{
@@ -26,8 +26,8 @@ let global_variables = {
 * 当前打包项目
 * */
 
-if(process.env.NODE_ENV == 'development'){
-// if(process.env.NODE_ENV == 'production'){
+// if(process.env.NODE_ENV == 'development'){
+if(process.env.NODE_ENV == 'production'){
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].ProductionDomain;
 }else{
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].DevelopDomain;
