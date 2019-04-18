@@ -1,26 +1,29 @@
 <template>
   <div class="salesRecord">
-    <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getRecord" >
-      <div v-for="(item,index) in recordList" v-bind:key="index" class="rechargeRecordItem">
-        <div>
-          <div>设备号：<span>{{item.device_id}}</span></div>
-        </div>
-        <div>
-          <div>姓名：<span>{{item.user_name}}</span></div>
-          <div> <span>{{item.mobile}}</span> </div>
-        </div>
-        <div>
-          <div>地址：{{item.province}}{{item.city}}{{item.district}}{{item.addr}}</div>
-        </div>
-        <div>
-          <div @click="showDetails(item)">查看详情 ></div>
-          <div>申请时间：{{item.created_at}}</div>
-        </div>
-       
-      </div>
-    </van-list>
+    <div ref="recordList">
+      <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getRecord" >
+        <div v-for="(item,index) in recordList" v-bind:key="index" class="rechargeRecordItem">
+          <div>
+            <div>设备号：<span>{{item.device_id}}</span></div>
+          </div>
+          <div>
+            <div>姓名：<span>{{item.user_name}}</span></div>
+            <div> <span>{{item.mobile}}</span> </div>
+          </div>
+          <div>
+            <div>地址：{{item.province}}{{item.city}}{{item.district}}{{item.addr}}</div>
+          </div>
+          <div>
+            <div @click="showDetails(item)">查看详情 ></div>
+            <div>申请时间：{{item.created_at}}</div>
+          </div>
 
-    <div class="submitButton" @click="goAddSales">售后申请</div>
+        </div>
+      </van-list>
+    </div>
+
+
+    <div ref="recordButton" class="submitButton" @click="goAddSales">售后申请</div>
     <van-popup :close-on-click-overlay="false" v-model="isExistOrder">
       <p class="showTip">{{load_plan_msg}}</p>
     </van-popup>
@@ -139,6 +142,18 @@ export default {
               _this.recordList[i].type="翻新";
             }
           }
+
+          this.$nextTick(() => {
+              let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                  // recordList = this.$refs.recordList.offsetHeight,
+                  recordButton = this.$refs.recordButton.offsetHeight,
+                  userHeight = getStorage('userHeight') || 44;
+              if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+                  this.$refs.recordList.style.height = (clientHeight - recordButton  - userHeight) + 'px'
+              } else {
+                  this.$refs.recordList.style.height = (clientHeight - recordButton ) + 'px'
+              }
+          })
         }
       } else {
         this.finished = true;
