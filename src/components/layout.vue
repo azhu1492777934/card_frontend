@@ -171,17 +171,15 @@
 
                             }
                         } else if (res.error == '11002') {
-
-                            this.$emit('getToken')
-
+                            this.$emit('getToken');
                         } else if(res.error == '10007'){
                             let curTimeStamp = (new Date()).getTime(),
                                 timeSpan = res.extra - curTimeStamp;
-
                             setStorage('timeSpan',timeSpan);
                             this.getUserInfo();
-                        }
-                        else{
+                        }else if(res.error == '20014'){
+                            Notify({message:'请求超时'});
+                        } else{
                             this.showAuthorityError('A'+res.error)
                         }
                     })

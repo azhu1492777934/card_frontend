@@ -42,7 +42,6 @@ module.exports = {
                 }
             },
             '/accountCenter':{
-                // target:domain_test.accountCenter,
                 target:'http://uc-test.api.china-m2m.com',
                 changeOrigin:true,
                 pathRewrite:{

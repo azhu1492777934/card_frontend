@@ -1,22 +1,22 @@
 <template>
     <div class="check-card-wrap">
-        <div class="scanTop-wrap">
+        <div ref="ref_top" class="scanTop-wrap">
             <img src="../../../assets/imgs/card/lookup/scanTop.png" alt="">
         </div>
-        <div class="search-wrap">
+        <div ref="ref_search" class="search-wrap">
             <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
             <span v-show="showClearBtn" @click="clearInputIccid" class="clearIccid">&times;</span>
             <span @click="testClick" class="iconfont icon-scan bounceIn animated"></span>
         </div>
-        <div class="btn-check-wrap">
+        <div ref="ref_button" class="btn-check-wrap">
             <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
         </div>
         <div v-show="recording_show" class="recording-wrap">
-            <p class="recording-title">
+            <p ref="recording_title" class="recording-title">
                 <span>历史搜索记录</span>
                 <span>{{recording_list.length}}条</span>
             </p>
-            <ul class="recording-list-wrap">
+            <ul ref="main_recording" class="recording-list-wrap">
                 <li v-for="(item,index) in recording_list">
                     <span @click="searchIccid(item.iccid)">{{item.iccid}}</span>
                     <span>{{item.searchTime}}</span>
@@ -109,6 +109,17 @@
                 if(scanWatchCardIccid){
                     Notify({message:this.checkSearchIccid(scanWatchCardIccid).msg});
                 }
+            }
+
+            if(this.recording_show){
+                this.$nextTick(()=>{
+                    let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                        ref_top = this.$refs.ref_top.offsetHeight,
+                        ref_search = this.$refs.ref_search.offsetHeight,
+                        ref_button = this.$refs.ref_button.offsetHeight,
+                        recording_title = this.$refs.recording_title.offsetHeight;
+                    this.$refs.main_recording.style.height =  (clientHeight - ref_top - ref_search - ref_button  - recording_title - 50 ) + 'px';
+                })
             }
         },
         methods: {

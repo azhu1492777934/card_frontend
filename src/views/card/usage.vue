@@ -119,15 +119,12 @@
                                         <p class="plan-date" v-else-if="item.expired_at">
                                             <span>有效日期:{{filterDate(item.expired_at)}}</span>
                                         </p><!--流量卡-->
-                                        <div class="speedup-wrap"
-                                             v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
+                                        <div class="speedup-wrap" v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
 		                                    <span v-if="item.planCellInfo.key!='MG500'">
-		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_80">
-		                                            购买加速包
-		                                        </a>
+		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_80">购买加速包</a>
 		                                    </span>
-		                                            <span v-else>
-		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500"></a>
+                                            <span v-else>
+		                                        <a v-if="item.planCellInfo.plan_cell_status==1" href="/weixin/speedup/plan_500">购买加速包</a>
 		                                    </span>
                                         </div>
 
@@ -593,11 +590,18 @@
                             this.filterCardInfo.msisdn = this.usageInfo.msisdn
                         }//判断MSISDN
 
+
                         if (this.inArray(this.usageInfo.source, [1, 4]) >= 0) {
                             this.auth_status.push('手淘实名');
                         } else {
                             this.auth_status.push('已实名');
                         }//实名增加状态
+
+                        if(!this.usageInfo.need_auth){
+                            this.filterCardInfo.real_name_state = '已实名';
+                        }else{
+                            this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
+                        }
 
                         this.filterCardInfo.real_name_state = this.auth_status[this.usageInfo.auth_status];//实名状态
 

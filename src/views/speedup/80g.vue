@@ -72,7 +72,7 @@
             if(getStorage('check_iccid')){
                 this.iccid = getStorage('check_iccid');
             }else{
-                this.$router.push({path:'/weixin/card/lookup'})
+                this.global_variables.packed_project === 'mifi' ?  this.$router.push({path:'/mifi/card/lookup'}) :  this.$router.push({path:'/weixin/card/lookup'});
             }
         },
         methods: {

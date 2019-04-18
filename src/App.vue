@@ -70,7 +70,7 @@
 </script>
 
 <style lang="less">
-    @import url("https://at.alicdn.com/t/font_963137_e913dtci2bg.css");
+    @import url("https://at.alicdn.com/t/font_963137_mbkpe3puoq.css");
     @import "./assets/less/common.less";
     html, body, #app ,.inner-wrap{
         height: 100%;
