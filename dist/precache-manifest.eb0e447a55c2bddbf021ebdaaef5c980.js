@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/css/recharge_callback.4a8c886c.css"
   },
   {
-    "revision": "40c8a809bb01b4a0bac6",
-    "url": "/css/Layout.c2a0f562.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
+  },
+  {
+    "revision": "0b25031aa1a561de0c7c",
+    "url": "/js/recharge_callback.1e21f73a.js"
   },
   {
     "revision": "0f346331598f08cac006",
     "url": "/css/Not_fund.0aeb7cd4.css"
-  },
-  {
-    "revision": "0f346331598f08cac006",
-    "url": "/js/Not_fund.77956993.js"
   },
   {
     "revision": "380dcb2952f88c7868bd",
@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.9ffaafb2.js"
   },
   {
-    "revision": "36118746977a0e358d44",
+    "revision": "95a9c65d2a3698e8e481",
     "url": "/css/app.9736fbfe.css"
   },
   {
-    "revision": "36118746977a0e358d44",
-    "url": "/js/app.b5fb4c8a.js"
+    "revision": "95a9c65d2a3698e8e481",
+    "url": "/js/app.7f9034a0.js"
   },
   {
     "revision": "c74fb79d122966529400",
@@ -388,8 +388,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.49832474.js"
   },
   {
-    "revision": "0b25031aa1a561de0c7c",
-    "url": "/js/recharge_callback.1e21f73a.js"
+    "revision": "0f346331598f08cac006",
+    "url": "/js/Not_fund.77956993.js"
   },
   {
     "revision": "b36dc51b6b3aabb0a338",
@@ -556,20 +556,20 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
-  },
-  {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
     "url": "/img/bg-check-wrap@3x.3f342771.png"
   },
   {
     "revision": "9713b21819c4019befecd095069977df",
     "url": "/img/bg-check-wrap@2x.9713b218.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
@@ -604,6 +604,10 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
     "revision": "114a6e12b42b9b48586dd341105188fe",
     "url": "/img/usedOrder@2x.114a6e12.png"
   },
@@ -636,18 +640,6 @@ self.__precacheManifest = [
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
-    "revision": "3d0fc424b703032ca595090e99f8354b",
-    "url": "/img/login_bg@2x.3d0fc424.png"
-  },
-  {
-    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
-    "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
@@ -658,6 +650,14 @@ self.__precacheManifest = [
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
     "url": "/img/bg.01355f17.png"
+  },
+  {
+    "revision": "3d0fc424b703032ca595090e99f8354b",
+    "url": "/img/login_bg@2x.3d0fc424.png"
+  },
+  {
+    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
+    "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
     "revision": "6eb1cce5bab9ec1cb25d71e8f3110a15",
@@ -748,12 +748,12 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "a906bc69e7d71236c62eb43099705f80",
+    "revision": "99c8378520ccc812eb92955720b227f7",
     "url": "/index.html"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
+    "revision": "40c8a809bb01b4a0bac6",
+    "url": "/css/Layout.c2a0f562.css"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
