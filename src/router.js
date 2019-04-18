@@ -102,9 +102,14 @@ const mifi_coupon_index = r => require.ensure([], () => r(require('./views/mifi/
 
 //个人中心
 const userCenterWrap = r => require.ensure([], () => r(require('./views/userCenter/userCenterWrap')), 'userCenterWrap');
-const userCenter = r => require.ensure([], () => r(require('./views/userCenter/index')), 'userCenter');
-const rechargeRecord =  r => require.ensure([], () => r(require('./views/userCenter/rechargeRecord')), 'rechargeRecord');
-
+const userCenter = r => require.ensure([], () => r(require('./views/userCenter/index')), 'userCenter'); //主页
+const rechargeRecord =  r => require.ensure([], () => r(require('./views/userCenter/rechargeRecord')), 'rechargeRecord'); //充值记录
+const userCenterAddress =  r => require.ensure([], () => r(require('./views/userCenter/userCenterAddress')), 'userCenterAddress'); //收获地址
+const contactUs =  r => require.ensure([], () => r(require('./views/userCenter/contactUs')), 'contactUs'); //联系我们
+const helpCenter =  r => require.ensure([], () => r(require('./views/userCenter/helpCenter')), 'helpCenter');  //问题中心
+const salesRecords =  r => require.ensure([], () => r(require('./views/userCenter/salesRecords')), 'salesRecords');  //售后列表
+const addSalesRecords =  r => require.ensure([], () => r(require('./views/userCenter/addSalesRecords')), 'addSalesRecords');  //售后申请
+const realName=r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
 
 
 Vue.use(Router)
@@ -344,7 +349,49 @@ export const constantRouterMap = [{
                     meta: {
                         title: '充值记录',
                     }
-                }
+                },
+                {
+                    path:'userCenterAddress',
+                    component:userCenterAddress,
+                    meta: {
+                        title: '收获地址',
+                    }
+                },
+                {
+                    path:'contactUs',
+                    component:contactUs,
+                    meta: {
+                        title: '联系我们',
+                    }
+                },
+                {
+                    path:'helpCenter',
+                    component:helpCenter,
+                    meta: {
+                        title: '帮助中心',
+                    }
+                },
+                {
+                    path:'salesRecords',
+                    component:salesRecords,
+                    meta: {
+                        title: '售后记录',
+                    }
+                },
+                {
+                    path:'addSalesRecords',
+                    component:addSalesRecords,
+                    meta: {
+                        title: '售后申请',
+                    }
+                },
+                {
+                    path:'realName',
+                    component:realName,
+                    meta: {
+                        title: '认证教程',
+                    }
+                },
             ]
         }
 

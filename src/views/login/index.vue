@@ -12,7 +12,7 @@
                 <button :disabled="loginDisabled" @click="login">绑定账户</button>
             </div>
         </div>
-        <van-popup :close-on-click-overlay="false" v-model="isLoginError">
+        <van-popup :close-on-click-overlay="true" v-model="isLoginError">
             <p class="showTip">{{loginErrorMsg}}</p>
         </van-popup>
     </div>
@@ -89,7 +89,9 @@
                             setTimeout(function () {
 
                                 if(localStorage.getItem("currentType")=="esim"){
-                                    _this.$router.push({path:'/weixin/card/esim_usage'})
+                                    _this.$router.push({path:'/weixin/card/esim_usage'});
+                                } else if(localStorage.getItem("currentType")=="userCenter"){
+                                    _this.$router.push({path:'/weixin/userCenter/index'});
                                 }else{
                                     _this.$router.push({path:'/weixin/card/lookup'})
                                 }
@@ -107,6 +109,8 @@
 
                                 if(localStorage.getItem("currentType")=="esim"){
                                     location.href ='/weixin/card/esim_usage';
+                                } else if(localStorage.getItem("currentType")=="userCenter"){
+                                    location.href="/weixin/userCenter/index"
                                 }else{
                                     let redirect_uri = getStorage('authorized_redirect_uri');
                                     getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';

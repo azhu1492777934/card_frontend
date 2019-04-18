@@ -15,12 +15,12 @@
                         <li v-for="(item,index) in refundList">
                             <div class="refund-date-wrap">
                                 <div v-if="item.refund==1 || item.refund==2">
-                                    <p>申请日期:{{item.created_at}}</p>
-                                    <p>审核日期:{{item.expired_at}}</p>
+                                    <p>申请日期:{{item.ref_info.created_at}}</p>
+                                    <p v-if="item.refund==2">审核日期:{{item.ref_info.operate_at}}</p>
                                 </div>
                                 <div v-else>
-                                    <p>开始日期:{{JSON.stringify(item.ref_info)!='{}'?item.ref_info.created_at : item.created_at}}</p>
-                                    <p>结束日期:{{JSON.stringify(item.ref_info)!='{}'?item.ref_info.operate_at : item.expired_at}}</p>
+                                    <p>开始日期:{{item.created_at}}</p>
+                                    <p>结束日期:{{item.expired_at}}</p>
                                 </div>
                             </div>
                             <!--end 日期-->
@@ -28,7 +28,7 @@
                             <div class="content">
                                 <div>
                                     <p>{{item.name}}</p>
-                                    <p>套餐金额：￥{{item.price}}</p>
+                                    <p>套餐金额：￥{{item.price}}</p>  <span v-if="item.imei">设备号:{{item.imei}}</span>
                                 </div>
                                 <div v-if="item.refund != 3">
                                     <p v-show="item.ref_info.real_price">
@@ -203,11 +203,21 @@
                 this.load_plan_msg = ''
             }
 
-            if(getStorage('check_iccid')){
-                this.iccid = getStorage('check_iccid')
-            }else{
-                this.$route.query.from == 'mifi' ? this.$router.push({path:'/mifi/card/lookup'}) : this.$router.push({path:'/weixin/card/lookup'});
-            }
+            // if(getStorage('check_iccid')){
+            //     this.iccid = getStorage('check_iccid')
+            // }else{
+            //     let _this=this;
+            //     setTimeout(function(){
+            //         if(localStorage.getItem("currentType")=="userCenter"){
+            //             _this.$router.push({path:'/weixin/userCenter/index'}); 
+            //         }else if(localStorage.getItem("currentType")=="esim"){
+            //             _this.$router.push({path:'/weixin/card/esim_usage'}); 
+            //         }else{
+            //             _this.$route.query.from == 'mifi' ? _this.$router.push({path:'/mifi/card/lookup'}) : _this.$router.push({path:'/weixin/card/lookup'});
+            //         }
+            //     },1000)
+                
+            // }
         },
         methods: {
             onLoad(){
@@ -226,7 +236,7 @@
 
                 _get('/api/v1/app/cards/refund/list',{
                     user_id:this.authorizedUserInfo.account.user_id,
-                    iccid:this.iccid,
+                    // iccid:this.iccid,
                     offset:this.offset,
                     limit:this.limit
                 }).then(res=>{

@@ -2,19 +2,24 @@
     <div class="userCenter">
         <div class="userHeader">
             <div>
-              <div>小鸭子</div>
-              <div></div>
+              <div>
+                <div class="nickName">
+                  {{userInfo.nickname}}
+                </div>
+               
+              </div>
+              <div class="userImg"> <img :src="userInfo.headimgurl" > </div>
             </div>
             <div class="userMiddle">
                 <div @click="goRecord">
                   <div></div>
                   <div>充值记录</div>
                 </div>
-                <div>
+                <div @click="goRefund">
                   <div></div>
                   <div>退费申请</div>
                 </div>
-                <div>
+                <div @click="goSalesRecords">
                   <div></div>
                   <div>售后记录</div>
                 </div>
@@ -25,28 +30,28 @@
 
 
         <div class="userBottom">
-          <div>
+          <div @click="goHelp">
             <div></div>
             <div>
               帮助中心
             </div>
             <div></div>
           </div>
-          <div>
+          <div @click="goRealName">
             <div></div>
             <div>
               认证教程
             </div>
             <div></div>
           </div>
-          <div>
+          <div @click="goAddress">
             <div></div>
             <div>
               收货地址
             </div>
             <div></div>
           </div>
-          <div>
+          <div @click="goContact">
             <div></div>
             <div>
               联系我们
@@ -58,25 +63,71 @@
 </template>
 
 <script>
-    import { setStorage, getStorage} from "../../utilies";
+    import { setStorage, getStorage,getUrlParam} from "../../utilies";
 
     export default {
         data() {
             return {
-                
+                userInfo:{}
             }
         },
         components: {
 
         },
         created() {
-            console.log(getStorage("userInfo","obj"));
+            if(getUrlParam("type")){
+              localStorage.setItem("currentType",getUrlParam("type"));
+            }
+                this.userInfo=getStorage("decrypt_data", "obj");
+           
+      
+           
         },
         methods: {
+          //充值记录
           goRecord(){
-            this.$router.push({path:"userCenter/rechargeRecord"})
-          }
-        }
+            this.$router.push({path:"rechargeRecord"})
+          },
+          //退款申请
+          goRefund(){
+            localStorage.setItem("currentType","userCenter");
+            this.$router.push({
+                   path:'/weixin/refund/argument',
+               });
+
+          },
+          //收获地址
+          goAddress(){
+            this.$router.push({
+              path:"userCenterAddress"
+            })
+          },
+          //联系我们
+          goContact(){
+            this.$router.push({
+              path:"contactUs"
+            })
+          },
+          //问题中心
+          goHelp(){
+            this.$router.push({
+              path:"helpCenter"
+            })
+          },
+          //售后记录
+          goSalesRecords(){
+            this.$router.push({
+              path:"salesRecords"
+            })
+          },
+          // 认证教程
+          goRealName(){
+            this.$router.push({
+              path:"realName"
+            })
+          },
+        },
+       
     }
 </script>
 
@@ -89,7 +140,39 @@
       height:288px;
       background-size:100% 100%;
       position:relative;
-
+      >div:nth-child(1){
+        display:flex;
+        align-items:center;
+        >div:nth-child(1){
+          flex:1;
+          text-align:left;
+          margin:88px 0 0 55px;
+        }
+      }
+      .nickName{
+        font-size:40px;
+        font-family:SourceHanSansSC-Bold;
+        font-weight:bold;
+        color:rgba(51,51,51,1);
+        line-height:66px;
+      }
+      .userId{
+          font-size:26px;
+          font-family:SourceHanSansSC-Normal;
+          font-weight:400;
+          color:rgba(76,76,76,1);
+      }
+      .userImg{
+          width:160px;
+          height:160px;
+          border-radius:50%;
+          overflow:hidden;
+          margin:49px 47px 0 0;
+          >img{
+            width:100%;
+            height:100%;
+          }
+      }
       .userMiddle{
         width:621px;
         height:124px;

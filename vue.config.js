@@ -52,7 +52,7 @@ module.exports = {
             '/iot':{
                 target:'https://iottest.china-m2m.com',
                 changeOrigin:true,
-                pathRewrite:{
+                pathRewrite:{   
                     '^/iot':''
                 }
             },
@@ -63,6 +63,14 @@ module.exports = {
                     '^/releaseApi':""
                 }
             },
+            '/kachiApi':{
+                target:"http://kachitest.china-m2m.com",
+                changeOrigin:true,
+                pathRewrite:{
+                    '^/kachiApi':""
+                }
+            },
+            
         }
     }
 }

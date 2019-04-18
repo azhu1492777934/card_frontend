@@ -193,6 +193,7 @@
                 })
             },
             authorizedRediect() {
+                let _this=this;
                 this.state = Math.random().toString(36).substr(2) + new Date().getTime();
                 setStorage('state', this.state);
 
@@ -211,6 +212,7 @@
                     removeStorage('watch_card');
                     removeStorage('watchAutoSearch');
                 }
+               
                 // 授权
                 _get('/accountCenter/v2/oauth/authorize?' + codeParam({
                     client_type: this.client_type,
@@ -227,7 +229,8 @@
                                 setStorage('alipay_version', this.global_variables.version);
                             }
 
-                            location.href = res.data;
+                            
+                                location.href = res.data;
 
                         } else if (res.error == '11002') {
 

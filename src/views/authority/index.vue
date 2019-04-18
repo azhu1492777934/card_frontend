@@ -46,7 +46,13 @@
                         if (this.redirect_uri && getStorage('check_iccid')) {
                             _this.$router.push(this.redirect_uri);
                         } else {
-                            _this.$router.push('/weixin/card/lookup');
+                            if(localStorage.getItem("currentType")=="userCenter"){
+                                this.$router.push('/weixin/userCenter/index');
+                            }else if(localStorage.getItem("currentType")=="esim"){
+                                this.$router.push('/weixin/card/esim_usage');
+                            }else{
+                                _this.$router.push('/weixin/card/lookup');
+                            }
                         }
                     })
                 }
@@ -111,7 +117,13 @@
                         if (this.redirect_uri &&  getStorage('check_iccid')) {
                             this.$router.push(this.redirect_uri);
                         } else {
-                            this.$router.push('/weixin/card/lookup');
+                            if(localStorage.getItem("currentType")=="userCenter"){
+                                this.$router.push('/weixin/userCenter/index');
+                            }else if(localStorage.getItem("currentType")=="esim"){
+                                this.$router.push('/weixin/card/esim_usage');
+                            }else{
+                                this.$router.push('/weixin/card/lookup');
+                            }
                         }
 
                     } else if (res.error == '11002') {
