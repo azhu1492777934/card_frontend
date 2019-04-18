@@ -35,7 +35,7 @@
 
                             <div class="order-price-wrap">
                                 <p>￥{{ inner_item.price }}</p>
-                                <span class="toPay" @click="toPay(inner_item)" v-if="inner_item.status==0">前往支付</span>
+                                <!--<span class="toPay" @click="toPay(inner_item)" v-if="inner_item.status==0">前往支付</span>-->
                             </div>
                         </li>
                     </ul>
