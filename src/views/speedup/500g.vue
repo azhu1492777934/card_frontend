@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="speedup-wrap-parent">
         <speedup :list="list" @rechargeSpeedup="recharge_500"></speedup>
         <!--app支付-->
         <app-pay :appPay="speedupAppPay"
@@ -148,11 +148,12 @@
                     param.pay_type = 'ALIPAY'
                 }
 
+                this.global_variables.packed_project === 'mifi' ? param.type = 1 :  param.type = 0;
+
                 _post('/api/v1/pay/weixin/create',param).then(res=>{
                     if(res.state==1){
                         if(/<[^>]+>/.test(res.data)){
                             document.write(res.data);
-
                         }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
                             location.href = res.data
                         }

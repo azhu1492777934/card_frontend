@@ -24,7 +24,7 @@ function clacDaysSpan(start_at,  end_at){
 
 function changedUnit(val,needUnit) {
     let type = Object.prototype.toString.call(val);
-    if(type !== '[object Undefined]' || type !== '[object Null]') return '暂无';
+    if(type === '[object Undefined]' || type === '[object Null]') return '暂无';
     let newVal;
     if(needUnit){
         val >= 1024 ? newVal = `${toDecimal(val/1024)}/G` : newVal = `${toDecimal(val)}/M`;

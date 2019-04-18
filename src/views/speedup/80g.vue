@@ -129,6 +129,8 @@
                     param.pay_type = 'ALIPAY'
                 }
 
+                this.global_variables.packed_project === 'mifi' ? param.type = 1 :  param.type = 0;
+
                 _post('/api/v1/pay/weixin/create',param).then(res=>{
                     if(res.state==1){
                         if(/<[^>]+>/.test(res.data)){

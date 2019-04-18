@@ -340,7 +340,7 @@
                             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
                             result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1 ,result.length) : result;
                             _this.iccid = (result.replace(/\s*/g,""));
-                            _this.processCheckIccid(_this.iccid)
+                            _this.processCheckIccid(_this.iccid);
                         }
                     });
                 } else if (this.client_type == 'alipay') {
