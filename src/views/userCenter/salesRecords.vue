@@ -1,6 +1,6 @@
 <template>
-  <div class="salesRecord">
-    <div ref="recordList">
+  <div class="salesRecord" >
+    <div  class="recordBox" ref="recordList">
       <van-list v-model="loading" :finished="finished" finished-text="没有更多了" @load="getRecord" >
         <div v-for="(item,index) in recordList" v-bind:key="index" class="rechargeRecordItem">
           <div>
@@ -21,9 +21,10 @@
         </div>
       </van-list>
     </div>
+    <div ref="recordButton" class="buttonBox" >
+      <div ref="recordButton"  class="submitButton" @click="goAddSales">售后申请</div>
 
-
-    <div ref="recordButton" class="submitButton" @click="goAddSales">售后申请</div>
+    </div>
     <van-popup :close-on-click-overlay="false" v-model="isExistOrder">
       <p class="showTip">{{load_plan_msg}}</p>
     </van-popup>
@@ -74,7 +75,7 @@ export default {
   created() {
     this.userInfo = getStorage("userInfo", "obj");
 
-    // this.getRecord();
+    this.getRecord();
   },
   methods: {
     //处理接口返回数据
@@ -143,7 +144,15 @@ export default {
             }
           }
 
-
+          this.$nextTick(() => {
+              let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                  // recordList = this.$refs.recordList.offsetHeight,
+                  recordButton = this.$refs.recordButton.offsetHeight,
+                  userHeight = Number(getStorage('userHeight')) || 44;
+                  
+                  this.$refs.recordList.style.height = (clientHeight - recordButton  - userHeight) + 'px'
+            
+          })
         }
       } else {
         this.finished = true;
@@ -165,10 +174,19 @@ export default {
 </script>
 
 <style lang="less">
-.salesRecord {
+#app, .inner-wrap, body, html{
   background: #f6f6f6;
   height: 100%;
-  overflow: auto;
+  border-top:1px solid #f6f6f6;
+}
+.salesRecord {
+  background: #f6f6f6;
+  .recordBox{
+    overflow:auto;
+  }
+  .buttonBox{
+    padding:20px 0;
+  }
   .rechargeRecordItem{
     font-size:26px;
     font-family:SourceHanSansSC-Normal;
@@ -218,7 +236,7 @@ export default {
     font-weight:400;
     color:rgba(68,63,56,1);
     line-height:69px;
-    margin:0 auto 40px auto;
+    margin:0px auto 0 auto;
   }
   .van-popup{
       width:600px;

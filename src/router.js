@@ -112,6 +112,9 @@ const addSalesRecords =  r => require.ensure([], () => r(require('./views/userCe
 const realName=r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
 
 
+
+
+
 Vue.use(Router)
 
 export const constantRouterMap = [{

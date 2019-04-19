@@ -127,6 +127,8 @@ export default {
               _this.recordList[i].is_invoice = "已开票";
             }
           }
+
+          
         }
       } else {
         this.finished = true;
@@ -139,9 +141,13 @@ export default {
 </script>
 
 <style lang="less">
-.rechargeRecord {
+#app, .inner-wrap, body, html{
   background: #f6f6f6;
   height: 100%;
+  border-top:1px solid #f6f6f6;
+}
+.rechargeRecord {
+  background: #f6f6f6;
   border-top:1px solid #f6f6f6;
   > div:nth-child(1) {
     margin-top: 12px;

@@ -25,6 +25,7 @@ export const getSalesRecords= obj => {return axios.get('/kachiApi/v1/after_sale/
 //申请售后
 export const addSalesRecords= obj => {return axios.post('/kachiApi/v1/after_sale/apply',obj.params).then(res=>res).catch(error=>error);};
 
+
 //新增车辆
 //  export const addCar= obj => {return axios.post('api/v1/vehicle/save-update-vehicle?'+obj.params,qs.stringify(obj.data)).then(res=>res.data).catch(error=>error);};
 
