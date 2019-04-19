@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.1372e9f3.js"
   },
   {
-    "revision": "7ac0841385f97a889ae1",
+    "revision": "72f7c52b19e5145c2ba5",
     "url": "/css/app.9736fbfe.css"
   },
   {
-    "revision": "7ac0841385f97a889ae1",
-    "url": "/js/app.5f2439c8.js"
+    "revision": "72f7c52b19e5145c2ba5",
+    "url": "/js/app.96760b4d.js"
   },
   {
     "revision": "1bcb98dad726f4dd91ab",
@@ -212,12 +212,12 @@ self.__precacheManifest = [
     "url": "/js/mifi_binding.8502bc0f.js"
   },
   {
-    "revision": "d2c1f8ffd42b0cd885a0",
+    "revision": "f0ef1b025876305ad8f8",
     "url": "/css/mifi_card_info.101605c4.css"
   },
   {
-    "revision": "d2c1f8ffd42b0cd885a0",
-    "url": "/js/mifi_card_info.7f176271.js"
+    "revision": "f0ef1b025876305ad8f8",
+    "url": "/js/mifi_card_info.cb0ba79c.js"
   },
   {
     "revision": "779aff53926255a28329",
@@ -292,20 +292,20 @@ self.__precacheManifest = [
     "url": "/js/mifi_order~mifi_plan_group.8d02651c.js"
   },
   {
-    "revision": "7ce9a670245a8c9e0297",
+    "revision": "b7f33da1632cec893ec9",
     "url": "/css/mifi_plan_group.1dc4facf.css"
   },
   {
-    "revision": "7ce9a670245a8c9e0297",
-    "url": "/js/mifi_plan_group.345a1810.js"
+    "revision": "b7f33da1632cec893ec9",
+    "url": "/js/mifi_plan_group.b34a9ab5.js"
   },
   {
-    "revision": "a07adbe3eaf641a47a53",
+    "revision": "eb06971ade676c1e3f17",
     "url": "/css/mifi_plan_list.18512927.css"
   },
   {
-    "revision": "a07adbe3eaf641a47a53",
-    "url": "/js/mifi_plan_list.b1dfc504.js"
+    "revision": "eb06971ade676c1e3f17",
+    "url": "/js/mifi_plan_list.24f343ac.js"
   },
   {
     "revision": "692e495b480d1e3a4000",
@@ -528,10 +528,6 @@ self.__precacheManifest = [
     "url": "/img/arrow1.ad4acc3d.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
@@ -546,6 +542,18 @@ self.__precacheManifest = [
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "a1386d312938b126d701a6841fb742e8",
@@ -570,14 +578,6 @@ self.__precacheManifest = [
   {
     "revision": "d140650fa64e0f1fc771610dba62aed7",
     "url": "/img/bg.d140650f.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -620,14 +620,6 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
-    "revision": "3d0fc424b703032ca595090e99f8354b",
-    "url": "/img/login_bg@2x.3d0fc424.png"
-  },
-  {
-    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
-    "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
     "revision": "114a6e12b42b9b48586dd341105188fe",
     "url": "/img/usedOrder@2x.114a6e12.png"
   },
@@ -658,6 +650,14 @@ self.__precacheManifest = [
   {
     "revision": "813b5319e378dafdda952c16ad89906b",
     "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "3d0fc424b703032ca595090e99f8354b",
+    "url": "/img/login_bg@2x.3d0fc424.png"
+  },
+  {
+    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
+    "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
@@ -748,7 +748,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "86a96528aa0b6309828d46017902ab4d",
+    "revision": "977abdfed56ccb438941794523801659",
     "url": "/index.html"
   },
   {
