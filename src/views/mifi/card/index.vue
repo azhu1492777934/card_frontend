@@ -1,15 +1,14 @@
 <template>
     <div class="card-wrap">
+        <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
         <div class="top-info">
             <div class="top-info-left">
-                <p>
-                    近期查询<span @click="refreshCard" class="iconfont icon-refresh"></span>
-                </p>
-                <p>{{iccid}}</p>
-                <div class="card-status-wrap">
-                    <div>
+
+                <div class="card-recent-wrap">
+                    <p>近期查询</p>
+                    <div class="card-status-wrap">
                         <span class="card-status"
-                            :class="usageInfo.auth_status>=3?'status-gradient':'status-gradient-warning'">
+                              :class="usageInfo.auth_status>=3?'status-gradient':'status-gradient-warning'">
                             {{filterCardInfo.real_name_state}}
                         </span>
 
@@ -25,18 +24,30 @@
                             {{filterCardInfo.device_state.state}}
                         </span>
                     </div>
+                </div>
+                <p class="iccid-wrap">{{iccid}}</p>
+
+                <div class="card-info">
                     <div>
-                        <router-link :to="{path:'/weixin/question/index',query:{from:'mifi'}}" class="card-question">?</router-link>
-                        <router-link to="/mifi/card/lookup" class="card-change"> 去变更> </router-link>
+                        <span>{{filterCardInfo.used_flow}}</span>
+                        <p>已用流量</p>
+                    </div>
+                    <span class="divider"></span>
+                    <div>
+                        <span>{{filterCardInfo.surplus_flow}}</span>
+                        <p>剩余流量</p>
+                    </div>
+                    <div @click="buyPlan">
+                        <span class="iconfont icon-recharge"></span>
+                        <p>去充值</p>
+                    </div>
+                    <span class="divider"></span>
+                    <div @click="changedCard">
+                        <span class="iconfont icon-exchange"></span>
+                        <p>更换卡号</p>
                     </div>
                 </div>
             </div>
-            <span class="divider"></span>
-            <div @click="toRealName" class="top-info-right" :class="{'no-need-realname': filterCardInfo.real_name_state === '已实名' || filterCardInfo.real_name_state === '手淘实名'}">
-                <span class="iconfont icon-user"></span>
-                <p>去实名</p>
-            </div>
-
         </div>
         <div class="card-function-wrap">
             <div class="function-group-wrap">
@@ -60,13 +71,26 @@
                     <span class="iconfont icon-coupon"></span>
                     <p>卡券兑换</p>
                 </div>
+                <span class="divider"></span>
+                <div @click="toQuestion">
+                    <span class="iconfont icon-question"></span>
+                    <p>问题中心</p>
+                </div>
+                <span class="divider divider-transparent"></span>
+                <div class="empty-space">
+                    <span class="iconfont icon-question"></span>
+                    <p>问题中心</p>
+                </div>
             </div>
+
         </div>
     </div>
 </template>
 
 <script>
-    import {getStorage,setStorage} from "../../../utilies";
+    import {mapState} from 'vuex'
+    import userHeader from '../../../components/common/uesrHead'
+    import {getStorage,setStorage,toDecimal} from "../../../utilies";
     import {_get} from "../../../http";
     import {Toast} from 'vant';
     export default {
@@ -78,6 +102,8 @@
                 card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
                 usageInfo:{},
                 filterCardInfo: {
+                    used_flow:'',
+                    surplus_flow:'',
                     msisdn: '',
                     device_state: '',//机卡状态
                     card_str_state: '',//卡状态
@@ -89,8 +115,15 @@
                 recording_list: getStorage('recording_list','arr') || [],//当前站点保留的查询数据
             }
         },
+        computed: {
+            ...mapState({
+                isShowUser: state => state.userInfo.showUser,
+                authorizeUserInfo: state => state.userInfo.userInfoInner,
+            }),
+        },
         components:{
             [Toast.name]:Toast,
+            userHeader,
         },
         created(){
             this.iccid ?  this.initial() : this.$router.push({path:'/mifi/card/lookup'});
@@ -109,6 +142,19 @@
 
                         setStorage('check_realNameSource',res.data.source);
                         this.usageInfo = res.data;
+
+                        // 流量
+                        res.data.used >= 1024 ?
+                            this.filterCardInfo.used_flow =  `${toDecimal(res.data.used / 1024)}G` :
+                            this.filterCardInfo.used_flow = `${toDecimal(res.data.used)}M`;
+                        if(res.data.total>=0){
+                            res.data.used >=1024 ?
+                                this.filterCardInfo.surplus_flow = `${toDecimal((res.data.total - res.data.used) / 1024)}G`:
+                                this.filterCardInfo.surplus_flow = `${toDecimal(res.data.total - res.data.used)}M`
+
+                        }else {
+                            this.filterCardInfo.surplus_flow = '无限量';
+                        }
 
                         // 判断当前卡状态 是都是未实名
                         if(this.usageInfo.auth_status==0 && this.usageInfo.need_auth){
@@ -157,21 +203,12 @@
                     }
                 })
             },
-            refreshCard(){
-                window.location.reload()
-            },
-            buyPlan(){
-                this.$router.push('/mifi/plan/group');
-            },
-            flowCheck(){
-                this.$router.push('/mifi/plan/usage');
-            },
-            checkOrder(){
-                this.$router.push('/mifi/order/index');
-            },
-            couponExchange(){
-                this.$router.push('/mifi/coupon/index');
-            },
+            buyPlan(){this.$router.push('/mifi/plan/group');},
+            flowCheck(){this.$router.push('/mifi/plan/usage');},
+            checkOrder(){this.$router.push('/mifi/order/index');},
+            couponExchange(){this.$router.push('/mifi/coupon/index');},
+            toQuestion(){this.$router.push('/weixin/question/index');},
+            changedCard(){this.$router.push('/mifi/card/lookup')},
             inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
@@ -221,57 +258,42 @@
             align-items: center;
             width: 100%;
             height: 320px;
-            padding: 117px 60px 0;
+            padding: 110px 60px 0;
             box-sizing: border-box;
             .bg-image('../../assets/imgs/mifi/card/info/card_index_bg');
             .top-info-left{
                 flex: 5;
                 text-align: left;
-                .icon-refresh{
-                    margin-left: 12px;
-                    color: #f8b43e;
-                }
-                p{
-                    &:first-child{
+                .card-recent-wrap{
+                    display: flex;
+                    justify-content: space-between;
+                    p{
                         color: #0e3243;
                         font-size: 30px;
                     }
-                    &:nth-child(2){
-                        padding: 23px 0;
-                        font-size: 40px;
-                        font-weight: 500;
-                    }
                 }
-
-                span{
-                    display: inline-block;
-                    margin-right: 12px;
-                    text-align: center;
-                }
-            }
-            .top-info-right{
-                flex: 1;
-                .icon-user{
-                    font-size: 54px;
-                    color: #f8b43e;
-                }
-                p{
-                    padding-top: 10px;
-                    color: #333;
+                .iccid-wrap{
+                    padding: 15px 0;
+                    font-size: 40px;
                     font-weight: 500;
                 }
+
             }
-            .no-need-realname{
-                .icon-user,p{color: rgba(177, 175, 175, 0.45);}
+            .card-info{
+                display: flex;
+                flex: 1;
+                justify-content: space-between;
+                align-items: center;
+                text-align: center;
+                p{padding-top:8px;font-size: 24px;color: #0e3243;}
+                span{font-size: 32px;color: #f1a741;}
             }
             .divider{
                 width: 3px;
-                height: 36px;
+                height: 26px;
                 background-color: #f6b03e;
             }
             .card-status-wrap{
-                display: flex;
-                justify-content: space-between;
                 .status-gradient{
                     background-image: linear-gradient( 45deg, #93c8fb 25%, #497fb1 100%);
                 }
@@ -283,9 +305,13 @@
                 }
 
                 .card-status{
+                    display: inline-block;
+                    margin-right: 12px;
                     padding: 5px 10px;
                     border-radius: 33px;
+                    font-size: 22px;
                     color: #fff;
+                    text-align: center;
                 }
                 .card-question{
                     display: inline-block;
@@ -320,11 +346,17 @@
                     font-weight: 500;
                     color: #333;
                 }
+                .empty-space{
+                    p,.iconfont{color: transparent!important;}
+                }
             }
            .divider{
                 width: 4px;
                 height: 25px;
                 background-color: #c7c7c7;
+            }
+            .divider-transparent{
+                background-color: transparent !important;
             }
             .iconfont {
                 display: inline-block;

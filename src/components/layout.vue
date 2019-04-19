@@ -93,6 +93,10 @@
                             this.$store.commit('userInfo/changeUserStatus', true);
                             let userDom = document.querySelector('.user-wrap');
                             if(userDom) setStorage('userHeight',userDom.offsetHeight);
+
+                            if(this.global_variables.packed_project === 'mifi'){
+                                this.$store.commit('userInfo/changeUserStatus', false);
+                            }
                         }
 
                         if ((this.client_type == 'wechat' && getStorage('wechat_version') != this.global_variables.version) ||
@@ -106,7 +110,9 @@
 
                     }//app环境隐藏顶部个人信息
                     if (getStorage('token')) {
-                        this.getUserInfo();//获取用户信息
+                        if(this.global_variables.packed_project !== 'mifi'){
+                            this.getUserInfo();//获取用户信息 其他项目的跳转
+                        }
                     } else {
                         let _this = this;
                         Dialog.alert({
@@ -154,6 +160,10 @@
 
                                     let userDom = document.querySelector('.user-wrap');
                                     if(userDom) setStorage('userHeight',userDom.offsetHeight);
+
+                                    if(this.global_variables.packed_project === 'mifi'){
+                                        this.$store.commit('userInfo/changeUserStatus', false);
+                                    }
                                 }
 
                             } else {
