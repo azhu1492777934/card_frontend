@@ -203,7 +203,7 @@
                     }
                 })
             },
-            buyPlan(){this.$router.push('/mifi/plan/group');},
+            buyPlan(){this.$router.push('/mifi/plan/list');},
             flowCheck(){this.$router.push('/mifi/plan/usage');},
             checkOrder(){this.$router.push('/mifi/order/index');},
             couponExchange(){this.$router.push('/mifi/coupon/index');},

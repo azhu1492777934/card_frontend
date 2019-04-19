@@ -102,9 +102,9 @@
                 this.$store.commit('mifiCommon/changeLoadingStatus',{flag:true});
                 this.$store.commit('mifiCommon/changeErrStatus',{show:false});
 
-                _get("/api/v1/app/plan_group/plan_list", {
+                _get("/api/v1/app/plan_list", {
                     iccid: getStorage("check_iccid"),
-                    plan_group_id:this.plan_group_id,
+                    // plan_group_id:this.plan_group_id,
                 }).then(res => {
                     this.$store.commit('mifiCommon/changeLoadingStatus',{flag:false});
                     let refPlanButton = 0;
@@ -176,15 +176,21 @@
                 planInfo = this.plan_list[ref_plan_type_index][this.choose_plan_index];
 
                 if (planInfo.surplus_times <= 0) {
-                    Toast("此套餐已售罄, 请更换套餐");
+                    Toast({
+                        message:'此套餐已售罄, 请更换套餐',
+                        position: 'top'
+                    });
                     return;
                 }
 
                 planInfo.iccid = getStorage("check_iccid");
                 setStorage("planInfo", planInfo, "obj");
 
-                if (this.client_type != 'alipay' && this.client_type != 'wechat') {
-                    Notify({message: '请在微信或支付宝客服端打开充值'});
+                if (!getStorage("userInfo", "obj")) {
+                    Toast({
+                        message: '请在微信或支付宝客服端打开充值',
+                        position: 'top'
+                    });
                     return
                 }
 

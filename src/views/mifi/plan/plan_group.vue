@@ -211,14 +211,13 @@
                 planInfo.iccid = getStorage("check_iccid");
                 setStorage("planInfo", planInfo, "obj");
 
-                if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+                if (!getStorage("userInfo", "obj")) {
                     Toast({
                         message: '请在微信或支付宝客服端打开充值',
                         position: 'top'
                     });
                     return
                 }
-
 
                 if(planInfo.type==1 && planInfo.day <=30 && cur_date>=20 && cur_date <=26 ){
 
@@ -237,13 +236,6 @@
 
             },
             toRechargeList(planInfo){
-                if(!getStorage("userInfo", "obj")){
-                    Toast({
-                        message: '您的用户信息丢失了',
-                        position: 'top'
-                    });
-                    return
-                }
                 //获取当前包月套餐信息
                 _get("/api/v1/app/plans/renew_info", {
                     user_id: getStorage("userInfo", "obj").account.user_id,
