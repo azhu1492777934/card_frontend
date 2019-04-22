@@ -50,6 +50,8 @@ function removeStorage(key) {
 };
 
 function toDecimal(val) {
+    let type = Object.prototype.toString.call(val);
+    if(type === '[object Undefined]' || type === '[object Null]') return '暂无';
     var value = val.toString();
     if (value.indexOf('.') > 0) {
         var decimal = value.substr(value.indexOf('.') + 1, value.length);
