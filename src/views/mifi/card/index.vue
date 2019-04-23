@@ -143,18 +143,24 @@
                         setStorage('check_realNameSource',res.data.source);
                         this.usageInfo = res.data;
 
-                        // 流量
-                        res.data.used >= 1024 ?
-                            this.filterCardInfo.used_flow =  `${toDecimal(res.data.used / 1024)}G` :
-                            this.filterCardInfo.used_flow = `${toDecimal(res.data.used)}M`;
-                        if(res.data.total>=0){
-                            res.data.used >=1024 ?
-                                this.filterCardInfo.surplus_flow = `${toDecimal((res.data.total - res.data.used) / 1024)}G`:
-                                this.filterCardInfo.surplus_flow = `${toDecimal(res.data.total - res.data.used)}M`
+                        if(res.data.used >=0 && res.data.total >=0){
+                            // 流量
+                            res.data.used >= 1024 ?
+                                this.filterCardInfo.used_flow =  `${toDecimal(res.data.used / 1024)}G` :
+                                this.filterCardInfo.used_flow = `${toDecimal(res.data.used)}M`;
+                            if(res.data.total>=0){
+                                res.data.used >=1024 ?
+                                    this.filterCardInfo.surplus_flow = `${toDecimal((res.data.total - res.data.used) / 1024)}G`:
+                                    this.filterCardInfo.surplus_flow = `${toDecimal(res.data.total - res.data.used)}M`
 
-                        }else {
-                            this.filterCardInfo.surplus_flow = '无限量';
+                            }else {
+                                this.filterCardInfo.surplus_flow = '无限量';
+                            }
+                        }else{
+                            this.filterCardInfo.used_flow = '暂无';
+                            this.filterCardInfo.surplus_flow = '暂无';
                         }
+
 
                         // 判断当前卡状态 是都是未实名
                         if(this.usageInfo.auth_status==0 && this.usageInfo.need_auth){
