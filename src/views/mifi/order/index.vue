@@ -14,7 +14,7 @@
         <div class="swipe-wrap" ref="SwiperWwrap">
             <transition-group name="fade" tag="div" class="swipe-wrap-inner">
                 <div class="swiper-slide" v-for="(item,index) in statusList" v-show="statusIndex === index" :key="index">
-                    <ul v-bounce v-show="orderListObj[index].length>0" class="order-list-wrap">
+                    <ul v-show="orderListObj[index].length>0" class="order-list-wrap">
                         <li v-for="(inner_item,inner_index) in orderListObj[index]">
                             <div class="order-info-wrap">
                                 <span class="order-status"

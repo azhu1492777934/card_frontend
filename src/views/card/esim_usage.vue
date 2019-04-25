@@ -159,7 +159,7 @@
         <div class="van-swipe-wrap">
           <swiper ref="mySwiper" :options="swiperOption">
             <swiper-slide>
-              <ul v-bounce v-if="hasUsagePlan" class="usage-plan-wrap">
+              <ul v-if="hasUsagePlan" class="usage-plan-wrap">
                 <li v-for="(item,index) in usageInfo.usage.plans">
                   <div class="plan-info-wrap">
                     <p class="plan-name">{{item.rps_name}}</p>

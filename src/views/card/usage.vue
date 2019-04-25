@@ -1,5 +1,6 @@
 <template>
     <div class="plan-usage-wrap">
+
         <div v-show="!load_plan">
             <div ref="refCardInfo" class="card-info-wrap">
                 <div class="operation-logo-wrap">
@@ -69,13 +70,12 @@
 
             <div class="card-plan-wrap">
                 <p ref="refPlanTitle" class="card-plan-wrap-title">
-                    <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
-                          :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
+                    <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array" :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
                 </p>
                 <div class="van-swipe-wrap">
                     <swiper ref="mySwiper" :options="swiperOption">
                         <swiper-slide>
-                            <ul v-bounce v-if="hasUsagePlan" class="usage-plan-wrap">
+                            <ul v-if="hasUsagePlan" class="usage-plan-wrap">
                                 <li v-for="(item,index) in usageInfo.usage.plans">
                                     <div class="plan-info-wrap">
                                         <p class="plan-name">{{item.rps_name}}</p>
@@ -180,7 +180,6 @@
             </div>
         </div>
 
-
         <van-popup :close-on-click-overlay="false" v-model="load_plan">
             <p class="showTip">{{load_plan_msg}}</p>
         </van-popup><!--获取详情遮罩-->
@@ -242,11 +241,9 @@
                         font-size: 36px;
                         color: #31b3ef;
                     }
-                    /*&:nth-child(2) {*/
-                        /*padding-bottom: 35px;*/
-                        font-size: 24px;
-                        color: #017ef9;
-                    /*}*/
+
+                    font-size: 24px;
+                    color: #017ef9;
                 }
 
                 .card-state-wrap {
@@ -392,8 +389,8 @@
             }
             .usage-plan-wrap, .order-plan-wrap {
                 width: 100%;
-                overflow-y: auto;
                 height: 100%;
+                overflow-y: auto;
                 li {
                     display: flex;
                     padding: 10px 15px;
@@ -417,7 +414,6 @@
                     }
                     .plan-date-wrap {
                         position: relative;
-                        /*flex:2.7;*/
                         text-align: right;
                         .plan-date {
                             padding: 20px 0;
@@ -486,7 +482,6 @@
             }
 
         }
-
     }
 </style>
 
@@ -555,9 +550,12 @@
             swiper,
             swiperSlide
         },
+        computed: {
+            swiper() {
+                return this.$refs.mySwiper.swiper
+            }
+        },
         created() {
-
-            // this.load_plan_msg = '1233';
             localStorage.setItem("currentType","card");
 
             if (getStorage('check_iccid')) {
@@ -687,9 +685,11 @@
                         }//流量卡
 
                         // 是否显示套餐
-                        this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false
+                        this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false;
                         this.usagePlanLength = this.usageInfo.usage.plans.length;
-                        this.hasOrderPlan = this.usageInfo.orders.length ? true : false
+                        this.hasOrderPlan = this.usageInfo.orders.length ? true : false;
+
+                        this.swiper.slideTo(0, 500, false);
 
                         this.$nextTick(()=>{
                             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
@@ -698,15 +698,15 @@
                                 refCardButton = this.$refs.refCardButton.offsetHeight,
                                 refPlanTitle =  this.$refs.refPlanTitle.offsetHeight,
                                 userHeight = getStorage('userHeight') || 44;
-                            if(this.client_type == 'wechat' || this.client_type == 'alipay'){
+                            if(this.client_type === 'wechat' || this.client_type === 'alipay'){
                                 this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight)+'px'
                             }else{
                                 this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle)+'px'
                             }
-                        })
+                        });
 
                     } else {
-                        this.load_plan = true
+                        this.load_plan = true;
                         this.load_plan_msg = res.msg;
                     }
                 })
@@ -726,7 +726,7 @@
                 this.$router.push({path: '/weixin/card/plan_list'})
             },
             refreshOrActivated() {
-                if (this.filterCardInfo.refresh_actived == '刷新') {
+                if (this.filterCardInfo.refresh_actived === '刷新') {
                     location.reload()
                 } else {
                     if (!this.usageInfo.canActivated) {

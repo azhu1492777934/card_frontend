@@ -636,6 +636,7 @@
         }
         .appContext-pay-wrap {
             color: #333;
+            background-color: #fff;
             .title {
                 font-size: 32px;
                 font-weight: 500;
