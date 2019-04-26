@@ -191,7 +191,7 @@
                         }else if(res.error == '20014'){
                             Notify({message:'请求超时'});
                         } else{
-                            this.showAuthorityError('A'+res.error)
+                            (res.status || res.error) ? this.showAuthorityError('A'+res.error) : this.showAuthorityError('A-R'+ JSON.stringify(res))
                         }
                     })
 

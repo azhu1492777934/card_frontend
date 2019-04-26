@@ -29,12 +29,8 @@
                 }, 'get'))
                     .then((res) => {
                         if (res.error == 0) {
-
                             localStorage.setItem("token", res.data);
-                            // let refreshUrl = getStorage('refreshUrl');
-                            // refreshUrl ? this.$router.push({path:refreshUrl}) : location.reload();
                             location.reload();
-
                         } else if (res.error == 11003) {
                             let _this = this;
 

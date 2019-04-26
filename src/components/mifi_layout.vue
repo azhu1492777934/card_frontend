@@ -201,7 +201,7 @@
                             this.getUserInfo();
                         }
                         else{
-                            this.showAuthorityError('A'+res.error)
+                            (res.status || res.error) ? this.showAuthorityError('A'+res.error) : this.showAuthorityError('A-R'+ JSON.stringify(res))
                         }
                     })
 
