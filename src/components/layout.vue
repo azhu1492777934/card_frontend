@@ -62,7 +62,9 @@
                     this.showHtmlcallJava2();
                 }else if(/(ios1.1.0)/.test(UA)){
                     window.webkit.messageHandlers.getIosToken.postMessage(null);
-                    this.authorized();
+                    setTimeout(function(){
+                        this.authorized();
+                    },500)
 
                 }
                 // document.addEventListener("plusready", this.plusReady, false);
@@ -75,7 +77,7 @@
             showHtmlcallJava2(){
                     let str3 = window.jsInterface.GetToken();
                     localStorage.setItem("token", str3);
-                    this.authorized();
+                        this.authorized();
                 
             },
             plusReady() {
