@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["speedup_wrapper"],{"1c89":function(e,n,p){"use strict";p.r(n);var r=function(){var e=this,n=e.$createElement,p=e._self._c||n;return p("router-view")},t=[],a={name:"speedup_wrapper"},u=a,s=(p("8a86"),p("2877")),c=Object(s["a"])(u,r,t,!1,null,"2abd3054",null);c.options.__file="speedup_wrapper.vue";n["default"]=c.exports},8359:function(e,n,p){},"8a86":function(e,n,p){"use strict";var r=p("8359"),t=p.n(r);t.a}}]);
+//# sourceMappingURL=speedup_wrapper.fba13342.js.map
