@@ -86,7 +86,7 @@ function objKeySort(obj) {
 function codeParam(param, type) {
     let timeSpan = getStorage('timeSpan') == 0 ? 0 : getStorage('timeSpan'),
         commParam = {
-            timestamp: (new Date()).getTime() + parseInt(timeSpan),
+            timestamp: (Date.parse(new Date())/1000) + parseInt(timeSpan),
             version: 'v1',
             format: 'json',
             app_key: 'XznBRoBGEgoCUtZbDbtL0G1QhE',
