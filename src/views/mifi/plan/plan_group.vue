@@ -2,7 +2,7 @@
     <div class="plan-group-wrapper">
         <div ref="btnChoosePlan" @click="showPLanDetail" class="btn-choose-plan-wrap">
             <div>
-                <span>请选择套餐</span>
+                <span>{{cur_plan_group_name}}</span>
                 <span>=</span>
             </div>
         </div>
@@ -71,6 +71,7 @@
         name: "plan_group",
         data() {
             return {
+                cur_plan_group_name:'请选择套餐',
                 client_type:checkBrowser(),
                 showNoData: false,
                 iccid: getStorage('check_iccid'),
@@ -91,13 +92,14 @@
                             {
                                 'keyId': 0,
                                 'text': '全部'
-                            }, {
-                                'keyId': '0',
-                                'text': '累计套餐',
-                            }, {
-                                'keyId': '1',
-                                'text': '月套餐',
                             }
+                            // , {
+                            //     'keyId': '0',
+                            //     'text': '累计套餐',
+                            // }, {
+                            //     'keyId': '1',
+                            //     'text': '月套餐',
+                            // }
                         ]
                     }
                 ],
@@ -131,8 +133,16 @@
                                     'text':item.plan_group_name
                                 })
                             });
+
+                            if(this.columns[0].values.length>0){
+                                if(this.cur_plan_group_name  === '请选择套餐'){
+                                    this.cur_plan_group_name = this.columns[0].values[0].text
+                                }
+                            };
+
                             this.group_list = res.data.plan_list;
                             res.data.plan_list.length ? this.showNoData = false : this.showNoData = true;
+
                             this.$nextTick(()=>{
                                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                                     refBanner = this.$refs.btnChoosePlan.offsetHeight,
@@ -185,6 +195,7 @@
                 this.picker.choose_plan_id = value[0].keyId;
                 this.picker.choose_type = value[1].keyId;
                 this.picker.showPlanSelect = false;
+                this.cur_plan_group_name = value[0].text;
                 this.initial({
                     plan_group_id: this.picker.choose_plan_id,
                     type: this.picker.choose_type,
