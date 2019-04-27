@@ -37,7 +37,9 @@ axios.interceptors.response.use(function (response){
     if(Object.prototype.toString.call(err)=='[object object]' || Object.prototype.toString.call(err)=='[object Error]'){
         if(err.response.status && err.response.status === 401 && err.config.url.indexOf('/accountCenter') > -1){
             return Promise.resolve(err.response.data);
-        }else{
+        }else if(err.response.data.error === 10007 && err.config.url.indexOf('/accountCenter') > -1){
+            return Promise.resolve(err.response.data)
+        } else{
             let msg ;
             err.response.status ? msg = `服务出小差啦${err.response.status}` : msg = '好像找不到资源了'
             return Promise.resolve({

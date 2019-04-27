@@ -19,8 +19,6 @@
             if(loading){
                 document.body.removeChild(loading);
             }
-
-            
         },
         methods: {
             refreshToken(params) {
@@ -30,7 +28,7 @@
                     .then((res) => {
                         if (res.error == 0) {
                             localStorage.setItem("token", res.data);
-                            location.reload();
+                            // location.reload();
                         } else if (res.error == 11003) {
                             let _this = this;
 
