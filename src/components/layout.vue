@@ -184,7 +184,7 @@
                         } else if (res.error == '11002') {
                             this.$emit('getToken');
                         } else if(res.error == '10007'){
-                            let curTimeStamp = (new Date()).getTime(),
+                            let curTimeStamp = (Date.parse(new Date())/1000),
                                 timeSpan = res.extra - curTimeStamp;
                             setStorage('timeSpan',timeSpan);
                             this.getUserInfo();
