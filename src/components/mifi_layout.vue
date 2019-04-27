@@ -194,7 +194,7 @@
                             this.$emit("getToken",{from:'mifi'});
 
                         } else if(res.error == '10007'){
-                            let curTimeStamp = (new Date()).getTime(),
+                            let curTimeStamp = (Date.parse(new Date())/1000),
                                 timeSpan = res.extra - curTimeStamp;
 
                             setStorage('timeSpan',timeSpan);

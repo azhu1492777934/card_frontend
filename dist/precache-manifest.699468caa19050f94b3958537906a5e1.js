@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/js/rechargeRecord.015bab9e.js"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
-  },
-  {
-    "revision": "0b25031aa1a561de0c7c",
-    "url": "/css/recharge_callback.4a8c886c.css"
+    "revision": "0dc00468295ab472e0e6",
+    "url": "/css/Layout.c2a0f562.css"
   },
   {
     "revision": "f3c7a3f2a2051cfef0dd",
     "url": "/css/Not_fund.0aeb7cd4.css"
+  },
+  {
+    "revision": "f3c7a3f2a2051cfef0dd",
+    "url": "/js/Not_fund.071f6694.js"
   },
   {
     "revision": "0f735b7f206699d096f1",
@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.56f66b0d.js"
   },
   {
-    "revision": "0165482c9dd133daf0d4",
+    "revision": "8c9fb63ef4f8c6d5760b",
     "url": "/css/app.9736fbfe.css"
   },
   {
-    "revision": "0165482c9dd133daf0d4",
-    "url": "/js/app.676b551d.js"
+    "revision": "8c9fb63ef4f8c6d5760b",
+    "url": "/js/app.fb2552e9.js"
   },
   {
     "revision": "1bcb98dad726f4dd91ab",
@@ -260,12 +260,12 @@ self.__precacheManifest = [
     "url": "/js/mifi_index.54717e13.js"
   },
   {
-    "revision": "b4372b242c2fa73f1899",
+    "revision": "13987d413b76eefd783a",
     "url": "/css/mifi_layout.c2a0f562.css"
   },
   {
-    "revision": "b4372b242c2fa73f1899",
-    "url": "/js/mifi_layout.644d9f0f.js"
+    "revision": "13987d413b76eefd783a",
+    "url": "/js/mifi_layout.c19f7568.js"
   },
   {
     "revision": "2835a701732afa487c96",
@@ -388,8 +388,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.3c45e462.js"
   },
   {
-    "revision": "f3c7a3f2a2051cfef0dd",
-    "url": "/js/Not_fund.071f6694.js"
+    "revision": "0b25031aa1a561de0c7c",
+    "url": "/css/recharge_callback.4a8c886c.css"
   },
   {
     "revision": "0b25031aa1a561de0c7c",
@@ -540,22 +540,6 @@ self.__precacheManifest = [
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
-  },
-  {
     "revision": "a1386d312938b126d701a6841fb742e8",
     "url": "/img/addressIcon.a1386d31.png"
   },
@@ -572,12 +556,28 @@ self.__precacheManifest = [
     "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+  },
+  {
     "revision": "f5f322478286641bd9887a155e35f222",
     "url": "/img/btn.f5f32247.png"
   },
   {
     "revision": "d140650fa64e0f1fc771610dba62aed7",
     "url": "/img/bg.d140650f.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -652,16 +652,16 @@ self.__precacheManifest = [
     "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
   {
     "revision": "813b5319e378dafdda952c16ad89906b",
     "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "6eb1cce5bab9ec1cb25d71e8f3110a15",
@@ -748,12 +748,12 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "e20749d22d70658e0b0757603a5c7bc7",
+    "revision": "2e1a5050cd96b099fa46b694beff02b7",
     "url": "/index.html"
   },
   {
-    "revision": "0dc00468295ab472e0e6",
-    "url": "/css/Layout.c2a0f562.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
