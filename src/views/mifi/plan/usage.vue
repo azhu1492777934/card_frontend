@@ -117,7 +117,7 @@
                     </ul>
                     <div class="no-data-wrap" v-show="usageListObj[index].length==0">
                         <img class="noOrderPic" src="../../../assets/imgs/mifi/common/noData@2x.png" alt="暂无数据">
-                        <router-link to="/mifi/plan/list" class="to-buy-plan">去下单</router-link>
+                        <router-link to="/mifi/plan/group" class="to-buy-plan">去下单</router-link>
                     </div>
                 </swiper-slide>
 

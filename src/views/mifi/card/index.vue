@@ -209,7 +209,7 @@
                     }
                 })
             },
-            buyPlan(){this.$router.push('/mifi/plan/list');},
+            buyPlan(){this.$router.push('/mifi/plan/group');},
             flowCheck(){this.$router.push('/mifi/plan/usage');},
             checkOrder(){this.$router.push('/mifi/order/index');},
             couponExchange(){this.$router.push('/mifi/coupon/index');},
