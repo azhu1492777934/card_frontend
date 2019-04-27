@@ -87,21 +87,22 @@
                 columns: [
                     {
                         values:[],//套餐组
-                    }, {
-                        values: [
-                            {
-                                'keyId': 0,
-                                'text': '全部'
-                            }
-                            // , {
-                            //     'keyId': '0',
-                            //     'text': '累计套餐',
-                            // }, {
-                            //     'keyId': '1',
-                            //     'text': '月套餐',
-                            // }
-                        ]
-                    }
+                    },
+                    // {
+                    //     values: [
+                    //         {
+                    //             'keyId': 0,
+                    //             'text': '全部'
+                    //         }
+                    //         , {
+                    //             'keyId': '0',
+                    //             'text': '累计套餐',
+                    //         }, {
+                    //             'keyId': '1',
+                    //             'text': '月套餐',
+                    //         }
+                    //     ]
+                    // }
                 ],
             }
         },
@@ -193,12 +194,12 @@
             },
             handleConfirm(value) {
                 this.picker.choose_plan_id = value[0].keyId;
-                this.picker.choose_type = value[1].keyId;
+                // this.picker.choose_type = value[1].keyId;
                 this.picker.showPlanSelect = false;
                 this.cur_plan_group_name = value[0].text;
                 this.initial({
                     plan_group_id: this.picker.choose_plan_id,
-                    type: this.picker.choose_type,
+                    type: null,
                 });
             },
             handleCancel(){
