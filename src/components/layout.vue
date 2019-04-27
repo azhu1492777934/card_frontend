@@ -177,9 +177,7 @@
                                 }).then(() => {
                                     _this.load_user_msg = true;
                                     _this.load_user_info  = '账号异常';
-
                                 })
-
                             }
                         } else if (res.error == '11002') {
                             this.$emit('getToken');
