@@ -152,6 +152,7 @@
                 this.load_user_msg = true;//用户信息遮罩
                 _get("/accountCenter/v2/user/info?" + codeParam({}, 'get'))
                     .then(res => {
+                        this.load_user_msg = false;//用户信息遮罩
                         if (res.error == 0) {
 
                             if (res.data && JSON.stringify(res.data) != '{}') {
@@ -189,7 +190,6 @@
 
                             }
                         } else if (res.error == '11002') {
-
                             setStorage('refreshUrl',GetUrlRelativePath());
                             this.$emit("getToken",{from:'mifi'});
 
