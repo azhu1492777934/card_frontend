@@ -9,16 +9,20 @@ let global_variables = {
         empty_router_url:'/mifi/card/index',
         DevelopDomain : 'http://mifiserver-test.china-m2m.com',
         ProductionDomain : 'https://mifiserver.china-m2m.com',
+        app_key: 'LKyU8N3izh7b28dnQl5Wqziq6m',
+        app_secret: 'fyGDWOHCfgyBHmHmY30Z3aE1k9mv1RXp6fYooK6sX728U',
     },
     card_project:{
         empty_router_url: '/weixin/card/lookup',
         DevelopDomain : 'http://cardserver-test.china-m2m.com',
         ProductionDomain : 'https://cardserver.china-m2m.com',
+        app_key: 'XznBRoBGEgoCUtZbDbtL0G1QhE',
+        app_secret: 'EThOWYkcwsrrCEsFTbgvHFWLaEJwrThDcYqrPbIuhufVp',
     },
     new_project:{
         empty_router_url: '/weixin/card/lookup',
-        DevelopDomain : 'https://cardserver.qiyu-m2m.com/weixin/lookup',
-        ProductionDomain : 'https://cardserver.qiyu-m2m.com/weixin/lookup',
+        DevelopDomain : 'https://cardserver.qiyu-m2m.com',
+        ProductionDomain : 'https://cardserver.qiyu-m2m.com',
     }
 }
 

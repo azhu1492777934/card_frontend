@@ -1,4 +1,5 @@
 import md5 from 'js-md5';
+import global_variables from "./domain";
 
 function checkICCID(iccid) {
     if (iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != '89') {
@@ -89,7 +90,7 @@ function codeParam(param, type) {
             timestamp: (Date.parse(new Date())/1000) + parseInt(timeSpan),
             version: 'v1',
             format: 'json',
-            app_key: 'XznBRoBGEgoCUtZbDbtL0G1QhE',
+            app_key: global_variables[`${global_variables.packed_project}_project`].app_key,
             nonce: new Date().getMilliseconds() + '0' + Math.floor(Math.random() * 10000)
         };
 
@@ -100,7 +101,7 @@ function codeParam(param, type) {
     for (var i in sortParm) {
         row_sign += i + '=' + sortParm[i] + '&'
     }
-    row_sign += 'EThOWYkcwsrrCEsFTbgvHFWLaEJwrThDcYqrPbIuhufVp';
+    row_sign += global_variables[`${global_variables.packed_project}_project`].app_secret;
     sign = md5(row_sign);
     commParam.sign = sign;
 
