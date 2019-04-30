@@ -55,15 +55,15 @@
                 removeStorage('watch_card');
                 removeStorage('watchAutoSearch');
             }
+            let _this=this;
             if (this.client_type == 'app') {
-
                 let UA = navigator.userAgent.toLowerCase();
                 if(/(ylkids_android)/.test(UA)){
                     this.showHtmlcallJava2();
                 }else if(/(ios1.1.0)/.test(UA)){
-                    window.webkit.messageHandlers.getIosToken.postMessage(null);
+                    let str=window.webkit.messageHandlers.getIosToken.postMessage(null);
                     setTimeout(function(){
-                        this.authorized();
+                        _this.authorized();
                     },500)
 
                 }
@@ -89,7 +89,6 @@
                 if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') && process.env.NODE_ENV != 'development'  ) {
 
                     if (this.client_type != 'app') {
-                        
                         if (getStorage('userInfo', 'obj')) {
                             this.$store.commit('userInfo/changeUserStatus', true);
                             let userDom = document.querySelector('.user-wrap');
@@ -154,7 +153,6 @@
                                 }
 
                                 setStorage('userInfo', UserInfo, 'obj');
-
                                 if (this.client_type == 'wechat' || this.client_type == 'alipay') {
                                     this.$store.commit('userInfo/changeUserStatus', true);
                                     this.$store.commit('userInfo/changeUserInfo', UserInfo);

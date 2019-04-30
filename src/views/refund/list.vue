@@ -193,7 +193,6 @@
             [Popup.name]:Popup
         },
         created() {
-
             if(!this.authorizedUserInfo.account.user_id){
                 this.isExistOrder = true;
                 this.load_plan_msg = '请在微信或支付宝客户端查询'
