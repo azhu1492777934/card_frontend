@@ -119,6 +119,7 @@
             initial(params){
                 this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
                 this.$store.commit('mifiCommon/changeErrStatus', {show: false});
+                this.choose_plan_index = 0;
                 _get('/api/v1/app/plan_group_list/and_plan_list',{
                     iccid: this.iccid,
                     plan_group_id: params.plan_group_id ?  params.plan_group_id : null,
