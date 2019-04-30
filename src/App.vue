@@ -27,7 +27,7 @@
                 }, 'get'))
                     .then((res) => {
                         if (res.error == 0) {
-                            localStorage.setItem("token", res.data);
+                            setStorage('token',res.data);
                             // location.reload();
                         } else if (res.error == 11003) {
                             let _this = this;

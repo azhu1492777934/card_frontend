@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.56f66b0d.js"
   },
   {
-    "revision": "94aa9b0b6d0c6daaa842",
+    "revision": "5cce6ab54b879d78966b",
     "url": "/css/app.9736fbfe.css"
   },
   {
-    "revision": "94aa9b0b6d0c6daaa842",
-    "url": "/js/app.2191e7c4.js"
+    "revision": "5cce6ab54b879d78966b",
+    "url": "/js/app.1f611c32.js"
   },
   {
     "revision": "1bcb98dad726f4dd91ab",
@@ -532,20 +532,20 @@ self.__precacheManifest = [
     "url": "/img/bg_test.6e5cee73.png"
   },
   {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
@@ -748,7 +748,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "7e8603d62d766750f51cdb4e58f787bc",
+    "revision": "147d2af5f5656d805b71cf399e6ac57f",
     "url": "/index.html"
   },
   {
