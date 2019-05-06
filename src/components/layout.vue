@@ -77,6 +77,7 @@
             showHtmlcallJava2(){
                     let str3 = window.jsInterface.GetToken();
                     localStorage.setItem("token", str3);
+                    // location.reload();
                         this.authorized();
                 
             },
@@ -163,6 +164,9 @@
                                     if(this.global_variables.packed_project === 'mifi'){
                                         this.$store.commit('userInfo/changeUserStatus', false);
                                     }
+                                }else if(this.client_type == 'app'){
+                                    this.$store.commit('userInfo/changeUserInfo', UserInfo);
+
                                 }
 
                             } else {

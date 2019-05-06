@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["mifi_card_wrapper"],{"66cf":function(e,r,n){"use strict";var c=n("dff1"),i=n.n(c);i.a},7522:function(e,r,n){"use strict";n.r(r);var c=function(){var e=this,r=e.$createElement,n=e._self._c||r;return n("router-view")},i=[],a=(n("cadf"),n("551c"),n("097d"),{name:"mifi_card_wrapper"}),f=a,t=(n("66cf"),n("2877")),p=Object(t["a"])(f,c,i,!1,null,"45635d2e",null);p.options.__file="mifi_card_wrapper.vue";r["default"]=p.exports},dff1:function(e,r,n){}}]);
-//# sourceMappingURL=mifi_card_wrapper.31e720f8.js.map

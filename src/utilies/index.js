@@ -84,7 +84,7 @@ function objKeySort(obj) {
     return newObj;
 }//排序参数
 
-function codeParam(param, type) {
+function codeParam(param, type) { 
     let timeSpan = getStorage('timeSpan') == 0 ? 0 : getStorage('timeSpan'),
         commParam = {
             timestamp: (Date.parse(new Date())/1000) + parseInt(timeSpan),
