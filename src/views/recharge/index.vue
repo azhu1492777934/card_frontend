@@ -381,7 +381,7 @@
                 if (rechargeInfo.is_renew == true) {
                     param.price = rechargeInfo.first_price;
                 } else {
-                    param.price = this.planInfo.price;
+                    (param.status === 1 && this.userInfo.account.rmb > 0)? param.price = this.surplus_cash : this.planInfo.price;
                 }
 
                 param.user_id = this.userInfo.account.user_id;

@@ -87,9 +87,9 @@
             },
 
             authorized() {
-                if ( (this.client_type == 'wechat' || this.client_type == 'alipay' || this.client_type == 'app') && process.env.NODE_ENV != 'development'  ) {
+                if ( (this.client_type === 'wechat' || this.client_type === 'alipay' || this.client_type === 'app') && process.env.NODE_ENV !== 'development'  ) {
 
-                    if (this.client_type != 'app') {
+                    if (this.client_type !== 'app') {
                         if (getStorage('userInfo', 'obj')) {
                             this.$store.commit('userInfo/changeUserStatus', true);
                             let userDom = document.querySelector('.user-wrap');
@@ -100,9 +100,9 @@
                             }
                         }
 
-                        if ((this.client_type == 'wechat' && getStorage('wechat_version') != this.global_variables.version) ||
+                        if ((this.client_type === 'wechat' && getStorage('wechat_version') !== this.global_variables.version) ||
 
-                            (this.client_type == 'alipay' && getStorage('alipay_version') != this.global_variables.version)
+                            (this.client_type === 'alipay' && getStorage('alipay_version') !== this.global_variables.version)
                         ) {
                             removeStorage('token');
                             // removeStorage('auth_data');
@@ -232,9 +232,9 @@
                 }, 'get'))
                     .then(res => {
                         if (res.error == 0) {
-                            if (this.client_type == 'wechat') {
+                            if (this.client_type === 'wechat') {
                                 setStorage('wechat_version', this.global_variables.version);
-                            } else if (this.client_type == 'alipay') {
+                            } else if (this.client_type === 'alipay') {
                                 setStorage('alipay_version', this.global_variables.version);
                             }
 
