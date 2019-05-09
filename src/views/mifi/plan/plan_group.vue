@@ -9,7 +9,7 @@
 
         <div ref="planList" class="group-list-wrap">
 
-            <ul v-if="JSON.stringify(group_list)!='[]'"  class="plan-list-wrap">
+            <ul v-if="JSON.stringify(group_list)!='[]'" class="plan-list-wrap">
 
                 <li @click="choosePlanClick(inner_index)" v-for="(inner_item,inner_index) in group_list"
                     :class="{'activedPlan':inner_index==choose_plan_index,'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0}">
@@ -32,8 +32,10 @@
                         <p>￥{{ inner_item.market_price }}</p>
                     </div>
 
-                    <img v-if="inner_item.is_recommend" class="recommend" src="../../../assets/imgs/mifi/plan_group/icon_recommend.png" alt=""><!--推荐-->
-                    <span class="icon-sell-done" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span><!--售罄-->
+                    <img v-if="inner_item.is_recommend" class="recommend"
+                         src="../../../assets/imgs/mifi/plan_group/icon_recommend.png" alt=""><!--推荐-->
+                    <span class="icon-sell-done"
+                          v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span><!--售罄-->
                 </li>
             </ul>
 
@@ -43,20 +45,40 @@
 
         </div>
 
-        <div ref="btnRechargeWrap" class="btn-recharge-wrap" >
+        <div ref="btnRechargeWrap" class="btn-recharge-wrap">
             <button :class="{'noDataHide':JSON.stringify(group_list) == '[]'}" @click="recharge">前往充值</button>
         </div>
 
+        <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
+            <p class="showTip">创建订单中,请等候</p>
+        </van-popup><!--创建订单-->
+
         <van-popup
-            v-model="picker.showPlanSelect"
-            position="bottom"
-            :overlay="true"
-            :lock-scroll="true"
-            :lazy-render="true"
-            :close-on-click-overlay="true"
-            :loading="picker.loading">
+                v-model="picker.showPlanSelect"
+                position="bottom"
+                :overlay="true"
+                :lock-scroll="true"
+                :lazy-render="true"
+                :close-on-click-overlay="true"
+                :loading="picker.loading">
             <van-picker ref="picker" show-toolbar title="套餐选择" :columns="columns" @confirm="handleConfirm" @cancel="handleCancel"/>
         </van-popup><!--套餐喧闹着-->
+
+        <van-popup :close-on-click-overlay="false" v-model="appPay.show" class="border-radius-10">
+            <div class="appContext-pay-wrap">
+                <div class="title">
+                    支付方式选择
+                </div>
+                <div class="content">
+                    <p @click="changePayType(1)" :class="{'choose_type':appPay.type}">微信支付</p>
+                    <p @click="changePayType(0)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
+                </div>
+                <div class="footer">
+                    <button @click="closePayType">取消</button>
+                    <button @click="FinalAppPay">确定</button>
+                </div>
+            </div>
+        </van-popup><!--app支付选择-->
 
     </div>
 </template>
@@ -64,29 +86,35 @@
 <script>
     import BScroll from 'better-scroll'
     import {_get} from "../../../http";
-    import {getStorage, setStorage,checkBrowser} from "../../../utilies";
-    import {Popup, Picker,List,Toast} from 'vant'
+    import {getStorage, setStorage, checkBrowser} from "../../../utilies";
+    import {Popup, Picker, List, Toast,Notify} from 'vant'
+    import {_post} from "../../../http";
 
     export default {
         name: "plan_group",
         data() {
             return {
-                cur_plan_group_name:'请选择套餐',
-                client_type:checkBrowser(),
+                rechargeShow: false,
+                appPay: {
+                    show: false,
+                    type: true,//true 为微信，false 为支付宝
+                },
+                cur_plan_group_name: '请选择套餐',
+                client_type: checkBrowser(),
                 showNoData: false,
                 iccid: getStorage('check_iccid'),
                 group_list: [],
                 choose_plan_index: 0,
-                picker:{
+                picker: {
                     showPlanSelect: false, // 套餐选择
-                    loading:true,
-                    choose_plan_id:'', // 当前选中的套餐组
-                    choose_type:'' // 当前选中的套餐类型
+                    loading: true,
+                    choose_plan_id: '', // 当前选中的套餐组
+                    choose_type: '' // 当前选中的套餐类型
                 },
-                scroll:null,
+                scroll: null,
                 columns: [
                     {
-                        values:[],//套餐组
+                        values: [],//套餐组
                     },
                     // {
                     //     values: [
@@ -113,64 +141,65 @@
             [Toast.name]: Toast
         },
         created() {
-            this.iccid ? this.initial({}) : this.$router.push({path:'/mifi/card/lookup'});
+            this.iccid ? this.initial({}) : this.$router.push({path: '/mifi/card/lookup'});
         },
         methods: {
-            initial(params){
+            initial(params) {
                 this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
                 this.$store.commit('mifiCommon/changeErrStatus', {show: false});
                 this.choose_plan_index = 0;
-                _get('/api/v1/app/plan_group_list/and_plan_list',{
+                _get('/api/v1/app/plan_group_list/and_plan_list', {
                     iccid: this.iccid,
-                    plan_group_id: params.plan_group_id ?  params.plan_group_id : null,
+                    plan_group_id: params.plan_group_id ? params.plan_group_id : null,
                     type: params.type ? params.type : null,
-                }).then(res=>{
+                }).then(res => {
                     this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false});
                     this.picker.loading = false;
-                    if(res.state === 1){
-                        if(res.data.plan_group_list.length){
-                            res.data.plan_group_list.map((item,index)=>{
+                    if (res.state === 1) {
+                        if (res.data.plan_group_list.length) {
+                            res.data.plan_group_list.map((item, index) => {
                                 this.columns[0].values.push({
-                                    'keyId':item.plan_group_id,
-                                    'text':item.plan_group_name
+                                    'keyId': item.plan_group_id,
+                                    'text': item.plan_group_name
                                 })
                             });
 
-                            if(this.columns[0].values.length>0){
-                                if(this.cur_plan_group_name  === '请选择套餐'){
+                            if (this.columns[0].values.length > 0) {
+                                if (this.cur_plan_group_name === '请选择套餐') {
                                     this.cur_plan_group_name = this.columns[0].values[0].text
                                 }
-                            };
+                            }
+                            ;
 
                             this.group_list = res.data.plan_list;
                             res.data.plan_list.length ? this.showNoData = false : this.showNoData = true;
 
-                            this.$nextTick(()=>{
+                            this.$nextTick(() => {
                                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
                                     refBanner = this.$refs.btnChoosePlan.offsetHeight,
                                     refTitle = this.$refs.btnRechargeWrap.offsetHeight;
                                 this.$refs.planList.style.height = (clientHeight - refBanner - refTitle) + 'px'
 
-                                if(!this.scroll){
-                                    this.scroll = new BScroll(this.$refs.planList,{
-                                        click:true
+                                if (!this.scroll) {
+                                    this.scroll = new BScroll(this.$refs.planList, {
+                                        click: true
                                     });
-                                }else{
+                                } else {
                                     this.scroll.refresh();
                                 }
 
 
                             });
-                        }else{
-                            this.$store.commit('mifiCommon/changeErrStatus',{
-                                show:true,
-                                errorMsg:res.msg ?res.msg:'此卡暂无套餐数据'
+                        } else {
+                            this.$store.commit('mifiCommon/changeErrStatus', {
+                                show: true,
+                                errorMsg: res.msg ? res.msg : '此卡暂无套餐数据'
                             })
                         }
-                    }else{
-                        this.$store.commit('mifiCommon/changeErrStatus',{
-                            show:true,
-                            errorMsg:res.msg ?res.msg:'获取数据失败，请稍后再试'
+                    } else {
+                        this.$store.commit('mifiCommon/changeErrStatus', {
+                            show: true,
+                            errorMsg: res.msg ? res.msg : '获取数据失败，请稍后再试'
                         })
                     }
                 })
@@ -181,15 +210,15 @@
             showPLanDetail() {
                 this.picker.showPlanSelect = true;
 
-                if(this.picker.choose_plan_id){
-                    this.$nextTick(()=>{
-                        this.$refs.picker.setColumnValue(0,this.picker.choose_plan_id);
-                        this.$refs.picker.setColumnValue(1,this.picker.choose_type);
+                if (this.picker.choose_plan_id) {
+                    this.$nextTick(() => {
+                        this.$refs.picker.setColumnValue(0, this.picker.choose_plan_id);
+                        this.$refs.picker.setColumnValue(1, this.picker.choose_type);
                     });
-                }else{
-                    this.$nextTick(()=>{
-                        this.$refs.picker.setColumnIndex(0,0);
-                        this.$refs.picker.setColumnIndex(1,0);
+                } else {
+                    this.$nextTick(() => {
+                        this.$refs.picker.setColumnIndex(0, 0);
+                        this.$refs.picker.setColumnIndex(1, 0);
                     });
                 }
             },
@@ -203,10 +232,10 @@
                     type: null,
                 });
             },
-            handleCancel(){
+            handleCancel() {
                 this.picker.showPlanSelect = false;
             },
-            recharge(){
+            recharge() {
                 let planInfo = null,
                     _this = this,
                     cur_date = new Date().getDate();
@@ -232,35 +261,129 @@
                     return
                 }
 
-                if(planInfo.type==1 && planInfo.day <=30 && cur_date>=20 && cur_date <=26 ){
+                if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
 
                     Dialog.confirm({
                         title: '温馨提示',
                         message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
                     }).then(() => {
                         _this.toRechargeList(planInfo);
-                    }).catch(()=>{
+                    }).catch(() => {
                         return
                     })
 
-                }else{
+                } else {
                     this.toRechargeList(planInfo)
                 }
-
             },
-            toRechargeList(planInfo){
-                //获取当前包月套餐信息
-                _get("/api/v1/app/plans/renew_info", {
-                    user_id: getStorage("userInfo", "obj").account.user_id,
-                    rating_id: planInfo.id
-                }).then(res => {
-                    if (res.state == 1) {
-                        setStorage("monthlyMsg", res.data, "obj");
-                        this.$router.push({path: "/weixin/recharge/index"});
-                    } else {
-                        Notify({message: res.msg});
+            getToday: function (val) {
+                let date = new Date();
+                if (val) {
+                    date = new Date(val);
+                }
+                let year = date.getFullYear(),
+                    month = date.getMonth() + 1,
+                    day = date.getDate();
+                if (month < 10) {
+                    month = '0' + month
+                }
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return year + '-' + month + '-' + day
+            },
+            changePayType(type) {
+                if (type) {
+                    this.appPay.type = true
+                } else {
+                    this.appPay.type = false
+                }
+            },
+            closePayType() {
+                this.appPay.type = true;
+                this.appPay.show = false
+            },
+            FinalAppPay() {
+                let planInfo = getStorage('userInfo','obj');
+                this.toRechargeList(planInfo);
+            },//app支付
+            toRechargeList(planInfo) {
+                let userInfo = getStorage('userInfo', 'obj');
+                if (userInfo.account.rmb > 0) {
+                    _get("/api/v1/app/plans/renew_info", {
+                        user_id: getStorage("userInfo", "obj").account.user_id,
+                        rating_id: planInfo.id
+                    }).then(res => {
+                        if (res.state == 1) {
+                            setStorage("monthlyMsg", res.data, "obj");
+                            this.$router.push({path: "/weixin/recharge/index"});
+                        } else {
+                            Notify({message: res.msg});
+                        }
+                    });  //获取当前包月套餐信息
+                } else {
+                    let param = {
+                        status: 0,
+                        iccid: this.iccid,
+                        rating_id: planInfo.id,
+                        price: planInfo.price,
+                        recharge_price: planInfo.price,
+                        user_id: userInfo.account.user_id,
+                        env: this.client_type,
+                        start_time: this.getToday(),
+                        type: 1,
                     }
-                });
+
+                    if (this.client_type === 'alipay' || this.client_type === 'wechat') {
+                        param.open_id = getStorage('decrypt_data', 'obj').openid;
+                    } else if (this.client_type === 'app') {
+                        param.open_id = userInfo.account.user_id
+                    }
+
+                    if (this.client_type === 'wechat') {
+                        param.pay_type = 'WEIXIN'
+                    } else if (this.client_type === 'alipay') {
+                        param.pay_type = 'ALIPAY'
+                    }
+
+                    this.rechargeShow = false,
+
+                    _post('/api/v1/pay/weixin/create', param)
+                        .then(res => {
+                            if (res.state == 1) {
+                                this.rechargeShow = false;
+
+                                if (/<[^>]+>/.test(res.data)) {
+
+                                    document.write(res.data);
+
+                                } else if (res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0, 4) == 'http') { //app
+                                    this.global_variables.packed_project === 'mifi' ?
+                                        location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
+                                } else {
+                                    Notify({
+                                        message: '充值成功',
+                                        background: '#60ce53'
+                                    })
+
+                                    setTimeout(function () {
+                                        if (localStorage.getItem("currentType") == "esim") {
+                                            location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                                        } else {
+                                            _this.global_variables.packed_project === 'mifi' ?
+                                                location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                        }
+
+                                    }, 1500);
+                                }//纯钻石支付
+                            } else {
+                                this.rechargeShow = false;
+                                Notify({
+                                    message: res.msg
+                                })
+                            }
+                        })
+                }
             },
         }
     }
@@ -272,22 +395,22 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
-        .btn-choose-plan-wrap{
+        .btn-choose-plan-wrap {
             width: 70%;
             margin: 0 auto;
             padding: 25px 0;
-            div{
+            div {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
                 padding: 14px 30px;
                 font-size: 28px;
                 color: #fffbf3;
-                background-image: linear-gradient( 45deg, #f0b546 10%, #fdd47a 100%);
+                background-image: linear-gradient(45deg, #f0b546 10%, #fdd47a 100%);
                 border-radius: 30px;
             }
         }
-        .group-list-wrap{
+        .group-list-wrap {
             overflow: hidden;
         }
         .plan-list-wrap {
@@ -302,7 +425,7 @@
                 border-bottom: 1px solid #efece6;
                 background-size: cover;
                 box-sizing: border-box;
-                img.recommend{
+                img.recommend {
                     position: absolute;
                     bottom: 0;
                     right: 0;
@@ -321,10 +444,10 @@
                         color: #2c251d;
                         font-weight: 500;
                     }
-                    .plan-icon-recommend{
+                    .plan-icon-recommend {
                         padding: 20px 0 20px 60px;
                     }
-                    .icon-recommend{
+                    .icon-recommend {
                         position: absolute;
                         top: 5px;
                         left: 40px;
@@ -354,12 +477,12 @@
                 .plan-price-wrap {
                     flex: 1.5;
                     text-align: right;
-                    p{
-                        &:first-child{
+                    p {
+                        &:first-child {
                             font-size: 46px;
                             color: #fd720d;
                         }
-                        &:last-child{
+                        &:last-child {
                             font-size: 24px;
                             color: #868686;
                             text-decoration: line-through;
@@ -370,10 +493,12 @@
                 //当前选中样式
                 &.activedPlan {
                     background-image: url("../../../assets/imgs/mifi/plan_group/bg_test.png");
-                    p{color: #533606 !important;}
-                    .plan-price-wrap{
-                        p{
-                            &:first-child{
+                    p {
+                        color: #533606 !important;
+                    }
+                    .plan-price-wrap {
+                        p {
+                            &:first-child {
                                 color: #fd720d !important;
                             }
                         }
@@ -406,7 +531,6 @@
             }
         }
 
-
         .btn-recharge-wrap {
             padding: 40px 0;
             height: 80px;
@@ -419,7 +543,7 @@
                 color: #443f37;
                 font-size: 36px;
                 border-radius: 80px;
-                background-image: linear-gradient( 45deg, #f0b546 10%, #fdd47a 100%);
+                background-image: linear-gradient(45deg, #f0b546 10%, #fdd47a 100%);
             }
         }
     }
