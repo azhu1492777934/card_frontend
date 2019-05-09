@@ -451,7 +451,6 @@
                 this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
 
                 this.rechargeShow = true;
-
                 _post('/api/v1/pay/weixin/create', param)
                     .then(res => {
                         if (res.state == 1) {

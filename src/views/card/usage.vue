@@ -490,7 +490,7 @@
 
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import {Notify, Popup} from 'vant';
-    import {getStorage, setStorage, toDecimal, checkBrowser} from "../../utilies";
+    import {getStorage, setStorage, toDecimal, checkBrowser,getUrlParam} from "../../utilies";
     import {_post,_get} from "../../http";
 
     export default {
@@ -557,6 +557,18 @@
         },
         created() {
             localStorage.setItem("currentType","card");
+
+            //适配卡池项目
+            if(getUrlParam("iccid")){
+                localStorage.setItem("check_iccid",getUrlParam("iccid"));
+                localStorage.setItem("isCardPool",true);
+                
+            }else{
+                localStorage.removeItem("isCardPool");
+                
+            }
+
+            
 
             if (getStorage('check_iccid')) {
 

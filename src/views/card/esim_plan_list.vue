@@ -82,6 +82,9 @@
             </div>
         </div>
 
+         <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
+            <p class="showTip">创建订单中,请等候</p>
+        </van-popup><!--创建订单-->
     </div>
 </template>
 
@@ -325,7 +328,7 @@
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import {Toast, Popup, Notify, List} from "vant";
     import {setStorage, getStorage, checkBrowser} from "../../utilies";
-    import {_get} from "../../http";
+    import {_get,_post} from "../../http";
     // @ is an alias to /src
     export default {
         name: "home",
@@ -351,7 +354,9 @@
                             _this.cur_plan_type_index = this.activeIndex
                         }
                     }
-                }
+                },
+                rechargeShow: false,//创建订单遮罩
+
             };
         },
         components: {
@@ -445,7 +450,7 @@
                 this.choose_plan_index = index;
             },
             recharge: function () {
-                let planInfo = null,
+                 let planInfo = null,
                     ref_plan_type_index = 0;//当前套餐索引
                 for (let i = 0; i < this.$refs.ref_plan_type.length; i++) {
                     if (this.$refs.ref_plan_type[i].className == "active_type") {
@@ -469,23 +474,154 @@
 
                 setStorage("planInfo", planInfo, "obj");
 
-                if (!getStorage("userInfo", "obj").account.user_id) {
-                    Notify({message: '请在微信或支付宝客服端打开充值'});
+
+
+                 if (this.client_type != 'alipay' && this.client_type != 'wechat') {
+                    Notify({message:'请在微信或支付宝客户端充值'});
                     return
                 }
-                //获取当前包月套餐信息
-                _get("/api/v1/app/plans/renew_info", {
-                    user_id: getStorage("userInfo", "obj").account.user_id,
-                    rating_id: planInfo.id
-                }).then(res => {
-                    if (res.state == 1) {
-                        setStorage("monthlyMsg", res.data, "obj");
-                        this.$router.push({path: "/weixin/recharge/index"});
+
+                
+                let param = {},
+                    _this = this;
+
+                param.status = 0;
+                param.recharge_price = planInfo.price;
+                param.price = planInfo.price;
+
+                if (this.client_type == 'alipay' || this.client_type == 'wechat') {
+                    param.open_id = getStorage('decrypt_data', 'obj').openid;
+                } else if (this.client_type == 'app') {
+                    param.open_id = getStorage("userInfo", "obj").account.user_id
+
+                }
+                param.iccid = planInfo.iccid || getStorage('check_iccid');
+                param.rating_id = planInfo.id;
+
+
+
+                param.user_id =getStorage("userInfo", "obj").account.user_id;
+                param.env = this.client_type;
+
+                if (this.client_type == 'app') {
+                    if (this.appPay.type) {
+                        param.pay_type = 'WEIXIN'
                     } else {
-                        Notify({message: res.msg});
+                        param.pay_type = 'ALIPAY'
                     }
-                });
-            }
+                } else if (this.client_type == 'wechat') {
+                    param.pay_type = 'WEIXIN'
+                } else if (this.client_type == 'alipay') {
+                    param.pay_type = 'ALIPAY'
+                }
+
+                param.start_time = this.getToday();
+
+                param.type = 0;
+
+                this.rechargeShow = true;
+                
+                _post('/api/v1/pay/weixin/create', param)
+                    .then(res => {
+                        if (res.state == 1) {
+                            this.rechargeShow = false;
+
+                            if (/<[^>]+>/.test(res.data)) {
+                                
+                                    document.write(res.data);
+
+                            }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
+                                this.global_variables.packed_project === 'mifi' ?
+                                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
+                            }else {
+                                Notify({
+                                    message: '充值成功',
+                                    background: '#60ce53'
+                                })
+
+                                setTimeout(function () {
+                                    if(localStorage.getItem("currentType")=="esim"){
+                                        location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                                    }else{
+                                        _this.global_variables.packed_project === 'mifi' ?
+                                        location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                    }
+                                    
+                                },1500);
+                            }//纯钻石支付
+                        } else {
+                            this.rechargeShow = false;
+                            Notify({
+                                message: res.msg
+                            })
+                        }
+                    })
+
+
+
+
+
+
+
+
+
+                // let planInfo = null,
+                //     ref_plan_type_index = 0;//当前套餐索引
+                // for (let i = 0; i < this.$refs.ref_plan_type.length; i++) {
+                //     if (this.$refs.ref_plan_type[i].className == "active_type") {
+                //         if (this.$refs.ref_plan_type[i].innerText == "国际套餐") {
+                //             ref_plan_type_index = "foreign_plan_list";
+                //         } else if (this.$refs.ref_plan_type[i].innerText == "国内套餐") {
+                //             ref_plan_type_index = "inland_plan_list";
+                //         } 
+                //         break;
+                //     }
+                // }
+
+                // planInfo = this.plan_list[ref_plan_type_index][this.choose_plan_index];
+
+                // if (planInfo.surplus_times <= 0) {
+                //     Toast("此套餐已售罄, 请更换套餐");
+                //     return;
+                // }
+               
+                // planInfo.iccid = getStorage("check_iccid");
+
+                // setStorage("planInfo", planInfo, "obj");
+
+                // if (!getStorage("userInfo", "obj").account.user_id) {
+                //     Notify({message: '请在微信或支付宝客服端打开充值'});
+                //     return
+                // }
+                // //获取当前包月套餐信息
+                // _get("/api/v1/app/plans/renew_info", {
+                //     user_id: getStorage("userInfo", "obj").account.user_id,
+                //     rating_id: planInfo.id
+                // }).then(res => {
+                //     if (res.state == 1) {
+                //         setStorage("monthlyMsg", res.data, "obj");
+                //         this.$router.push({path: "/weixin/recharge/index"});
+                //     } else {
+                //         Notify({message: res.msg});
+                //     }
+                // });
+            },
+            getToday: function (val) {
+                let date = new Date();
+                if (val) {
+                    date = new Date(val);
+                }
+                let year = date.getFullYear(),
+                    month = date.getMonth() + 1,
+                    day = date.getDate();
+                if (month < 10) {
+                    month = '0' + month
+                }
+                if (day < 10) {
+                    day = '0' + day
+                }
+                return year + '-' + month + '-' + day
+            },
         }
     };
 </script>
