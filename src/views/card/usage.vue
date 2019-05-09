@@ -559,7 +559,7 @@
             localStorage.setItem("currentType","card");
 
             //适配卡池项目
-            if(getUrlParam("iccid")){
+            if(getUrlParam("iccid")&&getUrlParam("type")=="cardPool"){
                 localStorage.setItem("check_iccid",getUrlParam("iccid"));
                 localStorage.setItem("isCardPool",true);
                 
