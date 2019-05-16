@@ -330,10 +330,8 @@
             }).then(res => {
                 if (res.state == 1) {
                     if (res.data.rate_plans.length == 0) {
-
-                        this.load_plan_list = true;
-                        this.load_plan_msg = '此卡暂无优惠复充套餐'
-                        return
+                        location.href =res.data.auth_url;
+                        return false;
                     }
                    
                     this.load_plan_msg = res.msg;

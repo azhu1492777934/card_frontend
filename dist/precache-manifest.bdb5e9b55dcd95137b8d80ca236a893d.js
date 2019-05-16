@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.d5d53b4f.js"
   },
   {
-    "revision": "84c2bec300f1ae05a4f6",
+    "revision": "9840f5246a01aaa266f8",
     "url": "/css/app.9736fbfe.css"
   },
   {
-    "revision": "84c2bec300f1ae05a4f6",
-    "url": "/js/app.996443be.js"
+    "revision": "9840f5246a01aaa266f8",
+    "url": "/js/app.5b3f56e1.js"
   },
   {
     "revision": "c74fb79d122966529400",
@@ -436,12 +436,12 @@ self.__precacheManifest = [
     "url": "/js/refund_wrapper.9e7feef0.js"
   },
   {
-    "revision": "bf9829365f1318141001",
+    "revision": "135bad663e9c78056081",
     "url": "/css/repeatRecharge.56719941.css"
   },
   {
-    "revision": "bf9829365f1318141001",
-    "url": "/js/repeatRecharge.c5d7bfd8.js"
+    "revision": "135bad663e9c78056081",
+    "url": "/js/repeatRecharge.3d8a8a8d.js"
   },
   {
     "revision": "f983cc3b64db8f4b0b35",
@@ -536,8 +536,12 @@ self.__precacheManifest = [
     "url": "/img/arrow1.ad4acc3d.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
+    "revision": "a1386d312938b126d701a6841fb742e8",
+    "url": "/img/addressIcon.a1386d31.png"
+  },
+  {
+    "revision": "83d0cd2dc163e83ef26f6bad98661da8",
+    "url": "/img/addressBg.83d0cd2d.png"
   },
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
@@ -556,20 +560,16 @@ self.__precacheManifest = [
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
-    "revision": "a1386d312938b126d701a6841fb742e8",
-    "url": "/img/addressIcon.a1386d31.png"
-  },
-  {
-    "revision": "83d0cd2dc163e83ef26f6bad98661da8",
-    "url": "/img/addressBg.83d0cd2d.png"
-  },
-  {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
     "url": "/img/iccid_bg@2x.a859e9ca.png"
   },
   {
     "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
     "url": "/img/iccid_bg@3x.fa9050c4.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "f5f322478286641bd9887a155e35f222",
@@ -596,16 +596,16 @@ self.__precacheManifest = [
     "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
+    "revision": "d32e5dc3875f1afd2be29aad1cfd0382",
+    "url": "/img/contactBg.d32e5dc3.png"
+  },
+  {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
     "url": "/img/ios@2x.e625229e.png"
   },
   {
     "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
     "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "d32e5dc3875f1afd2be29aad1cfd0382",
-    "url": "/img/contactBg.d32e5dc3.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -626,6 +626,14 @@ self.__precacheManifest = [
   {
     "revision": "9e02095f31a07b972244f1c714c1dfe7",
     "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
+    "revision": "3d0fc424b703032ca595090e99f8354b",
+    "url": "/img/login_bg@2x.3d0fc424.png"
+  },
+  {
+    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
+    "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -652,24 +660,16 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
-    "revision": "3d0fc424b703032ca595090e99f8354b",
-    "url": "/img/login_bg@2x.3d0fc424.png"
-  },
-  {
-    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
-    "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
   {
     "revision": "813b5319e378dafdda952c16ad89906b",
     "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
@@ -760,7 +760,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "d3466d562ed0a8d3c5340c00de324745",
+    "revision": "c834de7eb5d3726f735d02683d7f2836",
     "url": "/index.html"
   },
   {
