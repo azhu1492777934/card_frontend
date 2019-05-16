@@ -447,14 +447,13 @@
                 } else {
                     param.start_time = this.val_date
                 }
-
+                
                 this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
                 this.rechargeShow = true;
                 _post('/api/v1/pay/weixin/create', param)
                     .then(res => {
                         if (res.state == 1) {
                             this.rechargeShow = false;
-
                             if (/<[^>]+>/.test(res.data)) {
                                 
                                     document.write(res.data);

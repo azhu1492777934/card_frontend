@@ -112,7 +112,8 @@ const addSalesRecords =  r => require.ensure([], () => r(require('./views/userCe
 const realName=r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
 
 
-
+//复充活动
+const repeatRecharge =r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
 
 
 Vue.use(Router)
@@ -313,6 +314,12 @@ export const constantRouterMap = [{
                 component: children_card,
                 meta: {
                     title: '手表号码查询'
+                }
+            },{
+                path: 'repeatRecharge',
+                component: repeatRecharge,
+                meta: {
+                    title: '复充活动'
                 }
             }]
         }, {
