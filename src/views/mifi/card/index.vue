@@ -76,10 +76,16 @@
                     <span class="iconfont icon-question"></span>
                     <p>问题中心</p>
                 </div>
-                <span class="divider divider-transparent"></span>
-                <div class="empty-space">
-                    <span class="iconfont icon-question"></span>
-                    <p>问题中心</p>
+                <!--<span class="divider divider-transparent"></span>-->
+                <!--<div class="empty-space">-->
+                    <!--<span class="iconfont icon-question"></span>-->
+                    <!--<p>问题中心</p>-->
+                <!--</div>-->
+                <span class="divider"></span>
+                <div class="change-network-wrap" @click="toChangeNework">
+                    <span class="iconfont icon-change"></span>
+                    <!--<span class="icon-change-network"></span>-->
+                    <p>网速慢,切换网路</p>
                 </div>
             </div>
 
@@ -215,6 +221,7 @@
             couponExchange(){this.$router.push('/mifi/coupon/index');},
             toQuestion(){this.$router.push('/weixin/question/index');},
             changedCard(){this.$router.push('/mifi/card/lookup')},
+            toChangeNework(){this.$router.push('/mifi/card/change_network')},
             inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
@@ -338,7 +345,7 @@
 
         }
         .card-function-wrap{
-            padding: 0 83px;
+            padding: 0 60px;
             .function-group-wrap{
                 display: flex;
                 align-items: center;
@@ -347,6 +354,9 @@
                 &:first-child{
                     padding-top: 40px;
                 }
+                >div{
+                    width: 160px;
+                }
                 p{
                     font-size: 26px;
                     font-weight: 500;
@@ -354,6 +364,27 @@
                 }
                 .empty-space{
                     p,.iconfont{color: transparent!important;}
+                }
+            }
+            .change-network-wrap{
+                .iconfont{
+                    padding-bottom: 26px;
+                    color: #7aef95;
+                }
+                /*.icon-change-network{
+                    display: inline-block;
+                    width: 60px;
+                    height: 48px;
+                    margin-bottom: 24px;
+                    .bg-image('../../assets/imgs/mifi/card/network/icon_change_network');
+                }*/
+                p{
+                    position: relative;
+                    left: 50%;
+                    transform: translateX(-50%);
+                    width: 200px;
+                    font-size: 24px;
+                    word-break: keep-all;
                 }
             }
            .divider{
@@ -369,6 +400,7 @@
                 padding-bottom: 20px;
                 font-size: 64px;
                 color: #f8b43e;
+                vertical-align: text-top;
             }
             .icon-coupon{
                 padding-top: 2px;

@@ -84,6 +84,7 @@ const mifi_binding = r => require.ensure([], () => r(require('./views/mifi/bindi
 const mifi_card_wrapper = r => require.ensure([], () => r(require('./views/mifi/card/mifi_card_wrapper')), 'mifi_card_wrapper') // 卡父组件页
 const mifi_card_lookup = r => require.ensure([], () => r(require('./views/mifi/card/lookup')), 'mifi_card_lookup'); // 查卡
 const mifi_card_info = r => require.ensure([], () => r(require('./views/mifi/card/index')), 'mifi_card_info'); // 卡状态详情
+const mifi_change_network = r => require.ensure([], () => r(require('./views/mifi/card/change_net')), 'mifi_change_network'); // 切换网络
 
 // mifi 订单
 const mifi_order_wrapper = r => require.ensure([], () => r(require('./views/mifi/order/order_wrapper')), 'mifi_order_wrapper')
@@ -111,11 +112,8 @@ const salesRecords =  r => require.ensure([], () => r(require('./views/userCente
 const addSalesRecords =  r => require.ensure([], () => r(require('./views/userCenter/addSalesRecords')), 'addSalesRecords');  //售后申请
 const realName=r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
 
-
 //复充活动
 const repeatRecharge =r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
-
-
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -423,6 +421,10 @@ export const constantRouterMap = [{
             path: 'lookup',
             component: mifi_card_lookup,
             meta: {title: '查询'}
+        },{
+            path:'change_network',
+            component: mifi_change_network,
+            meta:{title: '修改网络'},
         }]
     }, {
         path: 'order',
