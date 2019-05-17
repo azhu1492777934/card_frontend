@@ -37,10 +37,12 @@
                         <span>{{filterCardInfo.surplus_flow}}</span>
                         <p>剩余流量</p>
                     </div>
-                    <div @click="buyPlan">
-                        <span class="iconfont icon-recharge"></span>
-                        <p>去充值</p>
+                    <span class="divider"></span>
+                    <div>
+                        <span>{{filterCardInfo.today_used_flow}}</span>
+                        <p>今日用量</p>
                     </div>
+
                     <span class="divider"></span>
                     <div @click="changedCard">
                         <span class="iconfont icon-exchange"></span>
@@ -52,7 +54,7 @@
         <div class="card-function-wrap">
             <div class="function-group-wrap">
                 <div @click="buyPlan">
-                    <span class="iconfont icon-cart"></span>
+                    <span class="iconfont icon-recharge"></span>
                     <p>购买套餐</p>
                 </div>
                 <span class="divider"></span>
@@ -84,8 +86,7 @@
                 <span class="divider"></span>
                 <div class="change-network-wrap" @click="toChangeNework">
                     <span class="iconfont icon-change"></span>
-                    <!--<span class="icon-change-network"></span>-->
-                    <p>网速慢,切换网路</p>
+                    <p>网速慢,切换网络</p>
                 </div>
             </div>
 
@@ -108,6 +109,7 @@
                 card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
                 usageInfo:{},
                 filterCardInfo: {
+                    today_used_flow:'',
                     used_flow:'',
                     surplus_flow:'',
                     msisdn: '',
@@ -148,6 +150,14 @@
 
                         setStorage('check_realNameSource',res.data.source);
                         this.usageInfo = res.data;
+
+                        // 当日用量
+                        if( res.data.today_used_flow >= 0){
+                            res.data.today_used_flow >= 1024 ? this.filterCardInfo.today_used_flow = `${toDecimal(res.data.today_used_flow / 1024)}G` :
+                                this.filterCardInfo.today_used_flow = `${toDecimal(res.data.today_used_flow)}M`;
+                        }else{
+                            this.filterCardInfo.today_used_flo = '0.00M'
+                        }
 
                         if(res.data.used >=0 && res.data.total >=0){
                             // 流量
@@ -368,23 +378,15 @@
             }
             .change-network-wrap{
                 .iconfont{
-                    padding-bottom: 26px;
+                    padding-bottom: 13px;
                     color: #7aef95;
                 }
-                /*.icon-change-network{
-                    display: inline-block;
-                    width: 60px;
-                    height: 48px;
-                    margin-bottom: 24px;
-                    .bg-image('../../assets/imgs/mifi/card/network/icon_change_network');
-                }*/
                 p{
                     position: relative;
                     left: 50%;
                     transform: translateX(-50%);
                     width: 200px;
-                    font-size: 24px;
-                    word-break: keep-all;
+                    height: 18px;
                 }
             }
            .divider{
