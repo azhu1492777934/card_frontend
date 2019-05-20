@@ -262,24 +262,18 @@
                     return
                 }
 
-                // let userInfo = getStorage('userInfo', 'obj');
-                //
-                // if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26  && userInfo.rmb > 0) {
-                //
-                //     Dialog.confirm({
-                //         title: '温馨提示',
-                //         message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
-                //     }).then(() => {
-                //         _this.toRechargeList(planInfo);
-                //     }).catch(() => {
-                //         return
-                //     })
-                //
-                // } else {
-                //     this.toRechargeList(planInfo)
-                // }
+                if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26 ) {
 
-                this.toRechargeList(planInfo)
+                    Dialog.confirm({
+                        title: '温馨提示',
+                        message: '您购买的套餐将在本月26号清零。'
+                    }).then(() => {
+                        _this.toRechargeList(planInfo);
+                    })
+
+                } else {
+                    this.toRechargeList(planInfo)
+                }
             },
             getToday: function (val) {
                 let date = new Date();
