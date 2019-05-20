@@ -485,7 +485,12 @@
                                     
                                 },1500);
                             }//纯钻石支付
-                        } else {
+                        }else if(res.state=="10015"){
+                             Notify({message: res.msg,})
+                            setTimeout(function () {
+                                _this.$router.push({path:'/weixin/card/plan_list'});
+                            },1500);
+                        }else  {
                             this.rechargeShow = false;
                             Notify({
                                 message: res.msg

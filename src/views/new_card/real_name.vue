@@ -394,7 +394,7 @@
                     id_no: this.info_id || '***',
                     alibind: true,
                 };
-
+                let _this=this;
                 Notify({message:'正在绑定手机号码,请等候'});
                 _post('/api/v1/app/bind/imei', param)
                     .then(res => {
@@ -418,7 +418,12 @@
                                     location.href = res.data;
                                 }
                             })
-                        } else {
+                        }else if(res.state==10015){
+                            Notify({message: res.msg,})
+                            setTimeout(function () {
+                                _this.$router.push({path:'/weixin/card/plan_list'});
+                            },1500);
+                        }else {
                             if(res.msg){
                                 Notify({message: res.msg,})
                             }else{

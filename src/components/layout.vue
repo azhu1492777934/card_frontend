@@ -223,6 +223,7 @@
                 }
                
                 // 授权
+               
                 _get('/accountCenter/v2/oauth/authorize?' + codeParam({
                     client_type: this.client_type,
                     // redirect_uri: this.global_variables.authorized_redirect_url + redirect_uri,
