@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.62cbc5ee.js"
   },
   {
-    "revision": "f79a12cb42cfa28be656",
+    "revision": "d46a4de873de8b4b6fee",
     "url": "/css/app.74fa97c8.css"
   },
   {
-    "revision": "f79a12cb42cfa28be656",
-    "url": "/js/app.7dc04485.js"
+    "revision": "d46a4de873de8b4b6fee",
+    "url": "/js/app.97261cf7.js"
   },
   {
     "revision": "1bcb98dad726f4dd91ab",
@@ -236,12 +236,12 @@ self.__precacheManifest = [
     "url": "/js/mifi_card_wrapper.31e720f8.js"
   },
   {
-    "revision": "4951ed9853838255a643",
-    "url": "/css/mifi_change_network.d9e3f55f.css"
+    "revision": "4bea0abb44ff6ce0cc35",
+    "url": "/css/mifi_change_network.6b14f132.css"
   },
   {
-    "revision": "4951ed9853838255a643",
-    "url": "/js/mifi_change_network.69b2102f.js"
+    "revision": "4bea0abb44ff6ce0cc35",
+    "url": "/js/mifi_change_network.85b0e3ba.js"
   },
   {
     "revision": "561c0c8a9d2122155f15",
@@ -544,10 +544,6 @@ self.__precacheManifest = [
     "url": "/img/arrow1.ad4acc3d.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
@@ -562,14 +558,6 @@ self.__precacheManifest = [
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "a1386d312938b126d701a6841fb742e8",
@@ -588,6 +576,10 @@ self.__precacheManifest = [
     "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
     "revision": "f5f322478286641bd9887a155e35f222",
     "url": "/img/btn.f5f32247.png"
   },
@@ -602,6 +594,14 @@ self.__precacheManifest = [
   {
     "revision": "32d70c8fc305e3647098f3de0c71b618",
     "url": "/img/bg_network@2x.32d70c8f.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -776,7 +776,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "b355b4d533b0fc300e6daa470477a231",
+    "revision": "85e5ade277f230f74c6890503d8afad5",
     "url": "/index.html"
   },
   {
