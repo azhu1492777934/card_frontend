@@ -87,7 +87,7 @@
     import BScroll from 'better-scroll'
     import {_get} from "../../../http";
     import {getStorage, setStorage, checkBrowser} from "../../../utilies";
-    import {Popup, Picker, List, Toast,Notify} from 'vant'
+    import {Popup, Picker, List, Toast,Notify,Dialog} from 'vant'
     import {_post} from "../../../http";
 
     export default {
@@ -138,7 +138,8 @@
             [Popup.name]: Popup,
             [Picker.name]: Picker,
             [List.name]: List,
-            [Toast.name]: Toast
+            [Toast.name]: Toast,
+            [Dialog.name]:Dialog,
         },
         created() {
             this.iccid ? this.initial({}) : this.$router.push({path: '/mifi/card/lookup'});
@@ -261,20 +262,24 @@
                     return
                 }
 
-                if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
+                // let userInfo = getStorage('userInfo', 'obj');
+                //
+                // if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26  && userInfo.rmb > 0) {
+                //
+                //     Dialog.confirm({
+                //         title: '温馨提示',
+                //         message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
+                //     }).then(() => {
+                //         _this.toRechargeList(planInfo);
+                //     }).catch(() => {
+                //         return
+                //     })
+                //
+                // } else {
+                //     this.toRechargeList(planInfo)
+                // }
 
-                    Dialog.confirm({
-                        title: '温馨提示',
-                        message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
-                    }).then(() => {
-                        _this.toRechargeList(planInfo);
-                    }).catch(() => {
-                        return
-                    })
-
-                } else {
-                    this.toRechargeList(planInfo)
-                }
+                this.toRechargeList(planInfo)
             },
             getToday: function (val) {
                 let date = new Date();

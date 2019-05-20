@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["mifi_order_wrapper"],{"3b6e":function(e,r,n){"use strict";n.r(r);var t=function(){var e=this,r=e.$createElement,n=e._self._c||r;return n("router-view")},a=[],o=(n("cadf"),n("551c"),n("097d"),{name:"order_wrapper"}),i=o,c=(n("7ee9"),n("2877")),p=Object(c["a"])(i,t,a,!1,null,"499ef890",null);p.options.__file="order_wrapper.vue";r["default"]=p.exports},"7ee9":function(e,r,n){"use strict";var t=n("a6f7"),a=n.n(t);a.a},a6f7:function(e,r,n){}}]);
+//# sourceMappingURL=mifi_order_wrapper.17b86bd2.js.map
