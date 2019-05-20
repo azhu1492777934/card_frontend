@@ -56,7 +56,7 @@
     @import "../../../assets/less/utitlies";
 
     .change-net-wrap {
-        padding-top: 190px;
+        padding-top: 10%;
         .bg-net {
             width: 591px;
             height: 434px;
