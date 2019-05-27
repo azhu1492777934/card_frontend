@@ -3,10 +3,10 @@
         <div ref="refPLanTitle" class="plan-type-wrap">
             <div class="plan-type-inner-wrap">
                 <span
-                    ref="ref_plan_type"
-                    @click="planTypeClikc(index)"
-                    v-for="(item,index) in plan_type_name"
-                    :class="{'active_type':index==cur_plan_type_index}">{{item}}
+                        ref="ref_plan_type"
+                        @click="planTypeClikc(index)"
+                        v-for="(item,index) in plan_type_name"
+                        :class="{'active_type':index==cur_plan_type_index}">{{item}}
                 </span>
             </div>
         </div>
@@ -73,9 +73,13 @@
 <style lang="less">
     @import "~swiper/dist/css/swiper.min.css";
     @import "../../assets/less/common";
-    html, body, #app {height: 100%;}
+
+    html, body, #app {
+        height: 100%;
+    }
+
     .plan-wrap {
-        .swiper-container{
+        .swiper-container {
             height: 100%;
         }
         .plan-type-wrap {
@@ -139,10 +143,10 @@
                         color: #2c251d;
                         font-weight: 500;
                     }
-                    .plan-icon-recommend{
+                    .plan-icon-recommend {
                         padding: 20px 0 20px 60px;
                     }
-                    .icon-recommend{
+                    .icon-recommend {
                         position: absolute;
                         top: 5px;
                         left: 10px;
@@ -234,8 +238,8 @@
 <script>
     import {swiper, swiperSlide} from 'vue-awesome-swiper'
     import {Toast, Popup, Notify, List} from "vant";
-    import {setStorage, getStorage, checkBrowser} from "../../utilies";
-    import {_get,_post} from "../../http";
+    import {setStorage, getStorage, checkBrowser, lossRate} from "../../utilies";
+    import {_get, _post} from "../../http";
     // @ is an alias to /src
     export default {
         name: "home",
@@ -262,7 +266,7 @@
                         }
                     }
                 },
-                rechargeShow:false
+                rechargeShow: false
             };
         },
         components: {
@@ -279,6 +283,11 @@
             }
         },
         created() {
+            lossRate({
+                type: 2,
+                iccid: getStorage('check_iccid'),
+            });// 流失率统计
+
             //处理套餐数据
             _get("/api/v1/app/plan_list", {
                 iccid: getStorage("check_iccid")
@@ -339,7 +348,8 @@
                 }
             });
         },
-        mounted() {},
+        mounted() {
+        },
         methods: {
             swiperOnChange: function (index) {
                 this.cur_plan_type_index = index;
@@ -375,15 +385,15 @@
                     Toast("此套餐已售罄, 请更换套餐");
                     return;
                 }
-               
+
                 planInfo.iccid = getStorage("check_iccid");
 
                 setStorage("planInfo", planInfo, "obj");
-                
 
-                if(getStorage("isCardPool")){
+
+                if (getStorage("isCardPool")) {
                     this.directRecharge(planInfo);
-                }else{
+                } else {
                     //获取当前包月套餐信息
                     _get("/api/v1/app/plans/renew_info", {
                         user_id: getStorage("userInfo", "obj").account.user_id,
@@ -401,15 +411,15 @@
                 //     Notify({message: '请在微信或支付宝客服端打开充值'});
                 //     return
                 // }
-                
+
             },
             //直接充值
-            directRecharge(planInfo){
-                 if (this.client_type != 'alipay' && this.client_type != 'wechat') {
-                    Notify({message:'请在微信或支付宝客户端充值'});
+            directRecharge(planInfo) {
+                if (this.client_type != 'alipay' && this.client_type != 'wechat') {
+                    Notify({message: '请在微信或支付宝客户端充值'});
                     return
                 }
-                
+
                 let param = {},
                     _this = this;
                 param.status = 0;
@@ -426,8 +436,7 @@
                 param.rating_id = planInfo.id;
 
 
-
-                param.user_id =getStorage("userInfo", "obj").account.user_id;
+                param.user_id = getStorage("userInfo", "obj").account.user_id;
                 param.env = this.client_type;
 
                 if (this.client_type == 'app') {
@@ -453,27 +462,27 @@
                             this.rechargeShow = false;
 
                             if (/<[^>]+>/.test(res.data)) {
-                                
-                                    document.write(res.data);
 
-                            }else if(res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0,4)=='http'){ //app
+                                document.write(res.data);
+
+                            } else if (res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0, 4) == 'http') { //app
                                 this.global_variables.packed_project === 'mifi' ?
                                     location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
-                            }else {
+                            } else {
                                 Notify({
                                     message: '充值成功',
                                     background: '#60ce53'
                                 })
 
                                 setTimeout(function () {
-                                    if(localStorage.getItem("currentType")=="esim"){
+                                    if (localStorage.getItem("currentType") == "esim") {
                                         location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
-                                    }else{
+                                    } else {
                                         _this.global_variables.packed_project === 'mifi' ?
-                                        location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                                            location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
                                     }
-                                    
-                                },1500);
+
+                                }, 1500);
                             }//纯钻石支付
                         } else {
                             this.rechargeShow = false;
@@ -483,7 +492,7 @@
                         }
                     })
             },
-             getToday: function (val) {
+            getToday: function (val) {
                 let date = new Date();
                 if (val) {
                     date = new Date(val);

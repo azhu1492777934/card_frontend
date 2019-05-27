@@ -568,8 +568,6 @@
                 
             }
 
-            
-
             if (getStorage('check_iccid')) {
 
                 this.iccid = getStorage('check_iccid');

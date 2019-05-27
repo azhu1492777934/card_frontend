@@ -4,7 +4,8 @@
             <img src="../../assets/imgs/card/lookup/scanTop.png" alt="">
         </div>
         <div class="search-wrap">
-            <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur" placeholder="扫码或手动输入iccid号或11位电话号" type="text">
+            <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur"
+                   placeholder="扫码或手动输入iccid号或11位电话号" type="text">
             <span v-show="showClearBtn" @click="clearInputIccid" class="clearIccid">&times;</span>
             <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
             <span v-show="client_type!='app'" class="icon-scanTip"></span>
@@ -63,7 +64,7 @@
                 padding-left: 20px;
                 font-size: 30px;
             }
-            .clearIccid{
+            .clearIccid {
                 position: relative;
                 right: 20px;
                 font-size: 50px;
@@ -126,7 +127,7 @@
                         flex: 2;
                         text-align: right;
                     }
-                    &:last-child{
+                    &:last-child {
                         max-width: 20px;
                         font-size: 48px;
                         line-height: .5;
@@ -160,9 +161,17 @@
 
 <script>
     // @ is an alias to /src
-    import {setStorage, formatterCardTime, getStorage,removeStorage,getUrlParam,checkBrowser} from '../../utilies'
-    import {Popup , Notify} from 'vant'
-    import {_post,_get} from "../../http";
+    import {
+        setStorage,
+        formatterCardTime,
+        getStorage,
+        removeStorage,
+        getUrlParam,
+        checkBrowser,
+        lossRate
+    } from '../../utilies'
+    import {Popup, Notify} from 'vant'
+    import {_post, _get} from "../../http";
     import cardButton from '../../components/button'
 
     export default {
@@ -175,8 +184,8 @@
                 iccid: '',
                 checkShow: false,//查询遮罩
                 client_type: checkBrowser(),//当前客户端环境 微信/支付宝
-                showClearBtn:false,
-                forbidden_click:true, //防止用户在未授权是进行业务操作
+                showClearBtn: false,
+                forbidden_click: true, //防止用户在未授权是进行业务操作
             }
         },
         components: {
@@ -184,25 +193,25 @@
             cardButton
         },
         created() {
-            if(this.client_type != 'wechat' || this.client_type != 'alipay' || this.client_type != 'app' || getStorage('token')){
-                this.forbidden_click  =false
+            if (this.client_type != 'wechat' || this.client_type != 'alipay' || this.client_type != 'app' || getStorage('token')) {
+                this.forbidden_click = false
             }
 
             let _this = this;
 
-            if (getStorage('recording_list','arr')) {
-                let local_recording_list = getStorage('recording_list','arr')
+            if (getStorage('recording_list', 'arr')) {
+                let local_recording_list = getStorage('recording_list', 'arr')
 
-                if(local_recording_list.length){
+                if (local_recording_list.length) {
 
                     this.recording_list = local_recording_list;
                     this.recording_show = true
                 }
             }
 
-            if(getStorage('new_auth_search_iccid')){
+            if (getStorage('new_auth_search_iccid')) {
                 this.iccid = getStorage('new_auth_search_iccid')
-            }else if(getStorage('check_iccid')){
+            } else if (getStorage('check_iccid')) {
                 this.iccid = getStorage('check_iccid');
             }
 
@@ -210,41 +219,41 @@
                 _this.handleIccidFocus()
             }, 500))
 
-            let scanWatchCardIccid = getUrlParam('iccid') ||  getStorage('watch_card'); //watch_card 兼容 授权时跳转问题
+            let scanWatchCardIccid = getUrlParam('iccid') || getStorage('watch_card'); //watch_card 兼容 授权时跳转问题
 
-            if(scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state==1){
+            if (scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state == 1) {
 
-                if(getStorage('watchAutoSearch') > 2){
+                if (getStorage('watchAutoSearch') > 2) {
                     removeStorage('watch_card');
                     removeStorage('watchAutoSearch');
                 }
 
-                if(getStorage('watch_card_timestamp')){
+                if (getStorage('watch_card_timestamp')) {
 
                     var watch_card_timestamp = getStorage('watch_card_timestamp')
                     var cur_date = new Date().getTime();
 
-                    if(cur_date>watch_card_timestamp){
-                        let setTime  = new Date().getTime()+(1*60*1000);
-                        setStorage('check_iccid',scanWatchCardIccid)
-                        setStorage('watch_card_timestamp',setTime);
+                    if (cur_date > watch_card_timestamp) {
+                        let setTime = new Date().getTime() + (1 * 60 * 1000);
+                        setStorage('check_iccid', scanWatchCardIccid)
+                        setStorage('watch_card_timestamp', setTime);
                         this.processCheckIccid(scanWatchCardIccid);//自动查询
                     }
 
-                }else{
+                } else {
                     this.iccid = scanWatchCardIccid;
-                    setStorage('check_iccid',scanWatchCardIccid)
-                    let setTime  = new Date().setTime(new Date().getTime()+1*60*1000);
-                    setStorage('watch_card_timestamp',setTime);
+                    setStorage('check_iccid', scanWatchCardIccid)
+                    let setTime = new Date().setTime(new Date().getTime() + 1 * 60 * 1000);
+                    setStorage('watch_card_timestamp', setTime);
 
                     this.processCheckIccid(scanWatchCardIccid);//自动查询
                 }
 
 
-            }else{
-               if(scanWatchCardIccid){
-                   Notify({message:this.checkSearchIccid(scanWatchCardIccid).msg});
-               }
+            } else {
+                if (scanWatchCardIccid) {
+                    Notify({message: this.checkSearchIccid(scanWatchCardIccid).msg});
+                }
             }
         },
         methods: {
@@ -295,7 +304,12 @@
                     this.recording_list.splice(20)
                 }
 
-                setStorage('recording_list', this.recording_list, 'arr')
+                setStorage('recording_list', this.recording_list, 'arr');
+
+                lossRate({
+                    type: 1,
+                    iccid: iccid
+                });// 流失统计
 
                 //查询
                 _post('/api/v1/app/new_auth/check_auth_', {
@@ -307,12 +321,12 @@
                         setStorage('watchAutoSearch', autoCount);
                     }
                     if (res.state == 1) {
-                        setStorage('originPrice',res.data.default_price);
+                        setStorage('originPrice', res.data.default_price);
                         setStorage('check_iccid', res.data.iccid);
-                        setStorage('new_auth_search_iccid',iccid);
-                        localStorage.setItem("currentType","card");
+                        setStorage('new_auth_search_iccid', iccid);
+                        localStorage.setItem("currentType", "card");
                         if (res.data.status == 1) {
-                                _this.$router.push({path:'/weixin/card/usage'})
+                            _this.$router.push({path: '/weixin/card/usage'})
                         } else if (res.data.status == 2) {
                             setStorage('check_realNameSource', res.data.source)
                             _this.$router.push({path: '/weixin/new_card/real_name'});
@@ -338,8 +352,8 @@
                         scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
                         success: function (res) {
                             var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                            result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1 ,result.length) : result;
-                            _this.iccid = (result.replace(/\s*/g,""));
+                            result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1, result.length) : result;
+                            _this.iccid = (result.replace(/\s*/g, ""));
                             _this.processCheckIccid(_this.iccid);
                         }
                     });
@@ -348,7 +362,7 @@
                     ap.scan(function (res) {
                         var result = res.code; // 当needResult 为 1 时，扫码返回的结果
 
-                        _this.iccid = (result.replace(/\s*/g,""));
+                        _this.iccid = (result.replace(/\s*/g, ""));
                         _this.processCheckIccid(_this.iccid)
                     });
                 }
@@ -413,7 +427,7 @@
                 this.$refs.iccidDom.focus()
                 this.showClearBtn = false
             },
-            iccidBlur(){
+            iccidBlur() {
                 this.showClearBtn = false
             },
             debounce(func, delay) {

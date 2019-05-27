@@ -1,4 +1,5 @@
 import md5 from 'js-md5';
+import {_post} from "../http";
 import global_variables from "./domain";
 
 function checkICCID(iccid) {
@@ -52,7 +53,7 @@ function removeStorage(key) {
 
 function toDecimal(val) {
     let type = Object.prototype.toString.call(val);
-    if(type === '[object Undefined]' || type === '[object Null]') return '暂无';
+    if (type === '[object Undefined]' || type === '[object Null]') return '暂无';
     var value = val.toString();
     if (value.indexOf('.') > 0) {
         var decimal = value.substr(value.indexOf('.') + 1, value.length);
@@ -84,10 +85,10 @@ function objKeySort(obj) {
     return newObj;
 }//排序参数
 
-function codeParam(param, type) { 
+function codeParam(param, type) {
     let timeSpan = getStorage('timeSpan') == 0 ? 0 : getStorage('timeSpan'),
         commParam = {
-            timestamp: (Date.parse(new Date())/1000) + parseInt(timeSpan),
+            timestamp: (Date.parse(new Date()) / 1000) + parseInt(timeSpan),
             version: 'v1',
             format: 'json',
             app_key: global_variables[`${global_variables.packed_project}_project`].app_key,
@@ -134,7 +135,7 @@ function checkBrowser() {
             return 'alipay'
         } else if (UA.match(/MicroMessenger/i) == "micromessenger") {
             return 'wechat'
-        } else if (/(uni-app)/.test(UA)||/(ylkids_android)/.test(UA)||/(ios1.1.0)/.test(UA)) {
+        } else if (/(uni-app)/.test(UA) || /(ylkids_android)/.test(UA) || /(ios1.1.0)/.test(UA)) {
             return 'app'
         } else {
             return 'mobile'
@@ -162,7 +163,7 @@ function getCardServerToken(params) {
         let paramsBak = {};
         // let paramsBak = {...params};
         for (var i in params) {
-            if (Object.prototype.toString.call(params[i]) !== '[object Undefined]' &&  Object.prototype.toString.call(params[i]) !== '[object Null]') {
+            if (Object.prototype.toString.call(params[i]) !== '[object Undefined]' && Object.prototype.toString.call(params[i]) !== '[object Null]') {
                 paramsBak[i] = params[i];
             }
         }
@@ -202,6 +203,12 @@ function GetUrlRelativePath() {
     return relUrl;
 }//获取当前路径
 
+function lossRate(params) {
+    _post('/api/v1/app/card_create_loss_rate', {
+        ...params
+    });
+}// 流失率统计
+
 export {
     getCardServerToken,
     setStorage,
@@ -217,4 +224,5 @@ export {
     inArray,
     Today,
     GetUrlRelativePath,
+    lossRate
 }

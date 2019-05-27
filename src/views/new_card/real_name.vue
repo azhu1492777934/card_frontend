@@ -55,13 +55,13 @@
 <script>
     import {Popup, Notify} from 'vant';
     import {_get, _post} from "../../http";
-    import {getStorage, inArray,getUrlParam} from "../../utilies";
+    import {getStorage, inArray, getUrlParam, lossRate} from "../../utilies";
     import '../../assets/less/common.less'
     // @ is an alias to /src
     export default {
         name: "home",
-        props:{
-            decrypt_data:{},
+        props: {
+            decrypt_data: {},
         },
         data() {
             return {
@@ -81,18 +81,18 @@
                 info_phone: '',
                 info_name: '',
 
-                isVerifyCode:false,//实名校验码
-                verifyCode:'1111',//实名校验码
+                isVerifyCode: false,//实名校验码
+                verifyCode: '1111',//实名校验码
 
                 showItem: {
                     showID: false,
                     showName: false,
                     showImei: false,
                     showFixedWrap: false,//大佬账户
-                    showVerifyCode:false,//大佬账户信息
+                    showVerifyCode: false,//大佬账户信息
 
-                    showCodeWrap:false,//实名校验码异步加载问题
-                    showCodeMsg:''//实名校验码失败加载信息
+                    showCodeWrap: false,//实名校验码异步加载问题
+                    showCodeMsg: ''//实名校验码失败加载信息
                 },
 
                 countDown: 60,
@@ -109,34 +109,39 @@
         },
         created() {
 
-            if(getUrlParam('iccid')){
-                this.info_iccid =  getUrlParam('iccid');
-            }else{
+            if (getUrlParam('iccid')) {
+                this.info_iccid = getUrlParam('iccid');
+            } else {
                 if (getStorage('check_iccid')) {
                     this.info_iccid = getStorage('check_iccid');
                 } else {
-                    this.$router.push({'path':'/weixin/card/lookup'});
+                    this.$router.push({'path': '/weixin/card/lookup'});
                 }
             }
-            if(getUrlParam('source')){
+            if (getUrlParam('source')) {
                 this.card_source = getUrlParam('source');
-            }else{
-                if(getStorage('check_realNameSource')){
+            } else {
+                if (getStorage('check_realNameSource')) {
                     this.card_source = getStorage('check_realNameSource');
-                }else{
-                    this.$router.push({'path':'/weixin/card/lookup'});
+                } else {
+                    this.$router.push({'path': '/weixin/card/lookup'});
                 }
             }
 
 
-            if (inArray(this.card_source, ['18', '19', '20', '21', '22','27']) >= 0) {
+            if (inArray(this.card_source, ['18', '19', '20', '21', '22', '27']) >= 0) {
                 this.card_tip = !this.card_tip
             }
+
+            lossRate({
+                type: 3,
+                iccid: getStorage('check_iccid')
+            });
 
             _get('/api/v1/app/find_iccid', {
                 iccid: getStorage('check_iccid')
             }).then(res => {
-                if (res.state==1) {
+                if (res.state == 1) {
                     this.is_boss = true
                     this.showItem.showID = true;
                     this.showItem.showName = true
@@ -150,9 +155,10 @@
 
 
         },
-        mounted(){},
+        mounted() {
+        },
         methods: {
-            hideCodeVerify(){
+            hideCodeVerify() {
                 this.showItem.showVerifyCode = false
             },
             inArray: function (elem, arr, i) {
@@ -264,12 +270,12 @@
                         msg: '手机号码有误'
                     }
                 }
-                let pre_three_num = this.info_phone.substr(0,3),
-                    watch_card = ['145','146','166','177','199'];
-                if(watch_card.includes(pre_three_num)){
+                let pre_three_num = this.info_phone.substr(0, 3),
+                    watch_card = ['145', '146', '166', '177', '199'];
+                if (watch_card.includes(pre_three_num)) {
                     return {
-                        state:0,
-                        msg:'请勿输入以145/146/166/177/199开头的手机号码'
+                        state: 0,
+                        msg: '请勿输入以145/146/166/177/199开头的手机号码'
                     }
                 }
                 return {
@@ -299,13 +305,13 @@
                 }
 
                 Notify({
-                    message:'检测手机号码中,请等候'
+                    message: '检测手机号码中,请等候'
                 })
 
 
                 _post('/api/v1/app/phone/check', {mobile: this.info_phone})
                     .then(res => {
-                        if (res.state==1) {
+                        if (res.state == 1) {
 
                             clearInterval(this.timer);
                             this.disabled_code = true;
@@ -325,10 +331,10 @@
                             _post('/api/v1/app/messages/send', {mobile: this.info_phone})
                                 .then(function (res) {
 
-                                    if (res.state==1) {
+                                    if (res.state == 1) {
                                         Notify({
                                             message: '验证码发送成功',
-                                            background:'#60ce53'
+                                            background: '#60ce53'
                                         });
                                     } else {
                                         Notify({message: res.msg});
@@ -384,7 +390,7 @@
 
                 this.bindImei();
             },
-            bindImei(){
+            bindImei() {
                 let param = {
                     mobile: this.info_phone,
                     iccid: this.info_iccid,
@@ -394,46 +400,46 @@
                     id_no: this.info_id || '***',
                     alibind: true,
                 };
-                let _this=this;
-                Notify({message:'正在绑定手机号码,请等候'});
+                let _this = this;
+                Notify({message: '正在绑定手机号码,请等候'});
                 _post('/api/v1/app/bind/imei', param)
                     .then(res => {
-                        if (res.state==1) {
-                            Notify({message:'绑定成功,正在前往第三方实名,请耐心等候'});
+                        if (res.state == 1) {
+                            Notify({message: '绑定成功,正在前往第三方实名,请耐心等候'});
 
                             _get('/api/v1/app/jump/taobao', {
                                 imei: this.info_imei,
-                                iccid:this.info_iccid,
-                                source:this.card_source,
+                                iccid: this.info_iccid,
+                                source: this.card_source,
                                 type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
                             }).then(res => {
-                                if(res.data.indexOf("taobao")!=-1){
+                                if (res.data.indexOf("taobao") != -1) {
                                     let ua = navigator.userAgent.toLowerCase();
-                                    if(ua.match(/MicroMessenger/i) == "micromessenger"){
-                                        this.$router.push({path:'to_tb',query:{url:res.data}});
-                                    }else{
+                                    if (ua.match(/MicroMessenger/i) == "micromessenger") {
+                                        this.$router.push({path: 'to_tb', query: {url: res.data}});
+                                    } else {
                                         location.href = res.data;
                                     }
-                                }else{
+                                } else {
                                     location.href = res.data;
                                 }
                             })
-                        }else if(res.state==10015){
+                        } else if (res.state == 10015) {
                             Notify({message: res.msg,})
                             setTimeout(function () {
-                                _this.$router.push({path:'/weixin/card/plan_list'});
-                            },1500);
-                        }else {
-                            if(res.msg){
+                                _this.$router.push({path: '/weixin/card/plan_list'});
+                            }, 1500);
+                        } else {
+                            if (res.msg) {
                                 Notify({message: res.msg,})
-                            }else{
+                            } else {
                                 Notify({message: '绑定手机失败,请稍后再试',})
                             }
                         }
                     })
             },
             toTutorial: function () {
-                if (this.card_source == 18 || this.card_source ==19) {
+                if (this.card_source == 18 || this.card_source == 19) {
                     location.href = 'https://mp.weixin.qq.com/s/IMUU9Wan63K00QEFcxUnjg'
                 } else {
                     location.href = 'https://mp.weixin.qq.com/s?__biz=MzUxODA0OTAyOQ==&mid=100000010&idx=1&sn=a5269b403df4782a2413184f027a01d2&chksm=798f9d604ef81476a074d02828cc355331e354d3c37f89aa3f87ddb21004903190d858842300&mpshare=1&scene=23&srcid=0601LjTN6Zs9SunY3rvoUg4Y#rd';
@@ -448,7 +454,10 @@
         border: none;
         outline: none;
     }
-    .text-left{text-align: left;}
+
+    .text-left {
+        text-align: left;
+    }
 
     .fixed-wrap-imei {
         position: fixed;
@@ -511,9 +520,9 @@
                 &:last-child {
                     border-bottom: none;
                 }
-                &.code-wrap{
+                &.code-wrap {
                     justify-content: space-between;
-                    input{
+                    input {
                         display: inline-block;
                         max-width: 60%;
                     }
@@ -554,7 +563,7 @@
             }
         }
 
-        .verify-code-wrap{
+        .verify-code-wrap {
             width: 100%;
             background-color: transparent;
         }
