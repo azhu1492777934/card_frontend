@@ -552,9 +552,7 @@
                         } else {
                             return item.pay_money >= 0
                         }
-
                     }
-
                 })
             },//用户rmb,套餐价格planPrice
             changePayType(type) {

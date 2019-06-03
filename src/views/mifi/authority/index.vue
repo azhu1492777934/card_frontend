@@ -28,13 +28,9 @@
         created() {
 
             if(!getStorage('token')){
-
-                if (this.client_type == 'wechat' || this.client_type == 'alipay') {
-
-                    if (getStorage('state') && getUrlParam('state') && getStorage('state') == getUrlParam('state')) {
-
+                if (this.client_type === 'wechat' || this.client_type === 'alipay') {
+                    if (getStorage('state') && getUrlParam('state') && getStorage('state') === getUrlParam('state')) {
                         this.decryptData();
-
                     } else {
                         let _this = this;
                         removeStorage('token');
@@ -61,11 +57,8 @@
                 _post('/accountCenter/v2/secret/decrypt?' + codeParam({}, 'post'), {
                     data: getUrlParam('data')
                 }).then(res => {
-
                     if (res.error == 0) {
-
-                        if (this.client_type == 'alipay') {
-
+                        if (this.client_type === 'alipay') {
                             let aliUser = {
                                 uuid: res.data.data.user_id,
                                 openid: res.data.data.user_id,
@@ -73,11 +66,8 @@
                                 gender: res.data.data.gender == 'm' ? 1 : 2,
                                 nickname: res.data.data.nick_name
                             }
-
                             setStorage('decrypt_data', aliUser, 'obj');
-
-
-                        } else if (this.client_type == 'wechat') {
+                        } else if (this.client_type === 'wechat') {
 
                             let wechatUserData = res.data.data;
                             if (wechatUserData.unionid) {
@@ -85,7 +75,6 @@
                             }
                             setStorage('decrypt_data', wechatUserData, 'obj');
                         }
-
                         //login
                         this.login(res);
 
