@@ -149,8 +149,8 @@
                                             <span>月底清零,30天有效,全国通用,有效期或流量任一用完即停机，套餐包含：20G高速流量，480G中速流量，中速流量可使用加速包提升为高速流量。</span>
                                         </p>
                                         <p class="plan-describe" v-else>
-                                                <span v-if="item.describe && item.describe!='None'">{{item.describe}}</span><br/>
-                                                <span v-if="!item.describe || item.describe==''" class="">{{item.remark}}</span>
+                                                <span v-if="item.describe && item.describe!='None'&&item.describe!=''">{{item.describe}}</span><br/>
+                                                <span v-if="!item.describe || item.describe==''||item.describe=='None'" class="">{{item.remark}}</span>
                                         </p>
                                         <p class="plan-orderNo">订单号:{{item.no}}</p>
                                     </div>
