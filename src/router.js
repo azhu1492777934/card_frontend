@@ -114,6 +114,11 @@ const realName=r => require.ensure([], () => r(require('./views/userCenter/realN
 
 //复充活动
 const repeatRecharge =r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
+//设备更换
+const eqReplaceMent =r => require.ensure([], () => r(require('./views/question/eqReplaceMent')), 'eqReplaceMent');  //设备更换
+
+
+
 Vue.use(Router)
 
 export const constantRouterMap = [{
@@ -183,6 +188,13 @@ export const constantRouterMap = [{
                     component: release_plan,
                     meta: {
                         title: '套餐解约',
+                        requireAuth: true,
+                    }
+                }, {
+                    path: 'eqReplaceMent',
+                    component: eqReplaceMent,
+                    meta: {
+                        title: '设备或卡更换',
                         requireAuth: true,
                     }
                 }

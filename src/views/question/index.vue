@@ -14,6 +14,10 @@
             <li>
                 <router-link to="/weixin/question/release_plan">4.解约自动续费套餐</router-link>
             </li>
+            <li v-if="global_variables.packed_project === 'mifi'">
+            <!-- <li> -->
+                <router-link to="/weixin/question/eqReplaceMent">5.设备或卡更换</router-link>
+            </li>
         </ul>
     </div>
 </template>
