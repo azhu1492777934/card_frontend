@@ -280,6 +280,9 @@ export default {
                             _this.replaceData.imei = result.split(",")[1];
                         }
                     });
+
+
+
                 
             },
   }

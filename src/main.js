@@ -32,8 +32,9 @@ global_variables.packed_project === 'mifi' ? scanUrl = '/mifi/card/lookup' :  sc
 global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_info' :  scanApi = '/api/v1/app/sign_info';
 
 router.afterEach((to,from)=>{
+
     if(checkBrowser()=='wechat'){
-        if(to.path==scanUrl){
+        if(to.path==scanUrl||to.path=="/weixin/question/eqReplaceMent"){
             _get(scanApi)
                 .then(res=>{
                     if(res.state==1){
