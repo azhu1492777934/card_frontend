@@ -34,10 +34,25 @@ global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_in
 router.afterEach((to,from)=>{
 
     if(checkBrowser()=='wechat'){
-        if(to.path==scanUrl||to.path=="/weixin/question/eqReplaceMent"){
+        if(to.path==scanUrl){
             _get(scanApi)
                 .then(res=>{
                     if(res.state==1){
+                        wx.config({
+                            debug: false,
+                            appId: res.data.appId,
+                            signature: res.data.sign,
+                            timestamp: res.data.timestamp,
+                            nonceStr: res.data.noncestr,
+                            jsApiList: ["scanQRCode"]
+                        })
+                    }
+                })
+        }else if(to.path=="/weixin/question/eqReplaceMent"){
+            _get(scanApi,{url:global_variables.authorized_redirect_url+"/weixin/question/eqReplaceMent"})
+                .then(res=>{
+                    if(res.state==1){
+                        
                         wx.config({
                             debug: false,
                             appId: res.data.appId,
@@ -54,7 +69,7 @@ router.afterEach((to,from)=>{
 
     const u = navigator.userAgent.toLowerCase();
     if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
-    if (to.path !== global.location.pathname) {
+    if (to.path !== global.location.pathname ) {
         location.assign(to.fullPath);
     };
 });
