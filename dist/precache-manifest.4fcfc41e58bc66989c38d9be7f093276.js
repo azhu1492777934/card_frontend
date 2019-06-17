@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.aedfa67a.js"
   },
   {
-    "revision": "dfacf5ec4e1ac65cf5d8",
+    "revision": "e32d7cd32902531419d8",
     "url": "/css/app.74fa97c8.css"
   },
   {
-    "revision": "dfacf5ec4e1ac65cf5d8",
-    "url": "/js/app.9277874b.js"
+    "revision": "e32d7cd32902531419d8",
+    "url": "/js/app.66d2cb01.js"
   },
   {
     "revision": "80accd158bb5130f5a11",
@@ -148,12 +148,12 @@ self.__precacheManifest = [
     "url": "/js/coupon_wrapper.032fa89d.js"
   },
   {
-    "revision": "6a75d3ec52a58920f98d",
+    "revision": "b3a8f44083d4c2e43813",
     "url": "/css/eqReplaceMent.7ccc425a.css"
   },
   {
-    "revision": "6a75d3ec52a58920f98d",
-    "url": "/js/eqReplaceMent.e3167a31.js"
+    "revision": "b3a8f44083d4c2e43813",
+    "url": "/js/eqReplaceMent.b54631cf.js"
   },
   {
     "revision": "9cc497019f350d77b449",
@@ -552,24 +552,12 @@ self.__precacheManifest = [
     "url": "/img/arrow1.ad4acc3d.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
     "revision": "a1386d312938b126d701a6841fb742e8",
@@ -596,6 +584,14 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
     "revision": "b899232b79ad9962c5ab5572775a0400",
     "url": "/img/card_index_bg@3x.b899232b.png"
   },
@@ -604,12 +600,20 @@ self.__precacheManifest = [
     "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
     "url": "/img/bg_network@3x.2c51a1e5.png"
   },
   {
     "revision": "32d70c8fc305e3647098f3de0c71b618",
     "url": "/img/bg_network@2x.32d70c8f.png"
+  },
+  {
+    "revision": "d32e5dc3875f1afd2be29aad1cfd0382",
+    "url": "/img/contactBg.d32e5dc3.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -626,10 +630,6 @@ self.__precacheManifest = [
   {
     "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
     "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "d32e5dc3875f1afd2be29aad1cfd0382",
-    "url": "/img/contactBg.d32e5dc3.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -676,14 +676,6 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
-    "revision": "2a67b73145562669220aa4639e1ad58f",
-    "url": "/img/icon3.2a67b731.png"
-  },
-  {
-    "revision": "813b5319e378dafdda952c16ad89906b",
-    "url": "/img/icon2.813b5319.png"
-  },
-  {
     "revision": "3d0fc424b703032ca595090e99f8354b",
     "url": "/img/login_bg@2x.3d0fc424.png"
   },
@@ -694,6 +686,14 @@ self.__precacheManifest = [
   {
     "revision": "014d354b9b25b67ae95857ba17e2f4cc",
     "url": "/img/activityPage.014d354b.png"
+  },
+  {
+    "revision": "2a67b73145562669220aa4639e1ad58f",
+    "url": "/img/icon3.2a67b731.png"
+  },
+  {
+    "revision": "813b5319e378dafdda952c16ad89906b",
+    "url": "/img/icon2.813b5319.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
@@ -784,7 +784,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "8b3ea16b04ec1a5c2868c4307d230ed2",
+    "revision": "0ec4a3d19327bb39066f1d1ac6ae0729",
     "url": "/index.html"
   },
   {

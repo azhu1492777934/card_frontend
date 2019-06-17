@@ -312,6 +312,11 @@ export default {
         for(let item in newData){
           newData[item]=String(newData[item]).replace(/\s*/g,"");
         }
+
+        if(!getStorage("userInfo", "obj")){
+          Notify({ message: "请在微信客户端打开" });
+              return false;
+        }
         newData.user_id=getStorage("userInfo", "obj").account.user_id;
         newData.type=this.currentType;
         // newData.user_id="613639";
