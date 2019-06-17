@@ -17,16 +17,20 @@
       <div class="swipe-wrap" ref="SwiperWwrap">
         <swiper ref="mySwiper" :options="swiperOption">
           <swiper-slide v-for="(item,index) in statusList" :key="index">
-            <div v-if="statusIndex==0">
+            <div v-if="statusIndex==0||statusIndex==1">
               <ul>
-                <li>
+                <li v-if="statusIndex==0">
                   <span> <span class="redWord">*</span>  设备型号</span>
                   <input v-model="replaceData.model_name" placeholder="请输入设备型号" type="text">
                 </li>
-                <li>
+                <li v-if="statusIndex==0">
                   <span><span class="redWord">*</span> IMEI号</span>
                   <input v-model="replaceData.imei" placeholder="请输入IMEI号" type="text">
                   <i class="scanCode" @click="scanIccid"></i>
+                </li>
+                <li v-if="statusIndex==1">
+                  <span><span class="redWord">*</span> 卡号</span>
+                  <input v-model="replaceData.iccid" placeholder="请输入要更换卡的卡号" type="text">
                 </li>
                 <li>
                   <span><span class="redWord">*</span> 收件人姓名</span>
@@ -45,7 +49,7 @@
                   <span><span class="redWord">*</span> 所在地区</span>
                   <input v-model="areaData" placeholder="请选择省市区街道" type="text" @focus="show=true" readonly>
                 </li>
-                <li>
+                <li stye="-webkit-user-select:text !important;">
                   <span><span class="redWord">*</span> 详细地址</span>
                   <input v-model="replaceData.addr" placeholder="请输入详细地址" type="text">
                 </li>
@@ -57,21 +61,22 @@
               </div>
             </div>
 
-            <div v-if="statusIndex==1">
+            <div v-if="statusIndex==2">
                 <div v-for="(item,index) in replaceList" v-bind:key="index" class="replaceList">
                   <div class="wrapBox1">
-                    <div class="wrapBox2">
+                    <div class="wrapBox2" v-if="item.model_name">
                       <div>设备型号</div>
                       <div>{{item.model_name}}</div>
                     </div>
                     <div class="wrapBox3">
-                      <div><span>IMEI号&nbsp;&nbsp;&nbsp;</span> <span>{{item.imei}}</span>  </div>
-                      <div><span>物流公司</span><span >{{item.express_name}}</span> </div>
-                      <div><span>快递单号</span><span>{{item.express_no}}</span></div>
+                      <div v-if="item.imei"><span>IMEI号&nbsp;&nbsp;&nbsp;</span> <span>{{item.imei}}</span>  </div>
+                      <div v-if="item.iccid"><span>ICCID&nbsp;&nbsp;&nbsp;</span> <span>{{item.iccid}}</span>  </div>
+                      <div><span>物流公司</span><span v-if="item.express_name">{{item.express_name}}</span> <span v-if="!item.express_name">暂无物流信息</span> </div>
+                      <div><span>快递单号</span><span  v-if="item.express_no">{{item.express_no}}</span><span v-if="!item.express_no">暂无物流信息</span></div>
                     </div>
                   </div>
                   <div class="wrapBox4">
-                    发货时间:{{item.operator_at}}
+                    发货时间: <span v-if="item.operator_at">{{item.operator_at}}</span> <span v-if="!item.operator_at">暂无物流信息</span>
                   </div>
                 </div>
                 <div class="noMsg" v-if="replaceList.length==0">暂无物流记录</div>
@@ -113,7 +118,7 @@ export default {
       iccid: getStorage("check_iccid"),
       source: getStorage("check_realNameSource"),
       client_type: checkBrowser(),
-      statusList: ["设备更换", "物流查询"],
+      statusList: ["设备更换","卡更换", "物流查询"],
       statusIndex: 0,
       usageListObj: {},
       swiperOption: {
@@ -132,14 +137,16 @@ export default {
         province: "",
         city: "",
         district: "",
-        addr: ""
+        addr: "",
+        iccid:""
       },
       areaData: "",
       codeText:"获取验证码",
       countdown:60,
       show:false,
       areaList:areaList,
-      replaceList:[]
+      replaceList:[],
+      currentType:0
       
       
     };
@@ -149,10 +156,13 @@ export default {
     changeStatus(index) {
       this.statusIndex = index;
       this.$refs.mySwiper.swiper.slideTo(index);
-      if(index==1){
+      if(index==2){
         this.getList();
       }
 
+      this.currentType=index;
+      this.replaceData={};
+      this.areaData=""
     },
     //获取列表
     getList(){
@@ -251,7 +261,14 @@ export default {
             return false;
           }
         }
+        
+
+
+        for(let item in this.replaceData){
+          this.replaceData[item]=String(this.replaceData[item]).replace(/\s*/g,"");
+        }
         this.replaceData.user_id=getStorage("userInfo", "obj").account.user_id;
+        this.replaceData.type=this.currentType;
         // this.replaceData.user_id=613639;
         _post('/api/v1/app/equipment/change/apply',this.replaceData).then(res=>{
             if(res.state==1){
@@ -270,21 +287,16 @@ export default {
 
       //扫码
       scanIccid() {
-                let _this = this;
-
-                    this.wx.scanQRCode({
-                        needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-                        scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
-                        success: function (res) {
-                            var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                            _this.replaceData.imei = result.split(",")[1];
-                        }
-                    });
-
-
-
-                
-            },
+          let _this = this;
+          this.wx.scanQRCode({
+              needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+              scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
+              success: function (res) {
+                  var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
+                  _this.replaceData.imei = result.split(",")[1];
+              }
+          });      
+        },
   }
 };
 </script>
