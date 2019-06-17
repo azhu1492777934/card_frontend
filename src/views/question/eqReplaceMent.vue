@@ -255,22 +255,67 @@ export default {
           Notify({ message: "请填写正确的验证码" });
             return false;
         }
-        for(let item in this.replaceData){
-          if(this.replaceData[item]==""){
-            Notify({ message: "请填写完整数据" });
-            return false;
+// model_name: "",
+        // imei: "",
+        // user_name: "",
+        // mobile: "",
+        // code: "",
+        // province: "",
+        // city: "",
+        // district: "",
+        // addr: "",
+        // iccid:""
+        if(this.currentType==0){
+          if(this.replaceData.model_name==""){
+             Notify({ message: "请填写设备型号" });
+              return false;
+          }
+          if(this.replaceData.imei==""){
+             Notify({ message: "请填写IMEI号" });
+              return false;
+          }
+          
+          
+        }else{
+          if(this.replaceData.iccid==""){
+             Notify({ message: "请填写卡号" });
+              return false;
           }
         }
         
-
-
-        for(let item in this.replaceData){
-          this.replaceData[item]=String(this.replaceData[item]).replace(/\s*/g,"");
+       if(this.replaceData.user_name==""){
+             Notify({ message: "请填写收件人姓名" });
+              return false;
+          }
+          if(this.replaceData.mobile==""){
+             Notify({ message: "请填写手机号" });
+              return false;
+          }
+          if(this.replaceData.code==""){
+             Notify({ message: "请填写验证码" });
+              return false;
+          }
+          if(this.replaceData.province==""||this.replaceData.city==""||this.replaceData.district==""){
+             Notify({ message: "请选择所在地区" });
+              return false;
+          }
+          if(this.replaceData.addr==""){
+             Notify({ message: "请填写详细地址" });
+              return false;
+          }
+          if(this.replaceData.addr.length<3){
+            Notify({ message: "详细地址过短" });
+              return false;
+          }
+        
+        let newData=this.replaceData;
+        for(let item in newData){
+          newData[item]=String(newData[item]).replace(/\s*/g,"");
         }
-        this.replaceData.user_id=getStorage("userInfo", "obj").account.user_id;
-        this.replaceData.type=this.currentType;
-        // this.replaceData.user_id=613639;
-        _post('/api/v1/app/equipment/change/apply',this.replaceData).then(res=>{
+        newData.user_id=getStorage("userInfo", "obj").account.user_id;
+        newData.type=this.currentType;
+        // newData.user_id="613639";
+        _post('/api/v1/app/equipment/change/apply',newData).then(res=>{
             if(res.state==1){
                 Notify({
                     message:'提交成功',
@@ -279,6 +324,7 @@ export default {
                 this.replaceData={};
                 this.areaData=""
             }else{
+
                 Notify({message:res.msg})
             }
         })
