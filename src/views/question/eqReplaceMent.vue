@@ -23,14 +23,15 @@
                   <span> <span class="redWord">*</span>  设备型号</span>
                   <input v-model="replaceData.model_name" placeholder="请输入设备型号" type="text">
                 </li>
-                <li v-if="statusIndex==0">
+                <!-- <li v-if="statusIndex==0">
                   <span><span class="redWord">*</span> IMEI号</span>
                   <input v-model="replaceData.imei" placeholder="请输入IMEI号" type="text">
-                  <i class="scanCode" @click="scanIccid"></i>
-                </li>
-                <li v-if="statusIndex==1">
-                  <span><span class="redWord">*</span> 卡号</span>
+                  <i class="scanCode" @click="scanIccid(0)"></i>
+                </li> -->
+                <li >
+                  <span><span class="redWord">*</span> ICCID卡号</span>
                   <input v-model="replaceData.iccid" placeholder="请输入要更换卡的卡号" type="text">
+                  <i class="scanCode" @click="scanIccid(1)"></i>
                 </li>
                 <li>
                   <span><span class="redWord">*</span> 收件人姓名</span>
@@ -68,8 +69,13 @@
                       <div>设备型号</div>
                       <div>{{item.model_name}}</div>
                     </div>
+                   <div class="wrapBox2" v-if="!item.model_name">
+                      <div></div>
+                      <div>卡更换</div>
+                    </div>
+
                     <div class="wrapBox3">
-                      <div v-if="item.imei"><span>IMEI号&nbsp;&nbsp;&nbsp;</span> <span>{{item.imei}}</span>  </div>
+                      <!-- <div v-if="item.imei"><span>IMEI号&nbsp;&nbsp;&nbsp;</span> <span>{{item.imei}}</span>  </div> -->
                       <div v-if="item.iccid"><span>ICCID&nbsp;&nbsp;&nbsp;</span> <span>{{item.iccid}}</span>  </div>
                       <div><span>物流公司</span><span v-if="item.express_name">{{item.express_name}}</span> <span v-if="!item.express_name">暂无物流信息</span> </div>
                       <div><span>快递单号</span><span  v-if="item.express_no">{{item.express_no}}</span><span v-if="!item.express_no">暂无物流信息</span></div>
@@ -97,7 +103,7 @@
 <script>
 import { swiper, swiperSlide } from "vue-awesome-swiper";
 import { Toast, Popup, Notify, Loading,Area } from "vant";
-import { getStorage, setStorage, checkBrowser, Today } from "../../utilies";
+import { getStorage, setStorage, checkBrowser, Today,getCardServerToken } from "../../utilies";
 import { _get, _post } from "../../http";
 import areaList from "../../assets/js/areaData.js"
 export default {
@@ -130,7 +136,7 @@ export default {
       },
       replaceData: {
         model_name: "",
-        imei: "",
+        // imei: "",
         user_name: "",
         mobile: "",
         code: "",
@@ -248,40 +254,28 @@ export default {
       submit(){
         let _this=this;
 
-
         
-
         if(!(/^[1-9]\d*$/).test(this.replaceData.code)){
           Notify({ message: "请填写正确的验证码" });
             return false;
         }
-// model_name: "",
-        // imei: "",
-        // user_name: "",
-        // mobile: "",
-        // code: "",
-        // province: "",
-        // city: "",
-        // district: "",
-        // addr: "",
-        // iccid:""
+
         if(this.currentType==0){
           if(this.replaceData.model_name==""){
              Notify({ message: "请填写设备型号" });
               return false;
           }
-          if(this.replaceData.imei==""){
-             Notify({ message: "请填写IMEI号" });
-              return false;
-          }
+        
           
           
-        }else{
+        }
           if(this.replaceData.iccid==""){
              Notify({ message: "请填写卡号" });
               return false;
           }
-        }
+
+
+          
         
        if(this.replaceData.user_name==""){
              Notify({ message: "请填写收件人姓名" });
@@ -303,6 +297,7 @@ export default {
              Notify({ message: "请填写详细地址" });
               return false;
           }
+          console.log(this.replaceData.addr);
           if(this.replaceData.addr.length<3){
             Notify({ message: "详细地址过短" });
               return false;
@@ -320,6 +315,7 @@ export default {
         newData.user_id=getStorage("userInfo", "obj").account.user_id;
         newData.type=this.currentType;
         // newData.user_id="613639";
+
         _post('/api/v1/app/equipment/change/apply',newData).then(res=>{
             if(res.state==1){
                 Notify({
@@ -337,14 +333,20 @@ export default {
 
 
       //扫码
-      scanIccid() {
+      scanIccid(type) {
           let _this = this;
           this.wx.scanQRCode({
               needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
               scanType: ["barCode", "qrCode"], // 可以指定扫二维码还是一维码，默认二者都有
               success: function (res) {
                   var result = res.resultStr; // 当needResult 为 1 时，扫码返回的结果
-                  _this.replaceData.imei = result.split(",")[1];
+                  // if(type==0){
+                  // _this.replaceData.imei = result.split(",")[1];
+
+                  // }else{
+                  _this.replaceData.iccid = result.split(",")[1];
+
+                  // }
               }
           });      
         },

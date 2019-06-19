@@ -21,7 +21,7 @@
                         </div>
                         <div>
                             <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                            <router-link to="/weixin/question/index">?</router-link>
+                            <router-link to="/weixin/question/index">问题中心></router-link>
                         </div>
                     </div>
                 </div>
@@ -255,6 +255,7 @@
                         }
                         &:last-child {
                             text-align: right;
+                            margin-left:100px;
                         }
                     }
                     span {
@@ -276,7 +277,7 @@
                             margin-right: 0;
                         }
                     }
-                    em, a {
+                    em {
                         font-style: normal;
                         color: #fff;
                         border: 1PX solid #38b5ed;
@@ -284,6 +285,10 @@
                     }
                     a {
                         padding: 0 20px;
+                        font-style: normal;
+                        color: #fff;
+                        border: 1PX solid #ffb73a;
+                        background-color: #ffb73a;
                     }
                 }
 

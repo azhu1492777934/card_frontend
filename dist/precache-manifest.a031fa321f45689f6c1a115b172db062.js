@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/css/recharge_callback.4a8c886c.css"
   },
   {
-    "revision": "33c14099827469a97f98",
-    "url": "/css/Layout.3a3c5a33.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
+  },
+  {
+    "revision": "0b25031aa1a561de0c7c",
+    "url": "/js/recharge_callback.1e21f73a.js"
   },
   {
     "revision": "0f346331598f08cac006",
     "url": "/css/Not_fund.0aeb7cd4.css"
-  },
-  {
-    "revision": "0f346331598f08cac006",
-    "url": "/js/Not_fund.77956993.js"
   },
   {
     "revision": "97ecc3d303c0037d0eb0",
@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.aedfa67a.js"
   },
   {
-    "revision": "e32d7cd32902531419d8",
+    "revision": "a0e2db973d718b3edd24",
     "url": "/css/app.74fa97c8.css"
   },
   {
-    "revision": "e32d7cd32902531419d8",
-    "url": "/js/app.66d2cb01.js"
+    "revision": "a0e2db973d718b3edd24",
+    "url": "/js/app.8b6cf162.js"
   },
   {
     "revision": "80accd158bb5130f5a11",
@@ -64,12 +64,12 @@ self.__precacheManifest = [
     "url": "/js/card_lookup.c7a0a7e3.js"
   },
   {
-    "revision": "dc8096ef049a37f43640",
-    "url": "/css/card_usage.2476ba3f.css"
+    "revision": "ae6c25893df1c99894ce",
+    "url": "/css/card_usage.8af59aa6.css"
   },
   {
-    "revision": "dc8096ef049a37f43640",
-    "url": "/js/card_usage.c3d96ceb.js"
+    "revision": "ae6c25893df1c99894ce",
+    "url": "/js/card_usage.6b483be8.js"
   },
   {
     "revision": "e3de9fe9350508cb8bdd",
@@ -148,12 +148,12 @@ self.__precacheManifest = [
     "url": "/js/coupon_wrapper.032fa89d.js"
   },
   {
-    "revision": "b3a8f44083d4c2e43813",
+    "revision": "ea3bce2ed6cafe16aa66",
     "url": "/css/eqReplaceMent.7ccc425a.css"
   },
   {
-    "revision": "b3a8f44083d4c2e43813",
-    "url": "/js/eqReplaceMent.b54631cf.js"
+    "revision": "ea3bce2ed6cafe16aa66",
+    "url": "/js/eqReplaceMent.55d6ab32.js"
   },
   {
     "revision": "9cc497019f350d77b449",
@@ -408,8 +408,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.c6b25acb.js"
   },
   {
-    "revision": "0b25031aa1a561de0c7c",
-    "url": "/js/recharge_callback.1e21f73a.js"
+    "revision": "0f346331598f08cac006",
+    "url": "/js/Not_fund.77956993.js"
   },
   {
     "revision": "b36dc51b6b3aabb0a338",
@@ -560,20 +560,32 @@ self.__precacheManifest = [
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
+    "revision": "1d7515ee61c3f659227318b4050955ed",
+    "url": "/img/mobile_sim@2x.1d7515ee.png"
+  },
+  {
+    "revision": "0f980b79d9a52702004de9f652a68835",
+    "url": "/img/telcom_sim@2x.0f980b79.png"
+  },
+  {
+    "revision": "98141226a7e992e3072a280746a259c4",
+    "url": "/img/mobile_sim@3x.98141226.png"
+  },
+  {
+    "revision": "0c88168b284b92c37f3a873f26a97d69",
+    "url": "/img/bg.0c88168b.jpg"
+  },
+  {
+    "revision": "9e02095f31a07b972244f1c714c1dfe7",
+    "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
     "revision": "a1386d312938b126d701a6841fb742e8",
     "url": "/img/addressIcon.a1386d31.png"
   },
   {
     "revision": "83d0cd2dc163e83ef26f6bad98661da8",
     "url": "/img/addressBg.83d0cd2d.png"
-  },
-  {
-    "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
-    "url": "/img/iccid_bg@2x.a859e9ca.png"
-  },
-  {
-    "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
-    "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
     "revision": "f5f322478286641bd9887a155e35f222",
@@ -598,6 +610,14 @@ self.__precacheManifest = [
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
     "url": "/img/card_index_bg@2x.b899232b.png"
+  },
+  {
+    "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
+    "url": "/img/iccid_bg@2x.a859e9ca.png"
+  },
+  {
+    "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
+    "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
     "revision": "6e5cee7393060b0ec3dcd587c2518b94",
@@ -630,26 +650,6 @@ self.__precacheManifest = [
   {
     "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
     "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "1d7515ee61c3f659227318b4050955ed",
-    "url": "/img/mobile_sim@2x.1d7515ee.png"
-  },
-  {
-    "revision": "0f980b79d9a52702004de9f652a68835",
-    "url": "/img/telcom_sim@2x.0f980b79.png"
-  },
-  {
-    "revision": "98141226a7e992e3072a280746a259c4",
-    "url": "/img/mobile_sim@3x.98141226.png"
-  },
-  {
-    "revision": "0c88168b284b92c37f3a873f26a97d69",
-    "url": "/img/bg.0c88168b.jpg"
-  },
-  {
-    "revision": "9e02095f31a07b972244f1c714c1dfe7",
-    "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -784,12 +784,12 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "0ec4a3d19327bb39066f1d1ac6ae0729",
+    "revision": "235b13eef3cbc97aa11b5cbf114dc6fd",
     "url": "/index.html"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
+    "revision": "33c14099827469a97f98",
+    "url": "/css/Layout.3a3c5a33.css"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
