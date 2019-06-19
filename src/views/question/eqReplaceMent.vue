@@ -17,7 +17,7 @@
       <div class="swipe-wrap" ref="SwiperWwrap">
         <swiper ref="mySwiper" :options="swiperOption">
           <swiper-slide v-for="(item,index) in statusList" :key="index">
-            <div v-if="statusIndex==0||statusIndex==1">
+            <div v-show="statusIndex==0||statusIndex==1">
               <ul>
                 <li v-if="statusIndex==0">
                   <span> <span class="redWord">*</span>  设备型号</span>
@@ -62,7 +62,7 @@
               </div>
             </div>
 
-            <div v-if="statusIndex==2">
+            <div v-show="statusIndex==2">
                 <div v-for="(item,index) in replaceList" v-bind:key="index" class="replaceList">
                   <div class="wrapBox1">
                     <div class="wrapBox2" v-if="item.model_name">

@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["question_wrapper"],{"7cf5":function(e,n,t){"use strict";var r=t("9f00"),u=t.n(r);u.a},"9f00":function(e,n,t){},d29d:function(e,n,t){"use strict";t.r(n);var r=function(){var e=this,n=e.$createElement,t=e._self._c||n;return t("router-view")},u=[],c={name:"question_wrapper"},i=c,o=(t("7cf5"),t("2877")),s=Object(o["a"])(i,r,u,!1,null,"6c1c4104",null);s.options.__file="question_wrapper.vue";n["default"]=s.exports}}]);
+//# sourceMappingURL=question_wrapper.a486832c.js.map
