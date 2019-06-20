@@ -379,6 +379,9 @@
                             ref_plan_type_index = 1;
                         } else if (this.$refs.ref_plan_type[i].innerText == "加油包") {
                             ref_plan_type_index = 2;
+                        }else if(this.$refs.ref_plan_type[i].innerText == "周期性套餐"){
+                            ref_plan_type_index = 5;
+
                         }
                         break;
                     }
