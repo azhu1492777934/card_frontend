@@ -6,16 +6,18 @@
                 <span class="user-name">{{getUserInfo.nickname}}</span>
             </div>
             <div>
-                <span>余额:</span>
-                <span class="icon-diamond-wrap">
+                <span>钻石:</span>
+                <span class="icon-diamond-wrap" @click="showDoc(0)">
                           <i class="icon-user-size  icon-diamond"></i>
                           {{getUserInfo.account.rmb}}
                       </span>
-                <span class="icon-elb-wrap">
+                <span>ELB:</span>
+
+                <span class="icon-elb-wrap" @click="showDoc(1)">
                           <i class="icon-user-size icon-elb"></i>
                           {{getUserInfo.account.elb}}
                       </span>
-                <span @click="showDoc" class="tip-wrap">!</span>
+                <!-- <span @click="showDoc" class="tip-wrap">!</span> -->
             </div>
         </div>
     </div>
@@ -40,9 +42,16 @@
             [Dialog.name]: Dialog
         },
         methods:{
-            showDoc() {
+            showDoc(type) {
+                let msg;
+                 if(type==0){
+                    msg="钻石：翼联会员体系下通用虚拟货币,可以用于:购买套餐,充值话费,游戏娱乐,购买优惠商品;"
+                 }else{
+                    msg="ELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等;"
+
+                 }   
                 Dialog.alert({
-                    message: '钻石：翼联会员体系下通用虚拟货币,可以用于:购买套餐,充值话费,游戏娱乐,购买优惠商品;\nELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等'
+                    message: msg
                 })
             },
         }
@@ -102,16 +111,20 @@
         .icon-elb-wrap {
             position: relative;
             display: inline-block;
-            margin-right: 40px;
+            margin-right: 20px;
             padding: 5px;
             width: 130px;
             text-align: center;
             border: 2px solid #3BB2E6;
             border-radius: 4px;
         }
-        .icon-diamond-wrap {
-            margin-left: 40px;
+        .icon-diamond-wrap{
+            margin-left:20px;
         }
+        .icon-elb-wrap {
+            margin-left: 20px;
+        }
+
         .tip-wrap {
             display: inline-block;
             width: 40px;

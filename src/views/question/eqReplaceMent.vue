@@ -136,7 +136,6 @@ export default {
       },
       replaceData: {
         model_name: "",
-        // imei: "",
         user_name: "",
         mobile: "",
         code: "",
@@ -167,8 +166,17 @@ export default {
       }
 
       this.currentType=index;
-      this.replaceData={};
-      this.areaData=""
+      this.replaceData={
+        model_name: "",
+        user_name: "",
+        mobile: "",
+        code: "",
+        province: "",
+        city: "",
+        district: "",
+        addr: "",
+        iccid:""};
+      this.areaData="";
     },
     //获取列表
     getList(){

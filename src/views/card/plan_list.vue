@@ -90,11 +90,13 @@
             .plan-type-inner-wrap {
                 border: 1PX solid #dca85f;
                 border-radius: 46px;
+                width:90%;
+                display:flex;
             }
             span {
                 display: inline-block;
                 height: 46px;
-                padding: 0 50px;
+                flex:1;
                 color: #868686;
                 border: 1px solid transparent;
                 font-size: 28px;
@@ -318,6 +320,9 @@
                             }
                             if (i == 2) {
                                 this.plan_type_name.push("加油包");
+                            }
+                            if(i==5){
+                                this.plan_type_name.push("周期性套餐");
                             }
                         }
                     }
