@@ -1,29 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width,initial-scale=1.0">
-    <link rel="icon" href="favicon.ico">
-    <link rel="stylesheet" href="//at.alicdn.com/t/font_963137_tdzfhx797d.css">
-    <meta name="viewport" content="width=devive-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
-    <title>流量卡</title>
-    <script>
-        /(iPhone|iPad|iPhone OS|Phone|iPod|iOS)/i.test(navigator.userAgent)&&(head=document.getElementsByTagName('head'),viewport=document.createElement('meta'),viewport.name='viewport',viewport.content='target-densitydpi=device-dpi, width=480px, user-scalable=no',head.length>0&&head[head.length-1].appendChild(viewport));
-    </script>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <link rel="icon" href="<%= BASE_URL %>">
+  <link rel="stylesheet" href="//at.alicdn.com/t/font_963137_tdzfhx797d.css">
+  <meta name="viewport" content="width=devive-width,initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+  <title>流量卡</title>
+  <script>
+    /(iPhone|iPad|iPhone OS|Phone|iPod|iOS)/i.test(navigator.userAgent) && (head = document.getElementsByTagName('head'), viewport = document.createElement('meta'), viewport.name = 'viewport', viewport.content = 'target-densitydpi=device-dpi, width=480px, user-scalable=no', head.length > 0 && head[head.length - 1].appendChild(viewport));
+  </script>
 </head>
 <body>
 <script>
-    !(function(c,b,d,a){c[a]||(c[a]={});c[a].config={pid:"blqrpq6wmd@55b4b3ce6fd086f",appType:"web",imgUrl:"https://arms-retcode.aliyuncs.com/r.png?"};
-        with(b)with(body)with(insertBefore(createElement("script"),firstChild))setAttribute("crossorigin","",src=d)
-    })(window,document,"https://retcode.alicdn.com/retcode/bl.js","__bl");
+  !(function (c, b, d, a) {
+    c[a] || (c[a] = {});
+    c[a].config = {
+      pid: "blqrpq6wmd@55b4b3ce6fd086f",
+      appType: "web",
+      imgUrl: "https://arms-retcode.aliyuncs.com/r.png?"
+    };
+    with (b) with (body) with (insertBefore(createElement("script"), firstChild)) setAttribute("crossorigin", "", src = d)
+  })(window, document, "https://retcode.alicdn.com/retcode/bl.js", "__bl");
 </script>
 <noscript>
-    <strong>We're sorry but card doesn't work properly without JavaScript enabled. Please enable it to
-        continue.</strong>
+  <strong>We're sorry but card doesn't work properly without JavaScript enabled. Please enable it to
+    continue.</strong>
 </noscript>
 <div class="app-loading-wrap">
-    <div class="loader"></div>
+  <div class="loader"></div>
 </div>
 <div id="app"></div>
 <!-- built files will be auto injected -->

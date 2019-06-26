@@ -22,6 +22,15 @@ module.exports = {
       }
     }
   },
+  pwa: {
+    iconPaths: {
+      favicon16: 'img/icons/favicon-16x16.png',
+      favicon32: 'img/icons/favicon-32x32.png',
+      appleTouchIcon: 'img/icons/favicon-32x32.png',
+      maskIcon: 'img/icons/favicon-32x32.png',
+      msTileImage: 'img/icons/favicon-32x32.png',
+    }
+  },
   devServer: {
     port: 8080,
     disableHostCheck: true,
@@ -61,7 +70,6 @@ module.exports = {
           '^/kachiApi': ""
         }
       },
-
     }
   }
 }
