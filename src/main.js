@@ -3,12 +3,15 @@ import App from './App.vue'
 import router from './router'
 import './registerServiceWorker'
 import store from '../src/store/index'
-
 import 'normalize.css'
+
+import { Popover } from 'element-ui';
+import 'element-ui/lib/theme-chalk/index.css';
+Vue.use(Popover)
+
 require('../src/assets/css/loading/index.css')
 require( '../src/assets/css/reset.css')
 require('../src/assets/css/SourceHanSansCNRegular.css')
-
 // require('./mock')
 require('../src/assets/js/sha1.min')
 

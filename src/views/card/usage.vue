@@ -255,7 +255,7 @@
                         }
                         &:last-child {
                             text-align: right;
-                            margin-left:100px;
+                            margin-left:20px;
                         }
                     }
                     span {
