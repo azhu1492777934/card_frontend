@@ -30,56 +30,56 @@ Vue.prototype.global_variables = global_variables;
 
 // 扫码请求
 let scanUrl,
-    scanApi;
+  scanApi;
 global_variables.packed_project === 'mifi' ? scanUrl = '/mifi/card/lookup' :  scanUrl = '/weixin/card/lookup';
 global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_info' :  scanApi = '/api/v1/app/sign_info';
 
 router.afterEach((to,from)=>{
 
-    if(checkBrowser()=='wechat'){
-        if(to.path==scanUrl){
-            _get(scanApi)
-                .then(res=>{
-                    if(res.state==1){
-                        wx.config({
-                            debug: false,
-                            appId: res.data.appId,
-                            signature: res.data.sign,
-                            timestamp: res.data.timestamp,
-                            nonceStr: res.data.noncestr,
-                            jsApiList: ["scanQRCode"]
-                        })
-                    }
-                })
-        }else if(to.path=="/weixin/question/eqReplaceMent"){
-            _get(scanApi,{url:global_variables.authorized_redirect_url+"/weixin/question/eqReplaceMent"})
-                .then(res=>{
-                    if(res.state==1){
-                        
-                        wx.config({
-                            debug: false,
-                            appId: res.data.appId,
-                            signature: res.data.sign,
-                            timestamp: res.data.timestamp,
-                            nonceStr: res.data.noncestr,
-                            jsApiList: ["scanQRCode"]
-                        })
-                    }
-                })
-        }
+  if(checkBrowser()=='wechat'){
+    if(to.path==scanUrl){
+      _get(scanApi)
+        .then(res=>{
+          if(res.state==1){
+            wx.config({
+              debug: false,
+              appId: res.data.appId,
+              signature: res.data.sign,
+              timestamp: res.data.timestamp,
+              nonceStr: res.data.noncestr,
+              jsApiList: ["scanQRCode"]
+            })
+          }
+        })
+    }else if(to.path=="/weixin/question/eqReplaceMent"){
+      _get(scanApi,{url:global_variables.authorized_redirect_url+"/weixin/question/eqReplaceMent"})
+        .then(res=>{
+          if(res.state==1){
 
+            wx.config({
+              debug: false,
+              appId: res.data.appId,
+              signature: res.data.sign,
+              timestamp: res.data.timestamp,
+              nonceStr: res.data.noncestr,
+              jsApiList: ["scanQRCode"]
+            })
+          }
+        })
     }
 
-    const u = navigator.userAgent.toLowerCase();
-    if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
-    if (to.path !== global.location.pathname ) {
-        location.assign(to.fullPath);
-    };
+  }
+
+  const u = navigator.userAgent.toLowerCase();
+  if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
+  if (to.path !== global.location.pathname ) {
+    location.assign(to.fullPath);
+  };
 });
 
 //适配IOS
 window.appToken=function(msg){
-    localStorage.setItem("token", msg);
+  localStorage.setItem("token", msg);
 }
 
 Vue.config.productionTip = false;
@@ -87,7 +87,7 @@ Vue.use(globalFunction)
 Vue.use(vueWeChatTitle)
 Vue.use(vueBounce)
 new Vue({
-    store,
-    router,
-    render: h => h(App)
+  store,
+  router,
+  render: h => h(App)
 }).$mount('#app')
