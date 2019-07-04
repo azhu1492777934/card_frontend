@@ -56,7 +56,7 @@
                 removeStorage('watchAutoSearch');
             }
             let _this=this;
-            if (this.client_type == 'app') {
+            if (this.client_type === 'app') {
                 let UA = navigator.userAgent.toLowerCase();
                 if(/(ylkids_android)/.test(UA)){
                     this.showHtmlcallJava2();
@@ -88,7 +88,6 @@
 
             authorized() {
                 if ( (this.client_type === 'wechat' || this.client_type === 'alipay' || this.client_type === 'app') && process.env.NODE_ENV !== 'development'  ) {
-
                     if (this.client_type !== 'app') {
                         if (getStorage('userInfo', 'obj')) {
                             this.$store.commit('userInfo/changeUserStatus', true);
