@@ -259,22 +259,8 @@
         user_rmb = this.userInfo.account.rmb;
       }
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);//根据套餐价格过滤充值参数
-       let newData=[];
-            console.log(this.new_recharge_list);
-            for(let i=0;i<this.new_recharge_list.length;i++){
-                if(this.showOriginPrice==2){
-                    if(this.new_recharge_list[i].pay_type=="over_charge"||this.new_recharge_list[i].pay_type=="diamond_charge"){
-                        newData.push(this.new_recharge_list[i]);
-                    }
-                }else if(this.showOriginPrice==3){
-                    if(this.new_recharge_list[i].pay_type=="normal_charge"||this.new_recharge_list[i].pay_type=="diamond_charge"){
-                        newData.push(this.new_recharge_list[i]);
-                    }
-                }
-            }
-            if(this.showOriginPrice==2||this.showOriginPrice==3){
-                this.new_recharge_list=newData;
-            }
+
+
 
       /*
      * 增加包月套餐
@@ -297,6 +283,29 @@
       } else if (this.userInfo.account.rmb <= 0) {
         this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
       }
+
+
+
+       
+            if(this.showOriginPrice==2||this.showOriginPrice==3){
+              let newData=[];
+              console.log(this.new_recharge_list);
+              for(let i=0;i<this.new_recharge_list.length;i++){
+                  if(this.showOriginPrice==2){
+                    // ||this.new_recharge_list[i].pay_type=="diamond_charge"
+                      if(this.new_recharge_list[i].pay_type=="over_charge"){
+                          newData.push(this.new_recharge_list[i]);
+                      }
+                  }else if(this.showOriginPrice==3){
+                      if(this.new_recharge_list[i].pay_type=="normal_charge"){
+                          newData.push(this.new_recharge_list[i]);
+                      }
+                  }
+              }
+              console.log(newData);
+                this.new_recharge_list=newData;
+            }
+
 
     },
     methods: {
