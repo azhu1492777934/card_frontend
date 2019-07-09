@@ -216,7 +216,8 @@
                         }//机卡状态
 
                         this.filterCardInfo.card_str_state = this.card_state[this.usageInfo.status];//卡状态
-
+                        
+                        localStorage.setItem("is_flow_card",1);
                     }else{
                         this.$store.commit('mifiCommon/changeErrStatus',{
                             show:true,
