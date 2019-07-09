@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.bc34f62a.js"
   },
   {
-    "revision": "cbe3fa499f5c5f32ff8a",
+    "revision": "6450dedb601814bcecce",
     "url": "/css/app.8b56f02a.css"
   },
   {
-    "revision": "cbe3fa499f5c5f32ff8a",
-    "url": "/js/app.844197b4.js"
+    "revision": "6450dedb601814bcecce",
+    "url": "/js/app.5057d9fe.js"
   },
   {
     "revision": "ce2f1173cdd1d8c71e9a",
@@ -588,16 +588,16 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
     "revision": "b899232b79ad9962c5ab5572775a0400",
     "url": "/img/card_index_bg@3x.b899232b.png"
   },
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
     "url": "/img/card_index_bg@2x.b899232b.png"
-  },
-  {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -792,7 +792,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "4e7bd9a2ae890f0a8b86655ba8409201",
+    "revision": "949cce3fcef0cb7b64a251f997a365eb",
     "url": "/index.html"
   },
   {
