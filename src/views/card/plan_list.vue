@@ -25,14 +25,18 @@
               :content="item_inner.describe ? item_inner.describe:item_inner.remark?item_inner.remark:''"
               :value="item_inner.id==choose_plan_index&&firstStatus"
             >
-              <div slot="reference">
+              <div slot="reference" class="centerBox">
                 <div class="contentWord1">{{item_inner.name}}</div>
                 <div class="contentWord2"></div>
                 <div class="contentWord3">
                   <p>￥{{ item_inner.price }}</p>
                   <del>￥{{ item_inner.market_price }}</del>
                 </div>
+                 <p :class="{'plan-icon-recommend':item_inner.is_recommend}" class="plan-name">
+                                    <span v-if="item_inner.is_recommend" class="iconfont icon-recommend"></span>
+                                </p>
               </div>
+              
             </el-popover>
           </div>
         </div>
@@ -128,6 +132,22 @@
       //   justify-content: space-between;
       padding: 0 20px;
       box-sizing: border-box;
+      .plan-icon-recommend {
+        text-align:left;
+        position:absolute;
+        bottom:4px;
+        left:8px;
+          }
+          .iconfont{
+            font-size:38px;
+          }
+          .centerBox{
+            height:100%;
+            display:flex;
+            align-items:center;
+            flex-direction: column;
+            justify-content: center;
+          }
       > div {
         border: 2px solid rgba(230, 230, 230, 1);
         border-radius: 13px;
@@ -135,6 +155,8 @@
         margin: 10px;
         box-sizing: border-box;
         flex: 0 0 30%;
+      position:relative;
+
         .contentWord1 {
           font-size: 24px;
           font-family: SourceHanSansSC-Regular;
@@ -169,6 +191,7 @@
           color: #fd720d;
         }
       }
+
       .activedPlan::after {
         content: "";
         position: absolute;
@@ -431,6 +454,12 @@
 
           this.load_plan_list = false;
           this.plan_list = res.data;
+
+          for(let item in this.plan_list){
+            // for(let i=0;i<this.plan_list[item].length;i++){
+              this.plan_list[item].sort(this.compare("is_recommend"))
+            // }
+          }
           this.choose_plan_index = res.data[0][0].id;
 
           this.$nextTick(() => {
@@ -595,6 +624,20 @@
           day = "0" + day;
         }
         return year + "-" + month + "-" + day;
+      },
+      //排序
+      compare(pro){
+        return function(obj){
+          let val=obj[pro];
+          if(val==true){
+            return -1;
+          }else if(val==false){
+            return 1;
+          }else{
+            return 0;
+          }
+
+        }
       }
     }
   };

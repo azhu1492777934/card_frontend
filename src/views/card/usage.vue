@@ -673,6 +673,7 @@
                             }
 
                             this.filterCardInfo.watch_card_usage.used_voice = toDecimal(this.usageInfo.usage.usedVoice) + '分钟' //已使用通话
+                            localStorage.setItem("is_flow_card",0);
 
                             //手表卡用量
                         } else {
@@ -696,7 +697,7 @@
                             }
 
                             this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used,0,0)
-
+                            localStorage.setItem("is_flow_card",1);
                         }//流量卡
 
                         // 是否显示套餐
