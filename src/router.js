@@ -213,7 +213,10 @@ export const constantRouterMap = [{
                 }, {
                     path: 'argument',
                     component: refund_argument,
-
+                    meta: {
+                        title: '退款条款',
+                        requireAuth: true,
+                    }
                 }, {
                     path: 'applying',
                     component: refund_applying,
