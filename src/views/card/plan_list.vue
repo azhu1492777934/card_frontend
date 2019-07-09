@@ -418,7 +418,8 @@
         },
         rechargeShow: false,
         ref_plan_type_index: 0,
-        firstStatus: false
+        firstStatus: false,
+
       };
     },
     components: {
@@ -454,11 +455,34 @@
 
           this.load_plan_list = false;
           this.plan_list = res.data;
+         
 
+          // for(let item in this.plan_list){
+          //     newList=this.plan_list[item].sort(this.compare2("price"));
+          //     console.log(this.plan_list[item].sort(this.compare2("price")));
+          // }
+          
           for(let item in this.plan_list){
-            // for(let i=0;i<this.plan_list[item].length;i++){
-              this.plan_list[item].sort(this.compare("is_recommend"))
-            // }
+              // this.plan_list[item].sort(this.compare("is_recommend"))
+            let newArray1=[],newArray2=[],newArray3=[];
+            for(let i=0;i<this.plan_list[item].length;i++){
+              
+              //区分推荐/未推荐
+
+              if(this.plan_list[item][i].is_recommend==true){
+                  newArray1.push(this.plan_list[item][i]);
+              }else{
+                  newArray2.push(this.plan_list[item][i]);
+              }
+              
+              
+            }
+            //分别进行排序
+              newArray1.sort(this.compare2("price"));
+              newArray2.sort(this.compare2("price"));
+              newArray3=newArray1.concat(newArray2);
+              this.plan_list[item]=newArray3;
+
           }
           this.choose_plan_index = res.data[0][0].id;
 
@@ -633,6 +657,20 @@
             return -1;
           }else if(val==false){
             return 1;
+          }else{
+            return 0;
+          }
+        }
+      },
+      //排序2
+       compare2(pro){
+        return function(obj1,obj2){
+          let val1=obj1[pro];
+          let val2=obj2[pro];
+          if(val1>val2){
+            return 1;
+          }else if(val1<val2){
+            return -1;
           }else{
             return 0;
           }
