@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/js/recharge_callback.39d16819.js"
   },
   {
-    "revision": "319b0e27dc43be61d452",
-    "url": "/css/Layout.f1696a85.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
+  },
+  {
+    "revision": "55487f697784251223a8",
+    "url": "/css/recharge_wrapper.907108b0.css"
   },
   {
     "revision": "a22a85b7bf5a0d77cd68",
     "url": "/css/Not_fund.08f80dd6.css"
-  },
-  {
-    "revision": "a22a85b7bf5a0d77cd68",
-    "url": "/js/Not_fund.68f35929.js"
   },
   {
     "revision": "04b0348c42dced1dbe05",
@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.bc34f62a.js"
   },
   {
-    "revision": "189475026b5130e53cd6",
+    "revision": "6a55c9ef7011e0742b1a",
     "url": "/css/app.8b56f02a.css"
   },
   {
-    "revision": "189475026b5130e53cd6",
-    "url": "/js/app.8c7d2e1c.js"
+    "revision": "6a55c9ef7011e0742b1a",
+    "url": "/js/app.cae16551.js"
   },
   {
     "revision": "ce2f1173cdd1d8c71e9a",
@@ -348,12 +348,12 @@ self.__precacheManifest = [
     "url": "/js/new_card_wrapper.46fd7f05.js"
   },
   {
-    "revision": "71682952600ef02afa0f",
-    "url": "/css/plan_list.850e8f8d.css"
+    "revision": "2128ca4ab7dcfe1491b4",
+    "url": "/css/plan_list.f8eeffd2.css"
   },
   {
-    "revision": "71682952600ef02afa0f",
-    "url": "/js/plan_list.8205de81.js"
+    "revision": "2128ca4ab7dcfe1491b4",
+    "url": "/js/plan_list.e66380c0.js"
   },
   {
     "revision": "5ea2582c41024d8d8e91",
@@ -412,8 +412,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.e5ed7b60.js"
   },
   {
-    "revision": "55487f697784251223a8",
-    "url": "/css/recharge_wrapper.907108b0.css"
+    "revision": "a22a85b7bf5a0d77cd68",
+    "url": "/js/Not_fund.68f35929.js"
   },
   {
     "revision": "55487f697784251223a8",
@@ -620,14 +620,6 @@ self.__precacheManifest = [
     "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
-  },
-  {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
     "revision": "d32e5dc3875f1afd2be29aad1cfd0382",
     "url": "/img/contactBg.d32e5dc3.png"
   },
@@ -638,6 +630,14 @@ self.__precacheManifest = [
   {
     "revision": "9713b21819c4019befecd095069977df",
     "url": "/img/bg-check-wrap@2x.9713b218.png"
+  },
+  {
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
+  },
+  {
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -684,16 +684,16 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
     "revision": "3d0fc424b703032ca595090e99f8354b",
     "url": "/img/login_bg@2x.3d0fc424.png"
   },
   {
     "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
     "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
   },
   {
     "revision": "2a67b73145562669220aa4639e1ad58f",
@@ -792,12 +792,12 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "2a9c1ec342a1056575a8e25a07241783",
+    "revision": "fe48554674cfe596fe20d56c2d78d90a",
     "url": "/index.html"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
+    "revision": "319b0e27dc43be61d452",
+    "url": "/css/Layout.f1696a85.css"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",

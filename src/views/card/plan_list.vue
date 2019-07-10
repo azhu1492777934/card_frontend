@@ -45,6 +45,8 @@
 
     <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
       <button @click="recharge">充值</button>
+      <router-link to="/weixin/coupon/index" >卡券兑换</router-link>
+
     </div>
 
     <van-popup :close-on-click-overlay="false" v-model="load_plan_list">
@@ -369,18 +371,28 @@
 
     .btn-recharge-wrap {
       padding: 40px 32px;
+      position:relative;
       &.noDataHide {
         display: none;
       }
       button {
         display: block;
-        width: 100%;
-        padding: 20px 0;
+        width: 430px;
+        height: 80px;
         font-size: 36px;
         color: #000;
         background: linear-gradient(-33deg, rgba(253, 212, 122, 1), rgba(240, 181, 70, 1));
         border-radius: 40px;
+        margin:0 auto;
       }
+       a {
+                position: absolute;
+                right: 30px;
+                bottom: 60px;
+                color: rgba(253, 212, 122, 1);
+                font-size: 28px;
+                text-decoration: underline;
+            }
     }
   }
 </style>
