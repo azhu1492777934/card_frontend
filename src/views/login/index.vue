@@ -45,22 +45,22 @@
       [Popup.name]: Popup
     },
     created() {
-
-      if (checkBrowser() == 'wechat') {
-
+      if (checkBrowser() === 'wechat') {
         this.client_type = 'wechat';
-
-      } else if (checkBrowser() == 'alipay') {
-
+      } else if (checkBrowser() === 'alipay') {
         this.client_type = 'alipay';
       }
-
+      if(checkBrowser() === 'wechat' || checkBrowser() === 'alipay'){
+        lossRate({
+          type:0
+        })
+      }
       //获取用户信息
       this.decrypt_data = getStorage('decrypt_data', 'obj');
     },
     methods: {
       login() {
-        if (this.phone == '' && this.code == '') {
+        if (!this.phone && !this.code ) {
           Notify({message: '请填写您的信息'});
           return;
         } else if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
@@ -69,7 +69,7 @@
         } else {
           this.loginDisabled = true;
           lossRate({
-            type: 2,
+            type: 1,
             phone: this.phone
           });
 
@@ -83,7 +83,7 @@
             avatar: this.decrypt_data.headimgurl
           }).then((res) => {
             this.loginDisabled = false;
-            if (res.error == 0) {
+            if (res.error === 0) {
               let _this = this;
               setStorage("token", res.data);
 
@@ -92,37 +92,32 @@
                 background: '#60ce53'
               });
               setTimeout(function () {
-
-                if (localStorage.getItem("currentType") == "esim") {
+                if (localStorage.getItem("currentType") === "esim") {
                   _this.$router.push({path: '/weixin/card/esim_usage'});
-                } else if (localStorage.getItem("currentType") == "userCenter") {
+                } else if (localStorage.getItem("currentType") === "userCenter") {
                   _this.$router.push({path: '/weixin/userCenter/index'});
                 } else {
                   _this.$router.push({path: '/weixin/card/lookup'})
                 }
               }, 2000)
-            } else if (res.error == "11002") {
-
+            } else if (res.error === 11002) {
               this.$emit("getToken");
-
-            } else if (res.error == 30002) {
-
+            } else if (res.error === 30002) {
               Notify({
                 message: '帐户绑定成功',
                 background: '#60ce53'
-              })
+              });
 
-              if (localStorage.getItem("currentType") == "esim") {
+              if (localStorage.getItem("currentType") === "esim") {
                 location.href = '/weixin/card/esim_usage';
-              } else if (localStorage.getItem("currentType") == "userCenter") {
+              } else if (localStorage.getItem("currentType") === "userCenter") {
                 location.href = "/weixin/userCenter/index"
               } else {
                 let redirect_uri = getStorage('authorized_redirect_uri');
                 getStorage('check_iccid') ? location.href = redirect_uri : location.href = '/weixin/card/lookup';
               }
 
-
-            } else if (res.error == 20014) {
+            } else if (res.error === 20014) {
               this.code = '';
               Notify({message: '用户绑定超时，请重新绑定'});
             } else {
@@ -133,7 +128,7 @@
         }
       },
       getCode() {
-        if (this.phone == '') {
+        if (!this.phone) {
           Notify({message: '请输入您的手机号码'})
           return
         } else if (!(/^(13[0-9]|14[5679]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
@@ -152,12 +147,12 @@
           _post("/accountCenter/v2/verify/send?" + codeParam({}, 'post'), {
             mobile: this.phone
           }).then((res) => {
-            if (res.error == 0) {
+            if (res.error === 0) {
               Notify({
                 message: '验证码发送成功',
                 background: '#60ce53'
               })
-            } else if (res.error == "11002") {
+            } else if (res.error === 11002) {
               this.$emit("getToken");
             } else {
               Notify({message: res.msg})
@@ -175,7 +170,7 @@
           if (_this.countdown <= 0) {
             _this.codeText = '获取验证码';
             _this.countdown = 60;
-            _this.btnCode_disabled = false
+            _this.btnCode_disabled = false;
             clearInterval(_this.timer);
           } else {
             _this.codeText = this.countdown + 's';

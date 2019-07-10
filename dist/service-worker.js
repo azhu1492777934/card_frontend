@@ -14,10 +14,10 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.2c786c4645260f883c6ec8c7b137d926.js"
+  "/precache-manifest.07aaa8e689bed5875ea0099083f3a7cd.js"
 );
 
-workbox.core.setCacheNameDetails({prefix: "p-activity"});
+workbox.core.setCacheNameDetails({prefix: "card_server"});
 
 /**
  * The workboxSW.precacheAndRoute() method efficiently caches and responds to

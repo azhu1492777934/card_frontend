@@ -26,12 +26,7 @@
         </li>
       </ul>
     </div><!--历史记录-->
-    <van-popup :close-on-click-overlay="false" v-model="checkShow">
-      <p class="showTip">正在检测中,请等候</p>
-    </van-popup>
-
     <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
-
   </div>
 </template>
 
@@ -41,9 +36,11 @@
 
   .check-card-wrap {
     padding: 0 40px;
+
     .scanTop-wrap {
       padding: 35px 0 90px;
       text-align: center;
+
       img {
         display: block;
         width: 77%;
@@ -51,6 +48,7 @@
         height: auto;
       }
     }
+
     .search-wrap {
       position: relative;
       display: flex;
@@ -59,11 +57,13 @@
       align-items: center;
       border: 1PX solid #38b5ed;
       border-radius: 7px;
+
       input {
         flex: 6;
         padding-left: 20px;
         font-size: 30px;
       }
+
       .clearIccid {
         position: relative;
         right: 20px;
@@ -72,11 +72,13 @@
         line-height: .8;
         cursor: pointer;
       }
+
       .icon-scan {
         font-size: 78px;
         color: #38b5ed;
         line-height: 1;
       }
+
       .icon-scanTip {
         position: absolute;
         top: -73px;
@@ -87,8 +89,10 @@
         background-size: 100% 100%;
       }
     }
+
     .btn-check-wrap {
       padding-bottom: 50px;
+
       button {
         display: inline-block;
         width: 50%;
@@ -101,11 +105,13 @@
         border-radius: 70px;
       }
     }
+
     .recording-wrap {
       .recording-list-wrap {
         max-height: 260px;
         overflow: auto;
       }
+
       li {
         display: flex;
         padding: 20px;
@@ -115,18 +121,22 @@
         font-size: 24px;
         border-bottom: 1PX solid #f0f0f0;
         box-sizing: border-box;
+
         &:last-child {
           border-bottom: none;
         }
+
         span {
           &:first-child {
             flex: 4;
             text-align: left;
           }
+
           &:nth-child(2) {
             flex: 2;
             text-align: right;
           }
+
           &:last-child {
             max-width: 20px;
             font-size: 48px;
@@ -138,16 +148,19 @@
         }
       }
     }
+
     .recording-title {
       display: flex;
       padding: 20px;
       background-color: #e8eefc;
       color: #5679bf;
+
       span {
         &:first-child {
           flex: 4;
           text-align: left;
         }
+
         &:last-child {
           flex: 2;
           text-align: right;
@@ -170,9 +183,10 @@
     checkBrowser,
     lossRate
   } from '../../utilies'
-  import {Popup, Notify} from 'vant'
+  import {Popup, Notify, Toast} from 'vant'
   import {_post, _get} from "../../http";
   import cardButton from '../../components/button'
+  import Empty from '../../components/empty'
 
   export default {
     name: "home",
@@ -182,7 +196,7 @@
         recording_list: [],
         recording_show: false,
         iccid: '',
-        checkShow: false,//查询遮罩
+        checkShow: true,//查询遮罩
         client_type: checkBrowser(),//当前客户端环境 微信/支付宝
         showClearBtn: false,
         forbidden_click: true, //防止用户在未授权是进行业务操作
@@ -190,7 +204,9 @@
     },
     components: {
       [Popup.name]: Popup,
-      cardButton
+      [Toast.name]: Toast,
+      Empty,
+      cardButton,
     },
     created() {
 
@@ -200,18 +216,15 @@
 
       if (getStorage('userInfo', 'obj')) {
         lossRate({
-          type: 0,
+          type: 2,
           user_id: getStorage('userInfo', 'obj') ? getStorage('userInfo', 'obj').account.user_id : ''
         });// 流失统计
       }
-
       let _this = this;
 
       if (getStorage('recording_list', 'arr')) {
         let local_recording_list = getStorage('recording_list', 'arr')
-
         if (local_recording_list.length) {
-
           this.recording_list = local_recording_list;
           this.recording_show = true
         }
@@ -225,19 +238,16 @@
 
       this.$watch('iccid', this.debounce((newQuery) => {
         _this.handleIccidFocus()
-      }, 500))
+      }, 500));
 
       let scanWatchCardIccid = getUrlParam('iccid') || getStorage('watch_card'); //watch_card 兼容 授权时跳转问题
 
-      if (scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state == 1) {
-
+      if (scanWatchCardIccid && this.checkSearchIccid(scanWatchCardIccid).state === 1) {
         if (getStorage('watchAutoSearch') > 2) {
           removeStorage('watch_card');
           removeStorage('watchAutoSearch');
         }
-
         if (getStorage('watch_card_timestamp')) {
-
           var watch_card_timestamp = getStorage('watch_card_timestamp')
           var cur_date = new Date().getTime();
 
@@ -245,9 +255,9 @@
             let setTime = new Date().getTime() + (1 * 60 * 1000);
             setStorage('check_iccid', scanWatchCardIccid)
             setStorage('watch_card_timestamp', setTime);
+
             this.processCheckIccid(scanWatchCardIccid);//自动查询
           }
-
         } else {
           this.iccid = scanWatchCardIccid;
           setStorage('check_iccid', scanWatchCardIccid)
@@ -275,15 +285,20 @@
         }
         this.processCheckIccid(iccid);
       },
-
       processCheckIccid: function (iccid) {
-        this.checkShow = true
+        // this.checkShow = true;
+        Toast.loading({
+          mask: true,
+          message: "查询中,请等候",
+          forbidClick: true,
+          duration: 0,
+        });
+
         let isExist = false,
           _this = this;
         if (this.recording_list.length) {
-
           this.recording_list.map(function (item, index) {
-            if (item.iccid == iccid) {
+            if (item.iccid === iccid) {
               item.searchTime = formatterCardTime().searchTime
               item.millisecond = formatterCardTime().millisecond
               isExist = true;
@@ -304,23 +319,17 @@
           })
           this.recording_show = true;
         }
-
         this.recording_list.sort(this.compare('millisecond'));
-
         if (this.recording_list.length > 20) {
           this.recording_list.splice(20)
         }
+        setStorage('recording_list', this.recording_list, 'arr', true);
 
-        setStorage('recording_list', this.recording_list, 'arr');
-
-        lossRate({
-          type: 1,
-          iccid: iccid
-        });
         //查询
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: iccid,
         }).then(res => {
+          Toast.clear();
           let autoCount = getStorage('watchAutoSearch');
           if (autoCount) {
             autoCount++;
@@ -335,19 +344,19 @@
               _this.$router.push({path: '/weixin/card/usage'})
             } else if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);
+              lossRate({type: 3, iccid: iccid});
               _this.$router.push({path: '/weixin/new_card/real_name'});
             } else if (res.data.status === 3) {
-              _this.$router.push({path: '/weixin/card/plan_list'});
+              lossRate({type: 3, iccid: iccid});
+              _this.$router.push({path: '/weixin/card/plan_list', query: {type: 1}});
             }
           } else {
             Notify({
               message: res.msg
-            })
-            _this.checkShow = false
+            });
           }
         })
       },
-
       scanIccid() {
         let _this = this;
         if (this.client_type === 'wechat') {
@@ -370,11 +379,9 @@
           });
         }
       },
-
       inArray: function (elem, arr, i) {
         return arr == null ? -1 : arr.indexOf(elem, i);
       },
-
       compare: function (property) {
         return function (a, b) {
           var value1 = a[property];
@@ -382,7 +389,6 @@
           return value2 - value1;
         }
       },
-
       checkSearchIccid: function (iccid) {
         if (!iccid) {
           return {
@@ -400,7 +406,6 @@
           state: 1
         }
       },
-
       deleteIccid: function (iccid) {
         let deleteIndex = -1;
         for (let i = 0; i < this.recording_list.length; i++) {
@@ -411,7 +416,7 @@
         }
         if (deleteIndex >= 0) {
           this.recording_list.splice(deleteIndex, 1);
-          setStorage('recording_list', this.recording_list, 'arr');
+          setStorage('recording_list', this.recording_list, 'arr', true);
         }
 
         if (!this.recording_list.length) {
@@ -444,7 +449,6 @@
           }, delay)
         }
       }
-
     }
   };
 </script>

@@ -32,11 +32,11 @@
                   <p>￥{{ item_inner.price }}</p>
                   <del>￥{{ item_inner.market_price }}</del>
                 </div>
-                 <p :class="{'plan-icon-recommend':item_inner.is_recommend}" class="plan-name">
-                                    <span v-if="item_inner.is_recommend" class="iconfont icon-recommend"></span>
-                                </p>
+                <p :class="{'plan-icon-recommend':item_inner.is_recommend}" class="plan-name">
+                  <span v-if="item_inner.is_recommend" class="iconfont icon-recommend"></span>
+                </p>
               </div>
-              
+
             </el-popover>
           </div>
         </div>
@@ -45,7 +45,7 @@
 
     <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
       <button @click="recharge">充值</button>
-      <router-link to="/weixin/coupon/index" >卡券兑换</router-link>
+      <router-link to="/weixin/coupon/index">卡券兑换</router-link>
 
     </div>
 
@@ -88,6 +88,7 @@
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
+
     .planHeader {
       height: 55px;
       background: rgba(255, 251, 243, 1);
@@ -96,6 +97,7 @@
       justify-content: center;
       align-items: center;
       margin: 10px 0;
+
       > div:nth-child(1) {
         width: 129px;
         height: 8px;
@@ -103,6 +105,7 @@
         background-size: 100% 100%;
         margin-right: 24px;
       }
+
       > div:nth-child(2) {
         font-size: 30px;
         font-family: SourceHanSansSC-Bold;
@@ -116,6 +119,7 @@
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
       }
+
       > div:nth-child(3) {
         width: 129px;
         height: 8px;
@@ -130,26 +134,28 @@
       width: 100%;
       flex-flow: row wrap;
       align-content: flex-start;
-      //  align-items:center;
-      //   justify-content: space-between;
       padding: 0 20px;
       box-sizing: border-box;
+
       .plan-icon-recommend {
-        text-align:left;
-        position:absolute;
-        bottom:4px;
-        left:8px;
-          }
-          .iconfont{
-            font-size:38px;
-          }
-          .centerBox{
-            height:100%;
-            display:flex;
-            align-items:center;
-            flex-direction: column;
-            justify-content: center;
-          }
+        text-align: left;
+        position: absolute;
+        bottom: 4px;
+        left: 8px;
+      }
+
+      .iconfont {
+        font-size: 38px;
+      }
+
+      .centerBox {
+        height: 100%;
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        justify-content: center;
+      }
+
       > div {
         border: 2px solid rgba(230, 230, 230, 1);
         border-radius: 13px;
@@ -157,25 +163,26 @@
         margin: 10px;
         box-sizing: border-box;
         flex: 0 0 30%;
-      position:relative;
+        position: relative;
 
         .contentWord1 {
           font-size: 24px;
-          font-family: SourceHanSansSC-Regular;
           font-weight: 400;
           color: rgba(51, 51, 51, 1);
         }
+
         .contentWord2 {
           width: 60px;
           height: 3px;
           background: rgba(241, 165, 60, 1);
           margin: 10px auto;
         }
+
         .contentWord3 {
           font-size: 28px;
-          font-family: SourceHanSansSC-Regular;
           font-weight: 400;
           color: #fd720d;
+
           del {
             color: #868686;
             font-size: 21px;
@@ -186,9 +193,9 @@
       //当前选中样式
       .activedPlan {
         position: relative;
-        // border: 2PX solid #dca85f;
         border-color: #dca85f;
         box-shadow: 0 0 30px 0 #eae9e9;
+
         .plan-name {
           color: #fd720d;
         }
@@ -204,13 +211,16 @@
         background: url("../../assets/imgs/card/usage/right.png") no-repeat;
         background-size: 100% 100%;
       }
+
       //售罄状态
       .plan-sell-done {
         background-color: #f0f0f0;
+
         .plan-name,
         .plan-price {
           color: #868686;
         }
+
         .icon-sell-done {
           position: absolute;
           top: 40px;
@@ -224,25 +234,30 @@
           border-radius: 12px;
           transform: rotate(-28deg);
         }
+
         .icon-sell-done::after {
           content: "已售罄";
         }
       }
     }
+
     .swiper-container {
       height: 100%;
     }
+
     .plan-type-wrap {
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px 0;
+
       .plan-type-inner-wrap {
         border: 1px solid #dca85f;
         border-radius: 46px;
         width: 90%;
         display: flex;
       }
+
       span {
         display: inline-block;
         height: 46px;
@@ -252,17 +267,20 @@
         font-size: 28px;
         line-height: 50px;
         border-radius: 46px;
+
         &.active_type {
           color: #fff;
           background-color: #dca85f;
         }
       }
     }
+
     //套餐列表
     .plan-list-wrap {
       height: 100%;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
+
       li {
         position: relative;
         display: flex;
@@ -277,33 +295,40 @@
         margin-bottom: 25px;
         align-items: center;
         font-size: 20px;
+
         &:first-child {
           margin-top: 20px;
         }
+
         &:last-child {
           margin-bottom: 0;
         }
+
         //套餐信息
         .plan-info-wrap {
           flex: 5;
           box-sizing: border-box;
           text-align: left;
           font-size: 24px;
+
           .plan-name {
             padding: 20px 0 10px;
             font-size: 30px;
             color: #2c251d;
             font-weight: 500;
           }
+
           .plan-icon-recommend {
             padding: 20px 0 20px 60px;
           }
+
           .icon-recommend {
             position: absolute;
             top: 5px;
             left: 10px;
             font-size: 60px;
           }
+
           .plan-limited-wrap {
             .limited-num {
               display: inline-block;
@@ -316,13 +341,16 @@
               line-height: 1;
             }
           }
+
           .plan-desc {
             font-size: 28px;
             padding-bottom: 20px;
           }
         }
+
         .plan-price-wrap {
           flex: 1.5;
+
           .plan-price {
             color: #fd720d;
             font-size: 36px;
@@ -333,22 +361,27 @@
         &.activedPlan {
           border: 1px solid #dca85f;
           box-shadow: 0 0 30px 0 #eae9e9;
+
           .plan-name {
             color: #fd720d;
           }
+
           .selected-plan {
             position: absolute;
             right: 0;
             bottom: 0;
           }
         }
+
         //售罄状态
         &.plan-sell-done {
           background-color: #f0f0f0;
+
           .plan-name,
           .plan-price {
             color: #868686;
           }
+
           .icon-sell-done {
             position: absolute;
             top: 40px;
@@ -362,6 +395,7 @@
             border-radius: 12px;
             transform: rotate(-28deg);
           }
+
           .icon-sell-done::after {
             content: "已售罄";
           }
@@ -371,10 +405,12 @@
 
     .btn-recharge-wrap {
       padding: 40px 32px;
-      position:relative;
+      position: relative;
+
       &.noDataHide {
         display: none;
       }
+
       button {
         display: block;
         width: 430px;
@@ -383,16 +419,17 @@
         color: #000;
         background: linear-gradient(-33deg, rgba(253, 212, 122, 1), rgba(240, 181, 70, 1));
         border-radius: 40px;
-        margin:0 auto;
+        margin: 0 auto;
       }
-       a {
-                position: absolute;
-                right: 30px;
-                bottom: 60px;
-                color: rgba(253, 212, 122, 1);
-                font-size: 28px;
-                text-decoration: underline;
-            }
+
+      a {
+        position: absolute;
+        right: 30px;
+        bottom: 60px;
+        color: rgba(253, 212, 122, 1);
+        font-size: 28px;
+        text-decoration: underline;
+      }
     }
   }
 </style>
@@ -447,10 +484,13 @@
       }
     },
     created() {
-      lossRate({
-        type: 3,
-        iccid: getStorage("check_iccid")
-      }); // 流失率统计
+      // 流失率统计
+      if (this.$route.query.type === "1") {
+        lossRate({
+          type: 4,
+          iccid: getStorage("check_iccid")
+        });
+      }
       let _this = this;
       //处理套餐数据
       _get("/api/v1/app/plan_list", {
@@ -464,36 +504,24 @@
           }
 
           this.load_plan_msg = res.msg;
-
           this.load_plan_list = false;
           this.plan_list = res.data;
-         
 
-          // for(let item in this.plan_list){
-          //     newList=this.plan_list[item].sort(this.compare2("price"));
-          //     console.log(this.plan_list[item].sort(this.compare2("price")));
-          // }
-          
-          for(let item in this.plan_list){
-              // this.plan_list[item].sort(this.compare("is_recommend"))
-            let newArray1=[],newArray2=[],newArray3=[];
-            for(let i=0;i<this.plan_list[item].length;i++){
-              
+          for (let item in this.plan_list) {
+            let newArray1 = [], newArray2 = [], newArray3 = [];
+            for (let i = 0; i < this.plan_list[item].length; i++) {
               //区分推荐/未推荐
-
-              if(this.plan_list[item][i].is_recommend==true){
-                  newArray1.push(this.plan_list[item][i]);
-              }else{
-                  newArray2.push(this.plan_list[item][i]);
+              if (this.plan_list[item][i].is_recommend === true) {
+                newArray1.push(this.plan_list[item][i]);
+              } else {
+                newArray2.push(this.plan_list[item][i]);
               }
-              
-              
             }
             //分别进行排序
-              newArray1.sort(this.compare2("price"));
-              newArray2.sort(this.compare2("price"));
-              newArray3=newArray1.concat(newArray2);
-              this.plan_list[item]=newArray3;
+            newArray1.sort(this.compare2("price"));
+            newArray2.sort(this.compare2("price"));
+            newArray3 = newArray1.concat(newArray2);
+            this.plan_list[item] = newArray3;
 
           }
           this.choose_plan_index = res.data[0][0].id;
@@ -557,6 +585,7 @@
               setStorage("monthlyMsg", res.data, "obj");
               this.$router.push({
                 path: "/weixin/recharge/index",
+                query: {type: this.$route.query.type}
               });
             } else {
               Notify({message: res.msg});
@@ -662,28 +691,28 @@
         return year + "-" + month + "-" + day;
       },
       //排序
-      compare(pro){
-        return function(obj){
-          let val=obj[pro];
-          if(val==true){
+      compare(pro) {
+        return function (obj) {
+          let val = obj[pro];
+          if (val == true) {
             return -1;
-          }else if(val==false){
+          } else if (val == false) {
             return 1;
-          }else{
+          } else {
             return 0;
           }
         }
       },
       //排序2
-       compare2(pro){
-        return function(obj1,obj2){
-          let val1=obj1[pro];
-          let val2=obj2[pro];
-          if(val1>val2){
+      compare2(pro) {
+        return function (obj1, obj2) {
+          let val1 = obj1[pro];
+          let val2 = obj2[pro];
+          if (val1 > val2) {
             return 1;
-          }else if(val1<val2){
+          } else if (val1 < val2) {
             return -1;
-          }else{
+          } else {
             return 0;
           }
 

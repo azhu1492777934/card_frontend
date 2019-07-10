@@ -133,11 +133,6 @@
                 this.card_tip = !this.card_tip
             }
 
-            lossRate({
-                type: 3,
-                iccid: getStorage('check_iccid')
-            });
-
             _get('/api/v1/app/find_iccid', {
                 iccid: getStorage('check_iccid')
             }).then(res => {

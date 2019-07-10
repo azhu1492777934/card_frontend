@@ -30,7 +30,7 @@ let global_variables = {
 * 当前打包项目
 * */
 // if(process.env.NODE_ENV == 'development'){
-if(process.env.NODE_ENV == 'production'){
+if(process.env.NODE_ENV === 'production'){
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].ProductionDomain;
 }else{
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].DevelopDomain;

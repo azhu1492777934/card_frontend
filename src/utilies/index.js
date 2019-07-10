@@ -1,6 +1,7 @@
 import md5 from 'js-md5';
 import {_post} from "../http";
 import global_variables from "./domain";
+import {isUndefined} from "element-ui/src/utils/types";
 
 function checkICCID(iccid) {
   if (iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != '89') {
@@ -30,25 +31,72 @@ function formatterCardTime() {
   }
 }//记录查询时间
 
-function setStorage(key, value, type) {
+function setStorage(key, value, type, saveCookie) {
   if (type === 'arr' || type === 'obj') {
     localStorage.setItem(key, JSON.stringify(value));
   } else {
     localStorage.setItem(key, value);
   }
+  if (saveCookie) {
+    setCookie(key, value, type);
+  }
 };
 
 function getStorage(key, type) {
   if (type === 'arr' || type === 'obj') {
-    return JSON.parse(localStorage.getItem(key));
+    if (localStorage.getItem(key)) {
+      return JSON.parse(localStorage.getItem(key));
+    } else if (getCookie(key, type)) {
+      return getCookie(key, type)
+    }
+    return undefined
   } else {
-    return localStorage.getItem(key);
+    if (localStorage.getItem(key)) {
+      return localStorage.getItem(key);
+    } else if (getCookie(key, type)) {
+      return getCookie(key, type);
+    }
+    return undefined
   }
 };
 
 function removeStorage(key) {
   localStorage.removeItem(key)
+  removeCookie(key);
 };
+
+function setCookie(key, value, type) {
+  if (type === 'arr' || type === 'obj') {
+    document.cookie = `${key}=${JSON.stringify(value)}`
+  } else {
+    document.cookie = `${key}=${value}`
+  }
+}
+
+function getCookie(key, type) {
+  var str = document.cookie;
+  var arr = str.split("; ");
+  for (let i = 0; i < arr.length; i++) {
+    let newArr = arr[i].split("=");
+    if (newArr[0] === key) {
+      if (type === 'arr' || type === 'obj') {
+        return JSON.parse(newArr[1]);
+      } else {
+        return newArr[1]
+      }
+    }
+  }
+}
+
+function removeCookie(key) {
+  let exp = new Date();
+  exp.setTime(exp.getTime() - 1);
+  let value = getCookie(key);
+  if (value != null) {
+    document.cookie = key + "=" + value + ";expires=" + exp.toGMTString();
+  }
+}
+
 
 function toDecimal(val) {
   let type = Object.prototype.toString.call(val);

@@ -215,10 +215,12 @@
     },
     created() {
       // 用户流失率统计
-      lossRate({
-        type: 4,
-        iccid: this.planInfo.iccid || getStorage('check_iccid')
-      });
+      if (this.$route.query.type === "1") {
+        lossRate({
+          type: 5,
+          iccid: this.planInfo.iccid || getStorage('check_iccid')
+        });
+      }
 
       if (getStorage('decrypt_data', 'obj')) {
         this.open_id = getStorage('decrypt_data', 'obj').openid
@@ -261,7 +263,6 @@
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);//根据套餐价格过滤充值参数
 
 
-
       /*
      * 增加包月套餐
      * 条件限制:存在钻石用量
@@ -284,29 +285,22 @@
         this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
       }
 
-
-
-       
-            if(this.showOriginPrice==2||this.showOriginPrice==3){
-              let newData=[];
-              console.log(this.new_recharge_list);
-              for(let i=0;i<this.new_recharge_list.length;i++){
-                  if(this.showOriginPrice==2){
-                    // ||this.new_recharge_list[i].pay_type=="diamond_charge"
-                      if(this.new_recharge_list[i].pay_type=="over_charge"){
-                          newData.push(this.new_recharge_list[i]);
-                      }
-                  }else if(this.showOriginPrice==3){
-                      if(this.new_recharge_list[i].pay_type=="normal_charge"){
-                          newData.push(this.new_recharge_list[i]);
-                      }
-                  }
-              }
-              console.log(newData);
-                this.new_recharge_list=newData;
+      if (this.showOriginPrice == 2 || this.showOriginPrice == 3) {
+        let newData = [];
+        for (let i = 0; i < this.new_recharge_list.length; i++) {
+          if (this.showOriginPrice == 2) {
+            // ||this.new_recharge_list[i].pay_type=="diamond_charge"
+            if (this.new_recharge_list[i].pay_type == "over_charge") {
+              newData.push(this.new_recharge_list[i]);
             }
-
-
+          } else if (this.showOriginPrice == 3) {
+            if (this.new_recharge_list[i].pay_type == "normal_charge") {
+              newData.push(this.new_recharge_list[i]);
+            }
+          }
+        }
+        this.new_recharge_list = newData;
+      }
     },
     methods: {
       changedCheck: function (type) {
@@ -658,15 +652,18 @@
       width: 80%;
       border-radius: 10px;
     }
+
     .appContext-pay-wrap {
       color: #333;
       background-color: #fff;
+
       .title {
         font-size: 32px;
         font-weight: 500;
         padding-top: 25px;
         text-align: center;
       }
+
       .content {
         padding: 25px;
         line-height: 1.5;
@@ -675,28 +672,34 @@
         text-align: center;
         color: #7d7e80;
         font-size: 28px;
+
         p {
           margin: 10px 0;
           padding: 10px;
         }
+
         .choose_type {
           background-color: #f1af4c;
           color: #fff;
           border-radius: 5px;
         }
       }
+
       .footer {
         display: flex;
         border-top: 1PX solid #f5f5f5;
         height: 90px;
+
         button {
           flex: 1;
           font-size: 28px;
           background-color: transparent;
+
           &:first-child {
             color: #000;
             border-right: 1PX solid #f5f5f5;
           }
+
           &:last-child {
             color: @primary;
           }
@@ -706,6 +709,7 @@
 
     .recharge-tip {
       background-color: #feeae5;
+
       p {
         text-align: center;
         padding: 20px;
@@ -713,6 +717,7 @@
         color: #ff562f;
       }
     }
+
     //充值提醒
 
     .title-wrap {
@@ -723,6 +728,7 @@
       text-align: center;
       font-size: 28px;
       color: #c89439;
+
       span {
         padding: 0 30px;
       }
@@ -741,6 +747,7 @@
       }
 
     }
+
     //支付title
 
     .content-wrap {
@@ -752,6 +759,7 @@
         flex-wrap: wrap;
         justify-content: space-between;
       }
+
       li {
         display: table;
         position: relative;
@@ -764,6 +772,7 @@
         border: 1PX solid #e6e6e6;
         border-radius: 16px;
         -webkit-text-size-adjust: none;
+
         &.special {
           min-height: 1px;
           margin: 0;
@@ -775,18 +784,22 @@
           vertical-align: middle;
           padding-top: 30px;
         }
+
         .monthlyPlan {
           vertical-align: top;
           border-radius: 16px;
           background: linear-gradient(-45deg, rgba(255, 222, 123, 1), rgba(250, 197, 84, 1), rgba(255, 209, 120, 1), rgba(247, 194, 80, 1));
         }
+
         .monthlyTop {
           margin-top: 10px;
           display: flex;
           justify-content: space-between;
+
           > div:nth-child(1) {
             margin-left: 12px;
           }
+
           > div:nth-child(2) {
             margin-right: 9px;
           }
@@ -797,23 +810,27 @@
           font-weight: 400;
           color: rgba(131, 96, 25, 1);
         }
+
         .monthlyFirst {
           font-size: 20px;
           font-weight: 400;
           color: rgba(255, 255, 255, 1);
         }
+
         .monthlyMoney {
           font-size: 20px;
           font-weight: 400;
           text-decoration: line-through;
           color: rgba(44, 37, 29, 1);
         }
+
         .monthly-rmb {
           margin-top: 12px;
           font-size: 38px !important;
           font-weight: 400;
           color: rgba(44, 37, 29, 1) !important;
         }
+
         .line {
           display: block;
           width: 60px;
@@ -821,6 +838,7 @@
           margin: 10px auto 13px;
           background-color: #c89439;
         }
+
         div {
           display: table-cell;
           vertical-align: middle;
@@ -835,8 +853,10 @@
           color: #2c251d;
           line-height: 1;
         }
+
         .discount-diamond {
           padding-top: 5px;
+
           .surplus-recharge {
             display: block;
             padding: 8px 0;
@@ -844,6 +864,7 @@
             color: #2c251d;
           }
         }
+
         .discount-appendix {
           color: #888;
           font-size: 20px;
@@ -875,6 +896,7 @@
 
       }
     }
+
     //充值列表结束
 
     .choice-wrap {
@@ -895,9 +917,11 @@
         div {
           flex: 1;
           max-width: 200px;
+
           input {
             vertical-align: middle;
           }
+
           input + span {
             padding-left: 8px;
             vertical-align: middle;
@@ -921,6 +945,7 @@
       }
 
     }
+
     //充值方式选择
 
     .btn-large {
@@ -933,6 +958,7 @@
       font-size: 34px;
       border-radius: 13px;
     }
+
     //充值按钮
 
   }
