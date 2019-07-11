@@ -286,7 +286,11 @@
         this.processCheckIccid(iccid);
       },
       processCheckIccid: function (iccid) {
-        // this.checkShow = true;
+        // 清除用户输入的字母
+        let newIccid;
+        if (/[a-zA-Z]/.test(iccid.charAt(iccid.length - 1))) {
+          newIccid = iccid.substr(0,iccid.length-1);
+        }
         Toast.loading({
           mask: true,
           message: "查询中,请等候",
@@ -298,22 +302,22 @@
           _this = this;
         if (this.recording_list.length) {
           this.recording_list.map(function (item, index) {
-            if (item.iccid === iccid) {
-              item.searchTime = formatterCardTime().searchTime
-              item.millisecond = formatterCardTime().millisecond
+            if (item.iccid === newIccid) {
+              item.searchTime = formatterCardTime().searchTime;
+              item.millisecond = formatterCardTime().millisecond;
               isExist = true;
             }
           });
           if (!isExist) {
             this.recording_list.push({
-              'iccid': iccid,
+              'iccid': newIccid,
               'searchTime': formatterCardTime().searchTime,
               'millisecond': formatterCardTime().millisecond
             })
           }
         } else {
           this.recording_list.push({
-            'iccid': iccid,
+            'iccid': newIccid,
             'searchTime': formatterCardTime().searchTime,
             'millisecond': formatterCardTime().millisecond
           })
@@ -327,7 +331,7 @@
 
         //查询
         _post('/api/v1/app/new_auth/check_auth_', {
-          iccid: iccid,
+          iccid: newIccid,
         }).then(res => {
           Toast.clear();
           let autoCount = getStorage('watchAutoSearch');
@@ -338,16 +342,16 @@
           if (res.state === 1) {
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
-            setStorage('new_auth_search_iccid', iccid);
+            setStorage('new_auth_search_iccid', newIccid);
             localStorage.setItem("currentType", "card");
             if (res.data.status === 1) {
               _this.$router.push({path: '/weixin/card/usage'})
             } else if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);
-              lossRate({type: 3, iccid: iccid});
+              lossRate({type: 3, iccid: res.data.iccid});
               _this.$router.push({path: '/weixin/new_card/real_name'});
             } else if (res.data.status === 3) {
-              lossRate({type: 3, iccid: iccid});
+              lossRate({type: 3, iccid: res.data.iccid});
               _this.$router.push({path: '/weixin/card/plan_list', query: {type: 1}});
             }
           } else {
