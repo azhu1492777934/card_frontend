@@ -288,8 +288,10 @@
       processCheckIccid: function (iccid) {
         // 清除用户输入的字母
         let newIccid;
-        if (/[a-zA-Z]/.test(iccid.charAt(iccid.length - 1))) {
-          newIccid = iccid.substr(0,iccid.length-1);
+        if (/[a-zA-Z]/.test(iccid.replace(/\s/g, "").charAt(iccid.length - 1))) {
+          newIccid = iccid.replace(/\s/g, "").substr(0, iccid.length - 1);
+        } else {
+          newIccid = iccid.replace(/\s/g, "");
         }
         Toast.loading({
           mask: true,
@@ -342,7 +344,7 @@
           if (res.state === 1) {
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
-            setStorage('new_auth_search_iccid', newIccid);
+            setStorage('new_auth_search_iccid', res.data.iccid);
             localStorage.setItem("currentType", "card");
             if (res.data.status === 1) {
               _this.$router.push({path: '/weixin/card/usage'})
@@ -393,18 +395,25 @@
           return value2 - value1;
         }
       },
-      checkSearchIccid: function (iccid) {
+      checkSearchIccid: function (paramIccid) {
+        let iccid = paramIccid.replace(/\s/g, "");
         if (!iccid) {
           return {
             state: 0,
             msg: '请输入ICCID'
           }
         }
-        if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) !== "89") && (iccid.length !== 13 && iccid.length !== 11 && iccid.length !== 15 && iccid.length !== 16)) {
+        if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) !== "89") && (iccid.length !== 11 && iccid.length !== 13 && iccid.length !== 15 && iccid.length !== 16)) {
           return {
             state: 0,
             msg: 'ICCID有误,请检查'
           };
+        }
+        if(!/^[a-zA-Z0-9]+$/.test(iccid)){
+          return {
+            state:0,
+            msg:"ICCID有误,请检查"
+          }
         }
         return {
           state: 1
