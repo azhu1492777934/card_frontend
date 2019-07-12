@@ -1,8 +1,9 @@
 <template>
-  <div  :class="{'appStyle':client_type=='app2','check-card-wrap':client_type!='app2'}">
+<div>
+  <div  class="check-card-wrap" v-if="newAppStyle!='app2'">
     <div class="scanTop-wrap">
-      <img v-if="client_type!='app'" src="../../assets/imgs/card/lookup/scanTop.png" alt="">
-      <img v-if="client_type=='app'" src="../../assets/imgs/card/lookup/scanTop2.png" alt="">
+      <img v-if="newAppStyle!='app2'" src="../../assets/imgs/card/lookup/scanTop.png" alt="">
+      <img v-if="newAppStyle=='app2'" src="../../assets/imgs/card/lookup/scanTop2.png" alt="">
     </div>
     <div class="search-wrap">
       <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur"
@@ -29,6 +30,41 @@
     </div><!--历史记录-->
     <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
   </div>
+
+
+
+  <div  class="appStyle" v-if="newAppStyle=='app2'">
+    <div class="scanTop-wrap">
+      <img v-if="newAppStyle!='app2'" src="../../assets/imgs/card/lookup/scanTop.png" alt="">
+      <img v-if="newAppStyle=='app2'" src="../../assets/imgs/card/lookup/scanTop2.png" alt="">
+    </div>
+    <div class="search-wrap">
+      <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur"
+             placeholder="扫码或手动输入iccid号或11位电话号" type="text">
+      <span v-show="showClearBtn" @click="clearInputIccid" class="clearIccid">&times;</span>
+      <span v-show="client_type!='app'" @click="scanIccid" class="iconfont icon-scan bounceIn animated"></span>
+      <span v-show="client_type!='app'" class="icon-scanTip"></span>
+    </div>
+    <div class="btn-check-wrap">
+      <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
+    </div>
+    <div v-show="recording_show" class="recording-wrap">
+      <p class="recording-title">
+        <span>历史搜索记录</span>
+        <span>{{recording_list.length}}条</span>
+      </p>
+      <ul class="recording-list-wrap">
+        <li v-for="(item,index) in recording_list">
+          <span @click="searchIccid(item.iccid)">{{item.iccid}}</span>
+          <span>{{item.searchTime}}</span>
+          <span @click="deleteIccid(item.iccid)">&times</span>
+        </li>
+      </ul>
+    </div><!--历史记录-->
+    <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
+  </div>
+</div>
+  
 </template>
 
 <style lang="less">
@@ -181,7 +217,6 @@
 // app样式
   .appStyle {
     // padding: 0 40px;
-    
     .scanTop-wrap {
       padding: 31px 0 0px 0;
       text-align: center;
@@ -352,7 +387,7 @@
         client_type: checkBrowser(),   //当前客户端环境 微信/支付宝
         showClearBtn: false,
         forbidden_click: true, //防止用户在未授权是进行业务操作
-
+        newAppStyle:"app"
       }
     },
     components: {
@@ -363,6 +398,10 @@
     },
     created() {
 
+      var UA = navigator.userAgent.toLowerCase();
+      if (/(app_charge)/.test(UA) || /(ios1.1.0)/.test(UA)) {
+        this.newAppStyle="app2"
+      }
       if (this.client_type !== 'wechat' || this.client_type !== 'alipay' || this.client_type !== 'app' || getStorage('token')) {
         this.forbidden_click = false
       }

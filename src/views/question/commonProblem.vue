@@ -75,18 +75,23 @@
             font-size:24px;
             font-family:PingFangSC-Regular;
             color:#494949;
+            line-height:40px;
           }
           >div:nth-child(3){
             margin-top:40px;
             font-size:24px;
             font-family:PingFangSC-Regular;
             color:#494949;
+            line-height:40px;
+
           }
           >div:nth-child(4){
             margin-top:40px;
             font-size:24px;
             font-family:PingFangSC-Regular;
             color:#494949;
+            line-height:40px;
+
           }
         }
       }

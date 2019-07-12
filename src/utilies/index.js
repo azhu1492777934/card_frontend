@@ -184,9 +184,7 @@ function checkBrowser() {
       return 'wechat'
     } else if (/(uni-app)/.test(UA) || /(ylkids_android)/.test(UA) || /(ios1.1.0)/.test(UA)) {
       return 'app'
-    } else if (/(app_charge)/.test(UA) || /(ios1.1.0)/.test(UA)) {
-      return 'app2'
-    } else {
+    }  else {
       return 'mobile'
     }
   } else {
