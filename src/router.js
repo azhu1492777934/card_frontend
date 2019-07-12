@@ -54,6 +54,8 @@ const question = r => require.ensure([], () => r(require('./views/question/index
 const find_plan = r => require.ensure([], () => r(require('./views/question/question_1')), 'find_plan'); // 流量通话未增加
 const revoke_plan = r => require.ensure([], () => r(require('./views/question/question_2')), 'revoke_plan'); // 无法使用
 const release_plan = r => require.ensure([], () => r(require('./views/question/question_3')), 'question') // 解约自动续约套餐
+const commonProblem = r => require.ensure([], () => r(require('./views/question/commonProblem')), 'commonProblem') //  常见问题
+const realNameCourse = r => require.ensure([], () => r(require('./views/question/realNameCourse')), 'realNameCourse') //  实名教程
 
 // 退款
 const refund_wrapper = r => require.ensure([], () => r(require('./views/refund/refund_wrapper')), 'refund_wrapper');
@@ -195,6 +197,22 @@ export const constantRouterMap = [{
                     component: eqReplaceMent,
                     meta: {
                         title: '设备或卡更换',
+                        requireAuth: true,
+                    }
+                },
+                {
+                    path: 'commonProblem',
+                    component: commonProblem,
+                    meta: {
+                        title: '常见问题',
+                        requireAuth: true,
+                    }
+                },
+                {
+                    path: 'realNameCourse',
+                    component: realNameCourse,
+                    meta: {
+                        title: '实名教程',
                         requireAuth: true,
                     }
                 }

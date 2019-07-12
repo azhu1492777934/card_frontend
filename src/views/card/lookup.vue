@@ -1,7 +1,8 @@
 <template>
-  <div class="check-card-wrap">
+  <div  :class="{'appStyle':client_type=='app2','check-card-wrap':client_type!='app2'}">
     <div class="scanTop-wrap">
-      <img src="../../assets/imgs/card/lookup/scanTop.png" alt="">
+      <img v-if="client_type!='app'" src="../../assets/imgs/card/lookup/scanTop.png" alt="">
+      <img v-if="client_type=='app'" src="../../assets/imgs/card/lookup/scanTop2.png" alt="">
     </div>
     <div class="search-wrap">
       <input ref="iccidDom" @focus="handleIccidFocus" v-model="iccid" @blur.prevent="iccidBlur"
@@ -169,6 +170,157 @@
     }
 
   }
+
+
+
+
+
+
+
+
+// app样式
+  .appStyle {
+    // padding: 0 40px;
+
+    .scanTop-wrap {
+      padding: 31px 0 0px 0;
+      text-align: center;
+      background:#00CA9D;
+      height:284px;
+      img {
+        display: block;
+        width:586px;
+        height:347px;
+        margin:0 auto;
+        
+      }
+    }
+
+    .search-wrap {
+      position: relative;
+      display: flex;
+      height: 128px;
+      align-items: center;
+      background:#FAFAFA;
+      margin:144px 22px 32px  22px;
+      input {
+        flex: 6;
+        padding-left: 34px;
+        font-size:32px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(46,46,46,1);
+      }
+
+      .clearIccid {
+        position: relative;
+        right: 20px;
+        font-size: 50px;
+        color: #888;
+        line-height: .8;
+        cursor: pointer;
+      }
+
+      .icon-scan {
+        font-size: 78px;
+        color: #38b5ed;
+        line-height: 1;
+      }
+
+      .icon-scanTip {
+        position: absolute;
+        top: -73px;
+        right: 0;
+        width: 221px;
+        height: 73px;
+        background-size: 100% 100%;
+      }
+    }
+
+    .btn-check-wrap {
+      padding-bottom: 84px;
+
+      button {
+        display: inline-block;
+        width: 596px;
+        height: 80px;
+        line-height: 80px;
+        font-size:32px;
+        font-family:PingFangSC-Regular;
+        font-weight:400;
+        color:rgba(255,255,255,1);
+        background-color: #00CA9D;
+        text-align: center;
+        border-radius: 100px;
+      }
+    }
+
+    .recording-wrap {
+      padding:0 25px;
+      .recording-list-wrap {
+        max-height: 260px;
+        overflow: auto;
+      }
+
+      li {
+        display: flex;
+        padding: 20px;
+        align-items: center;
+        background-color: #fff;
+        line-height: 1;
+        font-size: 24px;
+        border-bottom: 1PX solid #f0f0f0;
+        box-sizing: border-box;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        span {
+          &:first-child {
+            flex: 4;
+            text-align: left;
+          }
+
+          &:nth-child(2) {
+            flex: 2;
+            text-align: right;
+          }
+
+          &:last-child {
+            max-width: 20px;
+            font-size: 48px;
+            line-height: .5;
+            padding-left: 10px;
+            color: #e0e0e0;
+          }
+
+        }
+      }
+    }
+
+    .recording-title {
+      display: flex;
+      padding: 20px;
+      background-color: rgba(0,202,157,0.2);
+      font-size:28px;
+      font-family:SourceHanSansCN-Normal;
+      font-weight:400;
+      color:rgba(0,202,157,1);
+      span {
+        &:first-child {
+          flex: 4;
+          text-align: left;
+        }
+
+        &:last-child {
+          flex: 2;
+          text-align: right;
+        }
+      }
+    }
+
+  }
 </style>
 
 
@@ -197,9 +349,10 @@
         recording_show: false,
         iccid: '',
         checkShow: true,//查询遮罩
-        client_type: checkBrowser(),//当前客户端环境 微信/支付宝
+        client_type: checkBrowser(),   //当前客户端环境 微信/支付宝
         showClearBtn: false,
         forbidden_click: true, //防止用户在未授权是进行业务操作
+
       }
     },
     components: {
