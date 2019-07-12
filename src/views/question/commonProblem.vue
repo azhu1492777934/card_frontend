@@ -8,19 +8,20 @@
           <div v-for="(inner_item,inner_index) in item.children" v-bind:key="inner_index">
             <div>{{inner_item.title}}</div>
             <div>{{inner_item.content}}</div>
-            <div>{{inner_item.content2}}</div>
-            <div>{{inner_item.content3}}</div>
+            <div v-if="inner_item.content2">{{inner_item.content2}}</div>
+            <div v-if="inner_item.content3">{{inner_item.content3}}</div>
           </div>
       </div>
+
+
     </div>
 </template>
 
 
 <script>
-    import problemList from "./commonProblem"
+    import problemList from "./problemList.js";
     export default {
         name: "home",
-
         data() {
             return {
                 problemList:problemList
@@ -29,6 +30,7 @@
         components: {
         },
         created() {
+          // console.log(this.problemList);
         },
         methods: {
           

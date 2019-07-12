@@ -181,7 +181,7 @@
 // app样式
   .appStyle {
     // padding: 0 40px;
-
+    
     .scanTop-wrap {
       padding: 31px 0 0px 0;
       text-align: center;
