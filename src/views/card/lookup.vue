@@ -400,7 +400,7 @@
 
       var UA = navigator.userAgent.toLowerCase();
       if (/(app_charge)/.test(UA) || /(ios1.1.0)/.test(UA)) {
-        this.newAppStyle="app2"
+        this.newAppStyle="app2";
       }
       if (this.client_type !== 'wechat' || this.client_type !== 'alipay' || this.client_type !== 'app' || getStorage('token')) {
         this.forbidden_click = false
