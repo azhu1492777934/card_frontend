@@ -6,6 +6,9 @@ import global_variables from './utilies/domain'
 const Layout = r => require.ensure([], () => r(require('./components/layout')), 'Layout');
 const mifi_layout = r => require.ensure([], () => r(require('./components/mifi_layout')), 'mifi_layout');
 
+// 中转链接
+const transfer_url = r => require.ensure([], () => r(require('./views/transfer_url/index')), 'transfer_url');
+
 // 登录
 const login = r => require.ensure([], () => r(require('./views/login/index')), 'login');//查询
 
@@ -42,7 +45,6 @@ const card_connection = r => require.ensure([], () => r(require('./views/card/co
 const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check'); // 卡检测
 const esim_usage = r => require.ensure([], () => r(require('./views/card/esim_usage')), 'esim_usage'); // 卡检测
 const esim_plan_list = r => require.ensure([], () => r(require('./views/card/esim_plan_list')), 'esim_plan_list'); // 卡检测
-
 
 
 // 儿童手表卡
@@ -106,411 +108,414 @@ const mifi_coupon_index = r => require.ensure([], () => r(require('./views/mifi/
 //个人中心
 const userCenterWrap = r => require.ensure([], () => r(require('./views/userCenter/userCenterWrap')), 'userCenterWrap');
 const userCenter = r => require.ensure([], () => r(require('./views/userCenter/index')), 'userCenter'); //主页
-const rechargeRecord =  r => require.ensure([], () => r(require('./views/userCenter/rechargeRecord')), 'rechargeRecord'); //充值记录
-const userCenterAddress =  r => require.ensure([], () => r(require('./views/userCenter/userCenterAddress')), 'userCenterAddress'); //收获地址
-const contactUs =  r => require.ensure([], () => r(require('./views/userCenter/contactUs')), 'contactUs'); //联系我们
-const helpCenter =  r => require.ensure([], () => r(require('./views/userCenter/helpCenter')), 'helpCenter');  //问题中心
-const salesRecords =  r => require.ensure([], () => r(require('./views/userCenter/salesRecords')), 'salesRecords');  //售后列表
-const addSalesRecords =  r => require.ensure([], () => r(require('./views/userCenter/addSalesRecords')), 'addSalesRecords');  //售后申请
-const realName=r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
+const rechargeRecord = r => require.ensure([], () => r(require('./views/userCenter/rechargeRecord')), 'rechargeRecord'); //充值记录
+const userCenterAddress = r => require.ensure([], () => r(require('./views/userCenter/userCenterAddress')), 'userCenterAddress'); //收获地址
+const contactUs = r => require.ensure([], () => r(require('./views/userCenter/contactUs')), 'contactUs'); //联系我们
+const helpCenter = r => require.ensure([], () => r(require('./views/userCenter/helpCenter')), 'helpCenter');  //问题中心
+const salesRecords = r => require.ensure([], () => r(require('./views/userCenter/salesRecords')), 'salesRecords');  //售后列表
+const addSalesRecords = r => require.ensure([], () => r(require('./views/userCenter/addSalesRecords')), 'addSalesRecords');  //售后申请
+const realName = r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
 
 //复充活动
-const repeatRecharge =r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
+const repeatRecharge = r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
 //设备更换
-const eqReplaceMent =r => require.ensure([], () => r(require('./views/question/eqReplaceMent')), 'eqReplaceMent');  //设备更换
+const eqReplaceMent = r => require.ensure([], () => r(require('./views/question/eqReplaceMent')), 'eqReplaceMent');  //设备更换
 
 
-
-Vue.use(Router)
+Vue.use(Router);
 
 export const constantRouterMap = [{
-    path: '/login',
-    component: login,
-    meta: {title: '用户绑定',}
+  path: '/transfer_url',
+  component: transfer_url,
+  meta: {title: "公众号二维码"}
 }, {
-    path: '/binding',
-    component: mifi_binding,
-    meta: {title: '用户绑定'}
+  path: '/login',
+  component: login,
+  meta: {title: '用户绑定',}
 }, {
-    path: '/weixin',
-    component: Layout,
-    children: [
-        {
-            path: 'new_card',
-            component: new_card_wrapper,
-            children: [{
-                path: 'real_name',
-                component: real_name,
-                meta: {
-                    title: '实名',
-                    requireAuth: true,
-                }
-            }, {
-                path: 'lookup',
-                component: lookup,
-                meta: {
-                    title: '新卡激活',
-                }
-            }, {
-                path: 'to_tb',
-                component: to_tb,
-                meta: {
-                    title: '阿里实名',
-                    requireAuth: true,
-                }
-            },
-            ]
-        }, {
-            path: 'question',
-            component: question_wrapper,
-            children: [
-                {
-                    path: 'index',
-                    component: question,
-                    meta: {
-                        title: '问题中心',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'find_plan',
-                    component: find_plan,
-                    meta: {
-                        title: '找回套餐',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'revoke_plan',
-                    component: revoke_plan,
-                    meta: {
-                        title: '唤醒套餐',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'release_plan',
-                    component: release_plan,
-                    meta: {
-                        title: '套餐解约',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'eqReplaceMent',
-                    component: eqReplaceMent,
-                    meta: {
-                        title: '设备或卡更换',
-                        requireAuth: true,
-                    }
-                },
-                {
-                    path: 'commonProblem',
-                    component: commonProblem,
-                    meta: {
-                        title: '常见问题',
-                        requireAuth: true,
-                    }
-                },
-                {
-                    path: 'realNameCourse',
-                    component: realNameCourse,
-                    meta: {
-                        title: '实名认证教程',
-                        requireAuth: true,
-                    }
-                }
-            ]
-        }, {
-            path: 'refund',
-            component: refund_wrapper,
-            children: [
-                {
-                    path: 'index',
-                    component: refund_plan,
-                    meta: {
-                        title: '退款',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'argument',
-                    component: refund_argument,
-                    meta: {
-                        title: '退款条款',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'applying',
-                    component: refund_applying,
-                    meta: {
-                        title: '退款申请',
-                        requireAuth: true,
-                    }
-                },
-            ]
-        }, {
-            path: 'speedup',
-            component: speedup_wrapper,
-            children: [
-                {
-                    path: 'plan_80',
-                    component: speedup_80,
-                    meta: {
-                        title: '加速包',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'plan_500',
-                    component: speedup_500,
-                    meta: {
-                        title: '加速包',
-                        requireAuth: true,
-                    }
-                }
-            ]
-        }, {
-            path: 'coupon',
-            component: coupon_wrapper,
-            children: [
-                {
-                    path: 'index',
-                    component: coupon_normal,
-                    meta: {
-                        title: '卡券兑换',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'telcom',
-                    component: coupon_telcom,
-                    meta: {
-                        title: '联通卡券兑换',
-                        requireAuth: true,
-                    }
-                },
-            ]
-        }, {
-            path: 'card',
-            component: new_card_wrapper,
-            children: [{
-                path: 'lookup',
-                component: card_lookup,
-                meta: {
-                    title: '查询',
-                    requireAuth: true,
-                }
-            }, 
-            {
-                path: 'esim_usage',
-                component: esim_usage,
-                meta: {
-                    title: 'esim详情',
-                    requireAuth: true,
-                }
-            }, 
-            {
-                path: 'usage',
-                component: card_usage,
-                meta: {
-                    title: '详情',
-                    requireAuth: true,
-                }
-            }, 
-            
-            {
-                path: 'esim_plan_list',
-                component: esim_plan_list,
-                meta: {
-                    title: 'esim套餐列表',
-                    requireAuth: true,
-                }
-            },
-            {
-                path: 'plan_list',
-                component: plan_list,
-                meta: {
-                    title: '套餐列表',
-                    requireAuth: true,
-                }
-            }, {
-                path: 'connection',
-                component: card_connection,
-                meta: {
-                    title: '连接详情',
-                    requireAuth: true,
-                }
-            }, {
-                path: 'check',
-                component: card_check,
-                meta: {
-                    title: '卡检测'
-                }
-            }, {
-                path: 'watch',
-                component: children_card,
-                meta: {
-                    title: '手表号码查询'
-                }
-            },{
-                path: 'repeatRecharge',
-                component: repeatRecharge,
-                meta: {
-                    title: '复充活动'
-                }
-            }]
-        }, {
-            path: 'recharge',
-            component: recharge_wrapper,
-            children: [
-                {
-                    path: 'index',
-                    component: recharge,
-                    meta: {
-                        title: '充值',
-                        requireAuth: true,
-                    }
-                }, {
-                    path: 'callback',
-                    component: recharge_callback,
-                    meta: {
-                        title: '支付成功',
-                        requireAuth: true,
-                    }
-                }
-            ]
-        },{
-            path: 'userCenter',
-            component: userCenterWrap,
-            children:[
-                {
-                    path:'index',
-                    component:userCenter,
-                    meta: {
-                        title: '个人中心',
-                    }
-                },
-                {
-                    path:'rechargeRecord',
-                    component:rechargeRecord,
-                    meta: {
-                        title: '充值记录',
-                    }
-                },
-                {
-                    path:'userCenterAddress',
-                    component:userCenterAddress,
-                    meta: {
-                        title: '收获地址',
-                    }
-                },
-                {
-                    path:'contactUs',
-                    component:contactUs,
-                    meta: {
-                        title: '联系我们',
-                    }
-                },
-                {
-                    path:'helpCenter',
-                    component:helpCenter,
-                    meta: {
-                        title: '帮助中心',
-                    }
-                },
-                {
-                    path:'salesRecords',
-                    component:salesRecords,
-                    meta: {
-                        title: '售后记录',
-                    }
-                },
-                {
-                    path:'addSalesRecords',
-                    component:addSalesRecords,
-                    meta: {
-                        title: '售后申请',
-                    }
-                },
-                {
-                    path:'realName',
-                    component:realName,
-                    meta: {
-                        title: '认证教程',
-                    }
-                },
-            ]
+  path: '/binding',
+  component: mifi_binding,
+  meta: {title: '用户绑定'}
+}, {
+  path: '/weixin',
+  component: Layout,
+  children: [
+    {
+      path: 'new_card',
+      component: new_card_wrapper,
+      children: [{
+        path: 'real_name',
+        component: real_name,
+        meta: {
+          title: '实名',
+          requireAuth: true,
         }
+      }, {
+        path: 'lookup',
+        component: lookup,
+        meta: {
+          title: '新卡激活',
+        }
+      }, {
+        path: 'to_tb',
+        component: to_tb,
+        meta: {
+          title: '阿里实名',
+          requireAuth: true,
+        }
+      },
+      ]
+    }, {
+      path: 'question',
+      component: question_wrapper,
+      children: [
+        {
+          path: 'index',
+          component: question,
+          meta: {
+            title: '问题中心',
+            requireAuth: true,
+          }
+        }, {
+          path: 'find_plan',
+          component: find_plan,
+          meta: {
+            title: '找回套餐',
+            requireAuth: true,
+          }
+        }, {
+          path: 'revoke_plan',
+          component: revoke_plan,
+          meta: {
+            title: '唤醒套餐',
+            requireAuth: true,
+          }
+        }, {
+          path: 'release_plan',
+          component: release_plan,
+          meta: {
+            title: '套餐解约',
+            requireAuth: true,
+          }
+        }, {
+          path: 'eqReplaceMent',
+          component: eqReplaceMent,
+          meta: {
+            title: '设备或卡更换',
+            requireAuth: true,
+          }
+        },
+        {
+          path: 'commonProblem',
+          component: commonProblem,
+          meta: {
+            title: '常见问题',
+            requireAuth: true,
+          }
+        },
+        {
+          path: 'realNameCourse',
+          component: realNameCourse,
+          meta: {
+            title: '实名认证教程',
+            requireAuth: true,
+          }
+        }
+      ]
+    }, {
+      path: 'refund',
+      component: refund_wrapper,
+      children: [
+        {
+          path: 'index',
+          component: refund_plan,
+          meta: {
+            title: '退款',
+            requireAuth: true,
+          }
+        }, {
+          path: 'argument',
+          component: refund_argument,
+          meta: {
+            title: '退款条款',
+            requireAuth: true,
+          }
+        }, {
+          path: 'applying',
+          component: refund_applying,
+          meta: {
+            title: '退款申请',
+            requireAuth: true,
+          }
+        },
+      ]
+    }, {
+      path: 'speedup',
+      component: speedup_wrapper,
+      children: [
+        {
+          path: 'plan_80',
+          component: speedup_80,
+          meta: {
+            title: '加速包',
+            requireAuth: true,
+          }
+        }, {
+          path: 'plan_500',
+          component: speedup_500,
+          meta: {
+            title: '加速包',
+            requireAuth: true,
+          }
+        }
+      ]
+    }, {
+      path: 'coupon',
+      component: coupon_wrapper,
+      children: [
+        {
+          path: 'index',
+          component: coupon_normal,
+          meta: {
+            title: '卡券兑换',
+            requireAuth: true,
+          }
+        }, {
+          path: 'telcom',
+          component: coupon_telcom,
+          meta: {
+            title: '联通卡券兑换',
+            requireAuth: true,
+          }
+        },
+      ]
+    }, {
+      path: 'card',
+      component: new_card_wrapper,
+      children: [{
+        path: 'lookup',
+        component: card_lookup,
+        meta: {
+          title: '查询',
+          requireAuth: true,
+        }
+      },
+        {
+          path: 'esim_usage',
+          component: esim_usage,
+          meta: {
+            title: 'esim详情',
+            requireAuth: true,
+          }
+        },
+        {
+          path: 'usage',
+          component: card_usage,
+          meta: {
+            title: '详情',
+            requireAuth: true,
+          }
+        },
 
-    ],
+        {
+          path: 'esim_plan_list',
+          component: esim_plan_list,
+          meta: {
+            title: 'esim套餐列表',
+            requireAuth: true,
+          }
+        },
+        {
+          path: 'plan_list',
+          component: plan_list,
+          meta: {
+            title: '套餐列表',
+            requireAuth: true,
+          }
+        }, {
+          path: 'connection',
+          component: card_connection,
+          meta: {
+            title: '连接详情',
+            requireAuth: true,
+          }
+        }, {
+          path: 'check',
+          component: card_check,
+          meta: {
+            title: '卡检测'
+          }
+        }, {
+          path: 'watch',
+          component: children_card,
+          meta: {
+            title: '手表号码查询'
+          }
+        }, {
+          path: 'repeatRecharge',
+          component: repeatRecharge,
+          meta: {
+            title: '复充活动'
+          }
+        }]
+    }, {
+      path: 'recharge',
+      component: recharge_wrapper,
+      children: [
+        {
+          path: 'index',
+          component: recharge,
+          meta: {
+            title: '充值',
+            requireAuth: true,
+          }
+        }, {
+          path: 'callback',
+          component: recharge_callback,
+          meta: {
+            title: '支付成功',
+            requireAuth: true,
+          }
+        }
+      ]
+    }, {
+      path: 'userCenter',
+      component: userCenterWrap,
+      children: [
+        {
+          path: 'index',
+          component: userCenter,
+          meta: {
+            title: '个人中心',
+          }
+        },
+        {
+          path: 'rechargeRecord',
+          component: rechargeRecord,
+          meta: {
+            title: '充值记录',
+          }
+        },
+        {
+          path: 'userCenterAddress',
+          component: userCenterAddress,
+          meta: {
+            title: '收获地址',
+          }
+        },
+        {
+          path: 'contactUs',
+          component: contactUs,
+          meta: {
+            title: '联系我们',
+          }
+        },
+        {
+          path: 'helpCenter',
+          component: helpCenter,
+          meta: {
+            title: '帮助中心',
+          }
+        },
+        {
+          path: 'salesRecords',
+          component: salesRecords,
+          meta: {
+            title: '售后记录',
+          }
+        },
+        {
+          path: 'addSalesRecords',
+          component: addSalesRecords,
+          meta: {
+            title: '售后申请',
+          }
+        },
+        {
+          path: 'realName',
+          component: realName,
+          meta: {
+            title: '认证教程',
+          }
+        },
+      ]
+    }
+
+  ],
 }, {
-    path: '/mifi',
-    component: mifi_layout,
+  path: '/mifi',
+  component: mifi_layout,
+  children: [{
+    path: 'index',
+    component: mifi_index,
+  }, {
+    path: 'card',
+    component: mifi_card_wrapper,
     children: [{
-        path: 'index',
-        component: mifi_index,
+      path: 'index',
+      component: mifi_card_info,
+      meta: {title: '卡信息'}
     }, {
-        path: 'card',
-        component: mifi_card_wrapper,
-        children: [{
-            path: 'index',
-            component: mifi_card_info,
-            meta: {title: '卡信息'}
-        }, {
-            path: 'lookup',
-            component: mifi_card_lookup,
-            meta: {title: '查询'}
-        },{
-            path:'change_network',
-            component: mifi_change_network,
-            meta:{title: '修改网络'},
-        }]
+      path: 'lookup',
+      component: mifi_card_lookup,
+      meta: {title: '查询'}
     }, {
-        path: 'order',
-        component: mifi_order_wrapper,
-        children: [{
-            path: 'index',
-            component: mifi_order,
-            meta: {title: '订单'}
-        }]
-    }, {
-        path: 'plan',
-        component: mifi_plan_wrapper,
-        children: [{
-            path: 'usage',
-            component: mifi_plan_usage,
-            meta: {title: '套餐用量'}
-        }, {
-            path: 'group',
-            component: mifi_plan_group,
-            meta: {title: '套餐组'}
-        }, {
-            path: 'list',
-            component: mifi_plan_list,
-            meta: {title: '套餐列表'}
-        }]
-    },{
-       path:'coupon',
-       component:mifi_coupon_wrapper,
-       children:[{
-           path:'index',
-           component:mifi_coupon_index,
-           meta: {title: '卡券兑换'}
-       }]
+      path: 'change_network',
+      component: mifi_change_network,
+      meta: {title: '修改网络'},
     }]
+  }, {
+    path: 'order',
+    component: mifi_order_wrapper,
+    children: [{
+      path: 'index',
+      component: mifi_order,
+      meta: {title: '订单'}
+    }]
+  }, {
+    path: 'plan',
+    component: mifi_plan_wrapper,
+    children: [{
+      path: 'usage',
+      component: mifi_plan_usage,
+      meta: {title: '套餐用量'}
+    }, {
+      path: 'group',
+      component: mifi_plan_group,
+      meta: {title: '套餐组'}
+    }, {
+      path: 'list',
+      component: mifi_plan_list,
+      meta: {title: '套餐列表'}
+    }]
+  }, {
+    path: 'coupon',
+    component: mifi_coupon_wrapper,
+    children: [{
+      path: 'index',
+      component: mifi_coupon_index,
+      meta: {title: '卡券兑换'}
+    }]
+  }]
 }, {
-    // cardserver 授权业务处理
-    path: '/authority',
-    component: authority_middle,
+  // cardserver 授权业务处理
+  path: '/authority',
+  component: authority_middle,
 }, {
-    // mifi 授权业务处理
-    path: '/mifi/transaction',
-    component: logical_page,
-},{
-    path: '/',
-    redirect: global_variables[`${global_variables.packed_project}_project`].empty_router_url
-},{
-    path: '*',
-    component: Not_fund
+  // mifi 授权业务处理
+  path: '/mifi/transaction',
+  component: logical_page,
+}, {
+  path: '/',
+  redirect: global_variables[`${global_variables.packed_project}_project`].empty_router_url
+}, {
+  path: '*',
+  component: Not_fund
 }]
 
 const router = new Router({
-    mode: 'history',
-    routes: constantRouterMap
+  mode: 'history',
+  routes: constantRouterMap
 })
 
 export default router

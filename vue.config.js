@@ -50,17 +50,10 @@ module.exports = {
         }
       },
       '/iot': {
-        target: 'https://iottest.china-m2m.com',
+        target: 'https://iottt.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/iot': ''
-        }
-      },
-      '/releaseApi': {
-        target: "http://cardserver_mac.china-m2m.com",
-        changeOrigin: true,
-        pathRewrite: {
-          '^/releaseApi': ""
         }
       },
       '/kachiApi': {
