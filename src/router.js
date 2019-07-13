@@ -212,7 +212,7 @@ export const constantRouterMap = [{
                     path: 'realNameCourse',
                     component: realNameCourse,
                     meta: {
-                        title: '实名教程',
+                        title: '实名认证教程',
                         requireAuth: true,
                     }
                 }

@@ -182,7 +182,7 @@ function checkBrowser() {
       return 'alipay'
     } else if ((/MicroMessenger/i).test(UA)) {
       return 'wechat'
-    } else if (/(uni-app)/.test(UA) || /(ylkids_android)/.test(UA) || /(ios1.1.0)/.test(UA)) {
+    } else if (/(uni-app)/.test(UA) || /(ylkids_android)/.test(UA) || /(ios1.1.0)/.test(UA)||/(app_charge)/.test(UA) ) {
       return 'app'
     }  else {
       return 'mobile'
