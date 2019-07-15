@@ -123,7 +123,7 @@
             this.showLoading = false;
             if (res.error === 0 || res.error === 30002) {
               if (res.error === 0) {
-                setStorage("token", res.data);
+                setStorage("token", res.data,"str",true);
               }
               Notify({
                 message: '账户绑定成功',

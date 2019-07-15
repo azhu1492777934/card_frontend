@@ -17,7 +17,7 @@
     data() {
       return {
         load_user_msg: false,
-        load_user_info: '加载用户信息,请等候',
+        load_user_info: '',
       };
     },
     components: {
@@ -40,7 +40,7 @@
           .then((res) => {
             if (res.error === 0) {
               setStorage('token', res.data, 'str', true);
-              if (this.global_variables.packed_project === 'card') {
+              if (this.global_variables.packed_project === 'card' || this.global_variables.packed_project === 'mifi') {
                 this.getUserInfo();
               }
               // location.reload();
@@ -100,14 +100,7 @@
                   this.$store.commit('userInfo/changeUserInfo', UserInfo);
                 }
               } else {
-                let _this = this;
-                Dialog.alert({
-                  title: '账号异常',
-                  message: '您的账户信息存在问题,无法进行操作,请联系我司客服工作人员,我们将尽快为您解决问题。',
-                }).then(() => {
-                  _this.load_user_msg = true;
-                  _this.load_user_info = '账号异常';
-                })
+                this.showAuthorityError('(error)');
               }
             } else if (res.error === 11002) {
               this.$emit('getToken');
@@ -130,6 +123,7 @@
         Dialog.alert({
           title: '账号异常',
           message: '您的账户信息存在问题,无法进行操作,请联系我司客服工作人员,我们将尽快为您解决问题' + _flag + '。',
+          showConfirmButton:false,
         }).then(() => {
           _this.load_user_msg = true;
           _this.load_user_info = '账号异常' + _flag;
