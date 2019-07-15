@@ -68,16 +68,16 @@
     position: relative;
     width: 100%;
     min-height: 100vh;
+    padding:10vh 0;
+    box-sizing: border-box;
     background-image: url("../../assets/imgs/transferUrl/bg.jpeg");
     background-repeat: no-repeat;
     background-size: 100% 100%;
 
     .note-tip-wrapper {
-      position: absolute;
-      top: 9vh;
-      right: 90px;
       width: 55%;
       height: 147px;
+      margin-left: 220px;
       padding: 20px;
       color: #fff;
       text-align: left;
@@ -91,7 +91,7 @@
     }
 
     .qrImg-wrapper {
-      padding-top: 20vh;
+      /*padding-top: 20vh;*/
 
       .animater-img {
         width: 411px;

@@ -24,12 +24,12 @@ let global_variables = {
         DevelopDomain : 'https://cardserver.qiyu-m2m.com',
         ProductionDomain : 'https://cardserver.qiyu-m2m.com',
     }
-}
+};
 
 /*
 * 当前打包项目
 * */
-// if(process.env.NODE_ENV == 'development'){
+// if(process.env.NODE_ENV === 'development'){
 if(process.env.NODE_ENV === 'production'){
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].ProductionDomain;
 }else{
