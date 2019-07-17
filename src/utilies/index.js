@@ -182,9 +182,9 @@ function checkBrowser() {
       return 'alipay'
     } else if ((/MicroMessenger/i).test(UA)) {
       return 'wechat'
-    } else if (/(uni-app)/.test(UA) || /(ylkids_android)/.test(UA) || /(ios1.1.0)/.test(UA)||/(app_charge)/.test(UA) ) {
+    } else if (/(uni-app)/.test(UA) || /(ylkids_android)/.test(UA) || /(ios1.1.0)/.test(UA) || /(app_charge)/.test(UA)) {
       return 'app'
-    }  else {
+    } else {
       return 'mobile'
     }
   } else {
@@ -249,7 +249,7 @@ function GetUrlRelativePath() {
 }//获取当前路径
 
 function lossRate(params) {
-  _post('/api/v1/app/card_create_loss_rate', {
+  return _post('/api/v1/app/card_create_loss_rate', {
     ...params
   });
 }// 流失率统计
