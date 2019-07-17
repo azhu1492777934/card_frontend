@@ -474,35 +474,36 @@
 
         this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
         this.rechargeShow = true;
+        // 墙出此前创建的form表单
+        let payDom = document.querySelector('form');
+        if (payDom) document.removeChild(payDom);
         _post('/api/v1/pay/weixin/create', param)
           .then(res => {
+            this.rechargeShow = false;
             if (res.state === 1) {
-              this.rechargeShow = false;
               if (/<[^>]+>/.test(res.data)) {
-
-                document.write(res.data);
-
-              } else if (res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0, 4) == 'http') { //app
+                // document.write(res.data);
+                const div = document.createElement('div');
+                div.innerHTML = res.data;
+                document.body.appendChild(div);
+                document.forms[0].submit();
+              } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
                 this.global_variables.packed_project === 'mifi' ?
                   location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
               } else {
                 Notify({
                   message: '充值成功',
                   background: '#60ce53'
-                })
-
+                });
                 setTimeout(function () {
                   if (localStorage.getItem("currentType") === "esim") {
                     location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
                   } else {
-                    _this.global_variables.packed_project === 'mifi' ?
-                      location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                    _this.global_variables.packed_project === 'mifi' ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
                   }
-
                 }, 1500);
               }//纯钻石支付
             } else {
-              this.rechargeShow = false;
               Notify({
                 message: res.msg
               })
@@ -527,7 +528,6 @@
       FinalAppPay() {
         this.recharge();
       },//app支付
-
       filterRechargeList: function (rmb, planPrice) {
         return this.recharge_list.filter(item => {
           if (item.pay_type === 'normal_charge') {
@@ -586,7 +586,6 @@
           this.appPay.type = false
         }
       },
-
       closePayType() {
         this.appPay.type = true;
         this.appPay.show = false
