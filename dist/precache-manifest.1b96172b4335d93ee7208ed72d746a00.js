@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/addSalesRecords.5bd47bb3.js"
   },
   {
-    "revision": "d89e2c0ec4ba555fffd6",
+    "revision": "90b2230bd99daa271117",
     "url": "/css/app.8755b4b4.css"
   },
   {
-    "revision": "d89e2c0ec4ba555fffd6",
-    "url": "/js/app.75e7b13e.js"
+    "revision": "90b2230bd99daa271117",
+    "url": "/js/app.3b24726d.js"
   },
   {
     "revision": "8bfb930045ab7a368f7f",
@@ -572,36 +572,16 @@ self.__precacheManifest = [
     "url": "/img/SourceHanSansCNRegular.da0808e9.svg"
   },
   {
+    "revision": "ad4acc3d7da28ce6f33925b83bae2c94",
+    "url": "/img/arrow1.ad4acc3d.png"
+  },
+  {
     "revision": "732389ded34cb9c52dd88271f1345af9",
     "url": "/fonts/element-icons.732389de.ttf"
   },
   {
     "revision": "535877f50039c0cb49a6196a5b7517cd",
     "url": "/fonts/element-icons.535877f5.woff"
-  },
-  {
-    "revision": "ad4acc3d7da28ce6f33925b83bae2c94",
-    "url": "/img/arrow1.ad4acc3d.png"
-  },
-  {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "a1386d312938b126d701a6841fb742e8",
@@ -612,20 +592,20 @@ self.__precacheManifest = [
     "url": "/img/addressBg.83d0cd2d.png"
   },
   {
-    "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
-    "url": "/img/iccid_bg@2x.a859e9ca.png"
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
   {
-    "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
-    "url": "/img/iccid_bg@3x.fa9050c4.png"
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
-    "revision": "f5f322478286641bd9887a155e35f222",
-    "url": "/img/btn.f5f32247.png"
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
   {
-    "revision": "d140650fa64e0f1fc771610dba62aed7",
-    "url": "/img/bg.d140650f.png"
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
@@ -636,12 +616,24 @@ self.__precacheManifest = [
     "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
-    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
-    "url": "/img/bg-check-wrap@3x.3f342771.png"
+    "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
+    "url": "/img/iccid_bg@2x.a859e9ca.png"
   },
   {
-    "revision": "9713b21819c4019befecd095069977df",
-    "url": "/img/bg-check-wrap@2x.9713b218.png"
+    "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
+    "url": "/img/iccid_bg@3x.fa9050c4.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
+    "revision": "f5f322478286641bd9887a155e35f222",
+    "url": "/img/btn.f5f32247.png"
+  },
+  {
+    "revision": "d140650fa64e0f1fc771610dba62aed7",
+    "url": "/img/bg.d140650f.png"
   },
   {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
@@ -652,28 +644,24 @@ self.__precacheManifest = [
     "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
+    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
+    "url": "/img/bg-check-wrap@3x.3f342771.png"
   },
   {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
+    "revision": "9713b21819c4019befecd095069977df",
+    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "d32e5dc3875f1afd2be29aad1cfd0382",
     "url": "/img/contactBg.d32e5dc3.png"
   },
   {
-    "revision": "b70eddccd257b21777e71bb64c83b876",
-    "url": "/img/bg.b70eddcc.jpeg"
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
   },
   {
-    "revision": "909816c3d34e63a9ad86b8c179ab543c",
-    "url": "/img/bar.909816c3.png"
-  },
-  {
-    "revision": "e92f547ba0209da3b4342fa2b56ea9ae",
-    "url": "/img/animater.e92f547b.png"
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -694,6 +682,18 @@ self.__precacheManifest = [
   {
     "revision": "9e02095f31a07b972244f1c714c1dfe7",
     "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
+    "revision": "b70eddccd257b21777e71bb64c83b876",
+    "url": "/img/bg.b70eddcc.jpeg"
+  },
+  {
+    "revision": "909816c3d34e63a9ad86b8c179ab543c",
+    "url": "/img/bar.909816c3.png"
+  },
+  {
+    "revision": "e92f547ba0209da3b4342fa2b56ea9ae",
+    "url": "/img/animater.e92f547b.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -732,16 +732,16 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
+  },
+  {
     "revision": "3d0fc424b703032ca595090e99f8354b",
     "url": "/img/login_bg@2x.3d0fc424.png"
   },
   {
     "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
     "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "6eb1cce5bab9ec1cb25d71e8f3110a15",
@@ -868,7 +868,7 @@ self.__precacheManifest = [
     "url": "/img/real8.018b5f61.jpeg"
   },
   {
-    "revision": "6a9cc7d032974c1b653cf68f801d552e",
+    "revision": "e3dbfdffe7ce391e9fe9fa50c06f0a8b",
     "url": "/index.html"
   },
   {
