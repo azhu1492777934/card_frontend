@@ -1,11 +1,11 @@
 <template>
-    <router-view/>
+  <router-view/>
 </template>
 
 <script>
-    export default {
-        name: "speedup_wrapper"
-    }
+  export default {
+    name: "speedup_wrapper"
+  }
 </script>
 
 <style scoped>
