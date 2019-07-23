@@ -16,7 +16,7 @@
               <div>
                 <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
                 <span v-if="filterCardInfo.device_state==''"
-                      :class="usageInfo.status>=3?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
+                      :class="usageInfo.status!=1?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
                 <span :class="filterCardInfo.device_state.code==1?'cl-state-primary':'cl-state-warning'"
                       v-if="filterCardInfo.device_state!=''">{{filterCardInfo.device_state.state}}</span>
               </div>
@@ -226,8 +226,8 @@
 
   .plan-usage-wrap {
     .cl-state-warning {
-      color: #fe8d2e !important;
-      border-color: #fe8d2e !important;
+      color: #F7532B !important;
+      border-color: #F7532B !important;
     }
 
     .cl-state-normal {
@@ -573,7 +573,7 @@
         watch_source: [5, 10, 12, 17, 18, 20, 22],
         auth_status: ['未实名', '审核中', '审核不通过'],
         card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
-        order_state: ['未支付', '已支付', '已到帐'],
+        order_state: ['未支付', '已支付', '已退款'],
         plan_title_array: ['当前套餐', '历史续费套餐'],
         cur_plan_type_index: 0,//swiper 索引
         filterCardInfo: {
