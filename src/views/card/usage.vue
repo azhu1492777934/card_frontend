@@ -573,7 +573,7 @@
         watch_source: [5, 10, 12, 17, 18, 20, 22],
         auth_status: ['未实名', '审核中', '审核不通过'],
         card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
-        order_state: ['未支付', '已支付', '已退款'],
+        order_state: ['未支付', '已支付', '已到账'],
         plan_title_array: ['当前套餐', '历史续费套餐'],
         cur_plan_type_index: 0,//swiper 索引
         filterCardInfo: {
