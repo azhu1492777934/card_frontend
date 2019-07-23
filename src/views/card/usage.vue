@@ -640,8 +640,8 @@
         _get('/api/v1/app/cards/telcom/usage', {
           iccid: getStorage('check_iccid'),
         }).then(res => {
+          this.load_skeleton = false;
           if (res.state === 1) {
-            this.load_skeleton = false;
             this.usageInfo = res.data;
 
             if (this.usageInfo.operator === 0) {

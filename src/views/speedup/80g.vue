@@ -101,7 +101,7 @@
           return
         }
 
-        if (this.client_type == 'app') {
+        if (this.client_type === 'app') {
           this.speedupAppPay.show = false;
         }//重置重置弹窗
 
@@ -116,28 +116,32 @@
           user_id: this.userInfo.account.user_id,
           open_id: this.open_id,
           env: this.client_type
-        }
+        };
 
-        if (this.client_type == 'app') {
+        if (this.client_type === 'app') {
           if (this.speedupAppPay.type) {
             param.pay_type = 'WEIXIN'
           } else {
             param.pay_type = 'ALIPAY'
           }
           param.open_id = this.userInfo.account.user_id;//app修改openid参数
-        } else if (this.client_type == 'wechat') {
+        } else if (this.client_type === 'wechat') {
           param.pay_type = 'WEIXIN'
-        } else if (this.client_type == 'alipay') {
+        } else if (this.client_type === 'alipay') {
           param.pay_type = 'ALIPAY'
         }
 
         this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
-
+        let payDom = document.querySelector('form');
+        if (payDom) document.removeChild(payDom);
         _post('/api/v1/pay/weixin/create', param).then(res => {
-          if (res.state == 1) {
+          if (res.state === 1) {
             if (/<[^>]+>/.test(res.data)) {
-              document.write(res.data);
-
+              // document.write(res.data);
+              const div = document.createElement('div');
+              div.innerHTML = res.data;
+              document.body.appendChild(div);
+              document.forms['Ordersubmit'].submit();
             } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
               location.href = res.data
             }
@@ -154,19 +158,13 @@
         this.rechargeListIndex = speedupIndex;
 
         if (this.client_type === 'app') {
-
           this.speedupAppPay.show = true;
-
         } else if (this.client_type === 'wechat' || this.client_type === 'alipay') {
-
           this.trulyRechargeSpeedup(speedupIndex)
-
         } else {
           Notify({message: '请在支付宝或微信客户端充值'});
         }
-
       }
-
     }
   };
 </script>

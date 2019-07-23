@@ -152,11 +152,16 @@
         }
 
         this.global_variables.packed_project === 'mifi' ? param.type = 1 : param.type = 0;
-
+        let payDom = document.querySelector('form');
+        if (payDom) document.removeChild(payDom);
         _post('/api/v1/pay/weixin/create', param).then(res => {
           if (res.state === 1) {
             if (/<[^>]+>/.test(res.data)) {
-              document.write(res.data);
+              // document.write(res.data);
+              const div = document.createElement('div');
+              div.innerHTML = res.data;
+              document.body.appendChild(div);
+              document.forms['Ordersubmit'].submit();
             } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
               location.href = res.data
             }
@@ -171,15 +176,10 @@
         * speedupIndex:当前选中的加速包的index
         * */
         this.rechargeListIndex = speedupIndex;
-
         if (this.client_type === 'app') {
-
           this.speedupAppPay.show = true;
-
         } else if (this.client_type === 'wechat' || this.client_type === 'alipay') {
-
           this.trulyRechargeSpeedup(speedupIndex)
-
         } else {
           Notify({message: '请在支付宝或微信客户端充值'});
         }

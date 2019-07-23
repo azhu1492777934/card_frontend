@@ -108,7 +108,6 @@
 
       > div:nth-child(2) {
         font-size: 30px;
-        font-family: SourceHanSansSC-Bold;
         font-weight: bold;
         color: rgba(0, 0, 0, 1);
         background: linear-gradient(

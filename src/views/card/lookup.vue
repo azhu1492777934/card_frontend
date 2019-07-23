@@ -541,12 +541,20 @@
               setStorage('check_realNameSource', res.data.source);
               lossRate({type: 3, iccid: res.data.iccid})
                 .then(res => {
-                  this.$router.push({path: '/weixin/new_card/real_name'});
+                  if (res.state === 1) {
+                    this.$router.push({path: '/weixin/new_card/real_name'});
+                  } else {
+                    Notify({message: res.msg});
+                  }
                 });
             } else if (res.data.status === 3) {
               lossRate({type: 3, iccid: res.data.iccid})
                 .then(res => {
-                  this.$router.push({path: '/weixin/card/plan_list', query: {type: 1}});
+                  if (res.state === 1) {
+                    this.$router.push({path: '/weixin/card/plan_list', query: {type: 1}});
+                  } else {
+                    Notify({message: res.msg});
+                  }
                 });
             }
           } else {

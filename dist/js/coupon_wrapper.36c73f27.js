@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["coupon_wrapper"],{5011:function(n,e,o){"use strict";var r=o("d35d"),t=o.n(r);t.a},b782:function(n,e,o){"use strict";o.r(e);var r=function(){var n=this,e=n.$createElement,o=n._self._c||e;return o("router-view")},t=[],p={name:"coupon_wrapper"},u=p,a=(o("5011"),o("2877")),c=Object(a["a"])(u,r,t,!1,null,"cfda2a04",null);c.options.__file="coupon_wrapper.vue";e["default"]=c.exports},d35d:function(n,e,o){}}]);
-//# sourceMappingURL=coupon_wrapper.36c73f27.js.map
