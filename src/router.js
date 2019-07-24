@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import global_variables from './utilies/domain'
 
+// 临时组件
+const usage_bak = r => require.ensure([], () => r(require('./views/card/usage_bak')), 'Layout');
+
 // layout
 const Layout = r => require.ensure([], () => r(require('./components/layout')), 'Layout');
 const mifi_layout = r => require.ensure([], () => r(require('./components/mifi_layout')), 'mifi_layout');
@@ -136,6 +139,10 @@ export const constantRouterMap = [{
   path: '/binding',
   component: mifi_binding,
   meta: {title: '用户绑定'}
+}, {
+  path: '/card/usage_bak',
+  meta: {title: '临时链接'},
+  component: usage_bak,
 }, {
   path: '/weixin',
   component: Layout,

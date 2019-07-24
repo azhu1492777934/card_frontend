@@ -626,15 +626,6 @@
     //   }
     // },
     created() {
-      localStorage.setItem("currentType", "card");
-      //适配卡池项目
-      if (getUrlParam("iccid") && getUrlParam("type") === "cardPool") {
-        localStorage.setItem("check_iccid", getUrlParam("iccid"));
-        localStorage.setItem("isCardPool", true);
-      } else {
-        localStorage.removeItem("isCardPool");
-      }
-
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {
