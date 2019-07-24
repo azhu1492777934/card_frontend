@@ -1,10 +1,11 @@
 <template>
   <div class="g-wrap card-activated-wrap">
-    <div v-show="card_tip" class="tip-wrap">根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
-    <div v-show="!card_tip" class="tip-wrap">
+    <div v-show="card_tip" class="tip-wrap text-center"><span class="iconfont icon-warning"></span> 根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
+    <div v-show="!card_tip" class="tip-wrap p-15">
       <span>1.根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备,才允许使用。</span><br>
       <span>2.请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
     </div>
+    <img class="realname-tip" src="../../assets/imgs/card/realname/tip.png" alt="">
     <div class="info-wrap">
       <div>
         <span>ICCID</span>
@@ -33,7 +34,7 @@
         <button @click="getCode" class="btn-code" :disabled="disabled_code">{{countDownMsg}}</button>
       </div>
     </div>
-    <div class="tip-wrap" v-show="!card_tip">
+    <div class="tip-wrap p-15" v-show="!card_tip">
       <p>移动号码实名仅支持一证五号，若实名卡数已超出请更换证件</p>
     </div>
     <div class="btn-next-wrap">
@@ -451,6 +452,12 @@
   .text-left {
     text-align: left;
   }
+  .text-center{
+    text-align: center !important;
+  }
+  .p-15{
+    padding: 25px !important;
+  }
 
   .fixed-wrap-imei {
     position: fixed;
@@ -476,12 +483,17 @@
 
   .card-activated-wrap {
     .tip-wrap {
-      padding: 18px 60px;
-      font-size: 26px;
+      padding: 18px 10px;
+      font-size: 22px;
       line-height: 1.3;
       color: #ff562f;
       background-color: #fff1ee;
       text-align: left;
+    }
+    .realname-tip{
+      display: block;
+      width: 100%;
+      height: auto;
     }
 
     .info-wrap {
