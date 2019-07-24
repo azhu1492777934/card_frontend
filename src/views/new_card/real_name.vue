@@ -38,7 +38,7 @@
       <p>移动号码实名仅支持一证五号，若实名卡数已超出请更换证件</p>
     </div>
     <div class="btn-next-wrap">
-      <button @click="checkInfo" class="btn-next">下一步实名激活</button>
+      <button @click="checkInfo" class="btn-next">完成实名 激活卡</button>
     </div>
     <p class="tutorial-wrap">
       <a @click="toTutorial">查看实名教程</a>
