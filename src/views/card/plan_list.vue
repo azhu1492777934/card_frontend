@@ -484,7 +484,7 @@
     },
     created() {
       // 流失率统计
-      if (this.$route.query.type === "1") {
+      if (getStorage('plan_list_new_card')==="1") {
         lossRate({
           type: 4,
           iccid: getStorage("check_iccid")
@@ -630,6 +630,12 @@
 
         this.rechargeShow = true;
         _post("/api/v1/pay/weixin/create", param).then(res => {
+          if (getStorage('plan_list_new_card')==="1") {
+            lossRate({
+              type: 5,
+              iccid: getStorage("check_iccid")
+            });
+          }
           if (res.state === 1) {
             this.rechargeShow = false;
 

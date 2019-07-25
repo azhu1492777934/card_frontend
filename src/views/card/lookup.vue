@@ -534,6 +534,7 @@
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);
+            removeStorage('plan_list_new_card');
             localStorage.setItem("currentType", "card");
             if (res.data.status === 1) {
               this.$router.push({path: '/weixin/card/usage'})
@@ -551,7 +552,8 @@
               lossRate({type: 3, iccid: res.data.iccid})
                 .then(res => {
                   if (res.state === 1) {
-                    this.$router.push({path: '/weixin/card/plan_list', query: {type: 1}});
+                    this.$router.push({path: '/weixin/card/plan_list'});
+                    setStorage('plan_list_new_card',1)
                   } else {
                     Notify({message: res.msg});
                   }

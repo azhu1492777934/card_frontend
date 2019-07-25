@@ -1,23 +1,7 @@
 <template>
   <div class="repeat-plan-wrap">
-
-
     <div class="activityPage" ref="activityPage"></div>
-
-
-    <!-- <div ref="refPLanTitle" class="plan-type-wrap">
-        <div class="plan-type-inner-wrap">
-            <span
-                ref="ref_plan_type"
-                @click="planTypeClikc(index)"
-                v-for="(item,index) in plan_type_name"
-                :class="{'active_type':index==cur_plan_type_index}">{{item}}
-            </span>
-        </div>
-    </div> -->
     <div class="van-swipe-wrap" ref="vanSwiperWwrap">
-      <!-- <swiper ref="swiperVant" :options="swiperOption"> -->
-      <!-- <swiper-slide v-for="(item,index) in plan_type" :key="item" :class="item"> -->
       <ul class="plan-list-wrap">
         <li @click="choosePlanClick(inner_index)"
             v-for="(inner_item,inner_index) in repeat_plan_list"
@@ -28,9 +12,7 @@
               {{ inner_item.name }}
             </p>
             <p class="plan-limited-wrap">
-                                    <span class="limited-num"
-                                          v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
-              <!-- <span class="limited-num" v-show="inner_item.is_elb_deductible!=0">可抵扣{{inner_item.max_deductible_elb}}个ELB</span> -->
+              <span class="limited-num" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
             </p>
             <p class="plan-desc">
               {{ inner_item.describe ? inner_item.describe:inner_item.remark?inner_item.remark:''
@@ -54,11 +36,9 @@
       <!-- </swiper> -->
     </div>
 
-
     <div ref="refPlanButton2" class="btn-recharge-wrap " :class="{'noDataHide':load_plan_list}">
       <button class="realNameButton" @click="goRealName">跳过此步，去实名</button>
     </div>
-
 
     <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
       <button @click="recharge">立即复充</button>
@@ -308,7 +288,7 @@
 <script>
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import {Toast, Popup, Notify, List} from "vant";
-  import {setStorage, getStorage, checkBrowser, lossRate} from "../../utilies";
+  import {setStorage, getStorage,removeStorage, checkBrowser, lossRate} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
   export default {
@@ -356,28 +336,25 @@
       }
     },
     created() {
-      // 流失率统计
-      lossRate({
-        iccid: getStorage('check_iccid'),
-        type: 6
-      });
+      removeStorage('plan_list_new_card');
       //处理套餐数据
       _get("/api/v1/app/repeat_recharge/plans", {
         iccid: getStorage("check_iccid")
       }).then(res => {
-        if (res.state == 1) {
-          if (res.data.rate_plans.length == 0) {
+        if (res.state === 1) {
+          if (res.data.rate_plans.length === 0) {
             location.href = res.data.auth_url;
             return false;
           }
-
+          // 流失率统计
+          lossRate({
+            iccid: getStorage('check_iccid'),
+            type: 6
+          });
           this.load_plan_msg = res.msg;
-
           this.load_plan_list = false;
           this.repeat_plan_list = res.data.rate_plans;
-
           this.auth_url = res.data.auth_url;
-
 
           this.$nextTick(() => {
             let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
@@ -385,7 +362,7 @@
               refPlanButton2 = this.$refs.refPlanButton2.offsetHeight,
               activityPage = this.$refs.activityPage.offsetHeight,
               userHeight = getStorage('userHeight') || 44;
-            if (this.client_type == 'wechat' || this.client_type == 'alipay') {
+            if (this.client_type === 'wechat' || this.client_type === 'alipay') {
               this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPlanButton - refPlanButton2 - activityPage - userHeight) + 'px'
             } else {
               this.$refs.vanSwiperWwrap.style.height = (clientHeight - refPlanButton - refPlanButton2 - activityPage) + 'px'
@@ -398,8 +375,6 @@
         }
       });
     },
-
-    // mounted() {},
     methods: {
       swiperOnChange: function (index) {
         this.cur_plan_type_index = index;
@@ -414,33 +389,12 @@
         this.choose_plan_index = index;
       },
       recharge: function () {
-
         let planInfo = this.repeat_plan_list[this.choose_plan_index];
-
-
         planInfo.iccid = getStorage("check_iccid");
         planInfo.price = planInfo.repeat_recharge_price;
         planInfo.is_repeat_plan = true;
         setStorage("planInfo", planInfo, "obj");
         this.directRecharge(planInfo);
-
-        //获取当前包月套餐信息
-        // _get("/api/v1/app/plans/renew_info", {
-        //     user_id: getStorage("userInfo", "obj").account.user_id,
-        //     rating_id: planInfo.id
-        // }).then(res => {
-        //     if (res.state == 1) {
-        //         setStorage("monthlyMsg", res.data, "obj");
-        //         this.$router.push({path: "/weixin/recharge/index"});
-        //     } else {
-        //         Notify({message: res.msg});
-        //     }
-        // });
-        // if (this.client_type != 'alipay' && this.client_type != 'wechat') {
-        //     Notify({message: '请在微信或支付宝客服端打开充值'});
-        //     return
-        // }
-
       },
       //跳转实名
       goRealName() {
@@ -448,20 +402,19 @@
       },
       //直接充值
       directRecharge(planInfo) {
-        if (this.client_type != 'alipay' && this.client_type != 'wechat') {
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
           Notify({message: '请在微信或支付宝客户端充值'});
           return
         }
-
         let param = {},
           _this = this;
         param.status = 0;
         param.recharge_price = planInfo.price;
         param.price = planInfo.price;
 
-        if (this.client_type == 'alipay' || this.client_type == 'wechat') {
+        if (this.client_type === 'alipay' || this.client_type === 'wechat') {
           param.open_id = getStorage('decrypt_data', 'obj').openid;
-        } else if (this.client_type == 'app') {
+        } else if (this.client_type === 'app') {
           param.open_id = getStorage("userInfo", "obj").account.user_id
 
         }
@@ -472,15 +425,15 @@
         param.user_id = getStorage("userInfo", "obj").account.user_id;
         param.env = this.client_type;
 
-        if (this.client_type == 'app') {
+        if (this.client_type === 'app') {
           if (this.appPay.type) {
             param.pay_type = 'WEIXIN'
           } else {
             param.pay_type = 'ALIPAY'
           }
-        } else if (this.client_type == 'wechat') {
+        } else if (this.client_type === 'wechat') {
           param.pay_type = 'WEIXIN'
-        } else if (this.client_type == 'alipay') {
+        } else if (this.client_type === 'alipay') {
           param.pay_type = 'ALIPAY'
         }
 
@@ -493,30 +446,28 @@
         this.rechargeShow = true;
         _post('/api/v1/pay/weixin/create', param)
           .then(res => {
-            if (res.state == 1) {
+            if (res.state === 1) {
               this.rechargeShow = false;
 
               if (/<[^>]+>/.test(res.data)) {
 
                 document.write(res.data);
 
-              } else if (res.data && Object.prototype.toString.call(res.data) == '[object String]' && res.data.substr(0, 4) == 'http') { //app
+              } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
                 this.global_variables.packed_project === 'mifi' ?
                   location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
               } else {
                 Notify({
                   message: '充值成功',
                   background: '#60ce53'
-                })
-
+                });
                 setTimeout(function () {
-                  if (localStorage.getItem("currentType") == "esim") {
+                  if (localStorage.getItem("currentType") === "esim") {
                     location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
                   } else {
                     _this.global_variables.packed_project === 'mifi' ?
                       location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
                   }
-
                 }, 1500);
               }//纯钻石支付
             } else if (res.state == "10015") {

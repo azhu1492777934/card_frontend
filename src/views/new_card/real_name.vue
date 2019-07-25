@@ -56,7 +56,7 @@
 <script>
   import {Popup, Notify} from 'vant';
   import {_get, _post} from "../../http";
-  import {getStorage, inArray, getUrlParam, lossRate} from "../../utilies";
+  import {getStorage,removeStorage, inArray, getUrlParam} from "../../utilies";
   import '../../assets/less/common.less'
   // @ is an alias to /src
   export default {
@@ -109,7 +109,7 @@
       [Notify.name]: Notify,
     },
     created() {
-
+      removeStorage('plan_list_new_card');
       if (getUrlParam('iccid')) {
         this.info_iccid = getUrlParam('iccid');
       } else {

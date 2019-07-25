@@ -560,7 +560,7 @@
   import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import {Notify, Popup, Toast} from 'vant';
-  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam} from "../../utilies";
+  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam,removeStorage} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -629,8 +629,7 @@
     //   }
     // },
     created() {
-      
-
+      removeStorage('plan_list_new_card');
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {

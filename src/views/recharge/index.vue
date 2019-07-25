@@ -215,10 +215,10 @@
     },
     created() {
       // 用户流失率统计
-      if (this.$route.query.type === "1") {
+      if (getStorage('plan_list_new_card')==="1") {
         lossRate({
           type: 5,
-          iccid: this.planInfo.iccid || getStorage('check_iccid')
+          iccid: getStorage("check_iccid")
         });
       }
 
