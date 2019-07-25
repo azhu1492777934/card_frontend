@@ -572,9 +572,7 @@
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
 
-        if (getStorage("isCardPool")) {
-          this.directRecharge(planInfo);
-        } else {
+       
           //获取当前包月套餐信息
           _get("/api/v1/app/plans/renew_info", {
             user_id: getStorage("userInfo", "obj").account.user_id,
@@ -590,7 +588,6 @@
               Notify({message: res.msg});
             }
           });
-        }
       },
       //直接充值
       directRecharge(planInfo) {

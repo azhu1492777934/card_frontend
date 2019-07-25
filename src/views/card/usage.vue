@@ -163,7 +163,10 @@
                         <span>续费日期:{{filterDate(item.created_at)}}</span>
                       </p>
                       <p class="plan-order-status-wrap">
-                        <span>{{order_state[item.status]}}</span>
+                        <span v-if="item.refund==2">已退款</span>
+                        <span v-if="item.refund!=2&&item.status!=-1">{{order_state[item.status]}}</span>
+                        <span v-if="item.refund!=2&&item.status==-1">已删除</span>
+          
                       </p>
                     </div>
                   </li>
@@ -626,6 +629,8 @@
     //   }
     // },
     created() {
+      
+
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {

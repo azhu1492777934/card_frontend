@@ -17,9 +17,9 @@
       <div class="swipe-wrap" ref="SwiperWwrap">
         <swiper ref="mySwiper" :options="swiperOption">
           <swiper-slide v-for="(item,index) in statusList" :key="index">
-            <div v-show="statusIndex==0||statusIndex==1">
+            <div v-show="statusIndex==0">
               <ul>
-                <li v-if="statusIndex==0">
+                <li v-if="currentType==0">
                   <span> <span class="redWord">*</span>  设备型号</span>
                   <input v-model="replaceData.model_name" placeholder="请输入设备型号" type="text">
                 </li>
@@ -57,7 +57,7 @@
               </div>
             </div>
 
-            <div v-show="statusIndex==2">
+            <div v-show="statusIndex==1">
               <div v-for="(item,index) in replaceList" v-bind:key="index" class="replaceList">
                 <div class="wrapBox1">
                   <div class="wrapBox2" v-if="item.model_name">
@@ -79,8 +79,12 @@
                   </div>
                 </div>
                 <div class="wrapBox4">
-                  发货时间: <span v-if="item.operator_at">{{item.operator_at}}</span> <span
-                  v-if="!item.operator_at">暂无物流信息</span>
+                  <div v-if="item.operator_at"> 发货时间: {{item.operator_at}} </div>
+                  <span v-if="!item.operator_at">暂无物流信息</span>
+                  <div   v-if="item.operator_at" class="cfmButton"  :class="{'unreceived':item.plan_transfer==1}"  @click="cfmButton(item.id)">
+                    <span v-if="item.plan_transfer!=1">确认收货</span>  
+                    <span v-if="item.plan_transfer==1">已收货</span>  
+                  </div>
                 </div>
               </div>
               <div class="noMsg" v-if="replaceList.length==0">暂无物流记录</div>
@@ -99,8 +103,8 @@
 
 <script>
   import {swiper, swiperSlide} from "vue-awesome-swiper";
-  import {Toast, Popup, Notify, Loading, Area} from "vant";
-  import {getStorage, setStorage, checkBrowser, Today, getCardServerToken} from "../../utilies";
+  import {Toast, Popup, Notify, Loading, Area,Dialog} from "vant";
+  import {getStorage, setStorage, checkBrowser, Today, getCardServerToken, getUrlParam} from "../../utilies";
   import {_get, _post} from "../../http";
   import areaList from "../../assets/js/areaData.js"
 
@@ -155,16 +159,21 @@
       };
     },
     created() {
+      this.currentType=getUrlParam("status");
+      if(this.currentType==0){
+        this.statusList=["设备更换", "物流查询"];
+      }else{
+        this.statusList=["卡更换", "物流查询"];        
+      }
     },
     methods: {
       changeStatus(index) {
         this.statusIndex = index;
         this.$refs.mySwiper.swiper.slideTo(index);
-        if (index == 2) {
+        if (index == 1) {
           this.getList();
         }
 
-        this.currentType = index;
         this.replaceData = {
           model_name: "",
           user_name: "",
@@ -180,15 +189,16 @@
       },
       //获取列表
       getList() {
-        _get('/api//v1/app/equipment/change/apply_list', {
+        _get('/api/v1/app/equipment/change/apply_list', {
           user_id: getStorage("userInfo", "obj").account.user_id,
           // user_id:613814,
+          type:this.currentType,
           offset: 0,
           limit: 999
         }).then(res => {
           if (res.state == 1) {
             this.replaceList = res.data.rows;
-
+         
           } else {
             Notify({message: res.msg})
           }
@@ -355,6 +365,35 @@
           }
         });
       },
+
+      //确认收货
+      cfmButton(id){
+        Dialog.confirm({
+          title: '是否确认收货',
+          message: '确认收货后套餐将自动转移到新卡'
+        }).then(() => {
+          // on confirm
+          this.transferPlan(id);
+        }).catch(() => {
+          // on cancel
+        });
+      },
+
+      //转移套餐
+      transferPlan(id){
+
+        _post('/api/v1/app/equipment/transfer', {id:id}).then(res => {
+          if (res.state == 1) {
+            Notify({
+              message: '确认收货成功',
+              background: '#60ce53'
+            })
+            this.getList();
+          } else {
+            Notify({message: res.msg})
+          }
+        })
+      }
     }
   };
 </script>
@@ -544,6 +583,22 @@
             color: rgba(125, 125, 125, 1);
             text-align: left;
             padding: 13px 0 0 17px;
+            display:flex;
+            align-items:center;
+            justify-content: space-between;
+            .cfmButton{
+              width:150px;
+              height:50px;
+              background:linear-gradient(-33deg,rgba(253,212,122,1),rgba(240,181,70,1));
+              color:rgba(68,63,56,1);
+              line-height:50px;
+              border-radius:25px;
+              text-align:center;
+            }
+            .unreceived{
+              background:#E9E9E9;
+              color:#999999;
+            }
           }
         }
 

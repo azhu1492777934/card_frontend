@@ -89,6 +89,23 @@
                     <p>网速慢,切换网络</p>
                 </div>
             </div>
+            <div class="function-group-wrap">
+                <div @click="toChangeCard">
+                    <span class="iconfont icon-changeCard"></span>
+                    <p>卡更换</p>
+                </div>
+                <span class="divider"></span>
+                <div @click="toChangeEq">
+                    <span class="iconfont icon-changeEq"></span>
+                    <p>设备更换</p>
+                </div>
+               
+                <span class="divider" style="opacity:0"></span>
+                <div >
+                    
+                </div>
+            </div>
+
 
         </div>
     </div>
@@ -233,6 +250,8 @@
             toQuestion(){this.$router.push('/weixin/question/index');},
             changedCard(){this.$router.push('/mifi/card/lookup')},
             toChangeNework(){this.$router.push('/mifi/card/change_network')},
+            toChangeCard(){this.$router.push({path:'/weixin/question/eqReplaceMent',query:{status:1}})},
+            toChangeEq(){this.$router.push({path:'/weixin/question/eqReplaceMent',query:{status:0}})},
             inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
