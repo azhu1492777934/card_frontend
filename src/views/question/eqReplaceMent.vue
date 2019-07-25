@@ -81,8 +81,8 @@
                 <div class="wrapBox4">
                   <div v-if="item.operator_at"> 发货时间: {{item.operator_at}} </div>
                   <span v-if="!item.operator_at">暂无物流信息</span>
-                  <div   v-if="item.operator_at" class="cfmButton"  :class="{'unreceived':item.plan_transfer==1}"  @click="cfmButton(item.id)">
-                    <span v-if="item.plan_transfer!=1">确认收货</span>  
+                  <div   v-if="item.operator_at" class="cfmButton"  :class="{'unreceived':item.plan_transfer==1}"  >
+                    <span v-if="item.plan_transfer!=1" @click="cfmButton(item.id)">确认收货</span>  
                     <span v-if="item.plan_transfer==1">已收货</span>  
                   </div>
                 </div>
@@ -389,6 +389,9 @@
               background: '#60ce53'
             })
             this.getList();
+            if(res.data){
+              location.href=res.data;
+            }
           } else {
             Notify({message: res.msg})
           }
