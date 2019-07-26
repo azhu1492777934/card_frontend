@@ -82,7 +82,7 @@
                   <div v-if="item.operator_at"> 发货时间: {{item.operator_at}} </div>
                   <span v-if="!item.operator_at">暂无物流信息</span>
                   <div   v-if="item.operator_at" class="cfmButton"  :class="{'unreceived':item.plan_transfer==1}"  >
-                    <span v-if="item.plan_transfer!=1" @click="cfmButton(item.id)">确认收货</span>  
+                    <span v-if="item.plan_transfer!=1" @click="cfmButton(item.id,item.new_source)">确认收货</span>  
                     <span v-if="item.plan_transfer==1">已收货</span>  
                   </div>
                 </div>
@@ -367,10 +367,17 @@
       },
 
       //确认收货
-      cfmButton(id){
+      cfmButton(id,type){
+        let msg;
+        if(type==35){
+          msg="确认且实名";
+        }else{
+          msg="确认";
+        }
         Dialog.confirm({
           title: '是否确认收货',
-          message: '确认收货后套餐将自动转移到新卡'
+          message: '确认收货后套餐将自动转移到新卡',
+          confirmButtonText:msg
         }).then(() => {
           // on confirm
           this.transferPlan(id);
