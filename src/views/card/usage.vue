@@ -817,7 +817,7 @@
             })
             return
           }
-          _post('/api/v1/app/activated', {iccid: '8934564565432345'})
+          _post('/api/v1/app/activated', {iccid: this.iccid})
             .then(res => {
               if (res.state === 1) {
                 Notify({
