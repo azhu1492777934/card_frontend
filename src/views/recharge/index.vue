@@ -132,7 +132,7 @@
 <script>
   import {mapState} from 'vuex'
   import {DatetimePicker, Area, Popup, Notify} from 'vant';
-  import {setStorage, getStorage, checkBrowser, lossRate, toDecimal} from "../../utilies";
+  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal} from "../../utilies";
   import {_post} from "../../http";
 
   export default {
@@ -590,6 +590,9 @@
         this.appPay.type = true;
         this.appPay.show = false
       }
+    },
+    beforeDestroy(){
+      removeStorage('plan_list_new_card');
     },
   }
 </script>
