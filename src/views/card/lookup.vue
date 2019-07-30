@@ -394,7 +394,7 @@
       cardButton,
     },
     created() {
-
+      removeStorage('plan_list_new_card');
       var UA = navigator.userAgent.toLowerCase();
       if (/(app_charge)/.test(UA)) {
         this.newAppStyle = "app2";
