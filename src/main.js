@@ -5,6 +5,7 @@ import './registerServiceWorker'
 import store from '../src/store/index'
 import 'normalize.css'
 
+import {GetUrlRelativePath} from './utilies/index'
 import {Popover} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -29,30 +30,15 @@ const wx = require('weixin-js-sdk');
 Vue.prototype.wx = wx;
 Vue.prototype.global_variables = global_variables;
 
+
 // 扫码请求
-let scanUrl,
-  scanApi;
-global_variables.packed_project === 'mifi' ? scanUrl = '/mifi/card/lookup' : scanUrl = '/weixin/card/lookup';
-global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_info' : scanApi = '/api/v1/app/sign_info';
+let scanUrlArray = ['/mifi/card/lookup', '/weixin/card/lookup', '/weixin/question/eqReplaceMent'];
+let scanApi = global_variables.packed_project === 'mifi' ? '/api/v1/app/mifi_sign_info' : '/api/v1/app/sign_info';
 
 router.afterEach((to, from) => {
   if (checkBrowser() === 'wechat') {
-    if (to.path === scanUrl) {
-      _get(scanApi)
-        .then(res => {
-          if (res.state === 1) {
-            wx.config({
-              debug: false,
-              appId: res.data.appId,
-              signature: res.data.sign,
-              timestamp: res.data.timestamp,
-              nonceStr: res.data.noncestr,
-              jsApiList: ["scanQRCode"]
-            })
-          }
-        })
-    } else if (to.path === "/weixin/question/eqReplaceMent") {
-      _get(scanApi, {url: global_variables.authorized_redirect_url + "/weixin/question/eqReplaceMent"})
+    if (scanUrlArray.includes(to.path)) {
+      _get(scanApi, {url: `${global_variables.authorized_redirect_url}${to.path}`})
         .then(res => {
           if (res.state === 1) {
             wx.config({
