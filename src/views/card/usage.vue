@@ -814,7 +814,7 @@
             Notify({
               message: '流量已用完,不能激活,请充值',
               background: '#ff0752'
-            })
+            });
             return
           }
           _post('/api/v1/app/activated', {iccid: this.iccid})

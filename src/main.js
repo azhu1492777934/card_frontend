@@ -5,15 +5,16 @@ import './registerServiceWorker'
 import store from '../src/store/index'
 import 'normalize.css'
 
-import { Popover } from 'element-ui';
+import {Popover} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
-Vue.use(Popover)
 
-require('../src/assets/css/loading/index.css')
-require( '../src/assets/css/reset.css')
-require('../src/assets/css/SourceHanSansCNRegular.css')
-// require('./mock')
-require('../src/assets/js/sha1.min')
+Vue.use(Popover);
+
+require('../src/assets/css/loading/index.css');
+require('../src/assets/css/reset.css');
+require('../src/assets/css/SourceHanSansCNRegular.css');
+require('./mock');
+require('../src/assets/js/sha1.min');
 
 import 'lib-flexible/flexible'
 import vueBounce from 'vue-bounce'
@@ -31,16 +32,15 @@ Vue.prototype.global_variables = global_variables;
 // 扫码请求
 let scanUrl,
   scanApi;
-global_variables.packed_project === 'mifi' ? scanUrl = '/mifi/card/lookup' :  scanUrl = '/weixin/card/lookup';
-global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_info' :  scanApi = '/api/v1/app/sign_info';
+global_variables.packed_project === 'mifi' ? scanUrl = '/mifi/card/lookup' : scanUrl = '/weixin/card/lookup';
+global_variables.packed_project === 'mifi' ? scanApi = '/api/v1/app/mifi_sign_info' : scanApi = '/api/v1/app/sign_info';
 
-router.afterEach((to,from)=>{
-
-  if(checkBrowser()=='wechat'){
-    if(to.path==scanUrl){
+router.afterEach((to, from) => {
+  if (checkBrowser() === 'wechat') {
+    if (to.path === scanUrl) {
       _get(scanApi)
-        .then(res=>{
-          if(res.state==1){
+        .then(res => {
+          if (res.state === 1) {
             wx.config({
               debug: false,
               appId: res.data.appId,
@@ -51,11 +51,10 @@ router.afterEach((to,from)=>{
             })
           }
         })
-    }else if(to.path=="/weixin/question/eqReplaceMent"){
-      _get(scanApi,{url:global_variables.authorized_redirect_url+"/weixin/question/eqReplaceMent"})
-        .then(res=>{
-          if(res.state==1){
-
+    } else if (to.path === "/weixin/question/eqReplaceMent") {
+      _get(scanApi, {url: global_variables.authorized_redirect_url + "/weixin/question/eqReplaceMent"})
+        .then(res => {
+          if (res.state === 1) {
             wx.config({
               debug: false,
               appId: res.data.appId,
@@ -67,27 +66,26 @@ router.afterEach((to,from)=>{
           }
         })
     }
-
   }
 
   const u = navigator.userAgent.toLowerCase();
-  if(u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
-  if (to.path !== global.location.pathname ) {
+  if (u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) !== 'micromessenger') return;
+  if (to.path !== global.location.pathname) {
     location.assign(to.fullPath);
-  };
+  }
 });
 
 //适配IOS
-window.appToken=function(msg){
+window.appToken = function (msg) {
   localStorage.setItem("token", msg);
-}
+};
 
 Vue.config.productionTip = false;
-Vue.use(globalFunction)
-Vue.use(vueWeChatTitle)
-Vue.use(vueBounce)
+Vue.use(globalFunction);
+Vue.use(vueWeChatTitle);
+Vue.use(vueBounce);
 new Vue({
   store,
   router,
   render: h => h(App)
-}).$mount('#app')
+}).$mount('#app');

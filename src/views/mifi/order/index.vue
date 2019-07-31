@@ -155,7 +155,6 @@
                 this.statusIndex = index;
                 this.$nextTick(()=>{
                     this.bsList[index].refresh();
-                    console.log(this.bsList[index])
                 })
             },
             toPay(params) {
