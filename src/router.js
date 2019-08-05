@@ -111,13 +111,12 @@ const mifi_coupon_index = r => require.ensure([], () => r(require('./views/mifi/
 //个人中心
 const userCenterWrap = r => require.ensure([], () => r(require('./views/userCenter/userCenterWrap')), 'userCenterWrap');
 const userCenter = r => require.ensure([], () => r(require('./views/userCenter/index')), 'userCenter'); //主页
-const rechargeRecord = r => require.ensure([], () => r(require('./views/userCenter/rechargeRecord')), 'rechargeRecord'); //充值记录
-const userCenterAddress = r => require.ensure([], () => r(require('./views/userCenter/userCenterAddress')), 'userCenterAddress'); //收获地址
-const contactUs = r => require.ensure([], () => r(require('./views/userCenter/contactUs')), 'contactUs'); //联系我们
-const helpCenter = r => require.ensure([], () => r(require('./views/userCenter/helpCenter')), 'helpCenter');  //问题中心
-const salesRecords = r => require.ensure([], () => r(require('./views/userCenter/salesRecords')), 'salesRecords');  //售后列表
-const addSalesRecords = r => require.ensure([], () => r(require('./views/userCenter/addSalesRecords')), 'addSalesRecords');  //售后申请
-const realName = r => require.ensure([], () => r(require('./views/userCenter/realName')), 'realName');  //实名认证
+const orderRecord = r => require.ensure([], () => r(require('./views/userCenter/orderRecord')), 'orderRecord'); //订单查询
+const cardPackage = r => require.ensure([], () => r(require('./views/userCenter/cardPackage')), 'cardPackage'); //卡包
+const consumerRecord = r => require.ensure([], () => r(require('./views/userCenter/consumerRecord')), 'consumerRecord'); //消费记录
+const balanceRefund = r => require.ensure([], () => r(require('./views/userCenter/balanceRefund')), 'balanceRefund'); //余额退款
+const currencyConversion = r => require.ensure([], () => r(require('./views/userCenter/currencyConversion')), 'currencyConversion'); //钻石转余额
+
 
 //复充活动
 const repeatRecharge = r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
@@ -397,54 +396,41 @@ export const constantRouterMap = [{
           }
         },
         {
-          path: 'rechargeRecord',
-          component: rechargeRecord,
+          path: 'orderRecord',
+          component: orderRecord,
           meta: {
-            title: '充值记录',
+            title: '订单查询',
           }
         },
         {
-          path: 'userCenterAddress',
-          component: userCenterAddress,
+          path: 'cardPackage',
+          component: cardPackage,
           meta: {
-            title: '收获地址',
+            title: '卡包',
           }
         },
         {
-          path: 'contactUs',
-          component: contactUs,
+          path: 'consumerRecord',
+          component: consumerRecord,
           meta: {
-            title: '联系我们',
+            title: '消费记录',
           }
         },
         {
-          path: 'helpCenter',
-          component: helpCenter,
+          path: 'balanceRefund',
+          component: balanceRefund,
           meta: {
-            title: '帮助中心',
+            title: '余额退款',
           }
         },
         {
-          path: 'salesRecords',
-          component: salesRecords,
+          path: 'currencyConversion',
+          component: currencyConversion,
           meta: {
-            title: '售后记录',
+            title: '钻石转余额',
           }
         },
-        {
-          path: 'addSalesRecords',
-          component: addSalesRecords,
-          meta: {
-            title: '售后申请',
-          }
-        },
-        {
-          path: 'realName',
-          component: realName,
-          meta: {
-            title: '认证教程',
-          }
-        },
+        
       ]
     }
 

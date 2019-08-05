@@ -1,62 +1,94 @@
 <template>
     <div class="userCenter">
-        <div class="userHeader">
-            <div>
+        <div >
+            <div class="userHeader">
               <div>
                 <div class="nickName">
-                  {{userInfo.nickname}}
+                  {{getUserInfo.nickname}}
                 </div>
                
               </div>
-              <div class="userImg"> <img :src="userInfo.headimgurl" > </div>
+              <div class="userImg"> 
+                <img :src="getUserInfo.avatar" >
+                 </div>
             </div>
-            <div class="userMiddle">
-                <div @click="goRecord">
-                  <div></div>
-                  <div>充值记录</div>
-                </div>
-                <div @click="goRefund">
-                  <div></div>
-                  <div>退费申请</div>
-                </div>
-                <div @click="goSalesRecords">
-                  <div></div>
-                  <div>售后记录</div>
-                </div>
-            </div>
+            
         </div>
 
-        
+        <div class="userMid">
+          <div class="money">
+            <div >
+              <span>{{getUserInfo.account.balance}}<i></i></span>
+            </div>
+            <div>
+              <i></i>
+              <span>余额</span> 
+            </div>
+          </div>
+
+
+
+          <div class="diamonds">
+            <div>
+              <span>{{getUserInfo.account.rmb}} <i></i></span>
+            </div>
+            <div>
+              <i></i>
+              <span>钻石</span>
+              
+            </div>
+          </div>
+
+
+
+          <div class="elb">
+            <div>
+              <span>{{getUserInfo.account.elb}}<i></i> </span>
+            </div>
+            <div>
+              <i></i>
+              <span>ELB</span>
+              
+            </div>
+          </div>
+        </div>
 
 
         <div class="userBottom">
-          <div @click="goHelp">
+          <div @click="goRecord">
             <div></div>
             <div>
-              帮助中心
+              订单查询
             </div>
-            <div></div>
+            <div class="iconfont icon-rightArrow"></div>
           </div>
-          <div @click="goRealName">
+          <div @click="goChange">
             <div></div>
             <div>
-              认证教程
+              钻石转余额
             </div>
-            <div></div>
+            <div class="iconfont icon-rightArrow"></div>
           </div>
-          <div @click="goAddress">
+          <div @click="goConsumer">
             <div></div>
             <div>
-              收货地址
+              消费记录
             </div>
-            <div></div>
+            <div class="iconfont icon-rightArrow"></div>
           </div>
-          <div @click="goContact">
+          <div  @click="goCard">
             <div></div>
             <div>
-              联系我们
+              卡包
             </div>
+            <div class="iconfont icon-rightArrow" ></div>
+          </div>
+           <div  @click="goRefund">
             <div></div>
+            <div>
+              余额退款
+            </div>
+            <div class="iconfont icon-rightArrow" ></div>
           </div>
         </div>
     </div>
@@ -64,68 +96,47 @@
 
 <script>
     import { setStorage, getStorage,getUrlParam} from "../../utilies";
+    import {mapState} from 'vuex'
 
     export default {
         data() {
             return {
-                userInfo:{}
+               
             }
         },
         components: {
 
         },
-        created() {
-            if(getUrlParam("type")){
-              localStorage.setItem("currentType",getUrlParam("type"));
-            }
-                this.userInfo=getStorage("decrypt_data", "obj");
-           
-      
-           
+        computed: {
+            ...mapState({
+                getUserInfo: state => state.userInfo.userInfoInner
+            }),
+        },
+        created(){
+
         },
         methods: {
-          //充值记录
+          //订单查询
           goRecord(){
-            this.$router.push({path:"rechargeRecord"})
+            this.$router.push({path:"orderRecord"})
           },
-          //退款申请
-          goRefund(){
-            localStorage.setItem("currentType","userCenter");
-            this.$router.push({
-                   path:'/weixin/refund/argument',
-               });
+          goCard(){
+            this.$router.push({path:"cardPackage"});
 
           },
-          //收获地址
-          goAddress(){
-            this.$router.push({
-              path:"userCenterAddress"
-            })
+          goConsumer(){
+            this.$router.push({path:"consumerRecord"});
+
           },
-          //联系我们
-          goContact(){
-            this.$router.push({
-              path:"contactUs"
-            })
+          goRefund(){
+            this.$router.push({path:"balanceRefund"});
+
           },
-          //问题中心
-          goHelp(){
-            this.$router.push({
-              path:"helpCenter"
-            })
-          },
-          //售后记录
-          goSalesRecords(){
-            this.$router.push({
-              path:"salesRecords"
-            })
-          },
-          // 认证教程
-          goRealName(){
-            this.$router.push({
-              path:"realName"
-            })
-          },
+          goChange(){
+            this.$router.push({path:"currencyConversion"});
+
+          }
+         
         },
        
     }
@@ -134,159 +145,198 @@
 <style lang="less">
   .userCenter{
     height:100%;
-    background:#F6F6F6;
+    background:url("../../assets/imgs/userCenter/bg.png")no-repeat;
+    background-size:100% 100%;
+    position: absolute;
+    top:0;
+    right:0;
+    left:0;
+    bottom:0;
     .userHeader{
-      background:url("./img/userCenterBg.png")no-repeat;
-      height:288px;
-      background-size:100% 100%;
-      position:relative;
-      >div:nth-child(1){
-        display:flex;
-        align-items:center;
-        >div:nth-child(1){
-          flex:1;
-          text-align:left;
-          margin:88px 0 0 55px;
+      display:flex;
+      padding:57px 64px  42px 67px;
+      justify-content: space-between;
+      align-items: center;
+      .nickName{
+        font-size:48px;
+        font-family:SourceHanSansSC-Medium;
+        font-weight:500;
+        color:rgba(51,51,51,1);
+      }
+      .userImg{
+        img{
+          width:182px;
+          height:182px;
+          border-radius:50%;
         }
       }
-      .nickName{
-        font-size:40px;
-        font-family:SourceHanSansSC-Bold;
-        font-weight:bold;
-        color:rgba(51,51,51,1);
-        line-height:66px;
+    }
+
+
+
+
+    .userMid{
+      padding:0 0 44px 0;
+      font-size:42px;
+      font-family:SourceHanSansSC-Medium;
+      font-weight:500;
+      color:rgba(51,51,51,1);
+      display:flex;
+      >div{
+        flex:1;
+        >div:nth-child(1){
+          span{
+            position:relative;
+            i{
+              display:inline-block;
+              width:28px;
+              height:28px;
+              background:url("../../assets/imgs/userCenter/why.png")no-repeat;
+              background-size:100% 100%;
+              position:absolute;
+              top:-5px;
+              right:-30px;
+            }
+          }
+          
+        }
       }
-      .userId{
+      .money{
+        
+        >div:nth-child(2){
           font-size:26px;
           font-family:SourceHanSansSC-Normal;
           font-weight:400;
-          color:rgba(76,76,76,1);
-      }
-      .userImg{
-          width:160px;
-          height:160px;
-          border-radius:50%;
-          overflow:hidden;
-          margin:49px 47px 0 0;
-          >img{
-            width:100%;
-            height:100%;
-          }
-      }
-      .userMiddle{
-        width:621px;
-        height:124px;
-        border-radius:38px;
-        background:#fff;
-        position:absolute;
-        bottom:-62px;
-        left:50%;
-        margin-left:-310.5px;
-        display:flex;
-        justify-content: center;
-        align-items:center;
-        >div{
-          flex:1;
-          font-size:24px;
-          font-family:SourceHanSansSC-Light;
-          font-weight:300;
-          color:rgba(101,101,101,1);
-        }
-        >div:nth-child(1)>div:nth-child(1){
-          width:37px;
-          height:46px;
-          background:url("./img/userIcon1.png")no-repeat;
-          background-size:100% 100%;
-          margin: 0 auto;
-        }
-         >div:nth-child(2)>div:nth-child(1){
-          width:40px;
-          height:47px;
-          background:url("./img/userIcon2.png")no-repeat;
-          background-size:100% 100%;
-          margin: 0 auto;
-
-        }
-         >div:nth-child(3)>div:nth-child(1){
-          width:45px;
-          height:48px;
-          background:url("./img/userIcon3.png")no-repeat;
-          background-size:100% 100%;
-          margin: 0 auto;
-
-        }
-        >div>div:nth-child(2){
+          color:rgba(135,134,134,1);
           margin-top:20px;
+          i{
+            display:inline-block;
+            width:33px;
+            height:34px;
+            background:url("../../assets/imgs/userCenter/money.png")no-repeat;
+            background-size:100% 100%;
+            margin-right:5px;
+            vertical-align:middle;
+
+          }
+          span{
+            vertical-align:middle;
+          }
         }
       }
-    }
 
-    .userBottom{
-      margin-top:120px;
-      font-size:28px;
-      font-family:SourceHanSansSC-Normal;
-      font-weight:400;
-      color:rgba(51,51,51,1);
-      >div{
-        display:flex;
-        align-items:center;
-        // justify-content: space-between;
-        height:90px;
-        >div:nth-child(1){
-          margin-left:64px;
-          margin-right: 20px;
-        }
-
+      .diamonds{
         >div:nth-child(2){
-          font-size:28px;
+          font-size:26px;
           font-family:SourceHanSansSC-Normal;
           font-weight:400;
-          color:rgba(51,51,51,1);
-          margin-right: auto;
+          color:rgba(135,134,134,1);
+          margin-top:20px;
 
+          i{
+            display:inline-block;
+            width:32px;
+            height:25px;
+            background:url("../../assets/imgs/userCenter/diamonds.png")no-repeat;
+            background-size:100% 100%;
+            margin-right:5px;
+            vertical-align:middle;
+
+          }
+          span{
+            vertical-align:middle;
+          }
         }
-        >div:nth-child(3){
-          width:14px;
-          height:24px;
-          background:url("./img/right.png")no-repeat;
-          background-size:100% 100%;
-          margin-right:57px;
+      }
+
+      .elb{
+        >div:nth-child(2){
+          font-size:26px;
+          font-family:SourceHanSansSC-Normal;
+          font-weight:400;
+          color:rgba(135,134,134,1);
+          margin-top:20px;
+
+          i{
+            display:inline-block;
+            width:28px;
+            height:30px;
+            background:url("../../assets/imgs/userCenter/elb.png")no-repeat;
+            background-size:100% 100%;
+            margin-right:5px;
+            vertical-align:middle;
+          }
+          span{
+            vertical-align:middle;
+          }
         }
-      }
-
-
-      >div:nth-child(1)>div:nth-child(1){
-        width:28px;
-        height:38px;
-        background:url("./img/gogogo1.png")no-repeat;
-        background-size:100% 100%;
-        margin-left:69px;
-          margin-right: 25px;
-
-      }
-       >div:nth-child(2)>div:nth-child(1){
-        width:28px;
-        height:38px;
-        background:url("./img/gogogo2.png")no-repeat;
-        background-size:100% 100%;
-        margin-left:69px;
-
-          margin-right: 25px;
-
-      }
-       >div:nth-child(3)>div:nth-child(1){
-        width:38px;
-        height:34px;
-        background:url("./img/gogogo3.png")no-repeat;
-        background-size:100% 100%;
-      }
-       >div:nth-child(4)>div:nth-child(1){
-        width:38px;
-        height:38px;
-        background:url("./img/gogogo4.png")no-repeat;
-        background-size:100% 100%;
       }
     }
+
+
+
+
+
+     .userBottom{
+        background:#fff;
+        border-radius:70px 70px 0px 0px;
+        padding:46px 58px 0 47px;
+        font-size:28px;
+        font-family:SourceHanSansSC-Regular;
+        font-weight:400;
+        color:rgba(51,51,51,1);
+        text-align:left;
+        >div{
+          height:60px;
+          padding:20px 0;
+          line-height:60px;
+          display:flex;
+          >div:nth-child(2){
+            flex:1;
+            padding-left:20px;
+          }
+        }
+        >div:nth-child(1){
+          >div:nth-child(1){
+            width:57px;
+            height:57px;
+            background:url("../../assets/imgs/userCenter/check.png") no-repeat;
+            background-size:100% 100%;
+          }
+        }
+        >div:nth-child(2){
+          >div:nth-child(1){
+            width:58px;
+            height:58px;
+            background:url("../../assets/imgs/userCenter/change.png") no-repeat;
+            background-size:100% 100%;
+          }
+        }
+        >div:nth-child(3){
+          >div:nth-child(1){
+            width:59px;
+            height:59px;
+            background:url("../../assets/imgs/userCenter/record.png") no-repeat;
+            background-size:100% 100%;
+          }
+        }
+        >div:nth-child(4){
+          >div:nth-child(1){
+            width:58px;
+            height:58px;
+            background:url("../../assets/imgs/userCenter/package.png") no-repeat;
+            background-size:100% 100%;
+          }
+        }
+        >div:nth-child(5){
+          >div:nth-child(1){
+            width:59px;
+            height:59px;
+            background:url("../../assets/imgs/userCenter/refund.png") no-repeat;
+            background-size:100% 100%;
+          }
+        }
+     }
   }
    
 

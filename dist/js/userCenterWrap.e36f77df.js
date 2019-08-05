@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["userCenterWrap"],{"9dcf":function(e,n,r){},a414:function(e,n,r){"use strict";var t=r("9dcf"),u=r.n(t);u.a},e3f5:function(e,n,r){"use strict";r.r(n);var t=function(){var e=this,n=e.$createElement,r=e._self._c||n;return r("router-view")},u=[],a={name:"userCenter_wrapper"},c=a,s=(r("a414"),r("2877")),i=Object(s["a"])(c,t,u,!1,null,"18c7b58c",null);i.options.__file="userCenterWrap.vue";n["default"]=i.exports}}]);
-//# sourceMappingURL=userCenterWrap.e36f77df.js.map
