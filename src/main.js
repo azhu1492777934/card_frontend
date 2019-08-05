@@ -10,7 +10,8 @@ import {Popover} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(Popover);
-
+import { Dialog } from 'vant';
+Vue.use(Dialog);
 require('../src/assets/css/loading/index.css');
 require('../src/assets/css/reset.css');
 require('../src/assets/css/SourceHanSansCNRegular.css');

@@ -1,10 +1,15 @@
 <template>
-    <router-view/>
+    <router-view @getUserData="getUserInfo"/>
 </template>
 
 <script>
     export default {
-        name: "userCenter_wrapper"
+        name: "userCenter_wrapper",
+        methods:{
+            getUserInfo(){
+                this.$emit('getUserData');
+            }
+        }
     }
 </script>
 

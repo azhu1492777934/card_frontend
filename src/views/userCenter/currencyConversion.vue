@@ -14,30 +14,33 @@
       </div>
 
       <div>
-          <input type="text" placeholder="请输入要转钻石数0.01-9999之间">
-          <span>全部</span>
+          <input type="text" :placeholder="'请输入要转钻石数0.01-'+getUserInfo.account.rmb+'之间'" v-model="rmb">
+          <span @click="getAllRmb(getUserInfo.account.rmb)">全部</span>
       </div>
 
 
-      <div>
-        转移
+      <div @click="conversion">
+        <!-- 转移 -->
+      <van-button type="primary" size="normal" round  >转移</van-button>
+
       </div>
     </div>
 </template>
 
 <script>
-    import { setStorage, getStorage,getUrlParam} from "../../utilies";
-    import { Search,List,Cell } from 'vant';
+    import { setStorage, getStorage,getUrlParam,codeParam} from "../../utilies";
+    import { Notify,Button,Dialog } from 'vant';
     import {mapState} from 'vuex'
+    import {_post, _get} from "../../http";
 
     export default {
         data() {
             return {
-             
+              rmb:"",
             }
         },
         components: {
-          
+          "van-button":Button
         },
         computed: {
             ...mapState({
@@ -50,7 +53,47 @@
         mounted(){
         },
         methods: {
-            
+            getAllRmb(rmb){
+              this.rmb=rmb;
+            },
+            conversion(){
+               let reg=/(^[1-9]{1}[0-9]*$)|(^[0-9]*\.[0-9]{2}$)/;
+               if(!reg.test(this.rmb)){
+                  Notify({message: "请输入数字且至多保留两位小数"});
+                  return false;
+               }
+               if(this.rmb>this.getUserInfo.account.rmb){
+                  Notify({message: "超出可转移的范围"});
+                  return false;
+               }
+                Dialog.confirm({
+                  message: '是否确认将账户上的钻石转为余额，余额只可用于购买套餐且不能转回钻石!',
+                  beforeClose:this.cfm
+                });
+                
+            },
+            cfm(action,done){
+               if (action === 'confirm') {
+                  _post("/accountCenter/v2/user-account/rmb-to-balance?" + codeParam({}, 'post'), {
+                    rmb: this.rmb,
+                  }).then((res) => {
+                    if(res.error==0){
+                      Notify({
+                        message: '转移成功',
+                        background: '#60ce53'
+                      })
+                      this.rmb="";
+                      this.$emit('getUserData');
+                      done();
+                    }else{
+                      Notify({message: res.msg});
+                      done(close);
+                    }
+                  })
+                } else {
+                  done();
+                }
+            }
           
         },
        
@@ -59,7 +102,13 @@
 
 <style lang="less">
 .currencyConversion{
+  position: absolute;
+  top:0;
+  right:0;
+  left:0;
+  bottom:0;
   padding-top:16px;
+  background:#fff;
   >div:nth-child(1){
     width:745px;
     height:384px;
@@ -139,10 +188,7 @@
   }
 
   >div:nth-child(3){
-    width:631px;
-    height:78px;
-    background:rgba(64,145,255,1);
-    border-radius:39px;
+    
     font-size:34px;
     font-family:SourceHanSansSC-Regular;
     font-weight:400;
@@ -150,6 +196,14 @@
     text-align:center;
     line-height:78px;
     margin:135px auto 0 auto;
+    .van-button{
+      width:631px;
+      height:78px;
+    }
+    .van-button--primary{
+      background:rgba(64,145,255,1);
+      border:1px solid rgba(64,145,255,1);
+    }
   }
 }
 </style>

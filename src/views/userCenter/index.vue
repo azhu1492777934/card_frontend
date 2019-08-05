@@ -21,7 +21,7 @@
               <span>{{getUserInfo.account.balance}}<i></i></span>
             </div>
             <div>
-              <i></i>
+              <i @click="getRmb"></i>
               <span>余额</span> 
             </div>
           </div>
@@ -33,7 +33,7 @@
               <span>{{getUserInfo.account.rmb}} <i></i></span>
             </div>
             <div>
-              <i></i>
+              <i @click="getDiamonds"></i>
               <span>钻石</span>
               
             </div>
@@ -46,7 +46,7 @@
               <span>{{getUserInfo.account.elb}}<i></i> </span>
             </div>
             <div>
-              <i></i>
+              <i @click="getElb"></i>
               <span>ELB</span>
               
             </div>
@@ -113,7 +113,7 @@
             }),
         },
         created(){
-
+            this.$emit('getUserData');
         },
         methods: {
           //订单查询
@@ -135,6 +135,27 @@
           goChange(){
             this.$router.push({path:"currencyConversion"});
 
+          },
+          getRmb(){
+            Dialog.alert({
+              message: '余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额，也可将钻石转成余额。'
+            }).then(() => {
+              // on close
+            });
+          },
+          getDiamonds(){
+            Dialog.alert({
+              message: '钻石：翼联会员体系下通用虚拟货币，可用于游戏娱乐，购买优惠商品也可以转化成余额。'
+            }).then(() => {
+              // on close
+            });
+          },
+          getElb(){
+            Dialog.alert({
+              message: 'ELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用户商品现金抵扣、游戏娱乐等。'
+            }).then(() => {
+              // on close
+            });
           }
          
         },

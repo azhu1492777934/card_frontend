@@ -75,11 +75,21 @@
        <!-- 弹出框 -->
        <van-dialog
           v-model="showRefund"
-          title="标题"
+          title="退款原因"
           show-cancel-button
+          confirm-button-text="确认退款"
+          cancel-button-text="暂不退款"
+          :before-close="cfmRefund"
         >
           <div>
-            123123
+              <van-field
+                v-model="message"
+                label="退款原因："
+                type="textarea"
+                placeholder="请输入退款原因"
+                rows="1"
+                autosize
+              />
           </div>
         </van-dialog>
     </div>
@@ -87,7 +97,7 @@
 
 <script>
     import { setStorage, getStorage,getUrlParam} from "../../utilies";
-    import { Search,List,Cell,Dialog } from 'vant';
+    import { Search,List,Cell,Field,SwipeCell,Notify } from 'vant';
     import {_post, _get} from "../../http";
 
     export default {
@@ -101,14 +111,17 @@
                savedList:[],
               loading: false,
               finished: false,
-              showRefund:false
+              showRefund:false,
+              message:"",
+              currentId:""
             }
         },
         components: {
           "van-search":Search,
           "van-list":List,
           "van-cell":Cell,
-          "van-dialog":Dialog
+          "van-field":Field,
+          "van-cell-group":SwipeCell
         },
         computed: {
             
@@ -154,15 +167,18 @@
             //获取全部数据
             getList(){
               _get("/api/v1/app/order/status", {
-                user_id:64069
-                // user_id: getStorage("userInfo", "obj").account.user_id
+                // user_id:64069
+                user_id: getStorage("userInfo", "obj").account.user_id
               }).then(res => {
-                
-                this.list=res.data[0];
-                this.savedList=res.data[0];
+                if(res.state==1){
+                  this.list=res.data[0];
+                  this.savedList=res.data[0];
+                }else{
+                  Notify({message: res.msg})
+                }
                 this.loading = false;
                 this.finished = true;
-
+              
               });
             },
             //获取当前TAB数据
@@ -200,11 +216,33 @@
             //退款
             showMe(id){
               this.showRefund=true;
-              // _post('/api/v1/app/activated', {order_id: id,refund_reason,data}).then(res => {
-                
-              // })
-            }
-          
+              this.currentId=id;
+              this.message="";
+            },
+            cfmRefund(action,done){
+              if (action === 'confirm') {
+                if(this.message.length==0){
+                  Notify({message: "请填写退款原因"});
+                  done(false); 
+                  return false;
+                }
+                _post('/api/v1/app/cards/balance/refund', {order_id: this.currentId,refund_reason:this.message}).then(res => {
+                  if (res.state == 1) {
+                    Notify({
+                      message: '提交成功',
+                      background: '#60ce53'
+                    })
+                    done();
+                  } else {
+                    Notify({message: res.msg})
+                    done(false); 
+                  }
+              })
+              } else {
+                done();
+              }
+            },
+           
         },
        
     }
@@ -221,6 +259,9 @@
     left:0;
     bottom:0;
     padding:0 28px;
+    .van-field__body{
+      height:100%;
+    }
     .search{
       position:relative;
       margin-top:10px;

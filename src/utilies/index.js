@@ -220,6 +220,7 @@ function getCardServerToken(params) {
     }
     str = str.substr(0, str.length - 1);
     str = sha1(str);
+    alert(str);
     str = md5(str);
 
     return str
