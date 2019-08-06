@@ -37,12 +37,15 @@
     <div class="tip-wrap p-15" v-show="!card_tip">
       <p>移动号码实名仅支持一证五号，若实名卡数已超出请更换证件</p>
     </div>
+    <p class="tutorial-wrap">
+      <a @click="toTutorial"><span class="iconfont icon-tutorial"></span>查看实名教程</a>
+    </p>
     <div class="btn-next-wrap">
       <button @click="checkInfo" class="btn-next">完成实名 激活卡</button>
     </div>
-    <p class="tutorial-wrap">
-      <a @click="toTutorial">查看实名教程</a>
-    </p>
+    <div class="phone-tip">
+      温馨提示<br/>以'145','146','166','177','199'号段开头的号码无法接收短信验证码
+    </div>
     <van-popup v-model="showItem.showFixedWrap" :close-on-click-overlay="false">
       <p class="showTip">{{showTipMsg}}</p>
     </van-popup>
@@ -128,7 +131,6 @@
           this.$router.push({'path': '/weixin/card/lookup'});
         }
       }
-
 
       if (inArray(this.card_source, ['18', '19', '20', '21', '22', '27']) >= 0) {
         this.card_tip = !this.card_tip
@@ -300,8 +302,7 @@
 
         Notify({
           message: '检测手机号码中,请等候'
-        })
-
+        });
 
         _post('/api/v1/app/phone/check', {mobile: this.info_phone})
           .then(res => {
@@ -452,10 +453,12 @@
   .text-left {
     text-align: left;
   }
-  .text-center{
+
+  .text-center {
     text-align: center !important;
   }
-  .p-15{
+
+  .p-15 {
     padding: 25px !important;
   }
 
@@ -490,7 +493,8 @@
       background-color: #fff1ee;
       text-align: left;
     }
-    .realname-tip{
+
+    .realname-tip {
       display: block;
       width: 100%;
       height: auto;
@@ -559,7 +563,7 @@
 
     .btn-next-wrap {
       display: block;
-      margin: 80px 30px 30px;
+      margin: 40px 40px;
 
       button {
         width: 100%;
@@ -582,6 +586,12 @@
       }
     }
 
+    .phone-tip{
+      font-size: 24px;
+      line-height: 32px;
+      color: #ff562f;
+      text-align: center;
+    }
     .verify-code-wrap {
       width: 100%;
       background-color: transparent;
