@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.a6629d31.js"
   },
   {
-    "revision": "6b00ec7089fd4875a44c",
+    "revision": "39e3c64b65bd8ebe6fb0",
     "url": "/css/app.2608000f.css"
   },
   {
-    "revision": "6b00ec7089fd4875a44c",
-    "url": "/js/app.d6283c92.js"
+    "revision": "39e3c64b65bd8ebe6fb0",
+    "url": "/js/app.4ec382dc.js"
   },
   {
     "revision": "a618aa5c3728c6857cea",
@@ -584,14 +584,6 @@ self.__precacheManifest = [
     "url": "/img/bg_test.6e5cee73.png"
   },
   {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
@@ -600,20 +592,12 @@ self.__precacheManifest = [
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
   {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "f5f322478286641bd9887a155e35f222",
-    "url": "/img/btn.f5f32247.png"
-  },
-  {
-    "revision": "d140650fa64e0f1fc771610dba62aed7",
-    "url": "/img/bg.d140650f.png"
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
@@ -624,20 +608,28 @@ self.__precacheManifest = [
     "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
+    "revision": "f5f322478286641bd9887a155e35f222",
+    "url": "/img/btn.f5f32247.png"
+  },
+  {
+    "revision": "d140650fa64e0f1fc771610dba62aed7",
+    "url": "/img/bg.d140650f.png"
+  },
+  {
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
+  },
+  {
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
+  },
+  {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
     "url": "/img/bg_network@3x.2c51a1e5.png"
   },
   {
     "revision": "32d70c8fc305e3647098f3de0c71b618",
     "url": "/img/bg_network@2x.32d70c8f.png"
-  },
-  {
-    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
-    "url": "/img/bg-check-wrap@3x.3f342771.png"
-  },
-  {
-    "revision": "9713b21819c4019befecd095069977df",
-    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -658,6 +650,14 @@ self.__precacheManifest = [
   {
     "revision": "9e02095f31a07b972244f1c714c1dfe7",
     "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
+    "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
+    "url": "/img/bg-check-wrap@3x.3f342771.png"
+  },
+  {
+    "revision": "9713b21819c4019befecd095069977df",
+    "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
     "revision": "b70eddccd257b21777e71bb64c83b876",
@@ -704,6 +704,10 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
     "revision": "4a0cab0f33beb48ea985714d1b91fef7",
     "url": "/img/dianxin.4a0cab0f.png"
   },
@@ -712,20 +716,16 @@ self.__precacheManifest = [
     "url": "/img/pkgBg1.d3b42651.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
-    "revision": "6dedd4943e4c5848638196fb6f0c4145",
-    "url": "/img/bg.6dedd494.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
   {
     "revision": "813b5319e378dafdda952c16ad89906b",
     "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "6dedd4943e4c5848638196fb6f0c4145",
+    "url": "/img/bg.6dedd494.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
@@ -832,7 +832,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "534ac3e644b2b0f515ffa12af50c8562",
+    "revision": "d38ca2cbee0837d3cb2bd982f06a2d22",
     "url": "/index.html"
   },
   {
