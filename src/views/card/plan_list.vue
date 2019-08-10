@@ -9,6 +9,8 @@
             <span v-if="index==1">月套餐</span>
             <span v-if="index==2">加油包</span>
             <span v-if="index==5">周期性套餐</span>
+            <span v-if="index==6">超量自动续费套餐</span>
+
           </div>
           <div></div>
         </div>

@@ -3,13 +3,13 @@
        <div>
            <div>余额账户</div>
            <div>Account balance</div>
-           <div>5.00</div>
+           <div>{{getUserInfo.account.balance}}</div>
        </div>
         <div>
             <div>退款金额</div>
             <div>
                 <span>¥</span>
-                <input type="text" placeholder="请输入退款金额">
+                <input type="text" placeholder="请输入退款金额" v-model="balance">
             </div>
             <div>
                 <div>可退余额:¥5</div>
@@ -19,23 +19,29 @@
         <div>
             确认退款
         </div>
+
+        
     </div>
 </template>
 
 <script>
     import { setStorage, getStorage,getUrlParam} from "../../utilies";
-    import { Search,List,Cell } from 'vant';
+    import { Notify,Button,Dialog } from 'vant';
+    import {mapState} from 'vuex'
+    import {_post, _get} from "../../http";
     export default {
         data() {
             return {
-                list:[{},{}]
+                balance:""
             }
         },
         components: {
         
         },
         computed: {
-            
+            ...mapState({
+                getUserInfo: state => state.userInfo.userInfoInner
+            }),
         },
         created(){
 
@@ -107,6 +113,7 @@
                     color:rgba(51,51,51,1);
                 }
                 input{
+                    width:100%;
                     height:50px;
                     font-size:60px;
                     font-family:SourceHanSansSC-Regular;

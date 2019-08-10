@@ -630,6 +630,8 @@
     // },
     created() {
       removeStorage('plan_list_new_card');
+      this.$emit('getUserData');
+
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {

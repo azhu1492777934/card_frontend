@@ -14,8 +14,10 @@
       </div>
 
       <div>
-          <input type="text" :placeholder="'请输入要转钻石数0.01-'+getUserInfo.account.rmb+'之间'" v-model="rmb">
-          <span @click="getAllRmb(getUserInfo.account.rmb)">全部</span>
+        <div>
+          <input type="text" :placeholder="'可转钻石数0.01-'+getUserInfo.account.rmb" v-model="rmb">
+        </div>
+        <div @click="getAllRmb(getUserInfo.account.rmb)">全部</div>
       </div>
 
 
@@ -48,7 +50,6 @@
             }),
         },
         created(){
-
         },
         mounted(){
         },
@@ -57,12 +58,12 @@
               this.rmb=rmb;
             },
             conversion(){
-               let reg=/(^[1-9]{1}[0-9]*$)|(^[0-9]*\.[0-9]{2}$)/;
+               let reg=/^(([1-9][0-9]*)|(([0]\.\d{1,2}|[1-9][0-9]*\.\d{1,2})))$/;
                if(!reg.test(this.rmb)){
                   Notify({message: "请输入数字且至多保留两位小数"});
                   return false;
                }
-               if(this.rmb>this.getUserInfo.account.rmb){
+               if(parseFloat(this.rmb)>parseFloat(this.getUserInfo.account.rmb)){
                   Notify({message: "超出可转移的范围"});
                   return false;
                }
@@ -85,6 +86,8 @@
                       this.rmb="";
                       this.$emit('getUserData');
                       done();
+                    }else if (res.error === 11002) {
+                      this.$emit("getToken");
                     }else{
                       Notify({message: res.msg});
                       done(close);
@@ -147,25 +150,40 @@
     border-bottom:1px solid #DCDCDC;
     text-align:left;
     padding-bottom:25px;
-
+    display:flex;
     input{
+      width:100%;
         font-size:60px;
         font-family:SourceHanSansSC-Regular;
         font-weight:400;
         color:rgba(51,51,51,1);
-        width:80%;
     }
-    span{
+    >div{
       font-size:28px;
       font-family:SourceHanSansSC-Normal;
       font-weight:400;
       color:rgba(45,108,253,1);
+
+    }
+    >div:nth-child(1){
+      flex:0.8;
+      display:flex;
+      justify-content: center;
+      align-items: center;
+    }
+    >div:nth-child(2){
+      flex:0.2;
+      display:flex;
+      justify-content: center;
+      align-items: center;
     }
     input::-webkit-input-placeholder{
         font-size:26px;
         font-family:SourceHanSansSC-Normal;
         font-weight:400;
         color:rgba(172,172,172,1);
+        line-height: normal;
+        padding-top:10px;
     } 
     input:-moz-placeholder{
         font-size:26px;

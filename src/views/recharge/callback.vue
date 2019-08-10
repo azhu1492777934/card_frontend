@@ -3,9 +3,9 @@
     <p class="recharge-success">
       <img class="icon-success" src="../../assets/imgs/recharge_success/icon-recharge_20181001.svg" alt=""><br>支付成功!
     </p>
-    <img class="success-banner" src="../../assets/imgs/recharge_success/recharge_callback_20181126.jpg" alt="">
-    <span id="to_lottery" @click="to_another_way('lottery')" class="btn_to_lottery">立刻领取</span>
-    <span id="jump_plan" @click="to_another_way('card')" class="btn_to_plan">跳过</span>
+    <!-- <img class="success-banner" src="../../assets/imgs/recharge_success/recharge_callback_20181126.jpg" alt=""> -->
+    <span id="to_lottery"  class="btn_to_lottery">({{time}}S后回到首页) </span>
+    <!-- <span id="jump_plan" @click="to_another_way('card')" class="btn_to_plan">跳过</span> -->
   </div>
 </template>
 
@@ -72,11 +72,21 @@
     data() {
       return {
         iccid: '',
-
+        time:5
       }
     },
     created() {
+      let _this=this;
+      let timer=setInterval(()=>{
+        console.log(_this.time);
+        if(_this.time>0){
 
+          _this.time--;
+        }else{
+          clearInterval(timer);
+          _this.$router.push({path: '/weixin/card/usage'})
+        }
+      },1000)
     },
     methods: {
       to_another_way: function (location) {

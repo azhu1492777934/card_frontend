@@ -13,7 +13,7 @@ axios.interceptors.request.use(function (config) {
     config.headers.Authorization = getStorage('token');
   }
   // 处理数据
-  if (config.url.indexOf('/api') !== -1) {
+  if (config.url.indexOf('/api') !== -1||config.url.indexOf('/newiot') !== -1) {
     if (config.method === 'post') {
       config.headers['Qhyl-Token'] = getCardServerToken(config.data)
     } else if (config.method === 'get') {

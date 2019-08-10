@@ -18,10 +18,10 @@
         <div class="userMid">
           <div class="money">
             <div >
-              <span>{{getUserInfo.account.balance}}<i></i></span>
+              <span>{{getUserInfo.account.balance}}<i @click="getRmb"></i></span>
             </div>
             <div>
-              <i @click="getRmb"></i>
+              <i ></i>
               <span>余额</span> 
             </div>
           </div>
@@ -30,10 +30,10 @@
 
           <div class="diamonds">
             <div>
-              <span>{{getUserInfo.account.rmb}} <i></i></span>
+              <span>{{getUserInfo.account.rmb}} <i @click="getDiamonds"></i></span>
             </div>
             <div>
-              <i @click="getDiamonds"></i>
+              <i ></i>
               <span>钻石</span>
               
             </div>
@@ -43,10 +43,10 @@
 
           <div class="elb">
             <div>
-              <span>{{getUserInfo.account.elb}}<i></i> </span>
+              <span>{{getUserInfo.account.elb}}<i @click="getElb"></i> </span>
             </div>
             <div>
-              <i @click="getElb"></i>
+              <i ></i>
               <span>ELB</span>
               
             </div>
@@ -83,13 +83,13 @@
             </div>
             <div class="iconfont icon-rightArrow" ></div>
           </div>
-           <div  @click="goRefund">
+           <!-- <div  @click="goRefund">
             <div></div>
             <div>
               余额退款
             </div>
             <div class="iconfont icon-rightArrow" ></div>
-          </div>
+          </div> -->
         </div>
     </div>
 </template>
@@ -97,6 +97,8 @@
 <script>
     import { setStorage, getStorage,getUrlParam} from "../../utilies";
     import {mapState} from 'vuex'
+    import { Dialog } from 'vant';
+
 
     export default {
         data() {
@@ -217,6 +219,7 @@
               position:absolute;
               top:-5px;
               right:-30px;
+              z-index:999;
             }
           }
           

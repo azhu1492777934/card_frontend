@@ -1,7 +1,7 @@
 <template>
   <div class="recharge-wrap">
     <div class="recharge-tip">
-      <p>充值活动：充值钻石送ELB，钻石ELB可等额购买套餐。</p>
+      <p>充值活动：充值余额送ELB，余额ELB可等额购买套餐。</p>
     </div>
     <div class="content-wrap">
       <div class="title-wrap">
@@ -20,17 +20,17 @@
               <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
             </div>
             <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}">
-              {{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}
+              {{item.pay_type=='diamond_charge'?'余额支付':item.pay_money+'元'}}
             </p>
 
             <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
             <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
               <span class="surplus-recharge" v-if="surplus_cash >= 0">支付{{surplus_cash}}元</span>
-              可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>钻石<br>无ELB赠送
+              可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>余额<br>无ELB赠送
             </p><!--钻石支付-->
 
-            <p class="monthlyDes" v-if="item.is_renew">使用钻石连续包月</p>
+            <p class="monthlyDes" v-if="item.is_renew">使用余额连续包月</p>
 
             <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
 
@@ -257,8 +257,8 @@
       let user_rmb = 0;
       this.userInfo = this.authorizedUserInfo;
 
-      if (this.userInfo.account.rmb > 0) {
-        user_rmb = this.userInfo.account.rmb;
+      if (this.userInfo.account.balance > 0) {
+        user_rmb = this.userInfo.account.balance;
       }
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);//根据套餐价格过滤充值参数
 
@@ -268,7 +268,7 @@
      * 条件限制:存在钻石用量
      * */
 
-      if (this.userInfo.account.rmb > 0 && this.planInfo.is_can_renew == 1) {
+      if (this.userInfo.account.balance > 0 && this.planInfo.is_can_renew == 1) {
         const monthlyMsg = getStorage("monthlyMsg", "obj");
         monthlyMsg.give_elb = 0;
         if (monthlyMsg.is_first) {
@@ -281,7 +281,7 @@
         monthlyMsg.is_renew = true;
         this.new_recharge_list.push(monthlyMsg);
 
-      } else if (this.userInfo.account.rmb <= 0) {
+      } else if (this.userInfo.account.balance <= 0) {
         this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
       }
 
@@ -425,7 +425,7 @@
 
 
         if (this.check_elb) {
-          let userElb = parseInt(this.userInfo.account.rmb);
+          let userElb = parseInt(this.userInfo.account.elb);
           if (!this.val_elb) {
             Notify({message: '请输入ELB抵扣数'})
             return
@@ -514,7 +514,7 @@
         let rechargeInfo = this.new_recharge_list[this.activeIndex];
         if (this.client_type === 'app') {
 
-          if (rechargeInfo.pay_type === 'diamond_charge' && this.userInfo.account.rmb > this.planInfo.price) {
+          if (rechargeInfo.pay_type === 'diamond_charge' && this.userInfo.account.balance > this.planInfo.price) {
             this.appPay.show = false
             this.recharge()
           } else {

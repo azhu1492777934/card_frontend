@@ -6,17 +6,17 @@
                 <span class="user-name">{{getUserInfo.nickname}}</span>
             </div>
             <div>
-                <span>钻石:</span>
+                <span>余额:</span>
                 <span class="icon-diamond-wrap" @click="showDoc(0)">
                           <i class="icon-user-size  icon-diamond"></i>
-                          {{getUserInfo.account.rmb}}
+                          {{getUserInfo.account.balance}}
                       </span>
-                <span>ELB:</span>
+                <!-- <span>ELB:</span>
 
                 <span class="icon-elb-wrap" @click="showDoc(1)">
                           <i class="icon-user-size icon-elb"></i>
                           {{getUserInfo.account.elb}}
-                      </span>
+                      </span> -->
                 <!-- <span @click="showDoc" class="tip-wrap">!</span> -->
             </div>
         </div>
@@ -45,7 +45,7 @@
             showDoc(type) {
                 let msg;
                  if(type==0){
-                    msg="钻石：翼联会员体系下通用虚拟货币,可以用于:购买套餐,充值话费,游戏娱乐,购买优惠商品;"
+                    msg="余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额，也可将钻石转成余额;"
                  }else{
                     msg="ELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等;"
 
@@ -66,12 +66,13 @@
             display: flex;
             align-items: center;
             text-align: left;
+            justify-content: space-between;
             > div {
                 &:first-child {
                     flex: 2;
                 }
                 &:last-child {
-                    flex: 5;
+                    padding-left:50px;
                 }
             }
         }
@@ -136,7 +137,7 @@
             text-align: center;
         }
         .icon-diamond {
-            background-image: url("../../assets/imgs/app/icon-diamonds.png");
+            background-image: url("../../assets/imgs/userCenter/money.png");
         }
         .icon-elb {
             background-image: url("../../assets/imgs/app/icon-elb.png");

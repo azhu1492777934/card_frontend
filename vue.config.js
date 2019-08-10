@@ -63,6 +63,13 @@ module.exports = {
           '^/kachiApi': ""
         }
       },
+      '/newiot': {
+        target: "http://iotmanager-test.china-m2m.com",
+        changeOrigin: true,
+        pathRewrite: {
+          '^/newiot': ""
+        }
+      },
     }
   }
 }

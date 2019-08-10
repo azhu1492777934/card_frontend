@@ -1,5 +1,5 @@
 <template>
-    <router-view @getUserData="getUserInfo"/>
+    <router-view @getUserData="getUserInfo" @getToken="getNewToken"/>
 </template>
 
 <script>
@@ -8,7 +8,12 @@
         methods:{
             getUserInfo(){
                 this.$emit('getUserData');
+            },
+            getNewToken(){
+                this.$emit("getToken");
             }
+
+
         }
     }
 </script>

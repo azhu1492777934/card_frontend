@@ -1,7 +1,7 @@
 <template>
     <div class="recharge-wrap">
         <div class="recharge-tip">
-            <p>充值活动：充值钻石送ELB，钻石ELB可等额购买套餐。</p>
+            <p>充值活动：充值余额送ELB，余额ELB可等额购买套餐。</p>
         </div>
         <div class="content-wrap">
             <div class="title-wrap">
@@ -18,13 +18,13 @@
                             <div class="monthlyFirst">首月</div>
                             <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
                         </div>
-                        <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" >{{item.pay_type=='diamond_charge'?'钻石支付':item.pay_money+'元'}}</p>
+                        <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" >{{item.pay_type=='diamond_charge'?'余额支付':item.pay_money+'元'}}</p>
                         <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
                         <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
                             可抵扣<em class="j-user-rmb cl-primary">{{item.user_rmb}}</em>元<br>无ELB赠送
                         </p><!--钻石支付-->
-                        <p class="monthlyDes" v-if="item.is_renew">使用钻石连续包月</p>
+                        <p class="monthlyDes" v-if="item.is_renew">使用余额连续包月</p>
                         <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
 
                         <p class="discount-appendix" v-show="item.pay_type=='over_charge'">赠送<em class="cl-elb">{{item.give_elb}}</em>ELB

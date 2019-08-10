@@ -8,15 +8,16 @@
               shape="round"
               @search="onSearch"
               @cancel="onCancel"
+              @clear="onSearch"
             >
               <div slot="left-icon"></div>
             </van-search>
-            <b ></b>
+            <b @click="onSearch"></b>
           </form>
        </div>
 
 
-       <div class="tab">
+       <div class="tab" v-if="finished">
           <ul>
             <li v-for="(item,index) in tabList" v-bind:key="index" @click="getCurrentType(index)" :class="{'active':currentType==index}">{{item}}</li>
           </ul>
@@ -56,8 +57,8 @@
                   </div>
                 </div>
                 <div class="planTime">
-                  <div>下单时间：{{item.rate_plan.created_at}}</div>
-                  <div @click="showMe(item.id)" v-if="item.refund==0&&item.status==1||item.status==2">申请退款</div>
+                  <div>下单时间：{{item.paid_at}}</div>
+                  <div @click="showMe(item.id)" v-if="item.refund==0&&item.status==1||item.refund==0&&item.status==2">申请退款</div>
                       
                 </div>
                 <div class="phoneNo">
@@ -83,12 +84,55 @@
         >
           <div>
               <van-field
-                v-model="message"
+                v-model="refundInfo.brand"
+                label="设备品牌："
+                type="textarea"
+                placeholder="请输入设备品牌"
+                rows="1"
+                autosize
+              />
+              <van-field
+                v-model="refundInfo.model"
+                label="设备型号："
+                type="textarea"
+                placeholder="请输入设备型号"
+                rows="1"
+                autosize
+              />
+              <van-field
+                v-model="refundInfo.address"
+                label="使用地址："
+                type="textarea"
+                placeholder="请输入使用地址"
+                rows="1"
+                autosize
+              />
+              <van-field
+                v-model="refundInfo.reason"
                 label="退款原因："
                 type="textarea"
                 placeholder="请输入退款原因"
                 rows="1"
                 autosize
+              />
+              
+              <van-field
+                v-model="refundInfo.aliAccount"
+                label="支付宝账号："
+                type="textarea"
+                placeholder="请输入支付宝账号"
+                rows="1"
+                autosize
+                v-show="isShowAccount"
+              />
+              <van-field
+                v-model="refundInfo.aliName"
+                label="支付宝姓名："
+                type="textarea"
+                placeholder="请输入支付宝姓名"
+                rows="1"
+                autosize
+                v-show="isShowAccount"
               />
           </div>
         </van-dialog>
@@ -99,6 +143,7 @@
     import { setStorage, getStorage,getUrlParam} from "../../utilies";
     import { Search,List,Cell,Field,SwipeCell,Notify } from 'vant';
     import {_post, _get} from "../../http";
+    import {mapState} from 'vuex'
 
     export default {
         data() {
@@ -113,7 +158,16 @@
               finished: false,
               showRefund:false,
               message:"",
-              currentId:""
+              currentId:"",
+              isShowAccount:false,
+              refundInfo: {
+                brand: '',
+                model: '',
+                address: '',
+                reason: '',
+                aliAccount: '',
+                aliName: '',
+              },
             }
         },
         components: {
@@ -124,10 +178,15 @@
           "van-cell-group":SwipeCell
         },
         computed: {
-            
+            ...mapState({
+              authorizedUserInfo: state => state.userInfo.userInfoInner
+            }),
         },
         created(){
           // this.getList();
+          if (getStorage('refundPayType') == 3) {
+            this.isShowAccount = true
+          }
         },
         mounted(){
           this.bodyHeight=document.documentElement.clientHeight
@@ -217,27 +276,72 @@
             showMe(id){
               this.showRefund=true;
               this.currentId=id;
-              this.message="";
+              this.refundInfo= {
+                brand: '',
+                model: '',
+                address: '',
+                reason: '',
+                aliAccount: '',
+                aliName: '',
+              }
             },
             cfmRefund(action,done){
               if (action === 'confirm') {
-                if(this.message.length==0){
-                  Notify({message: "请填写退款原因"});
+                if (!this.refundInfo.brand) {
+                  Notify({message: '请填写设备品牌'})
                   done(false); 
-                  return false;
+                  return
                 }
-                _post('/api/v1/app/cards/balance/refund', {order_id: this.currentId,refund_reason:this.message}).then(res => {
+                if (!this.refundInfo.model) {
+                  Notify({message: '请填写设备型号'})
+                  done(false);
+                  return
+                }
+                if (!this.refundInfo.address) {
+                  Notify({message: '请填写设备使用地址'})
+                  done(false);
+                  return
+                }
+                if (!this.refundInfo.reason) {
+                  Notify({message: '请填写退款理由'})
+                  done(false);
+                  return
+                }
+                if (this.isShowAccount) {
+                  if (!this.refundInfo.aliAccount) {
+                    Notify({message: '请填写支付宝账号'})
+                    done(false);
+                    return
+                  }
+                  if (!this.refundInfo.aliName) {
+                    Notify({message: '请填写支付宝实名验证真实姓名'})
+                    done(false);
+                    return
+                  }
+                }
+                _post('/api/v1/app/cards/refund', {
+                  order_id: this.currentId,
+                  device_brand: this.refundInfo.brand,
+                  device_model: this.refundInfo.model,
+                  use_address: this.refundInfo.address,
+                  refund_reason: this.refundInfo.reason,
+                  refund_account: this.refundInfo.aliAccount,
+                  refund_account_name: this.refundInfo.aliName,
+                  user_id: this.authorizedUserInfo.account.user_id
+                }).then(res => {
                   if (res.state == 1) {
                     Notify({
-                      message: '提交成功',
+                      message: '退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候',
                       background: '#60ce53'
                     })
                     done();
+                    this.getList();
                   } else {
                     Notify({message: res.msg})
-                    done(false); 
+                    this.getList();
+                    done(); 
                   }
-              })
+                })
               } else {
                 done();
               }
