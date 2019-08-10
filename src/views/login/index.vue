@@ -11,6 +11,9 @@
       <div class="btn-login-wrap">
         <button :disabled="loginDisabled" @click="login">绑定账户</button>
       </div>
+      <div class="phone-tip">
+        温馨提示<br/>以'145','146','166','177','199'号段开头的号码无法接收短信验证码
+      </div>
     </div>
     <van-popup :close-on-click-overlay="true" v-model="isLoginError">
       <p class="showTip">{{loginErrorMsg}}</p>
@@ -242,6 +245,13 @@
           border-radius: 10px;
           line-height: 1;
         }
+      }
+      .phone-tip{
+        padding-top: 40px;
+        font-size: 24px;
+        line-height: 32px;
+        color: #fff;
+        text-align: center;
       }
     }
   }

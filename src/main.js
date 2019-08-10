@@ -10,7 +10,8 @@ import {Popover} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
 Vue.use(Popover);
-import { Dialog } from 'vant';
+import {Dialog} from 'vant';
+
 Vue.use(Dialog);
 require('../src/assets/css/loading/index.css');
 require('../src/assets/css/reset.css');
@@ -56,7 +57,10 @@ router.afterEach((to, from) => {
   }
   const u = navigator.userAgent.toLowerCase();
   if (u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
+<<<<<<< HEAD
   
+=======
+>>>>>>> 00bfade59ba9bf8b401cd7419c037498373bcb7a
   if (to.path !== global.location.pathname) {
     location.assign(to.fullPath);
   }
