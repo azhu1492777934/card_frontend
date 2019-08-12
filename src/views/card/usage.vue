@@ -630,7 +630,7 @@
     // },
     created() {
       removeStorage('plan_list_new_card');
-      this.$emit('getUserData');
+      // this.$emit('getUserData');
 
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');

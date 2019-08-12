@@ -115,7 +115,7 @@
             }),
         },
         created(){
-            this.$emit('getUserData');
+            // this.$emit('getUserData');
         },
         methods: {
           //订单查询
