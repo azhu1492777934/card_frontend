@@ -102,7 +102,9 @@
                 this.$router.push('/weixin/userCenter/index');
               } else if (localStorage.getItem("currentType") === "esim") {
                 this.$router.push('/weixin/card/esim_usage');
-              } else {
+              } else if (this.redirect_uri=="/weixin/userCenter/index")
+                this.$router.push(this.redirect_uri);
+              else {
                 this.$router.push('/weixin/card/lookup');
               }
             }
