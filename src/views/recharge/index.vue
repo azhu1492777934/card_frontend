@@ -162,15 +162,15 @@
           }, {
             pay_type: 'over_charge',
             pay_money: 100,
-            give_elb: 20
+            give_elb: 100
           }, {
             pay_type: 'over_charge',
             pay_money: 200,
-            give_elb: 50
+            give_elb: 200
           }, {
             pay_type: 'over_charge',
             pay_money: 300,
-            give_elb: 80
+            give_elb: 300
           }, {
             pay_type: 'normal_charge',
             pay_money: 0,
