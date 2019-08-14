@@ -107,6 +107,9 @@ const mifi_plan_usage = r => require.ensure([], () => r(require('./views/mifi/pl
 const mifi_coupon_wrapper = r => require.ensure([], () => r(require('./views/mifi/coupon/coupon_wrapper')), 'mifi_coupon_wrapper');
 const mifi_coupon_index = r => require.ensure([], () => r(require('./views/mifi/coupon/index')), 'mifi_coupon_index');
 
+// mifi 切换网络
+const mifi_change_network_explanation = r => require.ensure([], () => r(require('./views/mifi/change_network_explanation')), 'mifi_change_network_explanation');
+
 
 //个人中心
 const userCenterWrap = r => require.ensure([], () => r(require('./views/userCenter/userCenterWrap')), 'userCenterWrap');
@@ -142,6 +145,10 @@ export const constantRouterMap = [{
   path: '/card/usage_bak',
   meta: {title: '临时链接'},
   component: usage_bak,
+}, {
+  path: "/change_network_explanation",
+  component: mifi_change_network_explanation,
+  meta: {title: '切换网络操作说明'}
 }, {
   path: '/weixin',
   component: Layout,
@@ -430,7 +437,7 @@ export const constantRouterMap = [{
             title: '钻石转余额',
           }
         },
-        
+
       ]
     }
 
