@@ -48,9 +48,9 @@
           Toast.clear();
           if (res.state === 1) {
             this.visible = true;
-            this.name = res.data.title;
-            this.message = res.data.desc;
-            this.qrImg = res.data.img;
+            this.name = res.datas.title;
+            this.message = res.datas.desc;
+            this.qrImg = res.datas.img;
           } else {
             Toast({
               message: res.msg,
