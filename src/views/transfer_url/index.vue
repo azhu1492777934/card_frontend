@@ -43,7 +43,7 @@
         forbidClick: true,
         duration: 0,
       });
-      _get('/newiot/v1/qrcode/conf')
+      _get('/iot/v1/qrcode/conf')
         .then(res => {
           Toast.clear();
           if (res.state === 1) {
