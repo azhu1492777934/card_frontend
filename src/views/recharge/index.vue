@@ -161,6 +161,14 @@
             give_elb: 0,
           }, {
             pay_type: 'over_charge',
+            pay_money: 30,
+            give_elb: 30
+          }, {
+            pay_type: 'over_charge',
+            pay_money: 50,
+            give_elb: 50
+          }, {
+            pay_type: 'over_charge',
             pay_money: 100,
             give_elb: 100
           }, {
@@ -215,7 +223,7 @@
     },
     created() {
       // 用户流失率统计
-      if (getStorage('plan_list_new_card')==="1") {
+      if (getStorage('plan_list_new_card') === "1") {
         lossRate({
           type: 5,
           iccid: getStorage("check_iccid")
@@ -386,9 +394,12 @@
           _this = this;
 
         rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge' ? param.status = 1 : param.status = 0;
-        if (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') {
-          param.recharge_price = rechargeInfo.pay_money
-        }
+
+        rechargeInfo.pay_type === 'diamond_charge' ? param.recharge_price = this.planInfo.price : param.recharge_price = rechargeInfo.pay_money;
+
+        // if (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') {
+        //   param.recharge_price = rechargeInfo.pay_money
+        // }
 
         if (this.client_type === 'alipay' || this.client_type === 'wechat') {
           param.open_id = this.open_id;
@@ -427,19 +438,19 @@
         if (this.check_elb) {
           let userElb = parseInt(this.userInfo.account.elb);
           if (!this.val_elb) {
-            Notify({message: '请输入ELB抵扣数'})
+            Notify({message: '请输入ELB抵扣数'});
             return
           }
           if (this.planInfo.is_elb_deductible == 0) {
-            Notify({message: '此套餐不可抵扣ELB'})
+            Notify({message: '此套餐不可抵扣ELB'});
             return
           }
           if (!(/^[1-9]\d*$/.test(this.val_elb))) {
-            Notify({message: 'ELB最低抵扣数额为1'})
+            Notify({message: 'ELB最低抵扣数额为1'});
             return
           }
           if (this.val_elb > userElb) {
-            Notify({message: '您的ELB余额不足'})
+            Notify({message: '您的ELB余额不足'});
             return
           }
           if (this.planInfo.is_elb_deductible == 1 && this.val_elb > this.planInfo.max_deductible_elb) {
@@ -447,15 +458,14 @@
             return
           }
           if (this.val_elb >= this.planInfo.price) {
-            Notify({message: 'ELB抵扣数不能超过套餐总值'})
+            Notify({message: 'ELB抵扣数不能超过套餐总值'});
             return
           }
           param.elb_deduction = this.val_elb
-
         }
         if (this.check_coupon) {
           if (!this.val_coupon) {
-            Notify({message: '请输入券码'})
+            Notify({message: '请输入券码'});
             return
           } else {
             param.coupon_no = this.val_coupon
@@ -463,7 +473,7 @@
         }
         if (this.check_date) {
           if (!this.val_date) {
-            Notify({message: '请选择套餐生效时间'})
+            Notify({message: '请选择套餐生效时间'});
             return
           } else {
             param.start_time = this.val_date
@@ -534,23 +544,9 @@
             item.pay_money = planPrice;
           }
           if (rmb <= 0) {
-            if (planPrice > 100 && planPrice <= 200) {
-              return (item.pay_type === 'over_charge' && item.pay_money == 200)
-                || item.pay_type === 'normal_charge'
-            } else if (planPrice > 200 && planPrice <= 300) {
-              return (item.pay_type === 'over_charge' && item.pay_money > 200)
-                || item.pay_type === 'normal_charge'
-
-            } else if (planPrice > 300) {
-              return item.pay_type === 'normal_charge'
-            } else {
-              return item.pay_money >= 0
-                && item.pay_type !== 'diamond_charge'
-            }
+            return item.pay_money >= planPrice;
           } else {
-
             rmb - planPrice >= 0 ? this.surplus_cash = 0.00 : this.surplus_cash = toDecimal(planPrice - rmb);
-
             if (item.pay_type === 'diamond_charge') {
               if (planPrice < rmb) {
                 item.user_rmb = planPrice
@@ -558,24 +554,8 @@
                 item.user_rmb = rmb
               }
             }
-            if (planPrice > 100 && planPrice <= 200) {
-              return item.pay_type === 'diamond_charge'
-                || (item.pay_type === 'over_charge' && item.pay_money == 200)
-                || item.pay_type === 'normal_charge'
-
-
-            } else if (planPrice > 200 && planPrice <= 300) {
-              return item.pay_type === 'diamond_charge'
-                || (item.pay_type === 'over_charge' && item.pay_money > 200)
-                || item.pay_type === 'normal_charge'
-
-
-            } else if (planPrice > 300) {
-              return item.pay_type === 'diamond_charge'
-                || item.pay_type === 'normal_charge'
-            } else {
-              return item.pay_money >= 0
-            }
+            return item.pay_money >= planPrice
+              || item.pay_type === 'diamond_charge';
           }
         })
       },//用户rmb,套餐价格planPrice
