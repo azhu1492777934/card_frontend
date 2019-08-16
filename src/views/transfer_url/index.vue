@@ -43,14 +43,14 @@
         forbidClick: true,
         duration: 0,
       });
-      _get('/iot/v1/qrcode/conf')
+      _get('/newiot/v1/qrcode/conf')
         .then(res => {
           Toast.clear();
           if (res.state === 1) {
             this.visible = true;
-            this.name = res.datas.title;
-            this.message = res.datas.desc;
-            this.qrImg = res.datas.img;
+            this.name = res.data.title;
+            this.message = res.data.desc;
+            this.qrImg = res.data.img;
           } else {
             Toast({
               message: res.msg,
