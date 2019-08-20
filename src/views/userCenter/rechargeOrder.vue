@@ -78,7 +78,6 @@
               data.refund=2;
             }
             _get("/api/v1/app/balance/recharge_list", data).then(res => {
-              alert(JSON.stringify(res.data.list))
               if (res.state == 1) {
                 this.contentList=res.data.list;
                 this.loading=false;
