@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.a6629d31.js"
   },
   {
-    "revision": "e3f67d5582a9ab174df2",
+    "revision": "08dcd70e67e0e56f2ef5",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "e3f67d5582a9ab174df2",
-    "url": "/js/app.1bdbeb8f.js"
+    "revision": "08dcd70e67e0e56f2ef5",
+    "url": "/js/app.8656044a.js"
   },
   {
     "revision": "9f5767044d21c4e964bd",
@@ -588,30 +588,6 @@ self.__precacheManifest = [
     "url": "/fonts/element-icons.535877f5.woff"
   },
   {
-    "revision": "91e1d2771efacd45e5e465d9a001f197",
-    "url": "/img/liantong.91e1d277.png"
-  },
-  {
-    "revision": "4a0cab0f33beb48ea985714d1b91fef7",
-    "url": "/img/dianxin.4a0cab0f.png"
-  },
-  {
-    "revision": "657033323334e91efb0011bbc18f8c04",
-    "url": "/img/yidong.65703332.png"
-  },
-  {
-    "revision": "8da3b83b73e44e54d6be4b2522bcb1f2",
-    "url": "/img/pkgBg2.8da3b83b.png"
-  },
-  {
-    "revision": "d3b42651f9f5048baeffb50c800913ec",
-    "url": "/img/pkgBg1.d3b42651.png"
-  },
-  {
-    "revision": "d461d18e42a310bd709b2ce97d159153",
-    "url": "/img/pkgBg3.d461d18e.png"
-  },
-  {
     "revision": "0078f03c08066d51d64b92a13e194ebb",
     "url": "/img/balanceRefund.0078f03c.png"
   },
@@ -624,20 +600,20 @@ self.__precacheManifest = [
     "url": "/img/bg_test.6e5cee73.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
@@ -656,20 +632,20 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
-    "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
-    "url": "/img/bg_network@3x.2c51a1e5.png"
-  },
-  {
-    "revision": "32d70c8fc305e3647098f3de0c71b618",
-    "url": "/img/bg_network@2x.32d70c8f.png"
-  },
-  {
     "revision": "b899232b79ad9962c5ab5572775a0400",
     "url": "/img/card_index_bg@3x.b899232b.png"
   },
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
     "url": "/img/card_index_bg@2x.b899232b.png"
+  },
+  {
+    "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
+    "url": "/img/bg_network@3x.2c51a1e5.png"
+  },
+  {
+    "revision": "32d70c8fc305e3647098f3de0c71b618",
+    "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -724,16 +700,40 @@ self.__precacheManifest = [
     "url": "/img/activityPage.014d354b.png"
   },
   {
+    "revision": "91e1d2771efacd45e5e465d9a001f197",
+    "url": "/img/liantong.91e1d277.png"
+  },
+  {
+    "revision": "4a0cab0f33beb48ea985714d1b91fef7",
+    "url": "/img/dianxin.4a0cab0f.png"
+  },
+  {
+    "revision": "657033323334e91efb0011bbc18f8c04",
+    "url": "/img/yidong.65703332.png"
+  },
+  {
+    "revision": "8da3b83b73e44e54d6be4b2522bcb1f2",
+    "url": "/img/pkgBg2.8da3b83b.png"
+  },
+  {
+    "revision": "d3b42651f9f5048baeffb50c800913ec",
+    "url": "/img/pkgBg1.d3b42651.png"
+  },
+  {
+    "revision": "d461d18e42a310bd709b2ce97d159153",
+    "url": "/img/pkgBg3.d461d18e.png"
+  },
+  {
+    "revision": "6dedd4943e4c5848638196fb6f0c4145",
+    "url": "/img/bg.6dedd494.png"
+  },
+  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
   {
     "revision": "813b5319e378dafdda952c16ad89906b",
     "url": "/img/icon2.813b5319.png"
-  },
-  {
-    "revision": "6dedd4943e4c5848638196fb6f0c4145",
-    "url": "/img/bg.6dedd494.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
@@ -876,7 +876,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "4d71ad88ae11260ee5d58609b82d2759",
+    "revision": "560dcd069fc14e91a3c0fcac3b8a4100",
     "url": "/index.html"
   },
   {
