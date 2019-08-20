@@ -525,8 +525,9 @@
             this.plan_list[item] = newArray3;
 
           }
-          this.choose_plan_index = res.data[0][0].id;
 
+          
+            
           this.$nextTick(() => {
             let clientHeight =
               document.documentElement.clientHeight ||
@@ -546,6 +547,12 @@
           setTimeout(function () {
             _this.firstStatus = true;
           }, 100);
+
+          //放底部
+          for(let i in res.data){
+             this.choose_plan_index = res.data[i][0].id;
+             return this.choose_plan_index;
+          }  
         } else {
           this.load_plan_list = true;
           this.load_plan_msg = res.msg;

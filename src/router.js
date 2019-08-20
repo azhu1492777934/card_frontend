@@ -119,6 +119,7 @@ const cardPackage = r => require.ensure([], () => r(require('./views/userCenter/
 const consumerRecord = r => require.ensure([], () => r(require('./views/userCenter/consumerRecord')), 'consumerRecord'); //消费记录
 const balanceRefund = r => require.ensure([], () => r(require('./views/userCenter/balanceRefund')), 'balanceRefund'); //余额退款
 const currencyConversion = r => require.ensure([], () => r(require('./views/userCenter/currencyConversion')), 'currencyConversion'); //钻石转余额
+const rechargeOrder = r => require.ensure([], () => r(require('./views/userCenter/rechargeOrder')), 'rechargeOrder'); //充值订单
 
 
 //复充活动
@@ -406,7 +407,7 @@ export const constantRouterMap = [{
           path: 'orderRecord',
           component: orderRecord,
           meta: {
-            title: '订单查询',
+            title: '历史订单',
           }
         },
         {
@@ -437,7 +438,14 @@ export const constantRouterMap = [{
             title: '钻石转余额',
           }
         },
-
+        {
+          path: 'rechargeOrder',
+          component: rechargeOrder,
+          meta: {
+            title: '充值订单',
+          }
+        },
+        
       ]
     }
 

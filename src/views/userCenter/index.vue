@@ -58,10 +58,19 @@
           <div @click="goRecord">
             <div></div>
             <div>
-              订单查询
+              历史订单
             </div>
             <div class="iconfont icon-rightArrow"></div>
           </div>
+
+          <div @click="goRecharge">
+            <div></div>
+            <div>
+              充值订单
+            </div>
+            <div class="iconfont icon-rightArrow" ></div>
+          </div>
+          
           <div @click="goChange">
             <div></div>
             <div>
@@ -83,6 +92,8 @@
             </div>
             <div class="iconfont icon-rightArrow" ></div>
           </div>
+
+          
            <!-- <div  @click="goRefund">
             <div></div>
             <div>
@@ -137,6 +148,9 @@
           goChange(){
             this.$router.push({path:"currencyConversion"});
 
+          },
+          goRecharge(){
+            this.$router.push({path:"rechargeOrder"});
           },
           getRmb(){
             Dialog.alert({
@@ -332,7 +346,7 @@
           >div:nth-child(1){
             width:58px;
             height:58px;
-            background:url("../../assets/imgs/userCenter/change.png") no-repeat;
+            background:url("../../assets/imgs/userCenter/recharge.png") no-repeat;
             background-size:100% 100%;
           }
         }
@@ -340,7 +354,7 @@
           >div:nth-child(1){
             width:59px;
             height:59px;
-            background:url("../../assets/imgs/userCenter/record.png") no-repeat;
+            background:url("../../assets/imgs/userCenter/change.png") no-repeat;
             background-size:100% 100%;
           }
         }
@@ -348,7 +362,7 @@
           >div:nth-child(1){
             width:58px;
             height:58px;
-            background:url("../../assets/imgs/userCenter/package.png") no-repeat;
+            background:url("../../assets/imgs/userCenter/record.png") no-repeat;
             background-size:100% 100%;
           }
         }
@@ -356,7 +370,7 @@
           >div:nth-child(1){
             width:59px;
             height:59px;
-            background:url("../../assets/imgs/userCenter/refund.png") no-repeat;
+            background:url("../../assets/imgs/userCenter/package.png") no-repeat;
             background-size:100% 100%;
           }
         }
