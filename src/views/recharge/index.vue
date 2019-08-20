@@ -20,7 +20,7 @@
               <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
             </div>
             <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}">
-              {{item.pay_type=='diamond_charge'?'余额支付':item.pay_money+'元'}}
+              {{item.pay_type=='diamond_charge'?'余额支付':'充值'+item.pay_money+'元'}}
             </p>
 
             <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
@@ -32,13 +32,13 @@
 
             <p class="monthlyDes" v-if="item.is_renew">使用余额连续包月</p>
 
-            <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p><!--正常支付-->
+            <!-- <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p>      -->
 
             <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0">赠送<em class="cl-elb">
               {{item.give_elb}}</em>ELB
             </p><!--多充值支付-->
             <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0">赠送<em class="cl-elb">
-              {{item.give_balance}}</em>余额
+              {{item.give_balance}}</em>元余额
             </p>
           </div>
         </li>
