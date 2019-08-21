@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "/js/recharge_callback.d8237c4b.js"
   },
   {
-    "revision": "685f36a61c6b9388424d",
+    "revision": "55be781e6374dbc5f37d",
     "url": "/css/Layout.83a36cb0.css"
   },
   {
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.a6629d31.js"
   },
   {
-    "revision": "973d442761e334356a0d",
+    "revision": "e3819c133993f28621df",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "973d442761e334356a0d",
-    "url": "/js/app.cc5279c8.js"
+    "revision": "e3819c133993f28621df",
+    "url": "/js/app.23b3c950.js"
   },
   {
     "revision": "9f5767044d21c4e964bd",
@@ -448,8 +448,8 @@ self.__precacheManifest = [
     "url": "/css/recharge_callback.4776b260.css"
   },
   {
-    "revision": "685f36a61c6b9388424d",
-    "url": "/js/Layout.7e2130a0.js"
+    "revision": "55be781e6374dbc5f37d",
+    "url": "/js/Layout.094dbd85.js"
   },
   {
     "revision": "dde103bffdd71d2acd48",
@@ -588,24 +588,16 @@ self.__precacheManifest = [
     "url": "/fonts/element-icons.535877f5.woff"
   },
   {
-    "revision": "0078f03c08066d51d64b92a13e194ebb",
-    "url": "/img/balanceRefund.0078f03c.png"
-  },
-  {
     "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
     "url": "/img/changeBg.af3ed0b3.png"
   },
   {
+    "revision": "0078f03c08066d51d64b92a13e194ebb",
+    "url": "/img/balanceRefund.0078f03c.png"
+  },
+  {
     "revision": "6e5cee7393060b0ec3dcd587c2518b94",
     "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
@@ -614,6 +606,14 @@ self.__precacheManifest = [
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "f5f322478286641bd9887a155e35f222",
@@ -876,7 +876,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "eb828d3bfc5f4e44f42513377504a2b5",
+    "revision": "d2995ecebd18b9010b5fc7976a698af5",
     "url": "/index.html"
   },
   {

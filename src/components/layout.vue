@@ -92,7 +92,7 @@
       },
       authorized() {
         if ((this.client_type === 'wechat' || this.client_type === 'alipay' || this.client_type === 'app') && process.env.NODE_ENV !== 'development') {
-          if (this.client_type !== 'app') {
+          // if (this.client_type !== 'app') {
             if (getStorage('userInfo', 'obj')) {
               this.$store.commit('userInfo/changeUserStatus', true);
               let userDom = document.querySelector('.user-wrap');
@@ -110,7 +110,8 @@
               removeStorage('state');
             }
 
-          }//app环境隐藏顶部个人信息
+          // }
+          //app环境隐藏顶部个人信息
           if (getStorage('token')) {
             if (this.global_variables.packed_project !== 'mifi') {
               this.getUserInfo();//获取用户信息 其他项目的跳转
