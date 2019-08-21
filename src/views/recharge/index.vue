@@ -162,10 +162,6 @@
             pay_money: 0,
             user_rmb: 0,
             give_elb: 0,
-          },  {
-            pay_type: 'normal_charge',
-            pay_money: 0,
-            give_elb: 0
           }
         ],//充值列表数据
         new_recharge_list: [],
@@ -264,6 +260,11 @@
             give_elb:data[i].elb,
             give_balance:data[i].balance})
         }
+        this.recharge_list.push({
+            pay_type: 'normal_charge',
+            pay_money: 0,
+            give_elb: 0
+          });
       }else{
         this.recharge_list=[
           {
