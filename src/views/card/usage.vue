@@ -773,7 +773,7 @@
               if (this.client_type === 'wechat' || this.client_type === 'alipay') {
                 this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight) + 'px'
               } else {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) + 'px'
+                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) - userHeight + 'px'
               }
             });
           } else {

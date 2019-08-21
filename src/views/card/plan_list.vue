@@ -507,7 +507,6 @@
           this.load_plan_msg = res.msg;
           this.load_plan_list = false;
           this.plan_list = res.data;
-
           for (let item in this.plan_list) {
             let newArray1 = [], newArray2 = [], newArray3 = [];
             for (let i = 0; i < this.plan_list[item].length; i++) {
@@ -539,7 +538,7 @@
                 clientHeight - refPlanButton - userHeight + "px";
             } else {
               this.$refs.vanSwiperWwrap.style.height =
-                clientHeight - refPlanButton + "px";
+                clientHeight - refPlanButton - userHeight + "px";
             }
           });
 
@@ -551,6 +550,7 @@
           //放底部
           for(let i in res.data){
              this.choose_plan_index = res.data[i][0].id;
+             this.ref_plan_type_index=i;
              return this.choose_plan_index;
           }  
         } else {
@@ -568,11 +568,20 @@
       },
       recharge: function () {
         let planInfo = null;
+        // console.log(this.plan_list);
+        // console.log(this.ref_plan_type_index);
         for (let i = 0; i < this.plan_list[this.ref_plan_type_index].length; i++) {
           if (this.choose_plan_index == this.plan_list[this.ref_plan_type_index][i].id) {
             planInfo = this.plan_list[this.ref_plan_type_index][i];
           }
         }
+        // for(let i in this.plan_list){
+        //   for(let a=0;a<this.plan_list[i].length;a++){
+        //     if(this.choose_plan_index ==this.plan_list[i][a].id){
+        //       planInfo=this.plan_list[i][a];
+        //     }
+        //   }
+        // }
         if (planInfo.surplus_times <= 0) {
           Toast("此套餐已售罄, 请更换套餐");
           return;
