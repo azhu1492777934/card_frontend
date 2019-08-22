@@ -254,7 +254,7 @@
         let data= this.settingRechargeList;
         data.sort(this.jsonSort);
         for(let i=0;i<data.length;i++){
-          this.recharge_list.push({
+            this.recharge_list.push({
             pay_type:'over_charge',
             pay_money:data[i].price,
             give_elb:data[i].elb,
@@ -294,8 +294,6 @@
 
       
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
-
-
       /*
      * 增加包月套餐
      * 条件限制:存在钻石用量
@@ -413,11 +411,17 @@
         this.showDate = false;
       },//取消日期弹窗
       recharge: function () {
+        
+        
         if (!this.userInfo.account.user_id) {
           Notify({message: '请在微信或支付宝客户端充值'});
           return
         }
         let rechargeInfo = this.new_recharge_list[this.activeIndex];
+        if(this.client_type=="app"&&this.planInfo.price>100&&rechargeInfo.pay_money==50){
+          Notify({message: '充值后余额不足抵扣套餐价格，请选择其他套餐进行充值'});
+          return
+        }
         let param = {},
           _this = this;
 
@@ -578,7 +582,11 @@
             if(planPrice<item.pay_money){
               return item.pay_type === 'over_charge'|| item.pay_type === 'normal_charge';
             }else{
-              return item.pay_money>planPrice||item.pay_type === 'normal_charge';
+              if(this.client_type=="app"&&item.pay_money==50){
+                return item.pay_money==50||item.pay_type === 'normal_charge';
+              }else{
+                return item.pay_money>planPrice||item.pay_type === 'normal_charge';
+              }
             }
             // if (planPrice > 100 && planPrice <= 200) {
             //   return (item.pay_type === 'over_charge' && item.pay_money == 200)
@@ -606,7 +614,11 @@
             if(planPrice<item.pay_money){
               return item.pay_type === 'diamond_charge' || item.pay_type === 'over_charge'|| item.pay_type === 'normal_charge';
             }else{
-              return item.pay_type === 'diamond_charge' || item.pay_money>planPrice||item.pay_type === 'normal_charge';
+              if(this.client_type=="app"&&item.pay_money==50){
+                return item.pay_type === 'diamond_charge' ||item.pay_money==50||item.pay_type === 'normal_charge';
+              }else{
+                return item.pay_type === 'diamond_charge' || item.pay_money>planPrice||item.pay_type === 'normal_charge';
+              }
             }
             // if (planPrice > 100 && planPrice <= 200) {
             //   return item.pay_type === 'diamond_charge'
