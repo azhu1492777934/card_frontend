@@ -500,7 +500,12 @@
             Notify({message: '请输入券码'});
             return
           } else {
-            param.coupon_no = this.val_coupon
+            if(rechargeInfo.pay_type === 'diamond_charge'){
+              param.coupon_no = this.val_coupon
+            }else{
+              Notify({message: '必须使用余额支付才能使用抵扣券'});
+              return
+            }
           }
         }
         if (this.check_date) {
