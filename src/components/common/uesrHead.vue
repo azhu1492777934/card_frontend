@@ -7,17 +7,17 @@
             </div>
             <div>
                 <span>余额:</span>
-                <span class="icon-diamond-wrap" @click="showDoc(0)">
+                <span class="icon-diamond-wrap" @click="showDoc()">
                           <i class="icon-user-size  icon-diamond"></i>
                           {{getUserInfo.account.balance}}
                       </span>
-                <!-- <span>ELB:</span>
+                <!-- <span>ELB:</span> -->
 
-                <span class="icon-elb-wrap" @click="showDoc(1)">
+                <!-- <span class="icon-elb-wrap" @click="showDoc(1)">
                           <i class="icon-user-size icon-elb"></i>
                           {{getUserInfo.account.elb}}
                       </span> -->
-                <!-- <span @click="showDoc" class="tip-wrap">!</span> -->
+                <span @click="showDoc" class="tip-wrap">!</span>
             </div>
         </div>
     </div>
@@ -44,12 +44,14 @@
         methods:{
             showDoc(type) {
                 let msg;
-                 if(type==0){
-                    msg="余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额，也可将钻石转成余额;"
-                 }else{
-                    msg="ELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等;"
+                //  if(type==0){
+                //     msg="余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额，也可将钻石转成余额;"
+                //  }else{
+                    // msg="ELB：可通过阅读微信文章、充值话费和活动套餐等方式免费领取，用于商品现金抵扣、游戏娱乐等;"
 
-                 }   
+                //  }   
+
+                msg="余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额，也可将钻石转成余额,可以到公众号的“个人中心”菜单里查看余额的订单和消费记录"
                 Dialog.alert({
                     message: msg
                 })
