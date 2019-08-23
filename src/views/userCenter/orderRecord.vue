@@ -319,6 +319,11 @@
                     return
                   }
                 }
+                for(let i in this.refundInfo){
+                  this.refundInfo[i]=this.refundInfo[i].replace(/\ +/g,"");
+                  this.refundInfo[i]=this.refundInfo[i].replace(/[\r\n]/g,"");
+                }
+                
                 _post('/api/v1/app/cards/refund', {
                   order_id: this.currentId,
                   device_brand: this.refundInfo.brand,
