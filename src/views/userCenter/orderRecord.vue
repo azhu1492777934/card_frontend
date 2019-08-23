@@ -340,9 +340,11 @@
                       background: '#60ce53'
                     })
                     done();
+                    this.currentType=0;
                     this.getList();
                   } else {
                     Notify({message: res.msg})
+                    this.currentType=0;
                     this.getList();
                     done(); 
                   }
