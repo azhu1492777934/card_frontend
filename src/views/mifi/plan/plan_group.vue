@@ -308,7 +308,7 @@
             },//app支付
             toRechargeList(planInfo) {
                 let userInfo = getStorage('userInfo', 'obj');
-                if (userInfo.account.rmb > 0) {
+                if (userInfo.account.balance > 0) {
                     _get("/api/v1/app/plans/renew_info", {
                         user_id: getStorage("userInfo", "obj").account.user_id,
                         rating_id: planInfo.id
