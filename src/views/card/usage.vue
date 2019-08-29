@@ -573,7 +573,7 @@
         load_skeleton: true,
         // load_plan: false,
         load_plan_msg: '',
-        watch_source: [5, 10, 12, 17, 18, 20, 22,32],
+        watch_source: [5, 10, 12, 17, 18, 20, 22,32,38],
         auth_status: ['未实名', '审核中', '审核不通过'],
         card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
         order_state: ['未支付', '已支付', '已到账'],
