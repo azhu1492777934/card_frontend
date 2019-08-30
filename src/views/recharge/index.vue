@@ -34,10 +34,10 @@
 
             <!-- <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p>      -->
 
-            <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0">赠送<em class="cl-elb">
+            <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance">赠送<em class="cl-elb">
               {{item.give_elb}}</em>ELB
             </p><!--多充值支付-->
-            <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0">赠送<em class="cl-elb">
+            <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance">赠送<em class="cl-elb">
               {{item.give_balance}}</em>元余额
             </p>
           </div>
@@ -258,7 +258,8 @@
             pay_type:'over_charge',
             pay_money:data[i].price,
             give_elb:data[i].elb,
-            give_balance:data[i].balance})
+            give_balance:data[i].balance,
+            is_give_balance:data[i].is_give_balance})
         }
         this.recharge_list.push({
             pay_type: 'normal_charge',
