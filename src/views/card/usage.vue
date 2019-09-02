@@ -22,7 +22,7 @@
               </div>
               <div>
                 <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                <router-link v-if="client_type!='app'" to="/weixin/question/index">问题中心></router-link>
+                <router-link  to="/weixin/question/index">问题中心></router-link>
 
               </div>
             </div>

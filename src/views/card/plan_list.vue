@@ -37,6 +37,9 @@
                 <p :class="{'plan-icon-recommend':item_inner.is_recommend}" class="plan-name">
                   <span v-if="item_inner.is_recommend" class="iconfont icon-recommend"></span>
                 </p>
+                <div class="gift" v-if="item_inner.image_url">
+                  <img :src="item_inner.image_url" alt="">
+                </div>
               </div>
 
             </el-popover>
@@ -155,6 +158,16 @@
         align-items: center;
         flex-direction: column;
         justify-content: center;
+        position:relative;
+        .gift{
+          position:absolute;
+          top:-35px;
+          right:-20px;
+          >img{
+            width:40px;
+            height:40px;
+          }
+        }
       }
 
       > div {
@@ -432,6 +445,7 @@
         text-decoration: underline;
       }
     }
+    
   }
 </style>
 

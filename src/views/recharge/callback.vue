@@ -3,6 +3,7 @@
     <p class="recharge-success">
       <img class="icon-success" src="../../assets/imgs/recharge_success/icon-recharge_20181001.svg" alt=""><br>支付成功!
     </p>
+    <div class="oneMsg" v-if="planInfo.vip_type_id!=0">购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。</div>
     <!-- <img class="success-banner" src="../../assets/imgs/recharge_success/recharge_callback_20181126.jpg" alt=""> -->
     <span id="to_lottery"  class="btn_to_lottery">({{time}}S后回到首页) </span>
     <!-- <span id="jump_plan" @click="to_another_way('card')" class="btn_to_plan">跳过</span> -->
@@ -26,7 +27,10 @@
       width: 100%;
       height: auto;
     }
-
+    .oneMsg{
+      font-size: 28px;
+      padding:0 30px;
+    }
     .recharge-success {
       padding: 80px 0;
       font-size: 36px;
@@ -66,13 +70,18 @@
 
 <script>
   // @ is an alias to /src
+  import {checkBrowser,getStorage } from "../../utilies";
+
   export default {
     name: "recharge_success",
 
     data() {
       return {
         iccid: '',
-        time:5
+        time:5,
+        client_type: checkBrowser(),
+        planInfo: getStorage('planInfo', 'obj'),//当前充值套餐信息
+
       }
     },
     created() {

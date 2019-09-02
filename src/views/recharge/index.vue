@@ -539,10 +539,18 @@
                 this.global_variables.packed_project === 'mifi' ?
                   location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
               } else {
-                Notify({
-                  message: '充值成功',
-                  background: '#60ce53'
-                });
+                if(this.planInfo.vip_type_id!=0){
+                  Notify({
+                    message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
+                    background: '#60ce53'
+                  });
+                }else{
+                  Notify({
+                    message: '充值成功',
+                    background: '#60ce53'
+                  });
+                }
+                
                 this.$emit('getUserData');
                 setTimeout(function () {
                   if (localStorage.getItem("currentType") === "esim") {
