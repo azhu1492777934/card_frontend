@@ -14,6 +14,7 @@
                 <li @click="choosePlanClick(inner_index)" v-for="(inner_item,inner_index) in group_list"
                     :class="{'activedPlan':inner_index==choose_plan_index,'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0}">
                     <div class="plan-info-wrap">
+                        
                         <p class="plan-name">
                             {{ inner_item.name }}
                         </p>
@@ -28,6 +29,7 @@
                     </div>
 
                     <div class="plan-price-wrap">
+                        
                         <p>￥{{ inner_item.price }}</p>
                         <p>￥{{ inner_item.market_price }}</p>
                     </div>
@@ -36,6 +38,9 @@
                          src="../../../assets/imgs/mifi/plan_group/icon_recommend.png" alt=""><!--推荐-->
                     <span class="icon-sell-done"
                           v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span><!--售罄-->
+
+
+                    <span v-if="inner_item.vip_type_id!=0"   class="youku"></span>   <!--优酷活动-->
                 </li>
             </ul>
 
@@ -430,6 +435,16 @@
                     right: 0;
                     width: 92px;
                     height: 92px;
+                }
+                .youku{
+                    display:inline-block;
+                    width:137px;
+                    height:48px;
+                    background:url("../../../assets/imgs/mifi/plan_group/youku.png")no-repeat;
+                    background-size:100% 100%;
+                    position:absolute;
+                    right:37px;
+                    top:12px;
                 }
                 //套餐信息
                 .plan-info-wrap {
