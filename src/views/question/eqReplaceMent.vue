@@ -49,6 +49,19 @@
                   <span><span class="redWord">*</span> 详细地址</span>
                   <input v-model="replaceData.addr" placeholder="请输入详细地址" type="text">
                 </li>
+                <li>
+                  <span class="redWord"><span class="redWord">*</span > 赠品</span>
+                  <div>
+                    <input type="radio" value="优酷会员" v-model="gift"> <span>优酷会员</span>
+                  </div>
+                  <div >
+                    <input type="radio" value="10G流量" v-model="gift"> <span>10G流量</span>
+                  </div>
+                </li>
+                <li v-show="gift =='优酷会员'">
+                  <span><span class="redWord">*</span> 优酷账号</span>
+                  <input v-model="youku_moblie" placeholder="请输入优酷绑定的手机号" type="number">
+                </li>
               </ul>
 
               <div class="submitButton">
@@ -153,9 +166,9 @@
         show: false,
         areaList: areaList,
         replaceList: [],
-        currentType: 0
-
-
+        currentType: 0,
+        gift: "优酷会员",
+        youku_moblie: ""
       };
     },
     created() {
@@ -186,6 +199,8 @@
           iccid: ""
         };
         this.areaData = "";
+        this.gift = "优酷会员";
+        this.youku_moblie = ""
       },
       //获取列表
       getList() {
@@ -317,6 +332,10 @@
           Notify({message: "详细地址过短"});
           return false;
         }
+        if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.youku_moblie)) {
+          Notify({message: "请填写正确优酷绑定的手机号"});
+          return false;
+        }
 
         let newData = this.replaceData;
         for (let item in newData) {
@@ -338,7 +357,9 @@
               background: '#60ce53'
             })
             this.replaceData = {};
-            this.areaData = ""
+            this.areaData = "";
+            this.gift = "优酷会员";
+            this.youku_moblie = ""
           } else {
 
             Notify({message: res.msg})
@@ -493,6 +514,10 @@
             box-sizing: border-box;
             position: relative;
 
+            div {
+              flex: 1;
+            }
+
             span {
               flex: 1;
               color: #2c251d;
@@ -510,12 +535,13 @@
               margin-top: 18px;
             }
 
-            &:nth-child(1), &:nth-child(3), &:nth-child(4), &:nth-child(6) {
+            &:nth-child(1), &:nth-child(3), &:nth-child(4), &:nth-child(7) {
               border-bottom: 1px solid #E6E6E6;
             }
 
             &:nth-child(2),
-            &:nth-child(5) {
+            &:nth-child(5),
+            &:nth-child(6) {
               margin-bottom: 18px;
             }
 
