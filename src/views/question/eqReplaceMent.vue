@@ -52,15 +52,15 @@
                 <li>
                   <span class="redWord"><span class="redWord">*</span > 赠品</span>
                   <div>
-                    <input type="radio" value="优酷会员" v-model="gift"> <span>优酷会员</span>
+                    <input type="radio" value="1" v-model="gift"> <span>优酷会员</span>
                   </div>
                   <div >
-                    <input type="radio" value="10G流量" v-model="gift"> <span>10G流量</span>
+                    <input type="radio" value="2" v-model="gift"> <span>10G流量</span>
                   </div>
                 </li>
-                <li v-show="gift =='优酷会员'">
+                <li v-show="gift == 1">
                   <span><span class="redWord">*</span> 优酷账号</span>
-                  <input v-model="youku_moblie" placeholder="请输入优酷绑定的手机号" type="number">
+                  <input v-model="youku_mobile" placeholder="请输入优酷绑定的手机号" type="number">
                 </li>
               </ul>
 
@@ -167,8 +167,8 @@
         areaList: areaList,
         replaceList: [],
         currentType: 0,
-        gift: "优酷会员",
-        youku_moblie: ""
+        gift: 1,
+        youku_mobile: ""
       };
     },
     created() {
@@ -178,6 +178,9 @@
       }else{
         this.statusList=["卡更换", "物流查询"];        
       }
+    },
+    computed: {
+ 
     },
     methods: {
       changeStatus(index) {
@@ -199,8 +202,8 @@
           iccid: ""
         };
         this.areaData = "";
-        this.gift = "优酷会员";
-        this.youku_moblie = ""
+        this.gift = 1;
+        this.youku_mobile = ""
       },
       //获取列表
       getList() {
@@ -287,7 +290,6 @@
       submit() {
         let _this = this;
 
-
         if (!(/^[1-9]\d*$/).test(this.replaceData.code)) {
           Notify({message: "请填写正确的验证码"});
           return false;
@@ -332,9 +334,14 @@
           Notify({message: "详细地址过短"});
           return false;
         }
-        if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.youku_moblie)) {
+        if (this.gift == 1){
+          if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.youku_mobile)) {
           Notify({message: "请填写正确优酷绑定的手机号"});
           return false;
+          }
+        }
+        if (this.gift == 2) {
+          this.youku_mobile = ""
         }
 
         let newData = this.replaceData;
@@ -348,6 +355,8 @@
         }
         newData.user_id = getStorage("userInfo", "obj").account.user_id;
         newData.type = this.currentType;
+        newData.gift = this.gift;
+        newData.youku_mobile = this.youku_mobile;
         // newData.user_id="613639";
 
         _post('/api/v1/app/equipment/change/apply', newData).then(res => {
@@ -358,10 +367,9 @@
             })
             this.replaceData = {};
             this.areaData = "";
-            this.gift = "优酷会员";
-            this.youku_moblie = ""
+            this.gift = 1;
+            this.youku_mobile = ""
           } else {
-
             Notify({message: res.msg})
           }
         })
