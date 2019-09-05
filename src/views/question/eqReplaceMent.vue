@@ -172,7 +172,9 @@
       };
     },
     created() {
-      this.currentType=getUrlParam("status");
+      // this.currentType=getUrlParam("status");
+      this.currentType = this.$route.params.status;
+
       if(this.currentType==0){
         this.statusList=["设备更换", "物流查询"];
       }else{
@@ -378,6 +380,7 @@
 
       //扫码
       scanIccid(type) {
+        console.log("dd")
         let _this = this;
         this.wx.scanQRCode({
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -388,7 +391,9 @@
             // _this.replaceData.imei = result.split(",")[1];
 
             // }else{
-            _this.replaceData.iccid = result.split(",")[1];
+            result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1, result.length) : result;
+            _this.replaceData.iccid = (result.replace(/\s*/g, ""));
+            // _this.replaceData.iccid = result.split(",")[1];
 
             // }
           }
