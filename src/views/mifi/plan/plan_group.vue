@@ -137,6 +137,8 @@
                     //     ]
                     // }
                 ],
+                planName:["累计套餐","包月套餐","加油包","加速包","国际套餐","周期性套餐","超量自动充值套餐"],
+                totalPlan:[]
             }
         },
         components: {
@@ -154,31 +156,27 @@
                 this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
                 this.$store.commit('mifiCommon/changeErrStatus', {show: false});
                 this.choose_plan_index = 0;
-                _get('/api/v1/app/plan_group_list/and_plan_list', {
+                _get('/api/v1/app/plan_list', {
                     iccid: this.iccid,
-                    plan_group_id: params.plan_group_id ? params.plan_group_id : null,
-                    type: params.type ? params.type : null,
+                    // plan_group_id: params.plan_group_id ? params.plan_group_id : null,
+                    // type: params.type ? params.type : null,
                 }).then(res => {
                     this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false});
                     this.picker.loading = false;
                     if (res.state === 1) {
-                        if (res.data.plan_group_list.length) {
-                            res.data.plan_group_list.map((item, index) => {
-                                this.columns[0].values.push({
-                                    'keyId': item.plan_group_id,
-                                    'text': item.plan_group_name
-                                })
-                            });
+                        if (JSON.stringify(res.data) !== "{}") {
+                            // res.data.map((item, index) => {
+                            //     console.log(item);
+                            //     this.columns[0].values.push({
+                            //         'keyId': item.plan_group_id,
+                            //         'text': item.plan_group_name
+                            //     })
+                            // });
+                           
 
-                            if (this.columns[0].values.length > 0) {
-                                if (this.cur_plan_group_name === '请选择套餐') {
-                                    this.cur_plan_group_name = this.columns[0].values[0].text
-                                }
-                            }
-                            ;
-
-                            this.group_list = res.data.plan_list;
-                            res.data.plan_list.length ? this.showNoData = false : this.showNoData = true;
+                            // this.group_list = res.data.plan_list;
+                            // console.log(this.group_list);
+                            // console.log(this.columns);
 
                             this.$nextTick(() => {
                                 let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
@@ -196,6 +194,44 @@
 
 
                             });
+
+
+                            this.totalPlan=res.data;
+                            for (let item in this.totalPlan) {
+                                let newArray1 = [], newArray2 = [], newArray3 = [];
+                                for (let i = 0; i < this.totalPlan[item].length; i++) {
+                                  //区分推荐/未推荐
+                                  if (this.totalPlan[item][i].is_recommend === true) {
+                                    newArray1.push(this.totalPlan[item][i]);
+                                  } else {
+                                    newArray2.push(this.totalPlan[item][i]);
+                                  }
+                                }
+                                //分别进行排序
+                                newArray1.sort(this.compare2("price"));
+                                newArray2.sort(this.compare2("price"));
+                                newArray3 = newArray1.concat(newArray2);
+                                this.totalPlan[item] = newArray3;
+                              }
+
+                            for (let item in this.totalPlan) {
+                                this.columns[0].values.push({
+                                    'keyId': item,
+                                    'text': this.planName[item]
+                                })
+                            }
+                            if (this.columns[0].values.length > 0) {
+                                if (this.cur_plan_group_name === '请选择套餐') {
+                                    this.cur_plan_group_name = this.columns[0].values[0].text;
+                                }
+                            };
+
+                            for(let i in this.totalPlan){
+                               this.group_list = this.totalPlan[i];
+                                this.group_list.length ? this.showNoData = false : this.showNoData = true;
+                               return this.group_list;
+                            }  
+
                         } else {
                             this.$store.commit('mifiCommon/changeErrStatus', {
                                 show: true,
@@ -233,10 +269,7 @@
                 // this.picker.choose_type = value[1].keyId;
                 this.picker.showPlanSelect = false;
                 this.cur_plan_group_name = value[0].text;
-                this.initial({
-                    plan_group_id: this.picker.choose_plan_id,
-                    type: null,
-                });
+                this.group_list=this.totalPlan[this.picker.choose_plan_id ];
             },
             handleCancel() {
                 this.picker.showPlanSelect = false;
@@ -247,7 +280,6 @@
                     cur_date = new Date().getDate();
 
                 planInfo = this.group_list[this.choose_plan_index];
-
                 if (planInfo.surplus_times <= 0) {
                     Toast({
                         message: "此套餐已售罄, 请更换套餐",
@@ -389,6 +421,20 @@
                         })
                 }
             },
+            compare2(pro) {
+              return function (obj1, obj2) {
+                let val1 = obj1[pro];
+                let val2 = obj2[pro];
+                if (val1 > val2) {
+                  return 1;
+                } else if (val1 < val2) {
+                  return -1;
+                } else {
+                  return 0;
+                }
+
+              }
+            }
         }
     }
 </script>
