@@ -51,17 +51,18 @@
                 </li>
                 <li>
                   <span class="redWord"><span class="redWord">*</span > 赠品</span>
-                  <div>
+                  <!-- <div>
                     <input type="radio" value="1" v-model="gift"> <span>优酷会员</span>
-                  </div>
+                  </div> -->
                   <div >
-                    <input type="radio" value="2" v-model="gift"> <span>10G流量</span>
+                    <!-- <input type="radio" value="2" v-model="gift">  -->
+                    <span>流量套餐</span>
                   </div>
                 </li>
-                <li v-show="gift == 1">
+                <!-- <li v-show="gift == 1">
                   <span><span class="redWord">*</span> 优酷账号</span>
                   <input v-model="youku_mobile" placeholder="请输入优酷绑定的手机号" type="number">
-                </li>
+                </li> -->
               </ul>
 
               <div class="submitButton">
@@ -167,12 +168,14 @@
         areaList: areaList,
         replaceList: [],
         currentType: 0,
-        gift: 1,
+        gift: 2,
         youku_mobile: ""
       };
     },
     created() {
-      this.currentType=getUrlParam("status");
+      // this.currentType=getUrlParam("status");
+      this.currentType = this.$route.params.status;
+
       if(this.currentType==0){
         this.statusList=["设备更换", "物流查询"];
       }else{
@@ -202,7 +205,7 @@
           iccid: ""
         };
         this.areaData = "";
-        this.gift = 1;
+        this.gift = 2;
         this.youku_mobile = ""
       },
       //获取列表
@@ -367,7 +370,7 @@
             })
             this.replaceData = {};
             this.areaData = "";
-            this.gift = 1;
+            this.gift = 2;
             this.youku_mobile = ""
           } else {
             Notify({message: res.msg})
@@ -378,6 +381,7 @@
 
       //扫码
       scanIccid(type) {
+        console.log("dd")
         let _this = this;
         this.wx.scanQRCode({
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -388,7 +392,9 @@
             // _this.replaceData.imei = result.split(",")[1];
 
             // }else{
-            _this.replaceData.iccid = result.split(",")[1];
+            result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1, result.length) : result;
+            _this.replaceData.iccid = (result.replace(/\s*/g, ""));
+            // _this.replaceData.iccid = result.split(",")[1];
 
             // }
           }
@@ -523,7 +529,8 @@
             position: relative;
 
             div {
-              flex: 1;
+            flex: 2;
+            text-align: left;
             }
 
             span {

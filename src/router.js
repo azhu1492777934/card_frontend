@@ -213,6 +213,7 @@ export const constantRouterMap = [{
           }
         }, {
           path: 'eqReplaceMent',
+          name: 'eqReplaceMent',
           component: eqReplaceMent,
           meta: {
             title: '设备或卡更换',
