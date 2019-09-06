@@ -174,8 +174,8 @@
     },
     created() {
       // this.currentType=getUrlParam("status");
-      this.currentType = this.$route.params.status;
-
+      this.currentType = localStorage.getItem("replaceStatus");
+      console.log(this.currentType);
       if(this.currentType==0){
         this.statusList=["设备更换", "物流查询"];
       }else{
@@ -183,7 +183,7 @@
       }
     },
     computed: {
- 
+
     },
     methods: {
       changeStatus(index) {

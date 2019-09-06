@@ -250,8 +250,8 @@
             toQuestion(){this.$router.push('/weixin/question/index');},
             changedCard(){this.$router.push('/mifi/card/lookup')},
             toChangeNework(){this.$router.push('/mifi/card/change_network')},
-            toChangeCard(){this.$router.push({name:'eqReplaceMent',params:{status:1}})},
-            toChangeEq(){this.$router.push({name:'eqReplaceMent',params:{status:0}})},
+            toChangeCard(){this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)},
+            toChangeEq(){this.$router.push({name:'eqReplaceMent',params:{status:0}});localStorage.setItem("replaceStatus",0)},
             inArray (elem, arr, i) {
                 return arr == null ? -1 : arr.indexOf(elem, i);
             },
