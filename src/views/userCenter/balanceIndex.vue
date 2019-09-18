@@ -2,11 +2,11 @@
     <div class="balanceIndex">
         <div>
           <div>
-            <img :src="getUserInfo.avatar" >
+            <!-- <img :src="getUserInfo.avatar" > -->
           </div>
 
           <div>
-            {{getUserInfo.nickname}}
+            <!-- {{getUserInfo.nickname}} -->
           </div>
 
           <div @click="goRefund">
