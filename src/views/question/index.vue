@@ -15,6 +15,9 @@
         <router-link to="/weixin/question/release_plan">4.解约自动续费套餐</router-link>
       </li>
      
+     <li v-if="global_variables.packed_project=='mifi'">
+        <router-link to="/weixin/userCenter/rechargeOrder">5.余额退款</router-link>
+      </li>
     </ul>
   </div>
 </template>

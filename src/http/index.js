@@ -5,7 +5,8 @@ import {getStorage, getCardServerToken} from "../utilies";
 // axios.defaults.timeout =  10000;
 
 axios.interceptors.request.use(function (config) {
-  if (config.method === 'post' && config.url.indexOf('/accountCenter') !== -1) {
+
+  if (config.method === 'post' && config.url.indexOf('/accountCenter') !== -1||config.method === 'post' && config.url.indexOf('/recharge/refund') !== -1||config.method === 'post' && config.url.indexOf('Refund/getRefund') !== -1) {
     config.data = qs.stringify(config.data);
     config.data = config.data
   }

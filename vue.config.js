@@ -70,6 +70,13 @@ module.exports = {
           '^/newiot': ""
         }
       },
+      '/pay': {
+        target: "https://paytt.china-m2m.com",
+        changeOrigin: true,
+        pathRewrite: {
+          '^/pay': ""
+        }
+      },
     }
   }
 }

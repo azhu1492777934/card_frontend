@@ -20,7 +20,7 @@
             <div >
               <span>{{getUserInfo.account.balance}}<i @click="getRmb"></i></span>
             </div>
-            <div>
+            <div @click="goBalance">
               <i ></i>
               <span>余额</span> 
             </div>
@@ -63,13 +63,13 @@
             <div class="iconfont icon-rightArrow"></div>
           </div>
 
-          <div @click="goRecharge">
+          <!-- <div @click="goRecharge">
             <div></div>
             <div>
               充值订单
             </div>
             <div class="iconfont icon-rightArrow" ></div>
-          </div>
+          </div> -->
           
           <div @click="goChange">
             <div></div>
@@ -147,7 +147,9 @@
           },
           goChange(){
             this.$router.push({path:"currencyConversion"});
-
+          },
+          goBalance(){
+            this.$router.push({path:"balanceIndex"});
           },
           goRecharge(){
             this.$router.push({path:"rechargeOrder"});
@@ -342,15 +344,15 @@
             background-size:100% 100%;
           }
         }
+        // >div:nth-child(2){
+        //   >div:nth-child(1){
+        //     width:58px;
+        //     height:58px;
+        //     background:url("../../assets/imgs/userCenter/recharge.png") no-repeat;
+        //     background-size:100% 100%;
+        //   }
+        // }
         >div:nth-child(2){
-          >div:nth-child(1){
-            width:58px;
-            height:58px;
-            background:url("../../assets/imgs/userCenter/recharge.png") no-repeat;
-            background-size:100% 100%;
-          }
-        }
-        >div:nth-child(3){
           >div:nth-child(1){
             width:59px;
             height:59px;
@@ -358,7 +360,7 @@
             background-size:100% 100%;
           }
         }
-        >div:nth-child(4){
+        >div:nth-child(3){
           >div:nth-child(1){
             width:58px;
             height:58px;
@@ -366,7 +368,7 @@
             background-size:100% 100%;
           }
         }
-        >div:nth-child(5){
+        >div:nth-child(4){
           >div:nth-child(1){
             width:59px;
             height:59px;

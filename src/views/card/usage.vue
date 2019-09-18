@@ -863,7 +863,7 @@
         if (isTotal) {
           return num >= 1024 ? toDecimal(num / 1024) + 'GB' : toDecimal(num) + 'MB'
         } else {
-          return num >= 1000 ? toDecimal(num / 1000) + 'GB' : toDecimal(num) + 'MB'
+          return num >= 1024 ? toDecimal(num / 1024) + 'GB' : toDecimal(num) + 'MB'
         }
       },
       prefer_use_operate(iccid, rating_id, priority, source) {

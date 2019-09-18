@@ -15,9 +15,10 @@
         </ul>
       </div>
       <div class="swipe-wrap" ref="SwiperWwrap">
-        <swiper ref="mySwiper" :options="swiperOption">
-          <swiper-slide v-for="(item,index) in statusList" :key="index">
-            <div v-show="statusIndex==0">
+        <!-- <swiper ref="mySwiper" :options="swiperOption"> -->
+          <!-- <swiper-slide v-for="(item,index) in statusList" :key="index"> -->
+
+            <div v-show="statusIndex==0" >
               <ul>
                 <li v-if="currentType==0">
                   <span> <span class="redWord">*</span>  设备型号</span>
@@ -103,8 +104,8 @@
               </div>
               <div class="noMsg" v-if="replaceList.length==0">暂无物流记录</div>
             </div>
-          </swiper-slide>
-        </swiper>
+          <!-- </swiper-slide> -->
+        <!-- </swiper> -->
       </div>
 
 
@@ -140,7 +141,7 @@
         iccid: getStorage("check_iccid"),
         source: getStorage("check_realNameSource"),
         client_type: checkBrowser(),
-        statusList: ["设备更换", "卡更换", "物流查询"],
+        statusList: [],
         statusIndex: 0,
         usageListObj: {},
         swiperOption: {
@@ -537,7 +538,7 @@
               flex: 1;
               color: #2c251d;
               text-align: left;
-              min-width: 200px;
+              min-width: 180px;
             }
 
             input {
