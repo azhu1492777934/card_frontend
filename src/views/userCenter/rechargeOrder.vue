@@ -115,7 +115,7 @@
                       refundList.push(data[i]);
                     }
                   }
-                  if(refundList.length>0&&this.list.length<4){
+                  if(refundList.length>0&&this.list.length<4&&this.authorizedUserInfo.account.balance>0){
                     this.list.push({title:"申请退款"})
                   }
                   if(this.active==3){
