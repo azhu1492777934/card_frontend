@@ -168,11 +168,11 @@
                 done();
               }else{
                 let url="";
-                if(this.global_variables.packed_project=='mifi'){
-                    url="/iottt/v1/orders/balance/recharge/refund";
-                }else{
-                    url="/iot/v1/orders/balance/recharge/refund";
-                }
+                // if(this.global_variables.packed_project=='mifi'){
+                //     url="/iottt/v1/orders/balance/recharge/refund";
+                // }else{
+                url="/iot/v1/orders/balance/recharge/refund";
+                // }
                 _post(url, {
                   id: this.currentInfo.id,
                   refund_reason:"C端充值退款",
@@ -182,6 +182,7 @@
                       message: '退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候',
                       background: '#60ce53'
                     })
+                    this.$emit('getUserData');
                     this.getList();
                     done();
                   } else {
