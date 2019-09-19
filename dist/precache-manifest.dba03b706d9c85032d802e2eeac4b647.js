@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/js/recharge_wrapper.5368934d.js"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
-  },
-  {
-    "revision": "c3b664a9550572852b55",
-    "url": "/css/refundRules.e8500f7f.css"
+    "revision": "7dd9632109b0f0a42a5b",
+    "url": "/css/Layout.83a36cb0.css"
   },
   {
     "revision": "be40bca99df105cbae95",
     "url": "/css/Layout~card_usage.cb0d2a22.css"
+  },
+  {
+    "revision": "be40bca99df105cbae95",
+    "url": "/js/Layout~card_usage.bcf0ce41.js"
   },
   {
     "revision": "78214ba34c5f1df936aa",
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.a6629d31.js"
   },
   {
-    "revision": "e275791d438c8ee79a7c",
+    "revision": "633d6e011fb12a5a0e22",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "e275791d438c8ee79a7c",
-    "url": "/js/app.1abaef83.js"
+    "revision": "633d6e011fb12a5a0e22",
+    "url": "/js/app.80ac81a6.js"
   },
   {
     "revision": "9f5767044d21c4e964bd",
@@ -436,12 +436,12 @@ self.__precacheManifest = [
     "url": "/js/real_name.7734cc59.js"
   },
   {
-    "revision": "70917013f7cc7d8e2f71",
-    "url": "/css/recharge.4c55f47b.css"
+    "revision": "2426261c8274e8f4a076",
+    "url": "/css/recharge.70692713.css"
   },
   {
-    "revision": "70917013f7cc7d8e2f71",
-    "url": "/js/recharge.2ab41c2e.js"
+    "revision": "2426261c8274e8f4a076",
+    "url": "/js/recharge.38b26a89.js"
   },
   {
     "revision": "0759e76015fe532fca20",
@@ -468,8 +468,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.d8bbe4bf.js"
   },
   {
-    "revision": "be40bca99df105cbae95",
-    "url": "/js/Layout~card_usage.bcf0ce41.js"
+    "revision": "c3b664a9550572852b55",
+    "url": "/css/refundRules.e8500f7f.css"
   },
   {
     "revision": "c3b664a9550572852b55",
@@ -612,36 +612,12 @@ self.__precacheManifest = [
     "url": "/img/balanceBg2.565459ef.png"
   },
   {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
   {
     "revision": "fff5af4325410621aeec4e60b3b92d9b",
     "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
-  },
-  {
-    "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
-    "url": "/img/bg_network@3x.2c51a1e5.png"
-  },
-  {
-    "revision": "32d70c8fc305e3647098f3de0c71b618",
-    "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
@@ -708,6 +684,10 @@ self.__precacheManifest = [
     "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
     "revision": "91e1d2771efacd45e5e465d9a001f197",
     "url": "/img/liantong.91e1d277.png"
   },
@@ -732,10 +712,6 @@ self.__precacheManifest = [
     "url": "/img/pkgBg3.d461d18e.png"
   },
   {
-    "revision": "6dedd4943e4c5848638196fb6f0c4145",
-    "url": "/img/bg.6dedd494.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
@@ -744,20 +720,44 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
-    "revision": "0078f03c08066d51d64b92a13e194ebb",
-    "url": "/img/balanceRefund.0078f03c.png"
+    "revision": "6dedd4943e4c5848638196fb6f0c4145",
+    "url": "/img/bg.6dedd494.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
     "url": "/img/bg.01355f17.png"
   },
   {
+    "revision": "0078f03c08066d51d64b92a13e194ebb",
+    "url": "/img/balanceRefund.0078f03c.png"
+  },
+  {
     "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
     "url": "/img/changeBg.af3ed0b3.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
+    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
+    "url": "/img/youku.d0ccbc8a.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -768,12 +768,12 @@ self.__precacheManifest = [
     "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
+    "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
+    "url": "/img/bg_network@3x.2c51a1e5.png"
   },
   {
-    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
-    "url": "/img/youku.d0ccbc8a.png"
+    "revision": "32d70c8fc305e3647098f3de0c71b618",
+    "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -904,12 +904,12 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "565c6f08259d6aee7d4200d1e87bc4c4",
+    "revision": "3df2795aa0aa5df06203fb2e2ecfa1e4",
     "url": "/index.html"
   },
   {
-    "revision": "7dd9632109b0f0a42a5b",
-    "url": "/css/Layout.83a36cb0.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
