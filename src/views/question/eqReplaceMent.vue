@@ -189,7 +189,7 @@
     methods: {
       changeStatus(index) {
         this.statusIndex = index;
-        this.$refs.mySwiper.swiper.slideTo(index);
+        // this.$refs.mySwiper.swiper.slideTo(index);
         if (index == 1) {
           this.getList();
         }
