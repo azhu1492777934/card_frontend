@@ -136,7 +136,7 @@
   import {mapState} from 'vuex'
   import {DatetimePicker, Area, Popup, Notify} from 'vant';
   import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal} from "../../utilies";
-  import {_post,_get} from "../../http";
+  import {_post, _get} from "../../http";
 
   export default {
     name: "recharge",
@@ -197,11 +197,10 @@
           show: false,
           type: true,//true 为微信，false 为支付宝
         },
-        settingRechargeList:[]
+        settingRechargeList: []
       }
     },
     async created() {
-
       // 用户流失率统计
       if (getStorage('plan_list_new_card') === "1") {
         lossRate({
@@ -248,26 +247,27 @@
       if (this.userInfo.account.balance > 0) {
         user_rmb = this.userInfo.account.balance;
       }
-      this.settingRechargeList=await this.getRechargeInfo();
+      this.settingRechargeList = await this.getRechargeInfo();
 
-      if(this.settingRechargeList.length>0){
-        let data= this.settingRechargeList;
+      if (this.settingRechargeList.length > 0) {
+        let data = this.settingRechargeList;
         data.sort(this.jsonSort);
-        for(let i=0;i<data.length;i++){
-            this.recharge_list.push({
-            pay_type:'over_charge',
-            pay_money:data[i].price,
-            give_elb:data[i].elb,
-            give_balance:data[i].balance,
-            is_give_balance:data[i].is_give_balance})
+        for (let i = 0; i < data.length; i++) {
+          this.recharge_list.push({
+            pay_type: 'over_charge',
+            pay_money: data[i].price,
+            give_elb: data[i].elb,
+            give_balance: data[i].balance,
+            is_give_balance: data[i].is_give_balance
+          })
         }
         this.recharge_list.push({
-            pay_type: 'normal_charge',
-            pay_money: 0,
-            give_elb: 0
-          });
-      }else{
-        this.recharge_list=[
+          pay_type: 'normal_charge',
+          pay_money: 0,
+          give_elb: 0
+        });
+      } else {
+        this.recharge_list = [
           {
             pay_type: 'diamond_charge',
             pay_money: 0,
@@ -293,7 +293,6 @@
         ]
       }
 
-      
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
       /*
      * 增加包月套餐
@@ -312,7 +311,7 @@
 
         monthlyMsg.is_renew = true;
         this.new_recharge_list.push(monthlyMsg);
-      
+
       } else if (this.userInfo.account.balance <= 0) {
         this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
       }
@@ -322,20 +321,17 @@
         for (let i = 0; i < this.new_recharge_list.length; i++) {
           if (this.showOriginPrice == 2) {
             // ||this.new_recharge_list[i].pay_type=="diamond_charge"
-            if (this.new_recharge_list[i].pay_type == "over_charge") {
+            if (this.new_recharge_list[i].pay_type === "over_charge") {
               newData.push(this.new_recharge_list[i]);
             }
           } else if (this.showOriginPrice == 3) {
-            if (this.new_recharge_list[i].pay_type == "normal_charge") {
+            if (this.new_recharge_list[i].pay_type === "normal_charge") {
               newData.push(this.new_recharge_list[i]);
             }
           }
         }
         this.new_recharge_list = newData;
       }
-
-
-
     },
     methods: {
       changedCheck: function (type) {
@@ -412,14 +408,12 @@
         this.showDate = false;
       },//取消日期弹窗
       recharge: function () {
-        
-        
         if (!this.userInfo.account.user_id) {
           Notify({message: '请在微信或支付宝客户端充值'});
           return
         }
         let rechargeInfo = this.new_recharge_list[this.activeIndex];
-        if(this.client_type=="app"&&this.planInfo.price>100&&rechargeInfo.pay_money==50){
+        if (this.client_type === "app" && this.planInfo.price > 100 && rechargeInfo.pay_money === 50) {
           Notify({message: '充值后余额不足抵扣套餐价格，请选择其他套餐进行充值'});
           return
         }
@@ -429,7 +423,7 @@
         rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge' ? param.status = 1 : param.status = 0;
         if (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') {
           param.recharge_price = rechargeInfo.pay_money;
-        }else{
+        } else {
           param.recharge_price = this.planInfo.price;
 
         }
@@ -467,33 +461,39 @@
           param.pay_type = 'ALIPAY'
         }
 
+        // 折扣相关参数判断
+        let elbDiscountParams = [{
+          pattern: !this.val_elb,
+          msg: '请输入ELB抵扣数'
+        }, {
+          pattern: this.planInfo.is_elb_deductible === 0,
+          msg: '此套餐不可抵扣ELB'
+        }, {
+          pattern: !/^[1-9]\d*$/.test(this.val_elb),
+          msg: 'ELB最低抵扣数额为1'
+        }, {
+          pattern: this.val_elb > parseInt(this.userInfo.account.elb),
+          msg: '您的ELB余额不足'
+        }, {
+          pattern: this.planInfo.is_elb_deductible === 1 && this.val_elb > this.planInfo.max_deductible_elb,
+          msg: `此套餐ELB最大抵扣值为${this.planInfo.max_deductible_elb}`
+        }, {
+          pattern: this.val_elb >= this.planInfo.price,
+          msg: 'ELB抵扣数不能超过套餐总值'
+        }];
 
         if (this.check_elb) {
-          let userElb = parseInt(this.userInfo.account.elb);
-          if (!this.val_elb) {
-            Notify({message: '请输入ELB抵扣数'});
-            return
+          let hasError = false;
+          for (let i = 0; i < elbDiscountParams.length; i++) {
+            if (elbDiscountParams[i].pattern) {
+              console.log(this.userInfo.account.elb);
+              Notify({message: elbDiscountParams[i].msg});
+              hasError = true;
+              break;
+            }
           }
-          if (this.planInfo.is_elb_deductible == 0) {
-            Notify({message: '此套餐不可抵扣ELB'});
-            return
-          }
-          if (!(/^[1-9]\d*$/.test(this.val_elb))) {
-            Notify({message: 'ELB最低抵扣数额为1'});
-            return
-          }
-          if (this.val_elb > userElb) {
-            Notify({message: '您的ELB余额不足'});
-            return
-          }
-          if (this.planInfo.is_elb_deductible == 1 && this.val_elb > this.planInfo.max_deductible_elb) {
-            Notify({message: '此套餐ELB最大抵扣值为' + this.planInfo.max_deductible_elb})
-            return
-          }
-          if (this.val_elb >= this.planInfo.price) {
-            Notify({message: 'ELB抵扣数不能超过套餐总值'});
-            return
-          }
+          if (hasError) return;
+
           param.elb_deduction = this.val_elb
         }
         if (this.check_coupon) {
@@ -501,9 +501,9 @@
             Notify({message: '请输入券码'});
             return
           } else {
-            if(rechargeInfo.pay_type === 'diamond_charge'){
+            if (rechargeInfo.pay_type === 'diamond_charge') {
               param.coupon_no = this.val_coupon
-            }else{
+            } else {
               Notify({message: '必须使用余额支付才能使用抵扣券'});
               return
             }
@@ -513,9 +513,8 @@
           if (!this.val_date) {
             Notify({message: '请选择套餐生效时间'});
             return
-          } else {
-            param.start_time = this.val_date
           }
+          param.start_time = this.val_date
         } else {
           param.start_time = this.val_date
         }
@@ -539,18 +538,18 @@
                 this.global_variables.packed_project === 'mifi' ?
                   location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
               } else {
-                if(this.planInfo.vip_type_id!=0){
+                if (this.planInfo.vip_type_id != 0) {
                   Notify({
                     message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
                     background: '#60ce53'
                   });
-                }else{
+                } else {
                   Notify({
                     message: '充值成功',
                     background: '#60ce53'
                   });
                 }
-                
+
                 this.$emit('getUserData');
                 setTimeout(function () {
                   if (localStorage.getItem("currentType") === "esim") {
@@ -570,9 +569,8 @@
       normalPay() {
         let rechargeInfo = this.new_recharge_list[this.activeIndex];
         if (this.client_type === 'app') {
-
           if (rechargeInfo.pay_type === 'diamond_charge' && this.userInfo.account.balance > this.planInfo.price) {
-            this.appPay.show = false
+            this.appPay.show = false;
             this.recharge()
           } else {
             this.appPay.show = true
@@ -586,35 +584,22 @@
         this.recharge();
       },//app支付
       filterRechargeList: function (rmb, planPrice) {
-
         return this.recharge_list.filter(item => {
           if (item.pay_type === 'normal_charge') {
             item.pay_money = planPrice;
           }
           if (rmb <= 0) {
-            
-            if(planPrice<item.pay_money){
-              return item.pay_type === 'over_charge'|| item.pay_type === 'normal_charge';
-            }else{
-              if(this.client_type=="app"&&item.pay_money==50){
-                return item.pay_money==50||item.pay_type === 'normal_charge';
-              }else{
-                return item.pay_money>planPrice||item.pay_type === 'normal_charge';
+
+            if (planPrice < item.pay_money) {
+              return item.pay_type === 'over_charge' || item.pay_type === 'normal_charge';
+            } else {
+              if (this.client_type === "app" && item.pay_money === 50) {
+                return item.pay_money === 50 || item.pay_type === 'normal_charge';
+              } else {
+                return item.pay_money > planPrice || item.pay_type === 'normal_charge';
               }
             }
-            // if (planPrice > 100 && planPrice <= 200) {
-            //   return (item.pay_type === 'over_charge' && item.pay_money == 200)
-            //     || item.pay_type === 'normal_charge'
-            // } else if (planPrice > 200 && planPrice <= 300) {
-            //   return (item.pay_type === 'over_charge' && item.pay_money > 200)
-            //     || item.pay_type === 'normal_charge'
 
-            // } else if (planPrice > 300) {
-            //   return item.pay_type === 'normal_charge'
-            // } else {
-            //   return item.pay_money >= 0
-            //     && item.pay_type !== 'diamond_charge'
-            // }
           } else {
             rmb - planPrice >= 0 ? this.surplus_cash = 0.00 : this.surplus_cash = toDecimal(planPrice - rmb);
             if (item.pay_type === 'diamond_charge') {
@@ -625,33 +610,15 @@
               }
             }
 
-            if(planPrice<item.pay_money){
-              return item.pay_type === 'diamond_charge' || item.pay_type === 'over_charge'|| item.pay_type === 'normal_charge';
-            }else{
-              if(this.client_type=="app"&&item.pay_money==50){
-                return item.pay_type === 'diamond_charge' ||item.pay_money==50||item.pay_type === 'normal_charge';
-              }else{
-                return item.pay_type === 'diamond_charge' || item.pay_money>planPrice||item.pay_type === 'normal_charge';
+            if (planPrice < item.pay_money) {
+              return item.pay_type === 'diamond_charge' || item.pay_type === 'over_charge' || item.pay_type === 'normal_charge';
+            } else {
+              if (this.client_type === "app" && item.pay_money === 50) {
+                return item.pay_type === 'diamond_charge' || item.pay_money === 50 || item.pay_type === 'normal_charge';
+              } else {
+                return item.pay_type === 'diamond_charge' || item.pay_money > planPrice || item.pay_type === 'normal_charge';
               }
             }
-            // if (planPrice > 100 && planPrice <= 200) {
-            //   return item.pay_type === 'diamond_charge'
-            //     || (item.pay_type === 'over_charge' && item.pay_money == 200)
-            //     || item.pay_type === 'normal_charge'
-
-
-            // } else if (planPrice > 200 && planPrice <= 300) {
-            //   return item.pay_type === 'diamond_charge'
-            //     || (item.pay_type === 'over_charge' && item.pay_money > 200)
-            //     || item.pay_type === 'normal_charge'
-
-
-            // } else if (planPrice > 300) {
-            //   return item.pay_type === 'diamond_charge'
-            //     || item.pay_type === 'normal_charge'
-            // } else {
-            //   return item.pay_money >= 0
-            // }
           }
         })
       },//用户rmb,套餐价格planPrice
@@ -668,34 +635,32 @@
       },
       getRechargeInfo() {
         let env;
-        if(this.global_variables.packed_project === 'mifi'){
-          env="mifi";
-        }else{
-          env="cardserver";
+        if (this.global_variables.packed_project === 'mifi') {
+          env = "mifi";
+        } else {
+          env = "cardserver";
         }
-        let p = new Promise((resolve,reject)=>{
+        let p = new Promise((resolve, reject) => {
           _get("/api/v1/app/recharge/info", {
             iccid: this.planInfo.iccid || getStorage('check_iccid'),
-            env:env
+            env: env
           }).then(res => {
-            if (res.state == 1) {
+            if (res.state === 1) {
               resolve(res.data);
             } else {
               resolve([])
             }
           });
-        })
+        });
         return p;
-        
       },
-      jsonSort(a,b){
+      jsonSort(a, b) {
         return a.price - b.price;
       }
     },
-    beforeDestroy(){
+    beforeDestroy() {
       removeStorage('plan_list_new_card');
     },
-    
   }
 </script>
 
@@ -1051,7 +1016,6 @@
     }
 
     //充值方式选择
-
     .btn-large {
       display: block;
       width: 100%;
@@ -1062,8 +1026,6 @@
       font-size: 34px;
       border-radius: 13px;
     }
-
-    //充值按钮
 
   }
 </style>
