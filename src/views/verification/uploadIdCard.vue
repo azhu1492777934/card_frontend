@@ -102,7 +102,6 @@
   import {Loading, Toast, Popup, Notify, Icon} from 'vant';
   import {_post} from "../../http";
   import {setStorage} from "../../utilies";
-
   export default {
     name: "uploadIdCard",
     data() {
@@ -130,24 +129,38 @@
     },
     methods: {
       test(e) {
+        let _this = this;
         let file = e.currentTarget.files[0];
-        let base64url = this.base64(file);
+        let waitingGenerateBaseUrl = this.base64(file);
+        if (file) {
+          this.showLoading = true;
+          waitingGenerateBaseUrl.then(res => {
+            this.showLoading = false;
+            _this.previewUrl_0 = res.data;
+          })
+        }
       },
       base64(file) {
-        var reader = new FileReader();
-        var pos = file.name.lastIndexOf(".");
-        var type = file.name.substring(pos + 1).toLowerCase();
-        let arrImg = ['png', 'jpg', 'jpeg', 'gif', 'gif'];
-        if (!arrImg.includes(type)) {
-          console.log("格式错误，请上传'png、jpg、jpeg、bmp、gif'格式文件");
-          return;
-        }
-        // Read the file
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-          console.log(reader.result);
-          return reader.result;
-        }
+        let _this = this;
+        return new Promise(resolve => {
+          var reader = new FileReader();
+          var pos = file.name.lastIndexOf(".");
+          var type = file.name.substring(pos + 1).toLowerCase();
+          let arrImg = ['png', 'jpg', 'jpeg', 'gif', 'gif'];
+          if (!arrImg.includes(type)) {
+            console.log("格式错误，请上传'png、jpg、jpeg、bmp、gif'格式文件");
+            return;
+          }
+          // Read the file
+          reader.readAsDataURL(file);
+          reader.onload = function () {
+            console.log(render.result);
+            resolve({
+              state: 1,
+              data: reader.result
+            });
+          }
+        });
       },
       handleUpload(step) {
         if (this.global_variables.RuntimeEnv === 'wechat') {
@@ -482,7 +495,7 @@
       .van-popup {
         border-radius: 10px;
         padding: 10px;
-        font-size: 20px;
+        font-size: 26px;
         text-align: center;
       }
 
@@ -501,10 +514,5 @@
         opacity: 0;
       }
     }
-  }
-
-  // toast
-  .van-toast--text {
-    font-size: 20px;
   }
 </style>
