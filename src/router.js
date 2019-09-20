@@ -130,6 +130,14 @@ const repeatRecharge = r => require.ensure([], () => r(require('./views/card/rep
 const eqReplaceMent = r => require.ensure([], () => r(require('./views/question/eqReplaceMent')), 'eqReplaceMent');  //设备更换
 
 
+// 实名系统
+const realNameWrapper = r => require.ensure([], () => r(require('./views/verification/wrapper')), 'realNameWrapper');// 实名父组件
+const uploadIdInfo = r => require.ensure([], () => r(require('./views/verification/uploadIdCard')), 'uploadIdInfo');// 上传实名信息
+const auditSuccess = r => require.ensure([], () => r(require('./views/verification/sucess')), 'auditSuccess');// 审核失败
+const verifyInfo = r => require.ensure([], () => r(require('./views/verification/verifyInfo')), 'verifyInfo');// 提交身份信息
+const auditFail = r => require.ensure([], () => r(require('./views/verification/fail')), 'auditFail');// 审核成功
+
+
 Vue.use(Router);
 
 export const constantRouterMap = [{
@@ -152,6 +160,28 @@ export const constantRouterMap = [{
   path: "/change_network_explanation",
   component: mifi_change_network_explanation,
   meta: {title: '切换网络操作说明'}
+}, {
+  path: '/realname',
+  component: realNameWrapper,
+  children: [
+    {
+      path: 'upload_info',
+      component: uploadIdInfo,
+      meta: {title: '上传身份证信息'}
+    }, {
+      path: 'audit_success',
+      component: auditSuccess,
+      meta: {title: "审核成功"}
+    }, {
+      path: 'audit_fail',
+      component: auditFail,
+      meta: {title: "审核失败"}
+    }, {
+      path: 'verify_info',
+      component: verifyInfo,
+      meta: {title: "证件确认"}
+    }
+  ]
 }, {
   path: '/weixin',
   component: Layout,
@@ -462,10 +492,8 @@ export const constantRouterMap = [{
             title: '订单规则说明',
           }
         },
-        
       ]
     }
-
   ],
 }, {
   path: '/mifi',

@@ -77,6 +77,14 @@ module.exports = {
           '^/pay': ""
         }
       },
+      '/verification': {
+        target: 'http://realname-test.api.china-m2m.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/verification': ''
+        }
+      },
+
     }
   }
-}
+};
