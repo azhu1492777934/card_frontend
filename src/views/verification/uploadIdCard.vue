@@ -8,7 +8,7 @@
           <van-icon v-show="step>0" name="success"/>
         </div>
         <div class="step-content">
-          <div>身份证人物面</div>
+          <div>身份证人像面</div>
         </div>
       </div>
       <div :class="{'active':step===1}">
@@ -37,17 +37,12 @@
       </div>
 
       <div class="step-content-first">
-        <div class="origin-img origin-img-first">
-          <img id="test" :src="previewUrl_0" style="width: 100%;height: auto;">
-          <div style="width: 100%;white-space: pre-wrap;word-break: break-word">
-            {{previewUrl_0}}
-          </div>
-        </div>
+        <div class="origin-img origin-img-first"></div>
       </div>
       <!--摄像-->
       <div class="step-camera-wrapper">
         <div class="step-icon-camera">
-          <input id="file1" class="btn-upload" type="file" @change="test" capture="camera" accept="image/*"/>
+          <input class="btn-upload" type="file" @change="e=>handleUpload(e,0)" capture="camera" accept="image/*"/>
         </div>
         <div class="btn-tip">拍摄身份证人像面</div>
       </div>
@@ -63,7 +58,9 @@
       </div>
       <!--摄像-->
       <div class="step-camera-wrapper">
-        <div @click="handleUpload(1)" class="step-icon-camera"></div>
+        <div class="step-icon-camera">
+          <input class="btn-upload" type="file" @change="e=>handleUpload(e,1)" capture="camera" accept="image/*"/>
+        </div>
         <div class="btn-tip">拍摄身份者国徽面</div>
       </div>
     </div>
@@ -78,7 +75,9 @@
       </div>
       <!--摄像-->
       <div class="step-camera-wrapper step-camera-third">
-        <div @click="handleUpload(2)" class="step-icon-camera"></div>
+        <div class="step-icon-camera">
+          <input class="btn-upload" type="file" @change="e=>handleUpload(e,2)" capture="camera" accept="image/*"/>
+        </div>
         <div class="btn-tip">上传正面免冠照</div>
       </div>
       <!--下一步-->
@@ -102,11 +101,12 @@
   import {Loading, Toast, Popup, Notify, Icon} from 'vant';
   import {_post} from "../../http";
   import {setStorage} from "../../utilies";
+
   export default {
     name: "uploadIdCard",
     data() {
       return {
-        iccid: '8986011775000766991',
+        iccid: '99999991',
         step: 0,
         previewUrl_0: null,
         previewUrl_1: null,
@@ -127,183 +127,91 @@
       [Notify.name]: Notify,
       [Icon.name]: Icon
     },
+    created() {
+
+    },
     methods: {
-      test(e) {
+      handleUpload(e, step) {
         let _this = this;
         let file = e.currentTarget.files[0];
-        let waitingGenerateBaseUrl = this.base64(file);
         if (file) {
-          this.showLoading = true;
-          waitingGenerateBaseUrl.then(res => {
-            this.showLoading = false;
-            _this.previewUrl_0 = res.data;
-          })
-        }
-      },
-      base64(file) {
-        let _this = this;
-        return new Promise(resolve => {
-          var reader = new FileReader();
-          var pos = file.name.lastIndexOf(".");
+          let pos = file.name.lastIndexOf(".");
           var type = file.name.substring(pos + 1).toLowerCase();
-          let arrImg = ['png', 'jpg', 'jpeg', 'gif', 'gif'];
+          let arrImg = ['png', 'jpg', 'jpeg'];
           if (!arrImg.includes(type)) {
-            console.log("格式错误，请上传'png、jpg、jpeg、bmp、gif'格式文件");
             return;
           }
-          // Read the file
-          reader.readAsDataURL(file);
-          reader.onload = function () {
-            console.log(render.result);
-            resolve({
-              state: 1,
-              data: reader.result
-            });
+          this.showLoading = true;
+          let canvas = document.createElement("canvas");
+          let context = canvas.getContext("2d");
+          if (file) {
+            let url = window.URL.createObjectURL(file);//PS:不兼容IE
+            let img = new Image();
+            img.onload = function () {
+              canvas.width = img.width;
+              canvas.height = img.height;
+              context.clearRect(0, 0, canvas.width, canvas.height);
+              let quality = file.size / 1024 > 1025 ? 0.5 : 0.7;//图片是否大于1M,a=压缩上传
+              context.drawImage(img, 0, 0, img.width, img.height);
+              _this[`previewUrl_${step}`] = canvas.toDataURL("image/jpeg", quality);
+              alert(_this[`previewUrl_${step}`]);
+              _this.showLoading = false;
+              if (_this[`previewUrl_${step}`]) {
+                _this.uploadImgs(step);
+              } else {
+                Toast({
+                  position: 'top',
+                  message: '您上传的照片处理失败，请重新上传'
+                });
+                return;
+              }
+            };
+            img.src = url;
           }
-        });
-      },
-      handleUpload(step) {
-        if (this.global_variables.RuntimeEnv === 'wechat') {
-          this.handleUploadWx(step)
-        } else if (this.global_variables.RuntimeEnv === 'alipay') {
-          this.handleUploadAli(step);
         }
-      },
-      handleUploadAli(step) {
-        let _this = this;
-        ap.chooseImage({
-          count: 1,
-          sourceType: ['camera']
-        }, function (res) {
-          if (!res.apFilePaths.length || !/^https:/.test(res.apFilePaths[0])) {
-            return
-          }
-          _this.showLoading = true;
-          var image = new Image();
-          image.crossOrigin = 'anonymous';
-          image.onload = function () {
-            var canvas = document.createElement('CANVAS');
-            var context = canvas.getContext('2d');
-            canvas.height = image.height;
-            canvas.width = image.width;
-            context.drawImage(image, 0, 0);
-            try {
-              var dataURL = canvas.toDataURL('image/jpeg');
-              _this[`previewUrl_${step}`] = dataURL;
-            } catch (e) {
-              Toast({
-                position: 'top',
-                message: '您上传的照片处理失败，请重新上传'
-              });
-            }
-            canvas = null;
-            _this.showLoading = false;
-            if (_this[`previewUrl_${step}`]) {
-              // _this.step = ++step;
-              let getFile = _this.dataURLtoFile(_this[`previewUrl_${step}`], `img_file_${step}`);
-              getFile.then(res => {
-                alert(JSON.stringify(res));
-                if (res.state === 1) {
-                  _this.img_file_0 = res.data;
-                  _this.uploadImgs(0);
-                }
-              });
-            } else {
-              Toast({
-                position: 'top',
-                message: '您上传的照片处理失败，请重新上传'
-              });
-              return
-            }
-          };
-          image.src = res.apFilePaths[0];
-        })
-      },
-      dataURLtoFile(dataurl, filename) {//将base64转换为文件
-        return new Promise(resolve => {
-          var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
-            bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n);
-          while (n--) {
-            u8arr[n] = bstr.charCodeAt(n);
-          }
-          resolve({
-            state: 1,
-            data: new File([u8arr], filename, {type: mime})
-          })
-        })
-        // return
-      },
-      handleUploadWx(step) {
-        let _this = this;
-        this.wx.chooseImage({
-          count: 1,
-          sizeType: ['original'],
-          sourceType: ['camera'],
-          success: function (res) {
-            alert(JSON.stringify(res));
-            if (!res.localIds.length) return;
-            _this.showLoading = true;
-
-
-            _this.wx.getLocalImgData({
-              localId: res.localIds[0],
-              success: function (res) {
-                _this.showLoading = false;
-                alert('getLocalImgData');
-
-                if (res.localData) {
-                  _this[`previewUrl_${step}`] = _this.global_variables.device === 'android' ? 'data:image/jpeg;base64,' + res.localData : res.locaData.replace('jpg', 'jpeg');
-                  // _this.step = ++step;
-                  _this.uploadImgs(_this.step);
-                } else {
-                  Toast({
-                    position: 'top',
-                    message: '您上传的照片处理失败，请重新上传'
-                  });
-                }
-              },
-            })
-
-
-          },
-          fail: function (res) {
-            alert('fail')
-            alert(JSON.stringify(res));
-          }
-        })
       },
       uploadImgs(step) {
         let _this = this;
-        if (step >= 0 || (this.previewUrl_0 && this.previewUrl_1 && this.previewUrl_2)) {
-          // upload info and keep waiting result
-          this.loadingMsg = '正在解析您的信息，请等候。';
-          this.showLoading = true;
-
-          _post('/verification/v1/upload/img', {
-            img: this.previewUrl_0
-          }).then(res => {
+        // upload info and keep waiting result
+        // this.loadingMsg = '正在解析您的信息，请等候。';
+        this.showLoading = true;
+        let formdata = new FormData();
+        formdata.append('file', this.previewUrl_0);
+        _post('/verification/v1/upload/image', formdata)
+          .then(res => {
             this.showLoading = false;
-            alert(JSON.stringify(res));
-
-            // if (res.state === 1) {
-            //   // storage data
-            //   setStorage('info', res.data, 'obj');
-            //   this.$router.push('/realname/verify_info');
-            // } else {
-            //   // clear data
-            //   this.previewUrl_0 = '';
-            //   this.previewUrl_1 = '';
-            //   this.previewUrl_2 = '';
-            //   this.step = 0;
-            //   Notify({
-            //     type: 'primary',
-            //     message: res.msg
-            //   })
-            // }
-
+            if (res.error === 0 && res.status === 200) {
+              _this[`img_file_${step}`] = res.data;
+              _this.step = ++step;
+              if (_this.step > 2) {
+                //所有图片已全部处理完成
+                _this.verifyInfo();
+              }
+            } else {
+              Notify({
+                message: res.msg
+              })
+            }
           })
-        }
       },
+      verifyInfo() {
+        let _this = this;
+        this.loadingMsg = '正在验证您的信息,请等候认证结果';
+        this.showLoading = true;
+        let formData = new FormData();
+        formData.append('iccid', this.iccid);
+        formData.append('front', this.img_file_0);
+        formData.append('back', this.img_file_1);
+        formData.append('frontar', this.img_file_1);
+        _post('/verification//v1/user/valids', formData)
+          .then(res => {
+            if (res.error !== 0 && res.data.code !== 200) {
+              _this.$router.push('/realname/audit_fail');
+            } else {
+              _this.$router.push('/realname/audit_success');
+            }
+          })
+      }
     }
   }
 </script>
@@ -374,7 +282,8 @@
 
         .van-icon-success {
           color: #24bf24;
-          font-size: 24px;
+          font-size: 30px;
+          vertical-align: -webkit-baseline-middle;
         }
 
         &:before, &:after {
@@ -497,6 +406,9 @@
         padding: 10px;
         font-size: 26px;
         text-align: center;
+        width: auto;
+        background-color: #fff;
+        overflow: inherit;
       }
 
       .van-loading {
