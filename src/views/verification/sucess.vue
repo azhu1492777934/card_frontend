@@ -18,6 +18,8 @@
 </template>
 
 <script>
+  import {getStorage} from "../../utilies";
+
   export default {
     name: "auditSuccess",
     data() {
@@ -25,7 +27,11 @@
     },
     methods: {
       buypLan() {
-        this.$router.push('/plan_list');
+        if (['26','37'].includes(getStorage('cardData','obj').source)) {
+          let cardData = getStorage('cardData', 'obj');
+          location.href = `http://mifi.china-m2m.com/plan_list?iccid=${cardData.iccid}`
+        }
+        this.$router.push('/weixin/card/plan_list');
       },
     }
   }

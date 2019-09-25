@@ -20,7 +20,7 @@
       </div>
 
       <!--联系客服-->
-      <div class="contact-wrapper">联系客服</div>
+      <div @click="toService" class="contact-wrapper">联系客服</div>
 
       <!--操作-->
       <button @click="goToIndex" class="btn-exit">退出实名</button>
@@ -32,17 +32,28 @@
 </template>
 
 <script>
+  import {getStorage} from "../../utilies";
+
   export default {
     name: "uploadIdCard",
     data() {
-      return {}
+      return {
+        cardData: getStorage('cardData'),
+      }
     },
     methods: {
       goToIndex() {
-        this.$router.push('/');
+        if (inArray(this.cardData.source, ['26', '37']) >= 0) {
+          location.href = `http://mifi.china-m2m.com?iccid=${this.cardData.iccid}`;
+        } else {
+          this.$router.push('/');
+        }
       },
       realnameAgain() {
         this.$router.push('/realname/upload_info');
+      },
+      toService() {
+        location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#/'
       }
     }
   }

@@ -78,12 +78,11 @@
         <div class="step-icon-camera">
           <input class="btn-upload" type="file" @change="e=>handleUpload(e,2)" capture="camera" accept="image/*"/>
         </div>
-        <div class="btn-tip">上传正面免冠照</div>
+        <div class="btn-tip">拍摄正面免冠照</div>
       </div>
       <!--下一步-->
-      <!--      <button @click="verifyInfo" class="btn-step-next">下一步</button>-->
+      <!--<button @click="verifyInfo" class="btn-step-next">下一步</button>-->
     </div>
-
     <!--loading-->
     <div class="step-loading-wrapper">
       <van-popup
@@ -100,13 +99,12 @@
 <script>
   import {Loading, Toast, Popup, Notify, Icon} from 'vant';
   import {_post} from "../../http";
-  import {setStorage} from "../../utilies";
+  import {getStorage, setStorage} from "../../utilies";
 
   export default {
     name: "uploadIdCard",
     data() {
       return {
-        iccid: '99999991',
         step: 0,
         previewUrl_0: null,
         previewUrl_1: null,
@@ -118,6 +116,9 @@
         showLoading: false,
         loadingMsg: '',
         // 标记是否重拍
+        iccid: '',
+        imei: '',
+        phone: '',
       }
     },
     components: {
@@ -128,7 +129,18 @@
       [Icon.name]: Icon
     },
     created() {
-
+      let cardData = getStorage('cardData', 'obj');
+      let _this = this;
+      if (!cardData) {
+        Notify({message: '信息丢失,即将跳转'});
+        setTimeout(() => {
+          _this.$router.push('/weixin/card/lookup');
+        }, 2000);
+      }
+      // if (!cardData) location.href = 'http://mifi.china-m2m.com';
+      this.iccid = cardData.iccid;
+      this.imei = cardData.imei;
+      this.phone = cardData.phone;
     },
     methods: {
       handleUpload(e, step) {
@@ -148,13 +160,13 @@
             let url = window.URL.createObjectURL(file);//PS:不兼容IE
             let img = new Image();
             img.onload = function () {
+              console.log('onload')
               canvas.width = img.width;
               canvas.height = img.height;
               context.clearRect(0, 0, canvas.width, canvas.height);
               let quality = file.size / 1024 > 1025 ? 0.5 : 0.7;//图片是否大于1M,a=压缩上传
               context.drawImage(img, 0, 0, img.width, img.height);
               _this[`previewUrl_${step}`] = canvas.toDataURL("image/jpeg", quality);
-              alert(_this[`previewUrl_${step}`]);
               _this.showLoading = false;
               if (_this[`previewUrl_${step}`]) {
                 _this.uploadImgs(step);
@@ -172,12 +184,12 @@
       },
       uploadImgs(step) {
         let _this = this;
-        // upload info and keep waiting result
+        // upload info and keep waiting resulting
         // this.loadingMsg = '正在解析您的信息，请等候。';
         this.showLoading = true;
-        let formdata = new FormData();
-        formdata.append('file', this.previewUrl_0);
-        _post('/verification/v1/upload/image', formdata)
+        let formData = new FormData();
+        formData.append('file', this[`previewUrl_${step}`]);
+        _post('/verification/v1/upload/image', formData)
           .then(res => {
             this.showLoading = false;
             if (res.error === 0 && res.status === 200) {
@@ -200,15 +212,17 @@
         this.showLoading = true;
         let formData = new FormData();
         formData.append('iccid', this.iccid);
+        formData.append('imei', this.imei);
         formData.append('front', this.img_file_0);
         formData.append('back', this.img_file_1);
-        formData.append('frontar', this.img_file_1);
+        formData.append('frontar', this.img_file_2);
+        formData.append('mobile', this.phone);
         _post('/verification//v1/user/valids', formData)
           .then(res => {
-            if (res.error !== 0 && res.data.code !== 200) {
-              _this.$router.push('/realname/audit_fail');
-            } else {
+            if (res.error === 0 && res.data.code === 200) {
               _this.$router.push('/realname/audit_success');
+            } else {
+              _this.$router.push('/realname/audit_fail');
             }
           })
       }
