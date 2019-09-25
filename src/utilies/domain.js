@@ -20,8 +20,8 @@ let global_variables = {
         empty_router_url: '/weixin/card/lookup',
         DevelopDomain : 'http://cardserver-test.china-m2m.com',
         ProductionDomain : 'https://cardserver.china-m2m.com',
-        app_key: 'XznBRoBGEgoCUtZbDbtL0G1QhE',
-        app_secret: 'EThOWYkcwsrrCEsFTbgvHFWLaEJwrThDcYqrPbIuhufVp',
+        app_key: 'tz4Mdxeg5bMKgzkxsUNjpL6msQ',
+        app_secret: '6XPjkJtW0evK1zv7lVb8xnbZpTUjh2zisJ2l9vEZtLFGf',
     },
     new_project:{
         empty_router_url: '/weixin/card/lookup',
@@ -33,8 +33,8 @@ let global_variables = {
 /*
 * 当前打包项目
 * */
-if(process.env.NODE_ENV === 'development'){
-// if(process.env.NODE_ENV === 'production'){
+// if(process.env.NODE_ENV === 'development'){
+if(process.env.NODE_ENV === 'production'){
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].ProductionDomain;
 }else{
     global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].DevelopDomain;
