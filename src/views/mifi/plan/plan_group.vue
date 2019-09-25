@@ -345,19 +345,19 @@
             },//app支付
             toRechargeList(planInfo) {
                 let userInfo = getStorage('userInfo', 'obj');
-                if (userInfo.account.balance > 0) {
-                    _get("/api/v1/app/plans/renew_info", {
-                        user_id: getStorage("userInfo", "obj").account.user_id,
-                        rating_id: planInfo.id
-                    }).then(res => {
-                        if (res.state == 1) {
-                            setStorage("monthlyMsg", res.data, "obj");
-                            this.$router.push({path: "/weixin/recharge/index"});
-                        } else {
-                            Notify({message: res.msg});
-                        }
-                    });  //获取当前包月套餐信息
-                } else {
+                // if (userInfo.account.balance > 0) {
+                //     _get("/api/v1/app/plans/renew_info", {
+                //         user_id: getStorage("userInfo", "obj").account.user_id,
+                //         rating_id: planInfo.id
+                //     }).then(res => {
+                //         if (res.state == 1) {
+                //             setStorage("monthlyMsg", res.data, "obj");
+                //             this.$router.push({path: "/weixin/recharge/index"});
+                //         } else {
+                //             Notify({message: res.msg});
+                //         }
+                //     });  //获取当前包月套餐信息
+                // } else {
                     let param = {
                         status: 0,
                         iccid: this.iccid,
@@ -381,7 +381,7 @@
                     } else if (this.client_type === 'alipay') {
                         param.pay_type = 'ALIPAY'
                     }
-
+                    this.global_variables.packed_project === 'mifi' ? param.recharge_type = 1 : param.recharge_type = 0;
                     this.rechargeShow = false,
 
                     _post('/api/v1/pay/weixin/create', param)
@@ -419,7 +419,7 @@
                                 })
                             }
                         })
-                }
+                // }
             },
             compare2(pro) {
               return function (obj1, obj2) {

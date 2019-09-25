@@ -87,13 +87,12 @@
     created() {
       let _this=this;
       let timer=setInterval(()=>{
-        console.log(_this.time);
         if(_this.time>0){
 
           _this.time--;
         }else{
           clearInterval(timer);
-          _this.$router.push({path: '/weixin/card/usage'})
+          this.global_variables.packed_project === 'mifi' ?_this.$router.push({path: '/mifi/card/index'}):_this.$router.push({path: '/weixin/card/usage'})
         }
       },1000)
     },
