@@ -32,13 +32,13 @@
 </template>
 
 <script>
-  import {getStorage} from "../../utilies";
+  import {getStorage,inArray} from "../../utilies";
 
   export default {
     name: "uploadIdCard",
     data() {
       return {
-        cardData: getStorage('cardData'),
+        cardData: getStorage('cardData') || {},
       }
     },
     methods: {

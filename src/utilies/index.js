@@ -192,6 +192,17 @@ function checkBrowser() {
   }
 }//查看用户环境 微信/支付宝/app
 
+// 检测手机设备
+function checkDevice() {
+  let u = navigator.userAgent;
+  if(u.indexOf('Android') > -1 || u.indexOf('Linux') > -1){
+    return 'android'
+  }
+  if(!!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) || u.indexOf('iPhone') > -1 || u.indexOf('iPad') > -1){
+    return  'iphone'
+  }
+}
+
 function getUrlParam(name) {
   let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
   let r = window.location.search.substr(1).match(reg);  //匹配目标参数
@@ -304,13 +315,13 @@ function sha1(s) {
 }
 
 //减法精度问题
-function Subtr(arg1,arg2){ 
-  var r1,r2,m,n; 
-  try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0} 
-  try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0} 
-  m=Math.pow(10,Math.max(r1,r2)); 
-  n=(r1>=r2)?r1:r2; 
-  return ((arg1*m-arg2*m)/m).toFixed(n); 
+function Subtr(arg1,arg2){
+  var r1,r2,m,n;
+  try{r1=arg1.toString().split(".")[1].length}catch(e){r1=0}
+  try{r2=arg2.toString().split(".")[1].length}catch(e){r2=0}
+  m=Math.pow(10,Math.max(r1,r2));
+  n=(r1>=r2)?r1:r2;
+  return ((arg1*m-arg2*m)/m).toFixed(n);
  }
 export {
   getCardServerToken,
@@ -323,10 +334,11 @@ export {
   filterDate,
   codeParam,
   checkBrowser,
+  checkDevice,
   getUrlParam,
   inArray,
   Today,
   GetUrlRelativePath,
   lossRate,
-  Subtr
+  Subtr,
 }
