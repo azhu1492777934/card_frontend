@@ -265,7 +265,7 @@
 
   .more-flow-wrapper {
     padding-top: 20px;
-    height: 100vh;
+    height: cacl(~'100vh - 80px') ;
     box-sizing: border-box;
 
     .plan-wrapper {
@@ -351,6 +351,7 @@
     }
 
     .warning-wrapper {
+      width: 100%;
       padding: 50px 0;
       margin: 0 20px;
 

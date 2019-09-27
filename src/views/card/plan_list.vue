@@ -528,7 +528,7 @@
       .warning-wrapper {
         flex: auto;
         border: none;
-
+        width: 100%;
         p {
           color: #654828;
           font-size: 26px;
@@ -554,6 +554,8 @@
 
     .plan-type-wrap {
       display: flex;
+      flex-wrap: wrap;
+      -webkit-box-lines: multiple;
       justify-content: center;
       align-items: center;
       padding: 20px 0;
