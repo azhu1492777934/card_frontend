@@ -264,12 +264,10 @@
   @import "../../assets/less/utitlies";
 
   .more-flow-wrapper {
-    padding-top: 20px;
-    height: cacl(~'100vh - 80px') ;
+    padding: 20px 20px 0;
     box-sizing: border-box;
 
     .plan-wrapper {
-      margin: 0 20px;
       height: 55vh;
       overflow: auto;
 
