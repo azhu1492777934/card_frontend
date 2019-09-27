@@ -2,18 +2,12 @@
   <div class="plan-wrap">
     <div class="van-swipe-wrap" ref="vanSwiperWwrap">
       <div v-for="(item,index) in plan_list" v-bind:key="index">
-        <div class="planHeader">
-          <div></div>
-          <div ref="ref_plan_type_new">
-            <span v-if="index==0">累计套餐</span>
-            <span v-if="index==1">月套餐</span>
-            <span v-if="index==2">加油包</span>
-            <span v-if="index==5">周期性套餐</span>
-            <span v-if="index==6">超量自动续费套餐</span>
 
-          </div>
-          <div></div>
-        </div>
+        <div class="plan-type-name" v-if="index==='0'">{{plan_type_name[0]}}</div>
+        <div class="plan-type-name" v-if="index==='1'">{{plan_type_name[1]}}</div>
+        <div class="plan-type-name" v-if="index==='100'&&plan_list[100]">{{'加油包'}}</div>
+        <div class="plan-type-name" v-if="index==='5'">{{plan_type_name[5]}}</div>
+        <div class="plan-type-name" v-if="index==='6'">{{plan_type_name[6]}}</div>
 
         <div class="planContent">
           <div
@@ -44,14 +38,21 @@
 
             </el-popover>
           </div>
+
+          <div v-if="index==='100'&&plan_list[100]" class="warning-wrapper">
+            <p>加油包暂不支持退款请慎重选择</p>
+            <p>加油包有效期和指定套餐有效期相同</p>
+            <p>月套餐充值加油包仅当月有效</p>
+            <p>加油包需充值到指定套餐中方可使用</p>
+          </div>
+
         </div>
       </div>
     </div>
 
     <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
-      <button @click="recharge">充值</button>
+      <button @click="recharge">{{recharge_btn_text}}</button>
       <router-link to="/weixin/coupon/index">卡券兑换</router-link>
-
     </div>
 
     <van-popup :close-on-click-overlay="false" v-model="load_plan_list">
@@ -67,12 +68,283 @@
         </div>
       </div>
     </div>
-    <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
+
+    <van-popup
+      :close-on-click-overlay="false"
+      v-model="rechargeShow">
       <p class="showTip">创建订单中,请等候</p>
     </van-popup>
-    <!--创建订单-->
+
   </div>
 </template>
+
+<script>
+  import {Toast, Popup, Notify, List} from "vant";
+  import {setStorage, getStorage, checkBrowser, Today, lossRate} from "../../utilies";
+  import {_get, _post} from "../../http";
+  // @ is an alias to /src
+  export default {
+    name: "home",
+
+    data() {
+      const _this = this;
+      return {
+        client_type: checkBrowser(),
+        load_plan_list: false,
+        load_plan_msg: "",
+        recharge_btn_text: '充值',
+        plan_type: [],// 套餐类型
+        plan_type_name: {
+          0: "累计套餐",
+          1: "月套餐",
+          2: "加油包",
+          5: "周期性套餐",
+          6: "超量自动续费套餐"
+        },// 套餐名称
+        cur_plan_type_index: 0, //当前选中套餐类型
+        choose_plan_index: 0, //当前选中套餐
+        plan_list: {},
+        hasValidatedPlan: getStorage('hasValidatedPlan'),
+        rechargeShow: false,
+        ref_plan_type_index: 0,
+        firstStatus: false,
+      };
+    },
+    components: {
+      [Toast.name]: Toast,
+      [Popup.name]: Popup,
+      [List.name]: List,
+    },
+    created() {
+      // 流失率统计
+      if (getStorage('plan_list_new_card') === "1") {
+        lossRate({
+          type: 4,
+          iccid: getStorage("check_iccid")
+        });
+      }
+      let _this = this;
+      //处理套餐数据
+
+      _get("/api/v1/app/plan_list", {
+        iccid: getStorage("check_iccid")
+      }).then(res => {
+        if (res.state === 1) {
+          if (JSON.stringify(res.data) === "{}") {
+            this.load_plan_list = true;
+            this.load_plan_msg = "此卡暂无套餐";
+            return;
+          }
+          this.load_plan_msg = res.msg;
+          this.load_plan_list = false;
+          this.plan_list = res.data;
+          for (let item in this.plan_list) {
+            let newArray1 = [], newArray2 = [], newArray3 = [];
+            for (let i = 0; i < this.plan_list[item].length; i++) {
+              //区分推荐/未推荐
+              if (this.plan_list[item][i].is_recommend === true) {
+                newArray1.push(this.plan_list[item][i]);
+              } else {
+                newArray2.push(this.plan_list[item][i]);
+              }
+            }
+            //分别进行排序
+            newArray1.sort(this.compare2("price"));
+            newArray2.sort(this.compare2("price"));
+            newArray3 = newArray1.concat(newArray2);
+            this.plan_list[item] = newArray3;
+            this.plan_type.push(item);
+          }
+
+          // 处理加油包
+          if (!this.hasValidatedPlan) {
+            this.plan_list[2] = null;
+          } else {
+            let more_flow_list = this.plan_list[2];
+            if (more_flow_list.length) {
+              delete this.plan_list[2];
+              this.plan_list[100] = more_flow_list
+            }
+          }
+
+          this.$nextTick(() => {
+            let clientHeight = document.documentElement.clientHeight ||
+              document.body.clientHeight,
+              refPlanButton = this.$refs.refPlanButton.offsetHeight,
+              userHeight = getStorage("userHeight") || 44;
+            if (this.client_type === "wechat" || this.client_type === "alipay") {
+              this.$refs.vanSwiperWwrap.style.height =
+                clientHeight - refPlanButton - userHeight + "px";
+            } else {
+              this.$refs.vanSwiperWwrap.style.height =
+                clientHeight - refPlanButton - userHeight + "px";
+            }
+          });
+
+          //防止第一次加载气泡提示框显示错误的问题
+          setTimeout(function () {
+            _this.firstStatus = true;
+          }, 100);
+
+          //放底部
+          for (let i in res.data) {
+            this.choose_plan_index = res.data[i][0].id;
+            this.ref_plan_type_index = i;
+            return this.choose_plan_index;
+          }
+        } else {
+          this.load_plan_list = true;
+          this.load_plan_msg = res.msg;
+        }
+      });
+    },
+    mounted() {
+    },
+    methods: {
+      choosePlanClick: function (id, index) {
+        this.ref_plan_type_index = index;
+        this.choose_plan_index = id;
+        index === '2' ? this.recharge_btn_text = '选择叠加加油包套餐' : this.recharge_btn_text = '充值';
+      },
+      recharge: function () {
+        let planInfo = null;
+        for (let i = 0; i < this.plan_list[this.ref_plan_type_index].length; i++) {
+          if (this.choose_plan_index == this.plan_list[this.ref_plan_type_index][i].id) {
+            planInfo = this.plan_list[this.ref_plan_type_index][i];
+          }
+        }
+        if (planInfo.surplus_times <= 0) {
+          Toast("此套餐已售罄, 请更换套餐");
+          return;
+        }
+
+        planInfo.iccid = getStorage("check_iccid");
+        setStorage("planInfo", planInfo, "obj");
+
+        // 加油包套餐充值
+        if (this.ref_plan_type_index === '100') {
+          this.$router.push('/weixin/card/more_flow');
+          return;
+        }
+        //获取当前包月套餐信息
+        _get("/api/v1/app/plans/renew_info", {
+          user_id: getStorage("userInfo", "obj").account.user_id,
+          rating_id: planInfo.id
+        }).then(res => {
+          if (res.state === 1) {
+            setStorage("monthlyMsg", res.data, "obj");
+            this.$router.push({
+              path: "/weixin/recharge/index",
+              query: {type: this.$route.query.type}
+            });
+          } else {
+            Notify({message: res.msg});
+          }
+        });
+      },
+      //直接充值
+      directRecharge(planInfo) {
+        if (this.client_type !== "alipay" && this.client_type !== "wechat") {
+          Notify({message: "请在微信或支付宝客户端充值"});
+          return;
+        }
+        let _this = this;
+        let param = {
+          status: 0,
+          recharge_price: planInfo.price,
+          price: planInfo.price,
+          iccid: planInfo.iccid || getStorage("check_iccid"),
+          rating_id: planInfo.id,
+          user_id: getStorage("userInfo", "obj").account.user_id,
+          env: this.client_type,
+          start_time: Today(),
+          type: 0,
+          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+        };
+
+        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = getStorage("decrypt_data", "obj").openid;
+        if (this.client_type === "app") param.open_id = getStorage("userInfo", "obj").account.user_id;
+        if (this.client_type === "wechat") param.pay_type = "WEIXIN";
+        if (this.client_type === "alipay") param.pay_type = "ALIPAY";
+        if (this.client_type === "app") {
+          this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
+        }
+
+        this.rechargeShow = true;
+        _post("/api/v1/pay/weixin/create", param).then(res => {
+          if (getStorage('plan_list_new_card') === "1") {
+            lossRate({
+              type: 5,
+              iccid: getStorage("check_iccid")
+            });
+          }
+          if (res.state === 1) {
+            this.rechargeShow = false;
+            let payDom = document.querySelector('form');
+            if (payDom) document.removeChild(payDom);
+            if (/<[^>]+>/.test(res.data)) {
+              const div = document.createElement('div');
+              div.innerHTML = res.data;
+              document.body.appendChild(div);
+              document.forms[0].submit();
+            } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
+              //app
+              this.global_variables.packed_project === "mifi" ?
+                (location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`) :
+                (location.href = res.data);
+            } else {
+              Notify({
+                message: "充值成功",
+                background: "#60ce53"
+              });
+              setTimeout(function () {
+                if (localStorage.getItem("currentType") === "esim") {
+                  location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                } else {
+                  _this.global_variables.packed_project === "mifi" ?
+                    (location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`) :
+                    (location.href = res.data.return_url);
+                }
+              }, 1500);
+            } //纯钻石支付
+          } else {
+            this.rechargeShow = false;
+            Notify({
+              message: res.msg
+            });
+          }
+        });
+      },
+      //排序
+      compare(pro) {
+        return function (obj) {
+          let val = obj[pro];
+          if (val == true) {
+            return -1;
+          } else if (val == false) {
+            return 1;
+          } else {
+            return 0;
+          }
+        }
+      },
+      //排序2
+      compare2(pro) {
+        return function (obj1, obj2) {
+          let val1 = obj1[pro];
+          let val2 = obj2[pro];
+          if (val1 > val2) {
+            return 1;
+          } else if (val1 < val2) {
+            return -1;
+          } else {
+            return 0;
+          }
+        }
+      }
+    }
+  };
+</script>
 
 <style lang="less">
   @import "~swiper/dist/css/swiper.min.css";
@@ -94,42 +366,38 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    .planHeader {
-      height: 55px;
-      background: rgba(255, 251, 243, 1);
-      line-height: 55px;
+    .m-t-0 {
+      margin-top: 0 !important;
+    }
+
+    .plan-type-name {
       display: flex;
-      justify-content: center;
+      height: 55px;
+      margin-bottom: 10px;
       align-items: center;
-      margin: 10px 0;
+      justify-content: center;
+      font-size: 30px;
+      font-weight: bold;
+      text-align: center;
+      color: #f1a53c;
+      background: rgba(255, 251, 243, 1);
 
-      > div:nth-child(1) {
+      &::before, &::after {
+        display: block;
         width: 129px;
         height: 8px;
-        background: url("../../assets/imgs/card/usage/leftIcon.png") no-repeat;
-        background-size: 100% 100%;
+        content: '';
+        background-size: 100% 100% !important;
+      }
+
+      &::before {
         margin-right: 24px;
+        background: url("../../assets/imgs/card/usage/leftIcon.png") no-repeat;
       }
 
-      > div:nth-child(2) {
-        font-size: 30px;
-        font-weight: bold;
-        color: rgba(0, 0, 0, 1);
-        background: linear-gradient(
-          0deg,
-          rgba(241, 165, 60, 1) 0%,
-          rgba(255, 198, 65, 1) 91.259765625%
-        );
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
-
-      > div:nth-child(3) {
-        width: 129px;
-        height: 8px;
-        background: url("../../assets/imgs/card/usage/rightIcon.png") no-repeat;
-        background-size: 100% 100%;
+      &::after {
         margin-left: 24px;
+        background: url("../../assets/imgs/card/usage/rightIcon.png") no-repeat;
       }
     }
 
@@ -158,14 +426,16 @@
         align-items: center;
         flex-direction: column;
         justify-content: center;
-        position:relative;
-        .gift{
-          position:absolute;
-          top:-35px;
-          right:-20px;
-          >img{
-            width:40px;
-            height:40px;
+        position: relative;
+
+        .gift {
+          position: absolute;
+          top: -35px;
+          right: -20px;
+
+          > img {
+            width: 40px;
+            height: 40px;
           }
         }
       }
@@ -251,6 +521,29 @@
 
         .icon-sell-done::after {
           content: "已售罄";
+        }
+      }
+
+      // 加油提示
+      .warning-wrapper {
+        flex: auto;
+        border: none;
+
+        p {
+          color: #654828;
+          font-size: 26px;
+          line-height: 1.5;
+          text-align: left;
+
+          &:first-child {
+            color: #ff3448;
+            font-size: 28px;
+          }
+
+          &:before {
+            content: "*";
+            color: #ff4e35;
+          }
         }
       }
     }
@@ -445,314 +738,8 @@
         text-decoration: underline;
       }
     }
-    
+
   }
 </style>
 
-<script>
-  import {swiper, swiperSlide} from "vue-awesome-swiper";
-  import {Toast, Popup, Notify, List} from "vant";
-  import {setStorage, getStorage, checkBrowser, lossRate} from "../../utilies";
-  import {_get, _post} from "../../http";
-  // @ is an alias to /src
-  export default {
-    name: "home",
-
-    data() {
-      const _this = this;
-      return {
-        client_type: checkBrowser(),
-        moth_plan: null,
-        accumulated_plan: null,
-        speedup_plan: null,
-        load_plan_list: false,
-        load_plan_msg: "",
-        plan_type: [],
-        plan_type_name: [],
-        cur_plan_type_index: 0, //当前选中套餐类型
-        choose_plan_index: 0, //当前选中套餐
-        plan_list: {},
-        ref_plan_type_new: null,
-        swiperOption: {
-          on: {
-            slideChangeTransitionEnd: function (swiper) {
-              _this.cur_plan_type_index = this.activeIndex;
-            }
-          }
-        },
-        rechargeShow: false,
-        ref_plan_type_index: 0,
-        firstStatus: false,
-
-      };
-    },
-    components: {
-      [Toast.name]: Toast,
-      [Popup.name]: Popup,
-      [List.name]: List,
-      swiper,
-      swiperSlide
-    },
-    computed: {
-      swiper() {
-        return this.$refs.swiperVant.swiper;
-      }
-    },
-    created() {
-      // 流失率统计
-      if (getStorage('plan_list_new_card')==="1") {
-        lossRate({
-          type: 4,
-          iccid: getStorage("check_iccid")
-        });
-      }
-      let _this = this;
-      //处理套餐数据
-      _get("/api/v1/app/plan_list", {
-        iccid: getStorage("check_iccid")
-      }).then(res => {
-        if (res.state === 1) {
-          if (JSON.stringify(res.data) === "{}") {
-            this.load_plan_list = true;
-            this.load_plan_msg = "此卡暂无套餐";
-            return;
-          }
-
-          this.load_plan_msg = res.msg;
-          this.load_plan_list = false;
-          this.plan_list = res.data;
-          for (let item in this.plan_list) {
-            let newArray1 = [], newArray2 = [], newArray3 = [];
-            for (let i = 0; i < this.plan_list[item].length; i++) {
-              //区分推荐/未推荐
-              if (this.plan_list[item][i].is_recommend === true) {
-                newArray1.push(this.plan_list[item][i]);
-              } else {
-                newArray2.push(this.plan_list[item][i]);
-              }
-            }
-            //分别进行排序
-            newArray1.sort(this.compare2("price"));
-            newArray2.sort(this.compare2("price"));
-            newArray3 = newArray1.concat(newArray2);
-            this.plan_list[item] = newArray3;
-
-          }
-
-          
-            
-          this.$nextTick(() => {
-            let clientHeight =
-              document.documentElement.clientHeight ||
-              document.body.clientHeight,
-              refPlanButton = this.$refs.refPlanButton.offsetHeight,
-              userHeight = getStorage("userHeight") || 44;
-            if (this.client_type === "wechat" || this.client_type === "alipay") {
-              this.$refs.vanSwiperWwrap.style.height =
-                clientHeight - refPlanButton - userHeight + "px";
-            } else {
-              this.$refs.vanSwiperWwrap.style.height =
-                clientHeight - refPlanButton - userHeight + "px";
-            }
-          });
-
-          //防止第一次加载气泡提示框显示错误的问题
-          setTimeout(function () {
-            _this.firstStatus = true;
-          }, 100);
-
-          //放底部
-          for(let i in res.data){
-             this.choose_plan_index = res.data[i][0].id;
-             this.ref_plan_type_index=i;
-             return this.choose_plan_index;
-          }  
-        } else {
-          this.load_plan_list = true;
-          this.load_plan_msg = res.msg;
-        }
-      });
-    },
-    mounted() {
-    },
-    methods: {
-      choosePlanClick: function (id, index) {
-        this.ref_plan_type_index = index;
-        this.choose_plan_index = id;
-      },
-      recharge: function () {
-        let planInfo = null;
-        // console.log(this.plan_list);
-        // console.log(this.ref_plan_type_index);
-        for (let i = 0; i < this.plan_list[this.ref_plan_type_index].length; i++) {
-          if (this.choose_plan_index == this.plan_list[this.ref_plan_type_index][i].id) {
-            planInfo = this.plan_list[this.ref_plan_type_index][i];
-          }
-        }
-        // for(let i in this.plan_list){
-        //   for(let a=0;a<this.plan_list[i].length;a++){
-        //     if(this.choose_plan_index ==this.plan_list[i][a].id){
-        //       planInfo=this.plan_list[i][a];
-        //     }
-        //   }
-        // }
-        if (planInfo.surplus_times <= 0) {
-          Toast("此套餐已售罄, 请更换套餐");
-          return;
-        }
-
-        planInfo.iccid = getStorage("check_iccid");
-        setStorage("planInfo", planInfo, "obj");
-
-       
-          //获取当前包月套餐信息
-          _get("/api/v1/app/plans/renew_info", {
-            user_id: getStorage("userInfo", "obj").account.user_id,
-            rating_id: planInfo.id
-          }).then(res => {
-            if (res.state === 1) {
-              setStorage("monthlyMsg", res.data, "obj");
-              this.$router.push({
-                path: "/weixin/recharge/index",
-                query: {type: this.$route.query.type}
-              });
-            } else {
-              Notify({message: res.msg});
-            }
-          });
-      },
-      //直接充值
-      directRecharge(planInfo) {
-        if (this.client_type !== "alipay" && this.client_type !== "wechat") {
-          Notify({message: "请在微信或支付宝客户端充值"});
-          return;
-        }
-
-        let param = {},
-          _this = this;
-        param.status = 0;
-        param.recharge_price = planInfo.price;
-        param.price = planInfo.price;
-
-        if (this.client_type === "alipay" || this.client_type === "wechat") {
-          param.open_id = getStorage("decrypt_data", "obj").openid;
-        } else if (this.client_type === "app") {
-          param.open_id = getStorage("userInfo", "obj").account.user_id;
-        }
-        param.iccid = planInfo.iccid || getStorage("check_iccid");
-        param.rating_id = planInfo.id;
-
-        param.user_id = getStorage("userInfo", "obj").account.user_id;
-        param.env = this.client_type;
-
-        if (this.client_type === "app") {
-          if (this.appPay.type) {
-            param.pay_type = "WEIXIN";
-          } else {
-            param.pay_type = "ALIPAY";
-          }
-        } else if (this.client_type === "wechat") {
-          param.pay_type = "WEIXIN";
-        } else if (this.client_type === "alipay") {
-          param.pay_type = "ALIPAY";
-        }
-
-        param.start_time = this.getToday();
-        param.type = 0;
-
-        this.rechargeShow = true;
-        _post("/api/v1/pay/weixin/create", param).then(res => {
-          if (getStorage('plan_list_new_card')==="1") {
-            lossRate({
-              type: 5,
-              iccid: getStorage("check_iccid")
-            });
-          }
-          if (res.state === 1) {
-            this.rechargeShow = false;
-
-            if (/<[^>]+>/.test(res.data)) {
-              document.write(res.data);
-            } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
-              //app
-              this.global_variables.packed_project === "mifi"
-                ? (location.href = `${
-                  this.global_variables.authorized_redirect_url
-                  }/mifi/card/index`)
-                : (location.href = res.data);
-            } else {
-              Notify({
-                message: "充值成功",
-                background: "#60ce53"
-              });
-
-              setTimeout(function () {
-                if (localStorage.getItem("currentType") === "esim") {
-                  location.href = `${
-                    _this.global_variables.authorized_redirect_url
-                    }/weixin/card/esim_usage`;
-                } else {
-                  _this.global_variables.packed_project === "mifi"
-                    ? (location.href = `${
-                      _this.global_variables.authorized_redirect_url
-                      }/mifi/card/index`)
-                    : (location.href = res.data.return_url);
-                }
-              }, 1500);
-            } //纯钻石支付
-          } else {
-            this.rechargeShow = false;
-            Notify({
-              message: res.msg
-            });
-          }
-        });
-      },
-      getToday: function (val) {
-        let date = new Date();
-        if (val) {
-          date = new Date(val);
-        }
-        let year = date.getFullYear(),
-          month = date.getMonth() + 1,
-          day = date.getDate();
-        if (month < 10) {
-          month = "0" + month;
-        }
-        if (day < 10) {
-          day = "0" + day;
-        }
-        return year + "-" + month + "-" + day;
-      },
-      //排序
-      compare(pro) {
-        return function (obj) {
-          let val = obj[pro];
-          if (val == true) {
-            return -1;
-          } else if (val == false) {
-            return 1;
-          } else {
-            return 0;
-          }
-        }
-      },
-      //排序2
-      compare2(pro) {
-        return function (obj1, obj2) {
-          let val1 = obj1[pro];
-          let val2 = obj2[pro];
-          if (val1 > val2) {
-            return 1;
-          } else if (val1 < val2) {
-            return -1;
-          } else {
-            return 0;
-          }
-
-        }
-      }
-    }
-  };
-</script>
 

@@ -1,188 +1,187 @@
 <template>
   <div class="plan-usage-wrap">
-<!--    <transition name="slide-fade">-->
-      <div v-show="!load_skeleton">
-        <div ref="refCardInfo" class="card-info-wrap">
-          <div class="operation-logo-wrap">
-            <img :src="filterCardInfo.operator_logo" alt="">
-          </div>
-          <div class="card-info-detail">
-            <p v-if="filterCardInfo.is_watch_card">手表手机号:{{filterCardInfo.msisdn}}</p>
-            <p v-else>MSISDN:{{filterCardInfo.msisdn}}</p>
-            <p :class="{ 'p-t-45' : (!usageInfo.imei || usageInfo.imei=='864319031839011')}">
-              ICCID:{{usageInfo.iccid}}(编码:{{usageInfo.source}})</p>
-            <p v-if="usageInfo.imei && usageInfo.imei!='864319031839011'">IMEI:{{usageInfo.imei}}</p>
-            <div class="card-state-wrap">
-              <div>
-                <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
-                <span v-if="filterCardInfo.device_state==''"
-                      :class="usageInfo.status!=1?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
-                <span :class="filterCardInfo.device_state.code==1?'cl-state-primary':'cl-state-warning'"
-                      v-if="filterCardInfo.device_state!=''">{{filterCardInfo.device_state.state}}</span>
-              </div>
-              <div>
-                <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-                <router-link  to="/weixin/question/index">问题中心></router-link>
+    <!--    <transition name="slide-fade">-->
+    <div v-show="!load_skeleton">
+      <div ref="refCardInfo" class="card-info-wrap">
+        <div class="operation-logo-wrap">
+          <img :src="filterCardInfo.operator_logo" alt="">
+        </div>
+        <div class="card-info-detail">
+          <p v-if="filterCardInfo.is_watch_card">手表手机号:{{filterCardInfo.msisdn}}</p>
+          <p v-else>MSISDN:{{filterCardInfo.msisdn}}</p>
+          <p :class="{ 'p-t-45' : (!usageInfo.imei || usageInfo.imei=='864319031839011')}">
+            ICCID:{{usageInfo.iccid}}(编码:{{usageInfo.source}})</p>
+          <p v-if="usageInfo.imei && usageInfo.imei!='864319031839011'">IMEI:{{usageInfo.imei}}</p>
+          <div class="card-state-wrap">
+            <div>
+              <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
+              <span v-if="filterCardInfo.device_state==''"
+                    :class="usageInfo.status!=1?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
+              <span :class="filterCardInfo.device_state.code==1?'cl-state-primary':'cl-state-warning'"
+                    v-if="filterCardInfo.device_state!=''">{{filterCardInfo.device_state.state}}</span>
+            </div>
+            <div>
+              <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
+              <router-link to="/weixin/question/index">问题中心></router-link>
 
-              </div>
             </div>
           </div>
         </div>
-        <div ref="refCardData">
-          <div v-if="filterCardInfo.is_flow_card" class="card-used-wrap">
-            <p class="card-surplus-flow">
-              <span>剩余流量</span>
-              <span>{{this.filterCardInfo.flow_card_usage.detail_right}}</span>
-            </p>
-            <div class="card-flow-detail">
-              <div class="card-used-data-wrap">
-                <p>
-                  <span>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}} / </span>
-                  <span>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</span>
-                </p>
-              </div>
-              <div @click="toConnection" class="to-flow-wrap">
-                <a> 流量用量详情> </a>
-              </div>
+      </div>
+      <div ref="refCardData">
+        <div v-if="filterCardInfo.is_flow_card" class="card-used-wrap">
+          <p class="card-surplus-flow">
+            <span>剩余流量</span>
+            <span>{{this.filterCardInfo.flow_card_usage.detail_right}}</span>
+          </p>
+          <div class="card-flow-detail">
+            <div class="card-used-data-wrap">
+              <p>
+                <span>总流量:{{this.filterCardInfo.flow_card_usage.total_flow}} / </span>
+                <span>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</span>
+              </p>
             </div>
-          </div>
-          <div v-else class="card-used-wrap">
-            <p class="card-surplus-flow">
-              <span>剩余流量</span>
-              <span>{{this.filterCardInfo.watch_card_usage.detail_right}}</span>
-            </p>
-            <div class="card-flow-detail">
-              <div class="card-used-data-wrap">
-                <p>
-                  <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}} / </span>
-                  <span>已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</span>
-                </p>
-                <p>
-                  <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}} / </span>
-                  <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
-                </p>
-              </div>
-              <div @click="toConnection" class="to-flow-wrap">
-                <a> 流量用量详情> </a>
-              </div>
+            <div @click="toConnection" class="to-flow-wrap">
+              <a> 流量用量详情> </a>
             </div>
           </div>
         </div>
-        <div class="card-plan-wrap">
-          <p ref="refPlanTitle" class="card-plan-wrap-title">
+        <div v-else class="card-used-wrap">
+          <p class="card-surplus-flow">
+            <span>剩余流量</span>
+            <span>{{this.filterCardInfo.watch_card_usage.detail_right}}</span>
+          </p>
+          <div class="card-flow-detail">
+            <div class="card-used-data-wrap">
+              <p>
+                <span>总流量:{{this.filterCardInfo.watch_card_usage.total_flow}} / </span>
+                <span>已使用:{{this.filterCardInfo.watch_card_usage.used_flow}}</span>
+              </p>
+              <p>
+                <span>总通话:{{this.filterCardInfo.watch_card_usage.total_voice}} / </span>
+                <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
+              </p>
+            </div>
+            <div @click="toConnection" class="to-flow-wrap">
+              <a> 流量用量详情> </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="card-plan-wrap">
+        <p ref="refPlanTitle" class="card-plan-wrap-title">
           <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
                 :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
-          </p>
-          <div class="van-swipe-wrap">
-            <swiper ref="mySwiper" :options="swiperOption">
-              <swiper-slide>
-                <ul v-if="hasUsagePlan" class="usage-plan-wrap">
-                  <li v-for="(item,index) in usageInfo.usage.plans">
-                    <div class="plan-info-wrap">
-                      <p class="plan-name">{{item.rps_name}}</p>
-                      <div class="plan-describe">
-                        <!--/*套餐描述-->
-                        <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
-                          <div v-if="item.planCellInfo.key!='MG500'">
-                            <p v-if="item.describe && item.describe!='None'">
-                              <span>{{item.describe}}</span><br/>
-                              <span class="">{{item.remark}}</span>
-                            </p>
-                            <p v-else>
-                              <span>{{item.remark}}</span>
-                            </p>
-                          </div>
-                          <span v-if="item.planCellInfo.max_high">高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}</span><br>
-                          <span v-if="item.planCellInfo.max_normal">中速流量:{{item.planCellInfo.max_normal}}</span>
-                        </div>
-                        <div v-else>
+        </p>
+        <div class="van-swipe-wrap">
+          <swiper ref="mySwiper" :options="swiperOption">
+            <swiper-slide>
+              <ul v-if="hasUsagePlan" class="usage-plan-wrap">
+                <li v-for="(item,index) in usageInfo.usage.plans">
+                  <div class="plan-info-wrap">
+                    <p class="plan-name">{{item.rps_name}}</p>
+                    <div class="plan-describe">
+                      <!--/*套餐描述-->
+                      <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
+                        <div v-if="item.planCellInfo.key!='MG500'">
                           <p v-if="item.describe && item.describe!='None'">
                             <span>{{item.describe}}</span><br/>
-                            <span>{{item.remark}}</span>
+                            <span class="">{{item.remark}}</span>
                           </p>
                           <p v-else>
                             <span>{{item.remark}}</span>
                           </p>
                         </div>
-                        <!--\*套餐描述-->
+                        <span v-if="item.planCellInfo.max_high">高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}</span><br>
+                        <span v-if="item.planCellInfo.max_normal">中速流量:{{item.planCellInfo.max_normal}}</span>
                       </div>
+                      <div v-else>
+                        <p v-if="item.describe && item.describe!='None'">
+                          <span>{{item.describe}}</span><br/>
+                          <span>{{item.remark}}</span>
+                        </p>
+                        <p v-else>
+                          <span>{{item.remark}}</span>
+                        </p>
+                      </div>
+                      <!--\*套餐描述-->
                     </div>
-                    <div class="plan-date-wrap">
-                      <p class="plan-date"
-                         v-if="(inArray(usageInfo.source,watch_source)>=0||inArray(usageInfo.source,[1,7,8])>=0)">
-                        <span>开始日期:{{filterDate(item.activated_at)}}</span><br>
-                        <span>有效日期:{{filterDate(item.expired_at)}}</span>
-                      </p><!--手表卡-->
-                      <p class="plan-date" v-else-if="item.expired_at">
-                        <span>有效日期:{{filterDate(item.expired_at)}}</span>
-                      </p><!--流量卡-->
-                      <div class="speedup-wrap" v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
+                  </div>
+                  <div class="plan-date-wrap">
+                    <p class="plan-date"
+                       v-if="(inArray(usageInfo.source,watch_source)>=0||inArray(usageInfo.source,[1,7,8])>=0)">
+                      <span>开始日期:{{filterDate(item.activated_at)}}</span><br>
+                      <span>有效日期:{{filterDate(item.expired_at)}}</span>
+                    </p><!--手表卡-->
+                    <p class="plan-date" v-else-if="item.expired_at">
+                      <span>有效日期:{{filterDate(item.expired_at)}}</span>
+                    </p><!--流量卡-->
+                    <div class="speedup-wrap" v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
 		                                    <span v-if="item.planCellInfo.key!='MG500'">
 		                                        <a v-if="item.planCellInfo.plan_cell_status==1"
                                                href="/weixin/speedup/plan_80">购买加速包</a>
 		                                    </span>
-                        <span v-else>
+                      <span v-else>
 		                                        <a v-if="item.planCellInfo.plan_cell_status==1"
                                                href="/weixin/speedup/plan_500">购买加速包</a>
 		                                    </span>
-                      </div>
-
-                      <div class="prefer_use" v-if="usagePlanLength > 1">
-                        <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
-                           v-if="item.priority == 1000">优先使用</a>
-                        <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
-                           v-if="item.priority == 0">取消优先</a>
-                      </div>
                     </div>
-                  </li>
-                </ul>
-                <div v-else class="no-plan">
-                  <img src="../../assets/imgs/card/usage/bg_no_plan.svg" alt="">
-                </div>
-              </swiper-slide>
 
-              <swiper-slide>
-                <ul v-if="hasOrderPlan" class="order-plan-wrap">
-                  <li v-for="(item,index) in usageInfo.orders">
-                    <div class="plan-info-wrap">
-                      <p class="plan-name">{{item.name}}</p>
-                      <p class="plan-describe" v-if="item.rating_id==2522">
-                        <span>月底清零,30天有效,全国通用,有效期或流量任一用完即停机，套餐包含：20G高速流量，480G中速流量，中速流量可使用加速包提升为高速流量。</span>
-                      </p>
-                      <p class="plan-describe" v-else>
+                    <div class="prefer_use" v-if="usagePlanLength > 1">
+                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
+                         v-if="item.priority == 1000">优先使用</a>
+                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
+                         v-if="item.priority == 0">取消优先</a>
+                    </div>
+                  </div>
+                </li>
+              </ul>
+              <div v-else class="no-plan">
+                <img src="../../assets/imgs/card/usage/bg_no_plan.svg" alt="">
+              </div>
+            </swiper-slide>
+
+            <swiper-slide>
+              <ul v-if="hasOrderPlan" class="order-plan-wrap">
+                <li v-for="(item,index) in usageInfo.orders">
+                  <div class="plan-info-wrap">
+                    <p class="plan-name">{{item.name}}</p>
+                    <p class="plan-describe" v-if="item.rating_id==2522">
+                      <span>月底清零,30天有效,全国通用,有效期或流量任一用完即停机，套餐包含：20G高速流量，480G中速流量，中速流量可使用加速包提升为高速流量。</span>
+                    </p>
+                    <p class="plan-describe" v-else>
                       <span
                         v-if="item.describe && item.describe!='None'&&item.describe!=''">{{item.describe}}</span><br/>
-                        <span v-if="!item.describe || item.describe==''||item.describe=='None'"
-                              class="">{{item.remark}}</span>
-                      </p>
-                      <p class="plan-orderNo">订单号:{{item.no}}</p>
-                    </div>
+                      <span v-if="!item.describe || item.describe==''||item.describe=='None'"
+                            class="">{{item.remark}}</span>
+                    </p>
+                    <p class="plan-orderNo">订单号:{{item.no}}</p>
+                  </div>
 
-                    <div class="plan-date-wrap">
-                      <p class="plan-date">
-                        <span>续费日期:{{filterDate(item.created_at)}}</span>
-                      </p>
-                      <p class="plan-order-status-wrap">
-                        <span v-if="item.refund==2">已退款</span>
-                        <span v-if="item.refund!=2&&item.status!=-1">{{order_state[item.status]}}</span>
-                        <span v-if="item.refund!=2&&item.status==-1">已删除</span>
-          
-                      </p>
-                    </div>
-                  </li>
-                </ul>
-                <div v-else class="no-plan">
-                  <img src="../../assets/imgs/card/usage/bg_no_recharge.svg" alt="">
-                </div>
-              </swiper-slide>
-            </swiper>
-          </div>
-        </div>
-        <div ref="refCardButton" class="btn-recharge-wrap">
-          <button @click="recharge">充值续费</button>
-          <router-link to="/weixin/coupon/index">卡券兑换</router-link>
+                  <div class="plan-date-wrap">
+                    <p class="plan-date">
+                      <span>续费日期:{{filterDate(item.created_at)}}</span>
+                    </p>
+                    <p class="plan-order-status-wrap">
+                      <span v-if="item.refund==2">已退款</span>
+                      <span v-if="item.refund!=2&&item.status!=-1">{{order_state[item.status]}}</span>
+                      <span v-if="item.refund!=2&&item.status==-1">已删除</span>
+                    </p>
+                  </div>
+                </li>
+              </ul>
+              <div v-else class="no-plan">
+                <img src="../../assets/imgs/card/usage/bg_no_recharge.svg" alt="">
+              </div>
+            </swiper-slide>
+          </swiper>
         </div>
       </div>
+      <div ref="refCardButton" class="btn-recharge-wrap">
+        <button @click="recharge">充值续费</button>
+        <router-link to="/weixin/coupon/index">卡券兑换</router-link>
+      </div>
+    </div>
 
     <div v-show="load_skeleton" class="fixed-wrap-loading">
       <div id="loading-common-center">
@@ -193,8 +192,8 @@
         </div>
       </div>
     </div>
-<!--      <UsageSkeleton v-else/>-->
-<!--    </transition>-->
+    <!--      <UsageSkeleton v-else/>-->
+    <!--    </transition>-->
   </div>
 </template>
 
@@ -560,7 +559,7 @@
   import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import {Notify, Popup, Toast} from 'vant';
-  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam,removeStorage} from "../../utilies";
+  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -573,7 +572,7 @@
         load_skeleton: true,
         // load_plan: false,
         load_plan_msg: '',
-        watch_source: [5, 10, 12, 17, 18, 20, 22,32,38],
+        watch_source: [5, 10, 12, 17, 18, 20, 22, 32, 38],
         auth_status: ['未实名', '审核中', '审核不通过'],
         card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
         order_state: ['未支付', '已支付', '已到账'],
@@ -630,8 +629,8 @@
     // },
     created() {
       removeStorage('plan_list_new_card');
+      removeStorage('hasValidatedPlan');// remove more net flowing mark
       // this.$emit('getUserData');
-
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {
@@ -706,11 +705,11 @@
               this.filterCardInfo.is_flow_card = false;
 
               if (this.usageInfo.usage.noMax === 1) {
-                this.filterCardInfo.watch_card_usage.total_flow = '无限'
-                this.filterCardInfo.watch_card_usage.detail_right = '无限'//右侧详情
+                this.filterCardInfo.watch_card_usage.total_flow = '无限';
+                this.filterCardInfo.watch_card_usage.detail_right = '无限';//右侧详情
 
               } else {
-                this.filterCardInfo.watch_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total, 0, 1)  //总用量
+                this.filterCardInfo.watch_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total, 0, 1);  //总用量
                 this.filterCardInfo.watch_card_usage.detail_right =
                   this.flowUnit(0, {
                     watchCard: true,
@@ -719,17 +718,17 @@
                   }, 0)//右侧详情
               }
 
-              this.filterCardInfo.watch_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used, 0, 0) //已使用流量
+              this.filterCardInfo.watch_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used, 0, 0); //已使用流量
 
               if (this.usageInfo.usage.noMaxVoice === 1) {
-                this.filterCardInfo.watch_card_usage.total_voice = '无限'
+                this.filterCardInfo.watch_card_usage.total_voice = '无限';
 
               } else {
-                this.filterCardInfo.watch_card_usage.total_voice = toDecimal(this.usageInfo.usage.totalVoice) + '分钟'
+                this.filterCardInfo.watch_card_usage.total_voice = toDecimal(this.usageInfo.usage.totalVoice) + '分钟';
               }
 
-              this.filterCardInfo.watch_card_usage.used_voice = toDecimal(this.usageInfo.usage.usedVoice) + '分钟' //已使用通话
-              localStorage.setItem("is_flow_card",0);
+              this.filterCardInfo.watch_card_usage.used_voice = toDecimal(this.usageInfo.usage.usedVoice) + '分钟'; //已使用通话
+              localStorage.setItem("is_flow_card", 0);
               //手表卡用量
             } else {
 
@@ -737,8 +736,8 @@
               this.filterCardInfo.is_flow_card = true;
 
               if (this.usageInfo.source === 6 || this.usageInfo.usage.noMax === 1) {
-                this.filterCardInfo.flow_card_usage.total_flow = '无限'
-                this.filterCardInfo.flow_card_usage.detail_right = '无限'
+                this.filterCardInfo.flow_card_usage.total_flow = '无限';
+                this.filterCardInfo.flow_card_usage.detail_right = '无限';
               }
 
               if (this.usageInfo.source !== 6 && this.usageInfo.usage.noMax !== 1) {
@@ -752,13 +751,14 @@
               }
 
               this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used, 0, 0)
-              localStorage.setItem("is_flow_card",1);
+              localStorage.setItem("is_flow_card", 1);
             }//流量卡
 
             // 是否显示套餐
             this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false;
             this.usagePlanLength = this.usageInfo.usage.plans.length;
             this.hasOrderPlan = this.usageInfo.orders.length ? true : false;
+            if (this.hasUsagePlan) setStorage('hasValidatedPlan', true);
 
             // this.swiper.slideTo(0, 500, false);
 

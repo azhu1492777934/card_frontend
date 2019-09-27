@@ -1,52 +1,43 @@
 <template>
   <div class="empty-wrapper">
     <div class="empty-inner">
-      <van-icon :name="name" :size="size" :color="color"/>
+      <div class="no-data-wrapper"></div>
       <div class="text-wrapper">{{text}}</div>
     </div>
   </div>
 </template>
 
 <script>
-  import {Icon} from 'vant';
-
   export default {
     name: "index",
     props: {
-      name: {
-        type: String,
-        default: "warn-o"
-      },
       text: {
         type: String,
         default: "暂无数据"
       },//文案
-      color: {
-        type: String,
-        default: "#323233"
-      },
-      size: {
-        type: Number,
-        default: 40
-      }
     },
-    components: {
-      [Icon.name]: Icon,
-    }
   }
 </script>
 
 <style lang="less">
+  @import "../../assets/less/utitlies";
+
   .empty-wrapper {
     display: flex;
-    height: 100%;
+    height: 100vh;
+    justify-content: center;
     align-items: center;
-    align-content: center;
-    .empty-inner{
-      margin: 0 auto;
+
+    .no-data-wrapper {
+      width: 380px;
+      height: 333px;
+      .bg-image('../../assets/imgs/mifi/common/noData');
     }
+
     .text-wrapper {
+      padding: 10px;
       font-size: 28px;
+      text-align: center;
     }
   }
 </style>

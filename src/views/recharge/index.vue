@@ -34,10 +34,14 @@
 
             <!-- <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p>      -->
 
-            <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance">赠送<em class="cl-elb">
+            <p class="discount-appendix"
+               v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance">赠送<em
+              class="cl-elb">
               {{item.give_elb}}</em>ELB
             </p><!--多充值支付-->
-            <p class="discount-appendix" v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance">赠送<em class="cl-elb">
+            <p class="discount-appendix"
+               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance">赠送<em
+              class="cl-elb">
               {{item.give_balance}}</em>元余额
             </p>
           </div>
@@ -119,8 +123,8 @@
           支付方式选择
         </div>
         <div class="content">
-          <p @click="changePayType(1)" :class="{'choose_type':appPay.type}">微信支付</p>
-          <p @click="changePayType(0)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
+          <p @click="changePayType(true)" :class="{'choose_type':appPay.type}">微信支付</p>
+          <p @click="changePayType(false)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
         </div>
         <div class="footer">
           <button @click="closePayType">取消</button>
@@ -135,7 +139,7 @@
 <script>
   import {mapState} from 'vuex'
   import {DatetimePicker, Area, Popup, Notify} from 'vant';
-  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal} from "../../utilies";
+  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -180,7 +184,7 @@
         check_coupon: false,
         check_elb: false,
 
-        val_date: this.getToday(),
+        val_date: Today(),
         val_coupon: '',
         val_elb: '',
 
@@ -214,7 +218,7 @@
       }
 
       if (!this.planInfo) {
-        this.$router.push({'path': '/card/plan_list'});
+        this.$router.push({'path': '/weixin/card/plan_list'});
       }
 
       if (this.planInfo) {
@@ -223,18 +227,14 @@
         }
       }//是否显示ELB
 
-      if (getStorage('newCard')) {
-        if (getStorage('newCard') == 1) {
-          this.isShowChoice.showELB = false;
-          this.isShowChoice.showCode = false;
-          this.isShowChoice.showDate = false;
-        }
+      if (getStorage('newCard') === '1') {
+        this.isShowChoice.showELB = false;
+        this.isShowChoice.showCode = false;
+        this.isShowChoice.showDate = false;
       }//新卡默认不显示所有选择
 
-      if (getStorage('isSpeedUp')) {
-        if (getStorage('isSpeedUp') == 1) {
-          this.isShowChoice.showDate = false;
-        }
+      if (getStorage('isSpeedUp') === '1') {
+        this.isShowChoice.showDate = false;
       }//加速包默认不显示生效时间
 
       /*
@@ -313,18 +313,18 @@
         this.new_recharge_list.push(monthlyMsg);
 
       } else if (this.userInfo.account.balance <= 0) {
-        this.showOriginPrice == 1 ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
+        this.showOriginPrice === '1' ? this.activeIndex = (this.new_recharge_list.length - 1) : this.activeIndex = 0;
       }
 
-      if (this.showOriginPrice == 2 || this.showOriginPrice == 3) {
+      if (this.showOriginPrice === '2' || this.showOriginPrice === '3') {
         let newData = [];
         for (let i = 0; i < this.new_recharge_list.length; i++) {
-          if (this.showOriginPrice == 2) {
+          if (this.showOriginPrice === '2') {
             // ||this.new_recharge_list[i].pay_type=="diamond_charge"
             if (this.new_recharge_list[i].pay_type === "over_charge") {
               newData.push(this.new_recharge_list[i]);
             }
-          } else if (this.showOriginPrice == 3) {
+          } else if (this.showOriginPrice === '3') {
             if (this.new_recharge_list[i].pay_type === "normal_charge") {
               newData.push(this.new_recharge_list[i]);
             }
@@ -339,7 +339,7 @@
           case 'date':
             this.check_date = !this.check_date;
             if (!this.check_date) {
-              this.val_date = this.getToday()
+              this.val_date = Today()
             }
             break;
           case 'coupon':
@@ -363,22 +363,6 @@
         }
         return value;
       },
-      getToday: function (val) {
-        let date = new Date();
-        if (val) {
-          date = new Date(val);
-        }
-        let year = date.getFullYear(),
-          month = date.getMonth() + 1,
-          day = date.getDate();
-        if (month < 10) {
-          month = '0' + month
-        }
-        if (day < 10) {
-          day = '0' + day
-        }
-        return year + '-' + month + '-' + day
-      },
       getEndDate: function () {
         let date = new Date();
         date.setDate(date.getDate() + 90);
@@ -401,7 +385,7 @@
         this.showDate = true;
       },
       dateConfirm: function (value) {
-        this.val_date = this.getToday(value);
+        this.val_date = Today(value);
         this.showDate = false;
       },//确定弹窗
       dateCancel: function () {
@@ -417,50 +401,27 @@
           Notify({message: '充值后余额不足抵扣套餐价格，请选择其他套餐进行充值'});
           return
         }
-        let param = {},
-          _this = this;
-
-        rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge' ? param.status = 1 : param.status = 0;
-        if (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') {
-          param.recharge_price = rechargeInfo.pay_money;
-        } else {
-          param.recharge_price = this.planInfo.price;
-
-        }
-
-        if (this.client_type === 'alipay' || this.client_type === 'wechat') {
-          param.open_id = this.open_id;
-        } else if (this.client_type === 'app') {
-          param.open_id = this.userInfo.account.user_id
-
-        }
+        let _this = this;
+        let param = {
+          user_id: this.userInfo.account.user_id,
+          env: this.client_type,
+          iccid: this.planInfo.iccid || getStorage('check_iccid'),
+          rating_id: this.planInfo.id,
+          is_renew: rechargeInfo.is_renew,
+          price: rechargeInfo.is_renew == true ? rechargeInfo.first_price : this.planInfo.price,
+          status: (rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? 1 : 0,
+          recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
+          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+        };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
-
-        param.iccid = this.planInfo.iccid || getStorage('check_iccid');
-        param.rating_id = this.planInfo.id;
-        param.is_renew = rechargeInfo.is_renew;
-        if (rechargeInfo.is_renew == true) {
-          param.price = rechargeInfo.first_price;
-        } else {
-          param.price = this.planInfo.price;
-        }
-
-        param.user_id = this.userInfo.account.user_id;
-        param.env = this.client_type;
-
+        if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = this.open_id;
+        if (this.client_type === 'app') param.open_id = this.userInfo.account.user_id;
+        if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
+        if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
         if (this.client_type === 'app') {
-          if (this.appPay.type) {
-            param.pay_type = 'WEIXIN'
-          } else {
-            param.pay_type = 'ALIPAY'
-          }
-        } else if (this.client_type === 'wechat') {
-          param.pay_type = 'WEIXIN'
-        } else if (this.client_type === 'alipay') {
-          param.pay_type = 'ALIPAY'
+          (this.appPay.type) ? param.pay_type = 'WEIXIN' : param.pay_type = 'ALIPAY';
         }
-
         // 折扣相关参数判断
         let elbDiscountParams = [{
           pattern: !this.val_elb,
@@ -486,7 +447,6 @@
           let hasError = false;
           for (let i = 0; i < elbDiscountParams.length; i++) {
             if (elbDiscountParams[i].pattern) {
-              console.log(this.userInfo.account.elb);
               Notify({message: elbDiscountParams[i].msg});
               hasError = true;
               break;
@@ -519,7 +479,6 @@
           param.start_time = this.val_date
         }
 
-        this.global_variables.packed_project === 'mifi' ? param.recharge_type = 1 : param.recharge_type = 0;
         this.rechargeShow = true;
         // 墙出此前创建的form表单
         let payDom = document.querySelector('form');
@@ -536,7 +495,8 @@
                 document.forms[0].submit();
               } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
                 this.global_variables.packed_project === 'mifi' ?
-                  location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
+                  location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` :
+                  location.href = res.data;
               } else {
                 if (this.planInfo.vip_type_id != 0) {
                   Notify({
@@ -549,13 +509,14 @@
                     background: '#60ce53'
                   });
                 }
-
                 this.$emit('getUserData');
                 setTimeout(function () {
                   if (localStorage.getItem("currentType") === "esim") {
                     location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
                   } else {
-                    _this.global_variables.packed_project === 'mifi' ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                    _this.global_variables.packed_project === 'mifi' ?
+                      location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` :
+                      location.href = res.data.return_url
                   }
                 }, 1500);
               }//纯钻石支付
@@ -623,11 +584,7 @@
         })
       },//用户rmb,套餐价格planPrice
       changePayType(type) {
-        if (type) {
-          this.appPay.type = true
-        } else {
-          this.appPay.type = false
-        }
+        this.appPay.type = !!type;
       },
       closePayType() {
         this.appPay.type = true;
@@ -635,11 +592,7 @@
       },
       getRechargeInfo() {
         let env;
-        if (this.global_variables.packed_project === 'mifi') {
-          env = "mifi";
-        } else {
-          env = "cardserver";
-        }
+        this.global_variables.packed_project === 'mifi' ? env = "mifi" : env = "cardserver";
         let p = new Promise((resolve, reject) => {
           _get("/api/v1/app/recharge/info", {
             iccid: this.planInfo.iccid || getStorage('check_iccid'),
@@ -826,6 +779,7 @@
       .discount-wrap {
         display: flex;
         flex-wrap: wrap;
+        -webkit-box-lines: multiple;
         justify-content: space-between;
       }
 
@@ -978,6 +932,7 @@
         display: flex;
         align-items: center;
         flex-wrap: wrap;
+        -webkit-box-lines: multiple;
         padding-bottom: 30px;
       }
 

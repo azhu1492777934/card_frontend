@@ -165,7 +165,6 @@
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: iccid,
         }).then(res => {
-
           this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false})
 
           let autoCount = getStorage('watchAutoSearch');

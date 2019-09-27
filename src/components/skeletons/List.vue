@@ -41,6 +41,7 @@
     &.type-horizontal{
       display: flex;
       flex-wrap: wrap;
+      -webkit-box-lines: multiple;
       align-content: space-between;
       li{
         width: 30%;

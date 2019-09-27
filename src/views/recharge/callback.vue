@@ -70,7 +70,7 @@
 
 <script>
   // @ is an alias to /src
-  import {checkBrowser,getStorage } from "../../utilies";
+  import {checkBrowser, getStorage, removeStorage} from "../../utilies";
 
   export default {
     name: "recharge_success",
@@ -85,6 +85,8 @@
       }
     },
     created() {
+      removeStorage('plan_list_new_card');
+      removeStorage('hasValidatedPlan');// remove more net flowing mark
       let _this=this;
       let timer=setInterval(()=>{
         if(_this.time>0){

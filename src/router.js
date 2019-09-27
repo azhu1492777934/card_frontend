@@ -44,6 +44,7 @@ const plan_list = r => require.ensure([], () => r(require('./views/card/plan_lis
 const card_wrapper = r => require.ensure([], () => r(require('./views/card/card_wrapper')), 'card_wrapper');
 const card_lookup = r => require.ensure([], () => r(require('./views/card/lookup')), 'card_lookup'); // 查询
 const card_usage = r => require.ensure([], () => r(require('./views/card/usage')), 'card_usage'); // 使用情况
+const card_more_flow = r => require.ensure([], () => r(require('./views/card/more_flow_plan')), 'card_more_flow'); // 加油包充值
 const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection'); // 卡连接详情
 const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check'); // 卡检测
 const esim_usage = r => require.ensure([], () => r(require('./views/card/esim_usage')), 'esim_usage'); // 卡检测
@@ -363,7 +364,6 @@ export const constantRouterMap = [{
             requireAuth: true,
           }
         },
-
         {
           path: 'esim_plan_list',
           component: esim_plan_list,
@@ -371,6 +371,10 @@ export const constantRouterMap = [{
             title: 'esim套餐列表',
             requireAuth: true,
           }
+        }, {
+          path: 'more_flow',
+          component: card_more_flow,
+          meta: {title: '加速包叠加对应套餐'}
         },
         {
           path: 'plan_list',

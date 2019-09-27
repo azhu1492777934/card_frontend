@@ -4,6 +4,7 @@ const state = {
         decrypt_data: getStorage('decrypt_data', 'obj'),
         userInfoInner: getStorage('userInfo', 'obj') || {
             account: {
+                balance:0,
                 rmb: 0,
                 elb: 0
             },
