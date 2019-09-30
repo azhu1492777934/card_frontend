@@ -1,15 +1,26 @@
 <template>
     <div class="plan-group-wrapper">
-        <div ref="btnChoosePlan" @click="showPLanDetail" class="btn-choose-plan-wrap">
+
+        <div ref="refPLanTitle" class="plan-type-wrap" >
+            <div class="plan-type-inner-wrap">
+                <span
+                    ref="ref_plan_type"
+                    @click="handleConfirm(item)"
+                    v-for="(item,index) in columns[0].values" v-bind:key="index"
+                    :class="{'active_type':item.keyId==cur_plan_type_index}"  >{{item.text}}
+                </span>
+            </div>
+        </div>
+        <!-- <div ref="btnChoosePlan" @click="showPLanDetail" class="btn-choose-plan-wrap">
             <div>
                 <span>{{cur_plan_group_name}}</span>
                 <span>=</span>
             </div>
-        </div>
+        </div> -->
 
         <div ref="planList" class="group-list-wrap">
 
-            <ul v-if="JSON.stringify(group_list)!='[]'" class="plan-list-wrap">
+            <ul v-show="JSON.stringify(group_list)!='[]'" class="plan-list-wrap"  id="plan-list-wrap" ref="innerPlanList">
 
                 <li @click="choosePlanClick(inner_index)" v-for="(inner_item,inner_index) in group_list"
                     :class="{'activedPlan':inner_index==choose_plan_index,'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0}">
@@ -138,7 +149,9 @@
                     // }
                 ],
                 planName:["累计套餐","包月套餐","加油包","加速包","国际套餐","周期性套餐","超量自动充值套餐"],
-                totalPlan:[]
+                totalPlan:[],
+                cur_plan_type_index:0,
+                scrollTop:0
             }
         },
         components: {
@@ -178,22 +191,7 @@
                             // console.log(this.group_list);
                             // console.log(this.columns);
 
-                            this.$nextTick(() => {
-                                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                                    refBanner = this.$refs.btnChoosePlan.offsetHeight,
-                                    refTitle = this.$refs.btnRechargeWrap.offsetHeight;
-                                this.$refs.planList.style.height = (clientHeight - refBanner - refTitle) + 'px'
-
-                                if (!this.scroll) {
-                                    this.scroll = new BScroll(this.$refs.planList, {
-                                        click: true
-                                    });
-                                } else {
-                                    this.scroll.refresh();
-                                }
-
-
-                            });
+                           
 
 
                             this.totalPlan=res.data;
@@ -226,9 +224,29 @@
                                 }
                             };
 
+                             this.$nextTick(() => {
+                                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+                                    refBanner = this.$refs.refPLanTitle.offsetHeight,
+                                    refTitle = this.$refs.btnRechargeWrap.offsetHeight;
+                                   
+                                this.$refs.planList.style.height = (clientHeight-refBanner  - refTitle) + 'px'
+
+                                // if (!this.scroll) {
+                                //     this.scroll = new BScroll(this.$refs.planList, {
+                                //         click: true
+                                //     });
+                                // } else {
+                                //     this.scroll.refresh();
+                                // }
+
+
+                            });
+
+
                             for(let i in this.totalPlan){
                                this.group_list = this.totalPlan[i];
                                 this.group_list.length ? this.showNoData = false : this.showNoData = true;
+                                this.cur_plan_type_index=i;
                                return this.group_list;
                             }  
 
@@ -265,11 +283,30 @@
                 }
             },
             handleConfirm(value) {
-                this.picker.choose_plan_id = value[0].keyId;
+                let _this=this;
+                // this.picker.choose_plan_id = value[0].keyId;
+                this.picker.choose_plan_id=value.keyId;
+                this.cur_plan_type_index=value.keyId;
+                this.choose_plan_index=0;
                 // this.picker.choose_type = value[1].keyId;
                 this.picker.showPlanSelect = false;
-                this.cur_plan_group_name = value[0].text;
+                // this.cur_plan_group_name = value[0].text;
+                this.cur_plan_group_name = value.text;
                 this.group_list=this.totalPlan[this.picker.choose_plan_id ];
+                this.backTop();
+                
+            },
+            backTop () {
+                const that = this
+                //  this.scrollTop = this.$refs.innerPlanList.scrollTop;
+                let timer = setInterval(() => {
+                    let ispeed = Math.floor(-that.scrollTop / 5);
+                    that.$refs.innerPlanList.scrollTop = that.scrollTop + ispeed;
+                    if (that.scrollTop == 0) {
+                      clearInterval(timer)
+                    }
+                }, 16)
+
             },
             handleCancel() {
                 this.picker.showPlanSelect = false;
@@ -434,7 +471,17 @@
                 }
 
               }
+            },
+            handleScroll(){
+                this.scrollTop=this.$refs.innerPlanList.scrollTop;
             }
+        },
+        mounted(){
+            document.getElementById("plan-list-wrap").addEventListener('scroll', this.handleScroll);
+        },
+        destroyed(){
+            document.getElementById("plan-list-wrap").removeEventListener('scroll', this.handleScroll);
+
         }
     }
 </script>
@@ -445,6 +492,64 @@
         width: 100%;
         height: 100%;
         overflow: hidden;
+
+        .plan-type-wrap {
+            // display: flex;
+            // justify-content: center;
+            // align-items: center;
+            width:100%;
+            white-space: nowrap;
+            background:#353335;
+            overflow-x: auto;
+            overflow-y: hidden;
+            -webkit-backface-visibility: hidden;
+            -webkit-perspective: 1000;
+            -webkit-overflow-scrolling: touch;
+            box-shadow:0 -3px 46px 0 rgba(255,137,11,0.21);
+            height:86px;
+            line-height:86px;
+            z-index:999;
+            .plan-type-inner-wrap {
+                width:100%;
+                >span:last-child{
+                    border:none !important;
+                }
+            }
+            
+            span {
+                flex:1;
+                display: inline-block;
+                height: 46px;
+                padding: 0 50px;
+                font-size: 30px;
+                line-height: 50px;
+                font-family:SourceHanSansSC-Regular;
+                font-weight:400;
+                color:rgba(138,138,138,1);
+                  border-right:1px solid #fff;
+                &.active_type {
+                    font-family:SourceHanSansSC-Bold;
+                    font-weight:bold;
+                    color:rgba(250,178,20,1);
+                    position:relative;
+                    // &:after{
+                    //   content:"";
+                    //   display:inline-block;
+                    //   width:125px;
+                    //   height:24px;
+                    //   background:url("../../../assets/imgs/mifi/plan_group/currentStatus.png")no-repeat;
+                    //   background-size:100% 100%;
+                    //   position:absolute;
+                    //   left:50%;
+                    //   margin-left:-62.5px;
+                    //   bottom:-37px;
+                    // }
+                }
+            }
+           
+        }
+
+
         .btn-choose-plan-wrap {
             width: 70%;
             margin: 0 auto;
@@ -462,11 +567,12 @@
         }
         .group-list-wrap {
             overflow: hidden;
+            // padding-top:20px;
         }
         .plan-list-wrap {
-            /*height: 100%;*/
-            /*overflow: auto;*/
-            /*-webkit-overflow-scrolling: touch;*/
+            height: 100%;
+            overflow: auto;
+            -webkit-overflow-scrolling: touch;
             li {
                 position: relative;
                 display: flex;
