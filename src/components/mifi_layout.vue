@@ -1,7 +1,7 @@
 <template>
   <div class="inner-wrap">
     <router-view @getUserData="getUserInfo"/>
-    <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
+    <van-popup :close-on-click-overlay="false" v-model="load_user_msg" class="mifi-info-loading">
       <van-loading type="spinner" size="30" color="#fff"/>
     </van-popup>
 
@@ -186,7 +186,7 @@
                 setStorage('alipay_version', this.global_variables.version);
               }
               location.href = res.data;
-            } else if (res.error ===11002) {
+            } else if (res.error === 11002) {
               setStorage('refreshUrl', GetUrlRelativePath());
               this.$emit('getToken', {from: 'mifi'})
             } else {
@@ -211,4 +211,11 @@
   }
 </script>
 
+<style lang="less">
+  .mifi-info-loading{
+    .van-loading{
+      margin: 0 auto;
+    }
+  }
+</style>
 
