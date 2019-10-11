@@ -25,6 +25,7 @@ const to_tb = r => require.ensure([], () => r(require('./views/new_card/to_tb'))
 // 充值
 const recharge_wrapper = r => require.ensure([], () => r(require('./views/recharge/recharge_wrapper')), 'recharge_wrapper'); //充值页
 const recharge = r => require.ensure([], () => r(require('./views/recharge/index')), 'recharge'); //充值页
+const recharge_balance = r => require.ensure([], () => r(require('./views/recharge/balance')), 'recharge_balance'); //余额充值
 const recharge_callback = r => require.ensure([], () => r(require('./views/recharge/callback')), 'recharge_callback'); // 支付成功回调页
 
 // 加速包
@@ -419,6 +420,12 @@ export const constantRouterMap = [{
           meta: {
             title: '充值',
             requireAuth: true,
+          }
+        }, {
+          path: 'balance',
+          component:recharge_balance,
+          meta: {
+            title: '充值'
           }
         }, {
           path: 'callback',

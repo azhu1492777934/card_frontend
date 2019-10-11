@@ -1,11 +1,10 @@
 <template>
   <div class="recharge-wrap">
     <div class="content-wrap">
-      <div class="title-wrap">
-        <em class="title-line"></em>
-        <span class="title-name">支付选择</span>
-        <em class="title-line rotate-180"></em>
-      </div>
+
+      <div class="plan-type-name">充值选择</div>
+
+
       <ul class="discount-wrap">
         <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list"
             :class="{'checked':index==activeIndex}">
@@ -18,25 +17,6 @@
       <button @click="normalPay" class="btn-large">支付</button>
     </div>
 
-    <van-popup
-      v-model="showDate"
-      position="bottom"
-      :overlay="true"
-      :lock-scroll="true"
-      :lazy-render="true"
-      :close-on-click-overlay="true"
-    >
-      <van-datetime-picker
-        v-model="currentDate"
-        type="date"
-        :min-date="minDate"
-        :max-date="maxDate"
-        :formatter="dateFormatter"
-        @confirm="dateConfirm"
-        @cancel="dateCancel"
-      >
-      </van-datetime-picker>
-    </van-popup><!--时间选择-->
 
     <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
       <p class="showTip">创建订单中,请等候</p>
@@ -82,43 +62,13 @@
     },
     data() {
       return {
-        showOriginPrice: getStorage('originPrice'),
         rechargeShow: false,//创建订单遮罩
-        surplus_cash: -1, // 钻石支付情况下，显示需要支付的价格
-        recharge_list: [
-          {
-            pay_type: 'diamond_charge',
-            pay_money: 0,
-            user_rmb: 0,
-            give_elb: 0,
-          }
-        ],//充值列表数据
-        new_recharge_list: [],
-
-        minDate: new Date(),
-        maxDate: new Date(this.getEndDate().endYear, this.getEndDate().endMonth, this.getEndDate().endDay),
-        currentDate: new Date(),
-
-        isShowChoice: {
-          showDate: true,
-          showELB: true,
-          showCode: true,
-        },
-
-        check_date: false,
-        check_coupon: false,
-        check_elb: false,
-
-        val_date: Today(),
-        val_coupon: '',
-        val_elb: '',
 
         activeIndex: 0,//当前选择充值方式索引
         showDate: false,//选择时间弹出
 
         userInfo: '',//用户信息
         openid: '', //用户openid
-        planInfo: getStorage('planInfo', 'obj'),//当前充值套餐信息
 
         client_type: checkBrowser(),
 
@@ -126,99 +76,21 @@
           show: false,
           type: true,//true 为微信，false 为支付宝
         },
-        settingRechargeList: []
+        settingRechargeList: [{
+          name:'',
+          type:'',
+        },{
+
+        },{
+
+        }]
       }
     },
     async created() {
-      // 用户流失率统计
-      if (getStorage('plan_list_new_card') === "1") {
-        lossRate({
-          type: 5,
-          iccid: getStorage("check_iccid")
-        });
-      }
-
       if (getStorage('decrypt_data', 'obj')) {
         this.open_id = getStorage('decrypt_data', 'obj').openid
       }
 
-      if (!this.planInfo) {
-        this.$router.push({'path': '/weixin/card/plan_list'});
-      }
-
-      if (this.planInfo) {
-        if (this.planInfo.is_elb_deductible === 0) {
-          this.isShowChoice.showELB = false
-        }
-      }//是否显示ELB
-
-      if (getStorage('newCard') === '1') {
-        this.isShowChoice.showELB = false;
-        this.isShowChoice.showCode = false;
-        this.isShowChoice.showDate = false;
-      }//新卡默认不显示所有选择
-
-      if (getStorage('isSpeedUp') === '1') {
-        this.isShowChoice.showDate = false;
-      }//加速包默认不显示生效时间
-
-      /*
-      * 用户钻石数
-      * 套餐价格
-      * */
-      let user_rmb = 0;
-      this.userInfo = this.authorizedUserInfo;
-
-      if (this.userInfo.account.balance > 0) {
-        user_rmb = this.userInfo.account.balance;
-      }
-      this.settingRechargeList = await this.getRechargeInfo();
-
-      if (this.settingRechargeList.length > 0) {
-        let data = this.settingRechargeList;
-        data.sort(this.jsonSort);
-        for (let i = 0; i < data.length; i++) {
-          this.recharge_list.push({
-            pay_type: 'over_charge',
-            pay_money: data[i].price,
-            give_elb: data[i].elb,
-            give_balance: data[i].balance,
-            is_give_balance: data[i].is_give_balance
-          })
-        }
-        this.recharge_list.push({
-          pay_type: 'normal_charge',
-          pay_money: 0,
-          give_elb: 0
-        });
-      } else {
-        this.recharge_list = [
-          {
-            pay_type: 'diamond_charge',
-            pay_money: 0,
-            user_rmb: 0,
-            give_elb: 0,
-          }, {
-            pay_type: 'over_charge',
-            pay_money: 100,
-            give_elb: 50
-          }, {
-            pay_type: 'over_charge',
-            pay_money: 200,
-            give_elb: 200,
-          }, {
-            pay_type: 'over_charge',
-            pay_money: 300,
-            give_elb: 300
-          }, {
-            pay_type: 'normal_charge',
-            pay_money: 0,
-            give_elb: 0
-          }
-        ]
-      }
-
-      this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
     },
     methods: {
       rechargeTypeClick: function (index) {
@@ -227,11 +99,6 @@
       recharge: function () {
         if (!this.userInfo.account.user_id) {
           Notify({message: '请在微信或支付宝客户端充值'});
-          return
-        }
-        let rechargeInfo = this.new_recharge_list[this.activeIndex];
-        if (this.client_type === "app" && this.planInfo.price > 100 && rechargeInfo.pay_money === 50) {
-          Notify({message: '充值后余额不足抵扣套餐价格，请选择其他套餐进行充值'});
           return
         }
         let _this = this;
@@ -305,61 +172,11 @@
           })
       },
       normalPay() {
-        let rechargeInfo = this.new_recharge_list[this.activeIndex];
-        if (this.client_type === 'app') {
-          if (rechargeInfo.pay_type === 'diamond_charge' && this.userInfo.account.balance > this.planInfo.price) {
-            this.appPay.show = false;
-            this.recharge()
-          } else {
-            this.appPay.show = true
-          }
-        } else {
-          this.recharge()
-        }
-
+        this.recharge()
       },//普通支付
       FinalAppPay() {
         this.recharge();
       },//app支付
-      filterRechargeList: function (rmb, planPrice) {
-        return this.recharge_list.filter(item => {
-          if (item.pay_type === 'normal_charge') {
-            item.pay_money = planPrice;
-          }
-          if (rmb <= 0) {
-
-            if (planPrice < item.pay_money) {
-              return item.pay_type === 'over_charge' || item.pay_type === 'normal_charge';
-            } else {
-              if (this.client_type === "app" && item.pay_money === 50) {
-                return item.pay_money === 50 || item.pay_type === 'normal_charge';
-              } else {
-                return item.pay_money > planPrice || item.pay_type === 'normal_charge';
-              }
-            }
-
-          } else {
-            rmb - planPrice >= 0 ? this.surplus_cash = 0.00 : this.surplus_cash = toDecimal(planPrice - rmb);
-            if (item.pay_type === 'diamond_charge') {
-              if (planPrice < rmb) {
-                item.user_rmb = planPrice
-              } else {
-                item.user_rmb = rmb
-              }
-            }
-
-            if (planPrice < item.pay_money) {
-              return item.pay_type === 'diamond_charge' || item.pay_type === 'over_charge' || item.pay_type === 'normal_charge';
-            } else {
-              if (this.client_type === "app" && item.pay_money === 50) {
-                return item.pay_type === 'diamond_charge' || item.pay_money === 50 || item.pay_type === 'normal_charge';
-              } else {
-                return item.pay_type === 'diamond_charge' || item.pay_money > planPrice || item.pay_type === 'normal_charge';
-              }
-            }
-          }
-        })
-      },//用户rmb,套餐价格planPrice
       changePayType(type) {
         this.appPay.type = !!type;
       },
@@ -367,29 +184,6 @@
         this.appPay.type = true;
         this.appPay.show = false
       },
-      getRechargeInfo() {
-        let env;
-        this.global_variables.packed_project === 'mifi' ? env = "mifi" : env = "cardserver";
-        let p = new Promise((resolve, reject) => {
-          _get("/api/v1/app/recharge/info", {
-            iccid: this.planInfo.iccid || getStorage('check_iccid'),
-            env: env
-          }).then(res => {
-            if (res.state === 1) {
-              resolve(res.data);
-            } else {
-              resolve([])
-            }
-          });
-        });
-        return p;
-      },
-      jsonSort(a, b) {
-        return a.price - b.price;
-      }
-    },
-    beforeDestroy() {
-      removeStorage('plan_list_new_card');
     },
   }
 </script>
@@ -519,39 +313,38 @@
 
     //充值提醒
 
-    .title-wrap {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 30px 0;
-      text-align: center;
-      font-size: 28px;
-      color: #c89439;
-
-      span {
-        padding: 0 30px;
-      }
-
-      .rotate-180 {
-        transform: rotate(180deg);
-      }
-
-      .title-line {
-        display: inline-block;
-        flex: 1;
-        height: 3px;
-        max-width: 20%;
-        content: '';
-        background: linear-gradient(45deg, #fff 0, #c19252 100%);
-      }
-
-    }
-
-    //支付title
-
     .content-wrap {
-      width: 95%;
-      margin: 0 auto;
+
+      .plan-type-name {
+        display: flex;
+        height: 55px;
+        margin-bottom: 10px;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        font-weight: bold;
+        text-align: center;
+        color: #f1a53c;
+        background: rgba(255, 251, 243, 1);
+
+        &::before, &::after {
+          display: block;
+          width: 129px;
+          height: 8px;
+          content: '';
+          background-size: 100% 100% !important;
+        }
+
+        &::before {
+          margin-right: 24px;
+          background: url("../../assets/imgs/card/usage/leftIcon.png") no-repeat;
+        }
+
+        &::after {
+          margin-left: 24px;
+          background: url("../../assets/imgs/card/usage/rightIcon.png") no-repeat;
+        }
+      }
 
       .discount-wrap {
         display: flex;
