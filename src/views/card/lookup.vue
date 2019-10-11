@@ -376,6 +376,7 @@
     name: "home",
     data() {
       return {
+        realnameType: 0,
         sort_recording_list: {}, // 排序查询列表
         recording_list: [],
         recording_show: false,
@@ -463,6 +464,34 @@
       }
     },
     methods: {
+      getRealnameType(iccid) {
+        const toast = Toast({
+          duration: 0,
+          forbidClick: true
+        });
+        _get('', {
+          iccid: iccid
+        }).then(res => {
+          toast.clear();
+          if (res.state === 1) {
+            this.realnameType = res.data;
+          }
+          if (this.realnameType === 1) {
+            setStorage('realnameType', this.realnameType);
+            this.$router.push('/weixin/recharge/balance');
+            return
+          }
+          lossRate({type: 3, iccid: res.data.iccid})
+            .then(res => {
+              if (res.state === 1) {
+                this.$router.push({path: '/weixin/card/plan_list'});
+                setStorage('plan_list_new_card', 1)
+              } else {
+                Notify({message: res.msg});
+              }
+            });
+        })
+      },
       searchIccid: function (iccid) {
         if (!iccid) {
           Notify({message: '请输入ICCID'});
@@ -549,15 +578,7 @@
                   }
                 });
             } else if (res.data.status === 3) {
-              lossRate({type: 3, iccid: res.data.iccid})
-                .then(res => {
-                  if (res.state === 1) {
-                    this.$router.push({path: '/weixin/card/plan_list'});
-                    setStorage('plan_list_new_card',1)
-                  } else {
-                    Notify({message: res.msg});
-                  }
-                });
+              this.getRealnameType();
             }
           } else {
             Notify({
