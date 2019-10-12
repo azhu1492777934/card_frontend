@@ -4,7 +4,7 @@
 import {checkBrowser,checkDevice} from "./index";
 
 let global_variables = {
-    packed_project : 'mifi', // 修改项目
+    packed_project : 'card', // 修改项目
     authorized_redirect_url : '',
     version : '1.1',
     RuntimeEnv:checkBrowser(),
