@@ -71,13 +71,13 @@
       <div class="card-plan-wrap">
         <p ref="refPlanTitle" class="card-plan-wrap-title">
           <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
-                :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
+                :class="{'checked':index==cur_plan_type_index}" v-bind:key="index">{{item}}</span>
         </p>
         <div class="van-swipe-wrap">
           <swiper ref="mySwiper" :options="swiperOption">
             <swiper-slide>
               <ul v-if="hasUsagePlan" class="usage-plan-wrap">
-                <li v-for="(item,index) in usageInfo.usage.plans">
+                <li v-for="(item,index) in usageInfo.usage.plans" v-bind:key="index">
                   <div class="plan-info-wrap">
                     <p class="plan-name">{{item.rps_name}}</p>
                     <div class="plan-describe">
@@ -143,7 +143,7 @@
 
             <swiper-slide>
               <ul v-if="hasOrderPlan" class="order-plan-wrap">
-                <li v-for="(item,index) in usageInfo.orders">
+                <li v-for="(item,index) in usageInfo.orders" v-bind:key="index">
                   <div class="plan-info-wrap">
                     <p class="plan-name">{{item.name}}</p>
                     <p class="plan-describe" v-if="item.rating_id==2522">

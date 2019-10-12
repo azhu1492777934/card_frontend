@@ -419,7 +419,7 @@
                         param.pay_type = 'ALIPAY'
                     }
                     this.global_variables.packed_project === 'mifi' ? param.recharge_type = 1 : param.recharge_type = 0;
-                    this.rechargeShow = false,
+                    this.rechargeShow = false;
 
                     _post('/api/v1/pay/weixin/create', param)
                         .then(res => {

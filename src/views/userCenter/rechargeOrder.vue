@@ -16,7 +16,12 @@
                 <span v-show="item.balance&&item.balance>0">赠送{{item.balance}}元余额</span>
                 <span  v-if="item.refund==2&&item.refundAbleAmount<=0">已退款</span>
                 <span v-if="item.refund==1">退款中</span>
-                <span v-if="item.refund==0&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0||item.refund==4&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0" @click="showRefund(item)">申请退款</span>
+                <span v-if="item.refund==0&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0||item.refund==4&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0||
+                  global_variables.packed_project=='mifi'&&active==3&&item.refund==0||global_variables.packed_project=='mifi'&&active==3&&item.refund==4" @click="showRefund(item)">申请退款</span>
+                
+              </div>
+              <div>
+                <span>{{item.rate_plan_name}}</span>
               </div>
               <div v-show="item.refundAmount>0&&active!=1">
                 实际已退款金额为{{item.refundAmount}}元
@@ -89,7 +94,7 @@
         },
         methods: {
           
-           async getList() {
+            getList() {
              this.loading=true;
              this.finished=false;
             let data={
@@ -104,25 +109,45 @@
             }else if(this.active==2){
               data.refund=2;
             }
-             await _get("/api/v1/app/balance/recharge_list", data).then( async res => {
+
+            if(this.global_variables.packed_project=='mifi'){
+              data.recharge_type=1;
+            }else{
+              data.recharge_type=0;
+            }
+              _get("/api/v1/app/balance/recharge_list", data).then(  res => {
               if (res.state == 1) {
                 if(res.data.list.length>0){
                   let data=res.data.list;
                   let refundList=[];
-
-                  for(let i=0;i<data.length;i++){
-                    if(parseFloat(data[i].refundAbleAmount)>0){
-                      refundList.push(data[i]);
+                  if(this.global_variables.packed_project=='mifi'){
+                    for(let i=0;i<data.length;i++){
+                      if(data[i].refund==0||data[i].refund==4){
+                        refundList.push(data[i]);
+                      }
                     }
+                    if(refundList.length>0&&this.list.length<4){
+                      this.list.push({title:"申请退款"})
+                    }
+                  }else{
+                    for(let i=0;i<data.length;i++){
+                      if(parseFloat(data[i].refundAbleAmount)>0){
+                        refundList.push(data[i]);
+                      }
+                    }
+                    if(refundList.length>0&&this.list.length<4&&this.authorizedUserInfo.account.balance>0){
+                      this.list.push({title:"申请退款"})
+                    }
+                    
                   }
-                  if(refundList.length>0&&this.list.length<4&&this.authorizedUserInfo.account.balance>0){
-                    this.list.push({title:"申请退款"})
-                  }
+
                   if(this.active==3){
                     this.contentList=refundList;
                   }else{
                     this.contentList=data;
                   }
+
+
                   this.loading=false;
                   if(this.active==3){
                     this.finished=true;
@@ -149,6 +174,13 @@
 
           showRefund(data){
             this.currentInfo=data;
+            let msg="";
+            if(this.global_variables.packed_project=='mifi'){
+              msg="退款后会将当前充值购买的套餐一并退掉，请谨慎退款"
+            }else{
+              msg="退款后充值时赠送的福利余额将一并回收，请谨慎退款"
+            }
+            
             Dialog.confirm({
               title: '确认要退款吗？',
               message: '退款后充值时赠送的福利余额将一并回收，请谨慎退款',
@@ -159,7 +191,12 @@
               // on confirm
             }).catch(() => {
               // on cancel
+            if(this.global_variables.packed_project=='mifi'){
+              this.cfmRefund();
+            }else{
               this.showRefundStatus=true;
+            }
+              
 
             });
           },
@@ -168,21 +205,25 @@
                 done();
               }else{
                 let url="";
+                let params={};
+                params.id=this.currentInfo.id;
+                params.refund_reason="C端充值退款"
                 // if(this.global_variables.packed_project=='mifi'){
                 //     url="/iottt/v1/orders/balance/recharge/refund";
                 // }else{
                 url="/iot/v1/orders/balance/recharge/refund";
                 // }
-                _post(url, {
-                  id: this.currentInfo.id,
-                  refund_reason:"C端充值退款",
-                }).then(res => {
+                if(this.global_variables.packed_project=='mifi'){
+                  params.should_plan_refund=1
+                }
+                _post(url, params).then(res => {
                   if (res.state == 1) {
                     Notify({
                       message: '退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候',
                       background: '#60ce53'
                     })
                     this.$emit('getUserData');
+                    this.active=1;
                     this.getList();
                     done();
                   } else {
@@ -210,7 +251,7 @@
   }
   .orderContent{
     width:694px;
-    height:180px;
+    height:200px;
     background:#fff;
     border-radius:14px;
     margin:13px auto;
@@ -219,22 +260,23 @@
     box-sizing: border-box;
     position:relative;
     >div:nth-child(1){
-      margin-bottom:23px;
       display:flex;
       align-items: center;
       >i:nth-child(1){
+        position:absolute;
         display:inline-block;
-        width:71px;
-        height:71px;
+        width:88px;
+        height:88px;
         background:url("../../assets/imgs/userCenter/rechargeIcon.png")no-repeat;
         background-size:100% 100%;
+        top:10px;
       }
       >span:nth-child(2){
         font-size:44px;
         font-family:SourceHanSansSC-Medium;
         font-weight:500;
         color:rgba(78,78,78,1);
-        margin-left:32px;
+        margin-left:100px;
       }
       >span:nth-child(3),>span:nth-child(4){
         font-size:24px;
@@ -261,6 +303,14 @@
       }
     }
     >div:nth-child(2){
+        font-size:25px;
+        font-family:SourceHanSansSC-Medium;
+        font-weight:500;
+        color:rgba(78,78,78,1);
+        margin-left:100px;
+        margin-bottom:23px;
+    }
+    >div:nth-child(3){
         font-size:24px;
         font-family:SourceHanSansCN;
         font-weight:400;
@@ -268,7 +318,7 @@
         margin-bottom:10px;
     }
 
-    >div:nth-child(3){
+    >div:nth-child(4){
       display:flex;
       justify-content: space-between;
       font-size:20px;

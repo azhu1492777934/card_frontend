@@ -8,15 +8,15 @@
       <li>
         <router-link to="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</router-link>
       </li>
-      <li>
+      <li v-if="global_variables.packed_project!='mifi'">
         <a @click="toRefund" href="javascript:;">3.套餐退款</a>
       </li>
       <li>
-        <router-link to="/weixin/question/release_plan">4.解约自动续费套餐</router-link>
+        <router-link to="/weixin/question/release_plan"><span v-if="global_variables.packed_project=='mifi'">3</span><span v-if="global_variables.packed_project!='mifi'">4</span>.解约自动续费套餐</router-link>
       </li>
      
      <li v-if="global_variables.packed_project=='mifi'">
-        <router-link to="/weixin/userCenter/rechargeOrder">5.余额退款</router-link>
+        <router-link to="/weixin/userCenter/rechargeOrder">4.订单退款</router-link>
       </li>
     </ul>
   </div>
