@@ -108,6 +108,8 @@
         rechargeShow: false,
         ref_plan_type_index: 0,
         firstStatus: false,
+        //实名类型
+        realnameType: getStorage('realnameType'),
       };
     },
     components: {
@@ -226,6 +228,13 @@
           this.$router.push('/weixin/card/more_flow');
           return;
         }
+
+        // 实名类型流程
+        if (this.realnameType === '1') {
+          this.directRecharge(planInfo);
+          return;
+        }
+
         //获取当前包月套餐信息
         _get("/api/v1/app/plans/renew_info", {
           user_id: getStorage("userInfo", "obj").account.user_id,
@@ -238,14 +247,20 @@
               query: {type: this.$route.query.type}
             });
           } else {
-            Notify({message: res.msg});
+            Toast({
+              position: 'top',
+              message: res.msg
+            });
           }
         });
       },
       //直接充值
       directRecharge(planInfo) {
         if (this.client_type !== "alipay" && this.client_type !== "wechat") {
-          Notify({message: "请在微信或支付宝客户端充值"});
+          Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          });
           return;
         }
         let _this = this;
@@ -309,7 +324,8 @@
             } //纯钻石支付
           } else {
             this.rechargeShow = false;
-            Notify({
+            Toast({
+              position: 'top',
               message: res.msg
             });
           }
@@ -529,6 +545,7 @@
         flex: auto;
         border: none;
         width: 100%;
+
         p {
           color: #654828;
           font-size: 26px;

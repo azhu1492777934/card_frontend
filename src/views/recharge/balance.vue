@@ -1,22 +1,18 @@
 <template>
   <div class="recharge-wrap">
     <div class="content-wrap">
-
       <div class="plan-type-name">充值选择</div>
-
-
       <ul class="discount-wrap">
-        <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list"
+        <li @click="rechargeTypeClick(index)" v-for="(item,index) in settingRechargeList"
             :class="{'checked':index==activeIndex}">
           <div>
-
+            <span class="line">￥{{item.money}}</span>
           </div>
         </li>
         <li class="special"></li>
       </ul>
       <button @click="normalPay" class="btn-large">支付</button>
     </div>
-
 
     <van-popup :close-on-click-overlay="false" v-model="rechargeShow">
       <p class="showTip">创建订单中,请等候</p>
@@ -33,7 +29,7 @@
         </div>
         <div class="footer">
           <button @click="closePayType">取消</button>
-          <button @click="FinalAppPay">确定</button>
+          <button @click="recharge">确定</button>
         </div>
       </div>
     </van-popup><!--app支付选择-->
@@ -43,8 +39,8 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {DatetimePicker, Area, Popup, Notify} from 'vant';
-  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today} from "../../utilies";
+  import {Popup, Toast} from 'vant';
+  import {getStorage, checkBrowser, lossRate, toDecimal, Today} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -55,71 +51,60 @@
       }),
     },
     components: {
-      [DatetimePicker.name]: DatetimePicker,
-      [Area.name]: Area,
       [Popup.name]: Popup,
-      [Notify.name]: Notify
+      [Toast.name]: Toast
     },
     data() {
       return {
         rechargeShow: false,//创建订单遮罩
-
         activeIndex: 0,//当前选择充值方式索引
         showDate: false,//选择时间弹出
-
-        userInfo: '',//用户信息
         openid: '', //用户openid
-
-        client_type: checkBrowser(),
-
+        client_type: 'app',
+        // client_type: checkBrowser(),
         appPay: {
           show: false,
           type: true,//true 为微信，false 为支付宝
         },
         settingRechargeList: [{
-          name:'',
-          type:'',
-        },{
-
-        },{
-
+          money: 100,
+        }, {
+          money: 200,
+        }, {
+          money: 300,
         }]
       }
     },
-    async created() {
+    created() {
       if (getStorage('decrypt_data', 'obj')) {
         this.open_id = getStorage('decrypt_data', 'obj').openid
       }
-
     },
     methods: {
       rechargeTypeClick: function (index) {
         this.activeIndex = index
       },
       recharge: function () {
-        if (!this.userInfo.account.user_id) {
-          Notify({message: '请在微信或支付宝客户端充值'});
+        if (!this.authorizedUserInfo.account.user_id) {
+          Toast({
+            position: 'top',
+            message: '请在微信或支付宝客户端充值'
+          });
           return
         }
-        let _this = this;
         let param = {
-          user_id: this.userInfo.account.user_id,
+          user_id: this.authorizedUserInfo.account.user_id,
           env: this.client_type,
-          iccid: this.planInfo.iccid || getStorage('check_iccid'),
-          rating_id: this.planInfo.id,
-          is_renew: rechargeInfo.is_renew,
-          price: rechargeInfo.is_renew == true ? rechargeInfo.first_price : this.planInfo.price,
-          status: (rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? 1 : 0,
-          recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
-          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+          iccid: getStorage('check_iccid'),
+          price: this.settingRechargeList[this.activeIndex].money,
+          recharge_type: 0,
         };
 
-        if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
         if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = this.open_id;
-        if (this.client_type === 'app') param.open_id = this.userInfo.account.user_id;
         if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
         if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
         if (this.client_type === 'app') {
+          param.open_id = this.authorizedUserInfo.account.user_id;
           (this.appPay.type) ? param.pay_type = 'WEIXIN' : param.pay_type = 'ALIPAY';
         }
 
@@ -131,52 +116,25 @@
           .then(res => {
             this.rechargeShow = false;
             if (res.state === 1) {
-              if (/<[^>]+>/.test(res.data)) {
-                // document.write(res.data);
-                const div = document.createElement('div');
-                div.innerHTML = res.data;
-                document.body.appendChild(div);
-                document.forms[0].submit();
-              } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
-                this.global_variables.packed_project === 'mifi' ?
-                  location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` :
-                  location.href = res.data;
-              } else {
-                if (this.planInfo.vip_type_id != 0) {
-                  Notify({
-                    message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
-                    background: '#60ce53'
-                  });
-                } else {
-                  Notify({
-                    message: '充值成功',
-                    background: '#60ce53'
-                  });
-                }
-                this.$emit('getUserData');
-                setTimeout(function () {
-                  if (localStorage.getItem("currentType") === "esim") {
-                    location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
-                  } else {
-                    _this.global_variables.packed_project === 'mifi' ?
-                      location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` :
-                      location.href = res.data.return_url
-                  }
-                }, 1500);
-              }//纯钻石支付
+              const div = document.createElement('div');
+              div.innerHTML = res.data;
+              document.body.appendChild(div);
+              document.forms[0].submit();
             } else {
-              Notify({
+              Toast({
+                position: 'top',
                 message: res.msg
               })
             }
           })
       },
       normalPay() {
-        this.recharge()
-      },//普通支付
-      FinalAppPay() {
-        this.recharge();
-      },//app支付
+        if (this.client_type === 'app') {
+          this.appPay.show = true
+        } else {
+          this.recharge();
+        }
+      },
       changePayType(type) {
         this.appPay.type = !!type;
       },
@@ -314,6 +272,11 @@
     //充值提醒
 
     .content-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: column;
+      -webkit-box-lines: multiple;
+      height: 100vh;
 
       .plan-type-name {
         display: flex;
@@ -351,6 +314,8 @@
         flex-wrap: wrap;
         -webkit-box-lines: multiple;
         justify-content: space-between;
+        padding: 30px 5% 0;
+        box-sizing: border-box;
       }
 
       li {
@@ -373,103 +338,40 @@
           visibility: hidden
         }
 
-        .midPlan {
-          vertical-align: middle;
-          padding-top: 30px;
-        }
-
-        .monthlyPlan {
-          vertical-align: top;
-          border-radius: 16px;
-          background: linear-gradient(-45deg, rgba(255, 222, 123, 1), rgba(250, 197, 84, 1), rgba(255, 209, 120, 1), rgba(247, 194, 80, 1));
-        }
-
-        .monthlyTop {
-          margin-top: 10px;
-          display: flex;
-          justify-content: space-between;
-
-          > div:nth-child(1) {
-            margin-left: 12px;
-          }
-
-          > div:nth-child(2) {
-            margin-right: 9px;
-          }
-        }
-
-        .monthlyDes {
-          font-size: 20px;
-          font-weight: 400;
-          color: rgba(131, 96, 25, 1);
-        }
-
-        .monthlyFirst {
-          font-size: 20px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-        }
-
-        .monthlyMoney {
-          font-size: 20px;
-          font-weight: 400;
-          text-decoration: line-through;
-          color: rgba(44, 37, 29, 1);
-        }
-
-        .monthly-rmb {
-          margin-top: 12px;
-          font-size: 38px !important;
-          font-weight: 400;
-          color: rgba(44, 37, 29, 1) !important;
-        }
-
         .line {
-          display: block;
-          width: 60px;
-          height: 3px;
-          margin: 10px auto 13px;
-          background-color: #c89439;
+          position: relative;
+          display: inline-block;
+
+          &:after {
+            position: absolute;
+            left: 0;
+            bottom: -20px;
+            width: 110%;
+            content: '';
+            background: #EBEBEB;
+            height: 3px;
+          }
         }
 
         div {
           display: table-cell;
           vertical-align: middle;
+          color: #EBEBEB;
         }
 
-        .cl-elb {
-          color: #70a6ec;
-        }
-
-        .discount-rmb {
-          font-size: 28px;
-          color: #2c251d;
-          line-height: 1;
-        }
-
-        .discount-diamond {
-          padding-top: 5px;
-
-          .surplus-recharge {
-            display: block;
-            padding: 8px 0;
-            font-size: 24px;
-            color: #2c251d;
-          }
-        }
-
-        .discount-appendix {
-          color: #888;
-          font-size: 20px;
-          letter-spacing: 1PX;
-        }
 
         &.checked {
           border-color: #c89439;
           box-shadow: 0 50px 0 #fff;
 
-          .discount-rmb {
-            color: #fd720d;
+          div {
+            color: #333;
+          }
+
+          .line {
+            &:after {
+              background: #dca85f;
+            }
           }
 
           &::after {
@@ -543,9 +445,9 @@
     //充值方式选择
     .btn-large {
       display: block;
-      width: 100%;
+      width: 80%;
+      margin: auto auto 90px;
       padding: 20px;
-      margin: 90px 0;
       color: #fff;
       background-color: #dca85f;
       font-size: 34px;

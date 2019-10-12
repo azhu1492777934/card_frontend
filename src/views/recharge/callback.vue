@@ -5,7 +5,7 @@
     </p>
     <div class="oneMsg" v-if="planInfo.vip_type_id!=0">购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。</div>
     <!-- <img class="success-banner" src="../../assets/imgs/recharge_success/recharge_callback_20181126.jpg" alt=""> -->
-    <span id="to_lottery"  class="btn_to_lottery">({{time}}S后回到首页) </span>
+    <span class="btn_to_lottery">({{time}}S后跳转) </span>
     <!-- <span id="jump_plan" @click="to_another_way('card')" class="btn_to_plan">跳过</span> -->
   </div>
 </template>
@@ -27,10 +27,12 @@
       width: 100%;
       height: auto;
     }
-    .oneMsg{
+
+    .oneMsg {
       font-size: 28px;
-      padding:0 30px;
+      padding: 0 30px;
     }
+
     .recharge-success {
       padding: 80px 0;
       font-size: 36px;
@@ -78,35 +80,36 @@
     data() {
       return {
         iccid: '',
-        time:5,
+        time: 5,
         client_type: checkBrowser(),
         planInfo: getStorage('planInfo', 'obj'),//当前充值套餐信息
-
+        realnameType: getStorage('realnameType') || 0,
       }
     },
     created() {
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');// remove more net flowing mark
-      let _this=this;
-      let timer=setInterval(()=>{
-        if(_this.time>0){
-
+      let _this = this;
+      let timer = setInterval(() => {
+        if (_this.time > 0) {
           _this.time--;
-        }else{
+        } else {
           clearInterval(timer);
-          this.global_variables.packed_project === 'mifi' ?_this.$router.push({path: '/mifi/card/index'}):_this.$router.push({path: '/weixin/card/usage'})
+          if (this.$route.query.balance) {
+            _this.$router.push('/weixin/card/plan_list');
+          }
+          _this.global_variables.packed_project === 'mifi' ? _this.$router.push({path: '/mifi/card/index'}) : _this.$router.push({path: '/weixin/card/usage'})
         }
-      },1000)
+      }, 1000)
     },
     methods: {
       to_another_way: function (location) {
-        if (location == 'card') {
-          if (localStorage.getItem("currentType") == "esim") {
+        if (location === 'card') {
+          if (localStorage.getItem("currentType") === "esim") {
             this.$router.push({path: '/weixin/card/esim_usage'})
           } else {
             this.$router.push({path: '/weixin/card/usage'})
           }
-
         } else {
           location.href = 'http://wxgame.china-m2m.com/common/home';
         }
