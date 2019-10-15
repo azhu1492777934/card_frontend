@@ -68,7 +68,7 @@
         codeText: "获取验证码",
         countdown: 60,
         client_type: checkBrowser(),
-        btnCode_disabled: true,
+        btnCode_disabled: false,
         is_count_down: false,//判断当前是否正则countdown
         time: null,
         loginDisabled: false,
@@ -87,16 +87,16 @@
       [Loading.name]: Loading
     },
     watch: {
-      iccid(curVal, oldVal) {
-        let checkIccidResult = checkICCID(curVal);
-        checkIccidResult.state == 1 ? this.checkInfo.iccid = true : this.checkInfo.iccd = false;
-        (this.checkInfo.iccid && this.checkInfo.phone && !this.is_count_down) ? this.btnCode_disabled = false : this.btnCode_disabled = true
-      },
-      phone(curVal, oldVal) {
-        let checkPhoneResult = /^(13[0-9]|14[5679]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(curVal);
-        checkPhoneResult ? this.checkInfo.phone = true : this.checkInfo.phone = false;
-        (this.checkInfo.iccid && this.checkInfo.phone && !this.is_count_down) ? this.btnCode_disabled = false : this.btnCode_disabled = true
-      }
+      // iccid(curVal, oldVal) {
+      //   let checkIccidResult = checkICCID(curVal);
+      //   checkIccidResult.state == 1 ? this.checkInfo.iccid = true : this.checkInfo.iccd = false;
+      //   (this.checkInfo.iccid && this.checkInfo.phone && !this.is_count_down) ? this.btnCode_disabled = false : this.btnCode_disabled = true
+      // },
+      // phone(curVal, oldVal) {
+      //   let checkPhoneResult = /^(13[0-9]|14[5679]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/.test(curVal);
+      //   checkPhoneResult ? this.checkInfo.phone = true : this.checkInfo.phone = false;
+      //   (this.checkInfo.iccid && this.checkInfo.phone && !this.is_count_down) ? this.btnCode_disabled = false : this.btnCode_disabled = true
+      // }
     },
     created() {
       //获取用户信息
@@ -104,52 +104,58 @@
     },
     methods: {
       login() {
-        if (this.phone === '' && this.code === '') {
-          Notify({message: '请填写您的登录信息'})
+        if (this.phone === '' || this.code === '' || !this.iccid) {
+          Notify({message: '请填写您的登录信息'});
           return
-        } else if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
-          Notify({message: '您的手机号码有误'})
-          return
-        } else {
-          this.loginDisabled = true;
-          this.showLoading = true;
-          _post("/accountCenter/v2/user/bind?" + codeParam({}, 'post'), {
-            mobile: this.phone,
-            code: this.code,
-            from: this.client_type,
-            uuid: this.decrypt_data.openid,
-            nickname: this.decrypt_data.nickname,
-            gender: this.decrypt_data.sex,
-            avatar: this.decrypt_data.headimgurl
-          }).then((res) => {
-            this.loginDisabled = false;
-            this.showLoading = false;
-            if (res.error === 0 || res.error === 30002) {
-              if (res.error === 0) {
-                setStorage("token", res.data,"str",true);
-              }
-              Notify({
-                message: '账户绑定成功',
-                background: '#60ce53'
-              });
-              this.getUserInfo();
-            } else if (res.error === 11002) {
-              setStorage('refreshUrl', GetUrlRelativePath());
-              this.$emit("getToken", {from: 'mifi'});
-            } else if (res.error === 20014) {
-              this.code = '';
-              Notify({message: '用户绑定超时，请重新绑定'});
-            } else {
-              if (res.status === 500 || res.error === 20009) {
-                Notify({message: res.msg});
-              } else {
-                this.isLoginError = true;
-                res.msg ? this.loginErrorMsg = res.msg : this.loginErrorMsg = '绑定用户失败，请反馈我司客服。'
-              }
-            }
-
-          })
         }
+
+        if(checkICCID(this.iccid).state!==1){
+          Notify({message:'请输入正确的ICCID'});
+          return;
+        }
+
+        if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.phone)) {
+          Notify({message: '您的手机号码有误'});
+          return
+        }
+        this.loginDisabled = true;
+        this.showLoading = true;
+        _post("/accountCenter/v2/user/bind?" + codeParam({}, 'post'), {
+          mobile: this.phone,
+          code: this.code,
+          from: this.client_type,
+          uuid: this.decrypt_data.openid,
+          nickname: this.decrypt_data.nickname,
+          gender: this.decrypt_data.sex,
+          avatar: this.decrypt_data.headimgurl
+        }).then((res) => {
+          this.loginDisabled = false;
+          this.showLoading = false;
+          if (res.error === 0 || res.error === 30002) {
+            if (res.error === 0) {
+              setStorage("token", res.data, "str", true);
+            }
+            Notify({
+              message: '账户绑定成功',
+              background: '#60ce53'
+            });
+            this.getUserInfo();
+          } else if (res.error === 11002) {
+            setStorage('refreshUrl', GetUrlRelativePath());
+            this.$emit("getToken", {from: 'mifi'});
+          } else if (res.error === 20014) {
+            this.code = '';
+            Notify({message: '用户绑定超时，请重新绑定'});
+          } else {
+            if (res.status === 500 || res.error === 20009) {
+              Notify({message: res.msg});
+            } else {
+              this.isLoginError = true;
+              res.msg ? this.loginErrorMsg = res.msg : this.loginErrorMsg = '绑定用户失败，请反馈我司客服。'
+            }
+          }
+
+        })
       },
       getCode() {
         if (this.phone === '') {
@@ -252,8 +258,7 @@
                 timeSpan = res.extra - curTimeStamp;
               setStorage('timeSpan', timeSpan);
               this.getUserInfo();
-            }
-            else {
+            } else {
               this.showAuthorityError('A-1' + res.error)
             }
           })
@@ -368,10 +373,12 @@
       height: 537px;
       margin-bottom: 50px;
       .bg-image('../../assets/imgs/mifi/binding/mifi_binding_bg');
+
       .table-cell {
         display: table-cell;
         vertical-align: middle;
       }
+
       img {
         width: 170px;
         height: 170px;
@@ -379,18 +386,22 @@
         border-radius: 20px;
         box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.5);
       }
+
       p {
         font-size: 34px;
         font-weight: 500;
       }
     }
+
     .info-wrap {
       width: 75%;
       margin: 0 auto;
+
       .phone-wrap, .code-wrap, .iccid-wrap {
         margin-bottom: 40px;
         text-align: left;
         border-bottom: 1px solid #dadada;
+
         input {
           display: inline-block;
           padding: 20px 0;
@@ -398,14 +409,17 @@
           color: #443f37;
         }
       }
+
       .code-wrap {
         display: flex;
         justify-content: space-between;
+
         input {
           display: inline-block;
           width: 57%;
           font-size: 36px;
         }
+
         button {
           width: 175px;
           display: inline-block;
@@ -416,6 +430,7 @@
           font-size: 34px;
           border-bottom: 2px solid #ffd655;
           background-color: transparent;
+
           &:disabled {
             color: #989898;
             border-bottom: 2px solid #c6c6c6;
@@ -437,7 +452,8 @@
           background-image: linear-gradient(45deg, #f0b546 10%, #fdd47a 100%);
         }
       }
-      .phone-tip{
+
+      .phone-tip {
         padding-top: 40px;
         font-size: 24px;
         line-height: 32px;
