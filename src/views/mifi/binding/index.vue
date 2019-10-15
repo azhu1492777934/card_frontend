@@ -201,12 +201,7 @@
             _this.codeText = '获取验证码';
             _this.countdown = 60;
             _this.is_count_down = true;
-            if (this.checkInfo.iccid && this.checkInfo.phone) {
-              _this.btnCode_disabled = false;
-            } else {
-              _this.btnCode_disabled = true;
-            }
-
+            _this.btnCode_disabled = false;
             clearInterval(_this.timer);
           } else {
             _this.is_count_down = true;
