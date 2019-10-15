@@ -6,7 +6,7 @@
         <li @click="rechargeTypeClick(index)" v-for="(item,index) in settingRechargeList"
             :class="{'checked':index==activeIndex}">
           <div>
-            <span class="line">￥{{item.money}}</span>
+            <span class="line">￥{{item.price}}</span>
           </div>
         </li>
         <li class="special"></li>
@@ -60,18 +60,23 @@
         activeIndex: 0,//当前选择充值方式索引
         showDate: false,//选择时间弹出
         openid: '', //用户openid
-        client_type: 'app',
-        // client_type: checkBrowser(),
+        client_type: checkBrowser(),
         appPay: {
           show: false,
           type: true,//true 为微信，false 为支付宝
         },
         settingRechargeList: [{
-          money: 100,
+          price: 0.01,
+          is_give_balance: false,
+          balance: 0
         }, {
-          money: 200,
+          price: 0.02,
+          is_give_balance: false,
+          balance: 0
         }, {
-          money: 300,
+          price: 0.03,
+          is_give_balance: false,
+          balance: 0
         }]
       }
     },
@@ -79,8 +84,34 @@
       if (getStorage('decrypt_data', 'obj')) {
         this.open_id = getStorage('decrypt_data', 'obj').openid
       }
+      this.getRechargeList()
+        .then(res => {
+          if (res.length) this.settingRechargeList = res.sort((a, b) => {return a.price - b.price;});
+        });
     },
     methods: {
+      getRechargeList() {
+        const toast = Toast({
+          duration: 0,
+          forbidClick: true,
+          loadingType: 'spinner'
+        });
+        let env;
+        this.global_variables.packed_project === 'mifi' ? env = "mifi" : env = "cardserver";
+        return new Promise((resolve, reject) => {
+          _get("/api/v1/app/recharge/info", {
+            iccid: getStorage('check_iccid'),
+            env: env
+          }).then(res => {
+            toast.clear();
+            if (res.state === 1) {
+              resolve(res.data);
+            } else {
+              resolve([])
+            }
+          });
+        });
+      },
       rechargeTypeClick: function (index) {
         this.activeIndex = index
       },
@@ -96,8 +127,10 @@
           user_id: this.authorizedUserInfo.account.user_id,
           env: this.client_type,
           iccid: getStorage('check_iccid'),
-          price: this.settingRechargeList[this.activeIndex].money,
+          price: this.settingRechargeList[this.activeIndex].price,
           recharge_type: 0,
+          success_page: `${window.location.host}/weixin/recharge/callback`,
+          failed_page: window.location.href
         };
 
         if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = this.open_id;
@@ -112,7 +145,7 @@
         // 墙出此前创建的form表单
         let payDom = document.querySelector('form');
         if (payDom) document.removeChild(payDom);
-        _post('/api/v1/pay/weixin/create', param)
+        _post('/api/v1/pay/balance/recharge_create', param)
           .then(res => {
             this.rechargeShow = false;
             if (res.state === 1) {
@@ -148,53 +181,6 @@
 
 <style lang="less" scoped>
   @import "../../assets/less/common";
-
-  input[type=radio] {
-    position: relative;
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    border: 1PX solid #bcbcbc;
-    outline: none;
-    cursor: pointer;
-    border-radius: 50%;
-    vertical-align: text-top;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-  }
-
-  input[type=radio]:after {
-    content: '';
-    position: absolute;
-    width: 10px;
-    height: 10px;
-    display: block;
-    left: 0;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    margin: auto;
-    background: #dca85f;
-    border-radius: 12px;
-    transform: scale(0);
-    transition: all ease-in-out 300ms;
-  }
-
-  input[type=radio]:checked {
-    border-color: #dca85f;
-  }
-
-  input[type=radio]:checked:after {
-    transform: scale(1);
-  }
-
-  input[type=radio]:checked + em {
-    vertical-align: middle
-  }
-
-  .cl-primary {
-    color: #c19252;
-  }
 
   .recharge-wrap {
     text-align: left;
@@ -276,7 +262,7 @@
       flex-wrap: wrap;
       flex-direction: column;
       -webkit-box-lines: multiple;
-      height: 100vh;
+      height: 95vh;
 
       .plan-type-name {
         display: flex;

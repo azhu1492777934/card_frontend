@@ -470,19 +470,19 @@
           duration: 0,
           forbidClick: true
         });
-        _get('', {
+        _get('/api/v1/app/realnametype', {
           iccid: iccid
         }).then(res => {
           toast.clear();
           if (res.state === 1) {
-            this.realnameType = res.data;
+            this.realnameType = res.data.real_name_type;
           }
           if (this.realnameType === 1) {
             setStorage('realnameType', this.realnameType);
             this.$router.push('/weixin/recharge/balance');
             return
           }
-          lossRate({type: 3, iccid: res.data.iccid})
+          lossRate({type: 3, iccid: iccid})
             .then(res => {
               if (res.state === 1) {
                 this.$router.push({path: '/weixin/card/plan_list'});
@@ -568,7 +568,8 @@
             localStorage.setItem("currentType", "card");
             if (res.data.status === 1) {
               this.$router.push({path: '/weixin/card/usage'})
-            } else if (res.data.status === 2) {
+            }
+            if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);
               lossRate({type: 3, iccid: res.data.iccid})
                 .then(res => {
@@ -578,8 +579,9 @@
                     Notify({message: res.msg});
                   }
                 });
-            } else if (res.data.status === 3) {
-              this.getRealnameType();
+            }
+            if (res.data.status === 3) {
+              this.getRealnameType(res.data.iccid);
             }
           } else {
             Notify({

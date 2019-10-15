@@ -82,7 +82,7 @@
         iccid: '',
         time: 5,
         client_type: checkBrowser(),
-        planInfo: getStorage('planInfo', 'obj'),//当前充值套餐信息
+        planInfo: getStorage('planInfo', 'obj') || {},//当前充值套餐信息
         realnameType: getStorage('realnameType') || 0,
       }
     },

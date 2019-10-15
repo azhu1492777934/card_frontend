@@ -162,7 +162,7 @@
           if (!this.hasValidatedPlan) {
             this.plan_list[2] = null;
           } else {
-            let more_flow_list = this.plan_list[2];
+            let more_flow_list = this.plan_list[2] || [];
             if (more_flow_list.length) {
               delete this.plan_list[2];
               this.plan_list[100] = more_flow_list
@@ -275,6 +275,8 @@
           start_time: Today(),
           type: 0,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+          success_page: `${window.location.host}/weixin/recharge/callback`,
+          failed_page: window.location.href
         };
 
         if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = getStorage("decrypt_data", "obj").openid;
