@@ -129,7 +129,7 @@
           iccid: getStorage('check_iccid'),
           price: this.settingRechargeList[this.activeIndex].price,
           recharge_type: 0,
-          success_page: `${window.location.host}/weixin/recharge/callback`,
+          success_page: `${window.location.host}/weixin/recharge/callback?balance=1`,
           failed_page: window.location.href
         };
 
