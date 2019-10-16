@@ -376,6 +376,7 @@
     name: "home",
     data() {
       return {
+        realnameType: 0,
         sort_recording_list: {}, // 排序查询列表
         recording_list: [],
         recording_show: false,
@@ -394,6 +395,7 @@
       cardButton,
     },
     created() {
+      removeStorage('realnameType');
       removeStorage('plan_list_new_card');
       var UA = navigator.userAgent.toLowerCase();
       if (/(app_charge)/.test(UA)) {
@@ -463,6 +465,40 @@
       }
     },
     methods: {
+      getRealnameType(iccid) {
+        const toast = Toast({
+          duration: 0,
+          forbidClick: true
+        });
+        _get('/api/v1/app/realnametype', {
+          iccid: iccid
+        }).then(res => {
+          toast.clear();
+          if (res.state === 1) {
+            this.realnameType = res.data.real_name_type;
+          }
+          if (this.realnameType === 1 && res.data.order_status === 0) {
+            setStorage('realnameType', this.realnameType);
+            this.$router.push('/weixin/recharge/balance');
+            return
+          }
+          if (this.realnameType === 1 && res.data.order_status === 1) {
+            setStorage('realnameType', this.realnameType);
+            this.$router.push('/weixin/card/plan_list');
+            return
+          }
+
+          lossRate({type: 3, iccid: iccid})
+            .then(res => {
+              if (res.state === 1) {
+                this.$router.push({path: '/weixin/card/plan_list'});
+                setStorage('plan_list_new_card', 1)
+              } else {
+                Notify({message: res.msg});
+              }
+            });
+        })
+      },
       searchIccid: function (iccid) {
         if (!iccid) {
           Notify({message: '请输入ICCID'});
@@ -538,7 +574,8 @@
             localStorage.setItem("currentType", "card");
             if (res.data.status === 1) {
               this.$router.push({path: '/weixin/card/usage'})
-            } else if (res.data.status === 2) {
+            }
+            if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);
               lossRate({type: 3, iccid: res.data.iccid})
                 .then(res => {
@@ -548,16 +585,9 @@
                     Notify({message: res.msg});
                   }
                 });
-            } else if (res.data.status === 3) {
-              lossRate({type: 3, iccid: res.data.iccid})
-                .then(res => {
-                  if (res.state === 1) {
-                    this.$router.push({path: '/weixin/card/plan_list'});
-                    setStorage('plan_list_new_card',1)
-                  } else {
-                    Notify({message: res.msg});
-                  }
-                });
+            }
+            if (res.data.status === 3) {
+              this.getRealnameType(res.data.iccid);
             }
           } else {
             Notify({

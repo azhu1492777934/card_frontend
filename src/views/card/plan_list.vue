@@ -79,13 +79,18 @@
 </template>
 
 <script>
-  import {Toast, Popup, Notify, List} from "vant";
+  import {mapState} from 'vuex'
+  import {Toast, Popup, Notify, List, Dialog} from "vant";
   import {setStorage, getStorage, checkBrowser, Today, lossRate} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
   export default {
     name: "home",
-
+    computed: {
+      ...mapState({
+        authorizedUserInfo: state => state.userInfo.userInfoInner
+      }),
+    },
     data() {
       const _this = this;
       return {
@@ -108,12 +113,15 @@
         rechargeShow: false,
         ref_plan_type_index: 0,
         firstStatus: false,
+        //实名类型
+        realnameType: getStorage('realnameType'),
       };
     },
     components: {
       [Toast.name]: Toast,
       [Popup.name]: Popup,
       [List.name]: List,
+      [Dialog.name]: Dialog,
     },
     created() {
       // 流失率统计
@@ -160,7 +168,7 @@
           if (!this.hasValidatedPlan) {
             this.plan_list[2] = null;
           } else {
-            let more_flow_list = this.plan_list[2];
+            let more_flow_list = this.plan_list[2] || [];
             if (more_flow_list.length) {
               delete this.plan_list[2];
               this.plan_list[100] = more_flow_list
@@ -221,11 +229,19 @@
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
 
+
         // 加油包套餐充值
         if (this.ref_plan_type_index === '100') {
           this.$router.push('/weixin/card/more_flow');
           return;
         }
+
+        // 实名类型流程
+        if (this.realnameType === '1') {
+          this.directRecharge(planInfo);
+          return;
+        }
+
         //获取当前包月套餐信息
         _get("/api/v1/app/plans/renew_info", {
           user_id: getStorage("userInfo", "obj").account.user_id,
@@ -238,19 +254,25 @@
               query: {type: this.$route.query.type}
             });
           } else {
-            Notify({message: res.msg});
+            Toast({
+              position: 'top',
+              message: res.msg
+            });
           }
         });
       },
       //直接充值
       directRecharge(planInfo) {
-        if (this.client_type !== "alipay" && this.client_type !== "wechat") {
-          Notify({message: "请在微信或支付宝客户端充值"});
+        if (!this.authorizedUserInfo.account.user_id) {
+          Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          });
           return;
         }
         let _this = this;
         let param = {
-          status: 0,
+          status: this.authorizedUserInfo.account.balance > 0 ? 1 : 0,
           recharge_price: planInfo.price,
           price: planInfo.price,
           iccid: planInfo.iccid || getStorage("check_iccid"),
@@ -260,50 +282,58 @@
           start_time: Today(),
           type: 0,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+          success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback`,
+          failed_page: window.location.href
         };
 
-        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = getStorage("decrypt_data", "obj").openid;
-        if (this.client_type === "app") param.open_id = getStorage("userInfo", "obj").account.user_id;
+        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
         if (this.client_type === "wechat") param.pay_type = "WEIXIN";
         if (this.client_type === "alipay") param.pay_type = "ALIPAY";
         if (this.client_type === "app") {
+          param.open_id = this.authorizedUserInfo.account.user_id;
           this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
         }
 
+        Dialog.confirm({
+          title: '充值',
+          message: `是否确认充值'${planInfo.name}'?`
+        }).then(() => {
+          this.finalRecharge(param);
+        }).catch(() => {
+          // on cancel
+        });
+
+      },
+      finalRecharge(param) {
         this.rechargeShow = true;
+        let payDom = document.querySelector('form');
+        if (payDom) document.removeChild(payDom);
+        let _this = this;
         _post("/api/v1/pay/weixin/create", param).then(res => {
-          if (getStorage('plan_list_new_card') === "1") {
-            lossRate({
-              type: 5,
-              iccid: getStorage("check_iccid")
-            });
-          }
           if (res.state === 1) {
             this.rechargeShow = false;
-            let payDom = document.querySelector('form');
-            if (payDom) document.removeChild(payDom);
             if (/<[^>]+>/.test(res.data)) {
               const div = document.createElement('div');
               div.innerHTML = res.data;
               document.body.appendChild(div);
               document.forms[0].submit();
-            } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
+            }
+            if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
               //app
               this.global_variables.packed_project === "mifi" ?
-                (location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`) :
-                (location.href = res.data);
+                location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
+                : location.href = res.data;
             } else {
               Notify({
-                message: "充值成功",
+                message: "创建订单成功",
                 background: "#60ce53"
               });
+
               setTimeout(function () {
                 if (localStorage.getItem("currentType") === "esim") {
                   location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
                 } else {
-                  _this.global_variables.packed_project === "mifi" ?
-                    (location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`) :
-                    (location.href = res.data.return_url);
+                  _this.global_variables.packed_project === "mifi" ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url;
                 }
               }, 1500);
             } //纯钻石支付
@@ -529,6 +559,7 @@
         flex: auto;
         border: none;
         width: 100%;
+
         p {
           color: #654828;
           font-size: 26px;
