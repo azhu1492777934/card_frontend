@@ -14,7 +14,9 @@
               <div v-if="item.total >= 0">流量使用:{{changedUnit(item.used,true)}}/{{changedUnit(item.total,true)}}</div>
               <div v-if="item.total < 0">流量使用:{{changedUnit(item.used,true)}}/不限量</div>
 
-              <div v-if="(item.used_voice > 0 || item.total_voice > 0) ">通话使用:{{toDecimal(item.used_voice)}}Min/{{toDecimal(item.total_voice)}}Min</div>
+              <div v-if="(item.used_voice > 0 || item.total_voice > 0) ">
+                通话使用:{{toDecimal(item.used_voice)}}Min/{{toDecimal(item.total_voice)}}Min
+              </div>
               <div v-if="item.total_voice < 0">通话使用:{{toDecimal(item.used_voice)}}Min/不限量
               </div>
             </div>
@@ -179,7 +181,7 @@
       },
       //直接充值
       directRecharge(planInfo, isBalance) {
-        if (this.client_type !== "alipay" && this.client_type !== "wechat") {
+        if (!this.authorizedUserInfo.account.user_id) {
           Notify({message: "请在微信或支付宝客户端充值"});
           return;
         }
@@ -196,13 +198,17 @@
           // type: 0,
           start_time: Today(),
           band_rating_id: this.choose_plan_info.id,
-          band_order_id: this.choose_plan_info.order_id
+          band_order_id: this.choose_plan_info.order_id,
+          success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback`,
+          failed_page: window.location.href
         };
-        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = getStorage("decrypt_data", "obj").openid;
-        if (this.client_type === "app") param.open_id = this.authorizedUserInfo.account.user_id;
-        if (this.client_type === "app") this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
+        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
         if (this.client_type === "wechat") param.pay_type = "WEIXIN";
         if (this.client_type === "alipay") param.pay_type = "ALIPAY";
+        if (this.client_type === "app") {
+          param.open_id = this.authorizedUserInfo.account.user_id;
+          this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
+        }
 
         this.rechargeShow = true;
         let payDom = document.querySelector('form');
@@ -358,7 +364,8 @@
         font-size: 26px;
         line-height: 1.5;
         text-align: left;
-        &:first-child{
+
+        &:first-child {
           color: #ff3448;
           font-size: 28px;
         }

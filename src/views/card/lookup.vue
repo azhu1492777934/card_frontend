@@ -477,11 +477,17 @@
           if (res.state === 1) {
             this.realnameType = res.data.real_name_type;
           }
-          if (this.realnameType === 1) {
+          if (this.realnameType === 1 && res.data.order_status === 0) {
             setStorage('realnameType', this.realnameType);
             this.$router.push('/weixin/recharge/balance');
             return
           }
+          if (this.realnameType === 1 && res.data.order_status === 1) {
+            setStorage('realnameType', this.realnameType);
+            this.$router.push('/weixin/card/plan_list');
+            return
+          }
+
           lossRate({type: 3, iccid: iccid})
             .then(res => {
               if (res.state === 1) {

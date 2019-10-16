@@ -628,6 +628,7 @@
     //   }
     // },
     created() {
+      removeStorage('realnameType');
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');// remove more net flowing mark
       // this.$emit('getUserData');

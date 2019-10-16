@@ -129,7 +129,7 @@
           iccid: getStorage('check_iccid'),
           price: this.settingRechargeList[this.activeIndex].price,
           recharge_type: 0,
-          success_page: `${window.location.host}/weixin/recharge/callback?balance=1`,
+          success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback?balance=1`,
           failed_page: window.location.href
         };
 
@@ -334,7 +334,7 @@
             bottom: -20px;
             width: 110%;
             content: '';
-            background: #EBEBEB;
+            background: #dca85f;
             height: 3px;
           }
         }
@@ -342,7 +342,7 @@
         div {
           display: table-cell;
           vertical-align: middle;
-          color: #EBEBEB;
+          color: #333;
         }
 
 
@@ -351,13 +351,7 @@
           box-shadow: 0 50px 0 #fff;
 
           div {
-            color: #333;
-          }
-
-          .line {
-            &:after {
-              background: #dca85f;
-            }
+            color: #f1a53c;
           }
 
           &::after {

@@ -79,13 +79,18 @@
 </template>
 
 <script>
+  import {mapState} from 'vuex'
   import {Toast, Popup, Notify, List} from "vant";
   import {setStorage, getStorage, checkBrowser, Today, lossRate} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
   export default {
     name: "home",
-
+    computed: {
+      ...mapState({
+        authorizedUserInfo: state => state.userInfo.userInfoInner
+      }),
+    },
     data() {
       const _this = this;
       return {
@@ -223,6 +228,7 @@
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
 
+
         // 加油包套餐充值
         if (this.ref_plan_type_index === '100') {
           this.$router.push('/weixin/card/more_flow');
@@ -256,7 +262,7 @@
       },
       //直接充值
       directRecharge(planInfo) {
-        if (this.client_type !== "alipay" && this.client_type !== "wechat") {
+        if (!this.authorizedUserInfo.account.user_id) {
           Toast({
             position: 'top',
             message: "请在微信或支付宝客户端充值"
@@ -265,7 +271,7 @@
         }
         let _this = this;
         let param = {
-          status: 0,
+          status: this.authorizedUserInfo.account.balance > 0 ? 1 : 0,
           recharge_price: planInfo.price,
           price: planInfo.price,
           iccid: planInfo.iccid || getStorage("check_iccid"),
@@ -275,15 +281,15 @@
           start_time: Today(),
           type: 0,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
-          success_page: `${window.location.host}/weixin/recharge/callback`,
+          success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback`,
           failed_page: window.location.href
         };
 
-        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = getStorage("decrypt_data", "obj").openid;
-        if (this.client_type === "app") param.open_id = getStorage("userInfo", "obj").account.user_id;
+        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
         if (this.client_type === "wechat") param.pay_type = "WEIXIN";
         if (this.client_type === "alipay") param.pay_type = "ALIPAY";
         if (this.client_type === "app") {
+          param.open_id = this.authorizedUserInfo.account.user_id;
           this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
         }
 
