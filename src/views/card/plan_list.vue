@@ -80,7 +80,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {Toast, Popup, Notify, List} from "vant";
+  import {Toast, Popup, Notify, List, Dialog} from "vant";
   import {setStorage, getStorage, checkBrowser, Today, lossRate} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
@@ -121,6 +121,7 @@
       [Toast.name]: Toast,
       [Popup.name]: Popup,
       [List.name]: List,
+      [Dialog.name]: Dialog,
     },
     created() {
       // 流失率统计
@@ -293,47 +294,52 @@
           this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
         }
 
+        Dialog.confirm({
+          title: '充值',
+          message: `是否确认充值'${planInfo.name}'?`
+        }).then(() => {
+          this.finalRecharge(param);
+        }).catch(() => {
+          // on cancel
+        });
+
+      },
+      finalRecharge(param) {
         this.rechargeShow = true;
+        let payDom = document.querySelector('form');
+        if (payDom) document.removeChild(payDom);
+        let _this = this;
         _post("/api/v1/pay/weixin/create", param).then(res => {
-          if (getStorage('plan_list_new_card') === "1") {
-            lossRate({
-              type: 5,
-              iccid: getStorage("check_iccid")
-            });
-          }
           if (res.state === 1) {
             this.rechargeShow = false;
-            let payDom = document.querySelector('form');
-            if (payDom) document.removeChild(payDom);
             if (/<[^>]+>/.test(res.data)) {
               const div = document.createElement('div');
               div.innerHTML = res.data;
               document.body.appendChild(div);
               document.forms[0].submit();
-            } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
+            }
+            if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
               //app
               this.global_variables.packed_project === "mifi" ?
-                (location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`) :
-                (location.href = res.data);
+                location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
+                : location.href = res.data;
             } else {
               Notify({
-                message: "充值成功",
+                message: "创建订单成功",
                 background: "#60ce53"
               });
+
               setTimeout(function () {
                 if (localStorage.getItem("currentType") === "esim") {
                   location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
                 } else {
-                  _this.global_variables.packed_project === "mifi" ?
-                    (location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`) :
-                    (location.href = res.data.return_url);
+                  _this.global_variables.packed_project === "mifi" ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url;
                 }
               }, 1500);
             } //纯钻石支付
           } else {
             this.rechargeShow = false;
-            Toast({
-              position: 'top',
+            Notify({
               message: res.msg
             });
           }
