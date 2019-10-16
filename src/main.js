@@ -56,8 +56,8 @@ router.afterEach((to, from) => {
     }
   }
   const u = navigator.userAgent.toLowerCase();
-  if (u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) != 'micromessenger') return;
-  
+  if (u.indexOf("like mac os x") < 0 || u.match(/MicroMessenger/i) !== 'micromessenger') return;
+
   if (to.path !== global.location.pathname) {
     location.assign(to.fullPath);
   }
