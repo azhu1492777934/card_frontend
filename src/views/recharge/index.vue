@@ -213,10 +213,6 @@
         });
       }
 
-      if (getStorage('decrypt_data', 'obj')) {
-        this.open_id = getStorage('decrypt_data', 'obj').openid
-      }
-
       if (!this.planInfo) {
         this.$router.push({'path': '/weixin/card/plan_list'});
       }
@@ -412,12 +408,12 @@
           status: (rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? 1 : 0,
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
-          error_callback:window.location.href,
-          success_callback:`${window.location.host}/weixin/recharge/callback`
+          error_callback: window.location.href,
+          success_callback: `${window.location.host}/weixin/recharge/callback`
         };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
-        if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = this.open_id;
+        if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid
         if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
         if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
         if (this.client_type === 'app') {

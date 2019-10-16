@@ -1,6 +1,8 @@
 <template>
   <div class="g-wrap card-activated-wrap">
-    <div v-show="card_tip" class="tip-wrap text-center"><span class="iconfont icon-warning"></span> 根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。</div>
+    <div v-show="card_tip" class="tip-wrap text-center"><span class="iconfont icon-warning"></span>
+      根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备。
+    </div>
     <div v-show="!card_tip" class="tip-wrap p-15">
       <span>1.根据工信部相关法规：物联网卡须完成实名认证且绑定相应设备,才允许使用。</span><br>
       <span>2.请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
@@ -59,7 +61,7 @@
 <script>
   import {Popup, Notify} from 'vant';
   import {_get, _post} from "../../http";
-  import {getStorage,removeStorage, inArray, getUrlParam} from "../../utilies";
+  import {getStorage, removeStorage, inArray, getUrlParam} from "../../utilies";
   import '../../assets/less/common.less'
   // @ is an alias to /src
   export default {
@@ -140,21 +142,17 @@
       _get('/api/v1/app/find_iccid', {
         iccid: getStorage('check_iccid')
       }).then(res => {
-        if (res.state == 1) {
-          this.is_boss = true
+        if (res.state === 1) {
+          this.is_boss = true;
           this.showItem.showID = true;
-          this.showItem.showName = true
+          this.showItem.showName = true;
         } else {
-          this.is_boss = false
-          this.showItem.showID = false
-          this.showItem.showName = false
+          this.is_boss = false;
+          this.showItem.showID = false;
+          this.showItem.showName = false;
         }
-        this.showItem.showFixedWrap = false
+        this.showItem.showFixedWrap = false;
       })//检测是否是大佬账户
-
-
-    },
-    mounted() {
     },
     methods: {
       hideCodeVerify() {
@@ -224,7 +222,7 @@
           }
         } else {
           //18位身份证需要验证最后一位校验位
-          if (code.length == 18) {
+          if (code.length === 18) {
             code = code.split('');
             //∑(ai×Wi)(mod 11)
             //加权因子
@@ -297,18 +295,15 @@
           Notify({
             message: resultCheckPhone.msg,
             background: '#ce4141'
-          })
+          });
           return
         }
-
         Notify({
           message: '检测手机号码中,请等候'
         });
-
         _post('/api/v1/app/phone/check', {mobile: this.info_phone})
           .then(res => {
-            if (res.state == 1) {
-
+            if (res.state === 1) {
               clearInterval(this.timer);
               this.disabled_code = true;
               this.countDownMsg = this.countDown + 's';
@@ -322,12 +317,11 @@
                   _this.countDown = 60;
                   _this.disabled_code = false;
                 }
-              }, 1000)
+              }, 1000);
 
               _post('/api/v1/app/messages/send', {mobile: this.info_phone})
                 .then(function (res) {
-
-                  if (res.state == 1) {
+                  if (res.state === 1) {
                     Notify({
                       message: '验证码发送成功',
                       background: '#60ce53'
@@ -336,16 +330,11 @@
                     Notify({message: res.msg});
                   }
                 })
-
             } else {
-
               Notify({message: res.msg,})
             }
           })
-
-
       },//获取验证码
-
       checkInfo: function () {
         let checkIdResult = this.verifyID(this.info_id),
           checkPhone = this.checkPhone(),
@@ -353,17 +342,17 @@
 
         if (this.is_boss) {
           if (!checkIdResult.state) {
-            Notify({message: checkIdResult.msg,})
+            Notify({message: checkIdResult.msg});
             return
           }
 
           if (!this.info_name) {
-            Notify({message: '请填写您的姓名'})
+            Notify({message: '请填写您的姓名'});
             return
           }
 
           if (!this.regex_name.test(this.info_name) || this.info_name.length > 15) {
-            Notify({message: '请填写正确的姓名',})
+            Notify({message: '请填写正确的姓名',});
             return
           }
         }
@@ -372,7 +361,7 @@
           Notify({
             message: checkPhone.msg,
             background: '#ce4141'
-          })
+          });
           return
         }
 
@@ -380,7 +369,7 @@
           Notify({
             message: checkCode.msg,
             background: '#ce4141'
-          })
+          });
           return
         }
 
@@ -400,7 +389,7 @@
         Notify({message: '正在绑定手机号码,请等候'});
         _post('/api/v1/app/bind/imei', param)
           .then(res => {
-            if (res.state == 1) {
+            if (res.state === 1) {
               Notify({message: '绑定成功,正在前往第三方实名,请耐心等候'});
 
               _get('/api/v1/app/jump/taobao', {
@@ -409,10 +398,9 @@
                 source: this.card_source,
                 type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
               }).then(res => {
-                if (res.data.indexOf("taobao") != -1) {
-                  let ua = navigator.userAgent.toLowerCase();
-                  if (ua.match(/MicroMessenger/i) == "micromessenger") {
-                    this.$router.push({path: 'to_tb', query: {url: res.data}});
+                if (res.data.indexOf("taobao") !== -1) {
+                  if (this.global_variables.RuntimeEnv === 'wechat') {
+                    this.$router.push({path: '/to_tb', query: {url: res.data}});
                   } else {
                     location.href = res.data;
                   }
@@ -420,8 +408,8 @@
                   location.href = res.data;
                 }
               })
-            } else if (res.state == 10015) {
-              Notify({message: res.msg,})
+            } else if (res.state === 10015) {
+              Notify({message: res.msg});
               setTimeout(function () {
                 _this.$router.push({path: '/weixin/card/plan_list'});
               }, 1500);
@@ -435,7 +423,7 @@
           })
       },
       toTutorial: function () {
-        if (this.card_source == 18 || this.card_source == 19) {
+        if (this.card_source === '18' || this.card_source === '19') {
           location.href = 'https://mp.weixin.qq.com/s/IMUU9Wan63K00QEFcxUnjg'
         } else {
           location.href = 'https://mp.weixin.qq.com/s?__biz=MzUxODA0OTAyOQ==&mid=100000010&idx=1&sn=a5269b403df4782a2413184f027a01d2&chksm=798f9d604ef81476a074d02828cc355331e354d3c37f89aa3f87ddb21004903190d858842300&mpshare=1&scene=23&srcid=0601LjTN6Zs9SunY3rvoUg4Y#rd';
@@ -587,12 +575,13 @@
       }
     }
 
-    .phone-tip{
+    .phone-tip {
       font-size: 24px;
       line-height: 32px;
       color: #ff562f;
       text-align: center;
     }
+
     .verify-code-wrap {
       width: 100%;
       background-color: transparent;
