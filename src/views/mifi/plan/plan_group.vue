@@ -253,7 +253,7 @@
                         } else {
                             this.$store.commit('mifiCommon/changeErrStatus', {
                                 show: true,
-                                errorMsg: res.msg ? res.msg : '此卡暂无套餐数据'
+                                errorMsg: res.msg ? res.msg : '此卡暂无充值套餐，请联系客服人员及时处理'
                             })
                         }
                     } else {
