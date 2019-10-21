@@ -228,7 +228,7 @@
       getList() {
         _get("/api/v1/app/order/status", {
           // user_id:64069
-          recharge_type: 1,
+          recharge_type: 0,
           user_id: getStorage("userInfo", "obj").account.user_id
         }).then(res => {
           if (res.state == 1) {

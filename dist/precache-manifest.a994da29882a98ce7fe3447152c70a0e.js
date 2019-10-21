@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.15ff5217.js"
   },
   {
-    "revision": "93317909bbaf0188f513",
+    "revision": "e9ce0f774eb3939f0277",
     "url": "/css/app.2608000f.css"
   },
   {
-    "revision": "93317909bbaf0188f513",
-    "url": "/js/app.535e670d.js"
+    "revision": "e9ce0f774eb3939f0277",
+    "url": "/js/app.829a4e9f.js"
   },
   {
     "revision": "526f3e21e549d031b702",
@@ -396,12 +396,12 @@ self.__precacheManifest = [
     "url": "/js/new_card_wrapper.d31483c4.js"
   },
   {
-    "revision": "24c851b4c3dd8850dba8",
+    "revision": "026397f835aba66e0b2b",
     "url": "/css/orderRecord.cb4c56f3.css"
   },
   {
-    "revision": "24c851b4c3dd8850dba8",
-    "url": "/js/orderRecord.ad00aa27.js"
+    "revision": "026397f835aba66e0b2b",
+    "url": "/js/orderRecord.e68696cf.js"
   },
   {
     "revision": "60c37aaac9d06db9d63f",
@@ -732,8 +732,20 @@ self.__precacheManifest = [
     "url": "/img/pkgBg3.d461d18e.png"
   },
   {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
     "revision": "6dedd4943e4c5848638196fb6f0c4145",
     "url": "/img/bg.6dedd494.png"
+  },
+  {
+    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
+    "url": "/img/noData@3x.f40c7e0b.png"
+  },
+  {
+    "revision": "644e6e3cf5f33943747b116316694e28",
+    "url": "/img/noData@2x.644e6e3c.png"
   },
   {
     "revision": "2a67b73145562669220aa4639e1ad58f",
@@ -748,24 +760,12 @@ self.__precacheManifest = [
     "url": "/img/balanceRefund.0078f03c.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
     "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
     "url": "/img/changeBg.af3ed0b3.png"
   },
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
     "url": "/img/bg.01355f17.png"
-  },
-  {
-    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
-    "url": "/img/noData@3x.f40c7e0b.png"
-  },
-  {
-    "revision": "644e6e3cf5f33943747b116316694e28",
-    "url": "/img/noData@2x.644e6e3c.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
@@ -932,7 +932,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "e1c1ef40712122acd69d5b24664141e6",
+    "revision": "e87121885221172212c12625a99ea4be",
     "url": "/index.html"
   },
   {
