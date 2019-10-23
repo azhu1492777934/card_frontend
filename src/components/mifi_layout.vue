@@ -99,12 +99,12 @@
             this.getUserInfo();//获取用户信息
           } else {
             let _this = this;
-            Dialog.alert({
-              title: '授权',
-              message: '为了您的账号安全，我们需要您对本站进行授权操作并绑定账号。'
-            }).then(() => {
+            // Dialog.alert({
+            //   title: '授权',
+            //   message: '为了您的账号安全，我们需要您对本站进行授权操作并绑定账号。'
+            // }).then(() => {
               _this.authorizedRediect()
-            })
+            // })
           }
         } else {
           this.$store.commit('userInfo/changeUserStatus', false);

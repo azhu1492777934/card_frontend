@@ -46,7 +46,7 @@
               // location.reload();
             } else if (res.error === 11003) {
               let _this = this;
-              Notify({message: '为了您的账号安全,请绑定手机号码'});
+              // Notify({message: '为了您的账号安全,请绑定手机号码'});
               let redirect_url = this.GetUrlRelativePath();
               setStorage('authorized_redirect_uri', redirect_url);
 

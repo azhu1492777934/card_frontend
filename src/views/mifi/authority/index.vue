@@ -107,12 +107,12 @@
             this.$emit('getToken', {from: 'mifi'})
           } else if (res.error === 30005 || res.error === 11003) {
             let _this = this;
-            Dialog.alert({
-              title: '绑定信息',
-              message: '为了您的账号安全，需要绑定您的手机号码',
-            }).then(() => {
+            // Dialog.alert({
+            //   title: '绑定信息',
+            //   message: '为了您的账号安全，需要绑定您的手机号码',
+            // }).then(() => {
               _this.$router.push({path: '/binding'});
-            })
+            // })
           } else {
             this.showAuthorityError('L' + res.error)
           }
