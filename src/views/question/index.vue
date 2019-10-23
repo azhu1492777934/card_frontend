@@ -12,7 +12,7 @@
         <a @click="toRefund" href="javascript:;">3.套餐退款</a>
       </li>
       <li>
-        <router-link to="/weixin/question/release_plan"><span v-if="global_variables.packed_project=='mifi'">3</span><span v-if="global_variables.packed_project!='mifi'">4</span>.解约自动续费套餐</router-link>
+        <router-link to="/weixin/question/release_plan"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">4</span>.解约自动续费套餐</router-link>
       </li>
      
      <li v-if="global_variables.packed_project=='mifi'">
