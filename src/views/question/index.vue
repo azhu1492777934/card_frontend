@@ -8,7 +8,7 @@
       <li>
         <router-link to="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</router-link>
       </li>
-      <li v-if="global_variables.packed_project!='mifi'">
+      <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
         <a @click="toRefund" href="javascript:;">3.套餐退款</a>
       </li>
       <li>
@@ -69,13 +69,14 @@
 
 <script>
   // @ is an alias to /src
-  import {setStorage, getStorage} from "../../utilies";
+  import {setStorage, getStorage,checkBrowser} from "../../utilies";
 
   export default {
     name: "home",
     data() {
       return {
         from: this.$route.query.from,
+        client_type: checkBrowser()
       }
     },
     created() {
