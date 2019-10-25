@@ -405,7 +405,7 @@
                         env: this.client_type,
                         start_time: this.getToday(),
                         type: 1,
-                        error_callback: window.location.href,
+                        error_page: window.location.href,
                         success_page: window.location.protocol+'//'+`${window.location.host}/weixin/recharge/callback`
                     }
 
