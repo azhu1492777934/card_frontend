@@ -406,7 +406,7 @@
                         start_time: this.getToday(),
                         type: 1,
                         error_callback: window.location.href,
-                        success_callback: `${window.location.host}/weixin/recharge/callback`
+                        success_page: window.location.protocol+'//'+`${window.location.host}/weixin/recharge/callback`
                     }
 
                     if (this.client_type === 'alipay' || this.client_type === 'wechat') {

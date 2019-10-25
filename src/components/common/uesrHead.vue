@@ -5,7 +5,7 @@
                 <img :src="getUserInfo.avatar">
                 <span class="user-name">{{getUserInfo.nickname}}</span>
             </div>
-            <div>
+            <div >
                 <span>余额:</span>
                 <span class="icon-diamond-wrap" @click="showDoc()">
                           <i class="icon-user-size  icon-diamond"></i>

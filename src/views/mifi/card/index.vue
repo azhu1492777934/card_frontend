@@ -1,6 +1,6 @@
 <template>
     <div class="card-wrap">
-        <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
+        <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo" v-if="global_variables.packed_project!='mifi'"></user-header>
         <div class="top-info">
             <div class="top-info-left">
 
