@@ -187,10 +187,21 @@
               this.$router.push({path: '/mifi/card/index'});
             } else if (res.data.status === 2 || res.data.status === 3) {
               setStorage('check_realNameSource', res.data.source);
-              this.$router.push({
-                path: '/weixin/new_card/real_name',
-                query: {from: 'mifi'}
-              });
+              let data=res.data.iccid;
+              let source=res.data.source;
+               _get('/api/v1/app/cards/realname', {
+                      iccid: data
+                    }).then(res => {
+                        if(res.data==1){
+                          window.location.href = `http://realname.china-m2m.com/auth/new_card/real_name?iccid=${data}&source=${source}&urlType=2`;
+                        }else{
+                          this.$router.push({
+                            path: '/weixin/new_card/real_name',
+                            query: {from: 'mifi'}
+                          });
+                        }
+                    })
+              
             }
           } else {
             Notify({message: res.msg})

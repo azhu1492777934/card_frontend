@@ -577,10 +577,21 @@
             }
             if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);
+
+              let data=res.data.iccid;
+              let source=res.data.source;
               lossRate({type: 3, iccid: res.data.iccid})
                 .then(res => {
                   if (res.state === 1) {
-                    this.$router.push({path: '/weixin/new_card/real_name'});
+                    _get('/api/v1/app/cards/realname', {
+                      iccid: data
+                    }).then(res => {
+                        if(res.data==1){
+                          window.location.href = `http://realname.china-m2m.com/auth/new_card/real_name?iccid=${data}&source=${source}&urlType=1`;
+                        }else{
+                          this.$router.push({path: '/weixin/new_card/real_name'});
+                        }
+                    })
                   } else {
                     Notify({message: res.msg});
                   }
