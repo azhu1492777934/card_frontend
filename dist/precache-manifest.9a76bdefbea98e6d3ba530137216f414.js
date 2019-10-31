@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/css/recharge_wrapper.a4f6c950.css"
   },
   {
-    "revision": "10f0a959b7af3664d376",
-    "url": "/css/Layout.6f67a32f.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
+  },
+  {
+    "revision": "619b660c124be1285778",
+    "url": "/js/recharge_wrapper.bd609ed7.js"
   },
   {
     "revision": "10679cd21017d22a21aa",
     "url": "/css/Layout~card_usage.8ac0b02d.css"
-  },
-  {
-    "revision": "10679cd21017d22a21aa",
-    "url": "/js/Layout~card_usage.20fe43c5.js"
   },
   {
     "revision": "f6fe50ccd582c459975e",
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.0c5ed069.js"
   },
   {
-    "revision": "0dc605df57b7341a5c6f",
+    "revision": "2b8b62e5742f11c0e6fe",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "0dc605df57b7341a5c6f",
-    "url": "/js/app.f9170bc1.js"
+    "revision": "2b8b62e5742f11c0e6fe",
+    "url": "/js/app.6ecbad5d.js"
   },
   {
     "revision": "f2ff13c89acfaa3ce591",
@@ -480,8 +480,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.79bddbcf.js"
   },
   {
-    "revision": "619b660c124be1285778",
-    "url": "/js/recharge_wrapper.bd609ed7.js"
+    "revision": "10679cd21017d22a21aa",
+    "url": "/js/Layout~card_usage.20fe43c5.js"
   },
   {
     "revision": "a1ab4fa923ab72375be9",
@@ -620,14 +620,6 @@ self.__precacheManifest = [
     "url": "/fonts/element-icons.535877f5.woff"
   },
   {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
-  },
-  {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
     "revision": "f5f322478286641bd9887a155e35f222",
     "url": "/img/btn.f5f32247.png"
   },
@@ -636,12 +628,12 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -700,18 +692,6 @@ self.__precacheManifest = [
     "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
-    "revision": "2a67b73145562669220aa4639e1ad58f",
-    "url": "/img/icon3.2a67b731.png"
-  },
-  {
-    "revision": "813b5319e378dafdda952c16ad89906b",
-    "url": "/img/icon2.813b5319.png"
-  },
-  {
     "revision": "0f16389ec218c90cf8f657e233b745f2",
     "url": "/img/balanceBg1.0f16389e.png"
   },
@@ -752,20 +732,12 @@ self.__precacheManifest = [
     "url": "/img/balanceRefund.0078f03c.png"
   },
   {
-    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
-    "url": "/img/noData@3x.f40c7e0b.png"
-  },
-  {
-    "revision": "644e6e3cf5f33943747b116316694e28",
-    "url": "/img/noData@2x.644e6e3c.png"
-  },
-  {
     "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
     "url": "/img/changeBg.af3ed0b3.png"
   },
   {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
@@ -776,12 +748,32 @@ self.__precacheManifest = [
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
+    "revision": "2a67b73145562669220aa4639e1ad58f",
+    "url": "/img/icon3.2a67b731.png"
   },
   {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
+    "revision": "813b5319e378dafdda952c16ad89906b",
+    "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
+    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
+    "url": "/img/youku.d0ccbc8a.png"
+  },
+  {
+    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
+    "url": "/img/noData@3x.f40c7e0b.png"
+  },
+  {
+    "revision": "644e6e3cf5f33943747b116316694e28",
+    "url": "/img/noData@2x.644e6e3c.png"
+  },
+  {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -792,6 +784,14 @@ self.__precacheManifest = [
     "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
+  },
+  {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
     "url": "/img/bg_network@3x.2c51a1e5.png"
   },
@@ -800,12 +800,12 @@ self.__precacheManifest = [
     "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
   },
   {
-    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
-    "url": "/img/youku.d0ccbc8a.png"
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -932,12 +932,12 @@ self.__precacheManifest = [
     "url": "/img/4.3e217df4.png"
   },
   {
-    "revision": "d91b0b2968458e18a0fe641531d3fcbb",
+    "revision": "a07bad77741e2f2f059c019452257157",
     "url": "/index.html"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
+    "revision": "10f0a959b7af3664d376",
+    "url": "/css/Layout.6f67a32f.css"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
