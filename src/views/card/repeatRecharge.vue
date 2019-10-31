@@ -413,7 +413,7 @@
         param.price = planInfo.price;
 
         if (this.client_type === 'alipay' || this.client_type === 'wechat') {
-          param.open_id = getStorage('decrypt_data', 'obj').openid;
+          param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid;
         } else if (this.client_type === 'app') {
           param.open_id = getStorage("userInfo", "obj").account.user_id
 
