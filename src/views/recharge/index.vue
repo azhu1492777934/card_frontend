@@ -10,19 +10,21 @@
         <em class="title-line rotate-180"></em>
       </div>
       <ul class="discount-wrap">
-        <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"
+        <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"   v-bind:key="index"
             data-elb="20"
-            :class="{'checked':index==activeIndex}">
+            :class="{'checked':index==activeIndex,'discountIcon':item.newStatus&&item.is_give_balance&&global_variables.packed_project == 'card'}"  >
           <div :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">
 
             <div class="monthlyTop " v-if="item.is_first==true">
               <div class="monthlyFirst">首月</div>
               <div class="monthlyMoney">{{"¥"+item.first_price}}</div>
             </div>
-            <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}">
+            <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" v-show="!item.newStatus">
               {{item.pay_type=='diamond_charge'?'余额支付':'充值'+item.pay_money+'元'}}
             </p>
-
+            <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" v-show="item.newStatus&&global_variables.packed_project == 'card'">
+              {{item.pay_type=='diamond_charge'?'余额支付':'充值'+item.newPrice+'元'}}
+            </p>
             <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
 
             <p v-show="item.pay_type=='diamond_charge'" class="discount-appendix discount-diamond">
@@ -35,14 +37,19 @@
             <!-- <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p>      -->
 
             <p class="discount-appendix"
-               v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance">赠送<em
+               v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance&&!item.newStatus">赠送<em
               class="cl-elb">
               {{item.give_elb}}</em>ELB
             </p><!--多充值支付-->
             <p class="discount-appendix"
-               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance">赠送<em
+               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance&&!item.newStatus">赠送<em
               class="cl-elb">
               {{item.give_balance}}</em>元余额
+            </p>
+            <p class="discount-appendix"
+               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance&&item.newStatus&&global_variables.packed_project == 'card'">只需支付<em
+              class="cl-elb">
+              {{item.pay_money}}</em>元
             </p>
           </div>
         </li>
@@ -249,13 +256,28 @@
         let data = this.settingRechargeList;
         data.sort(this.jsonSort);
         for (let i = 0; i < data.length; i++) {
-          this.recharge_list.push({
-            pay_type: 'over_charge',
-            pay_money: data[i].price,
-            give_elb: data[i].elb,
-            give_balance: data[i].balance,
-            is_give_balance: data[i].is_give_balance
-          })
+
+          if(data[i].balance==15||data[i].balance==30||data[i].balance==45){
+            this.recharge_list.push({
+              pay_type: 'over_charge',
+              pay_money: data[i].price,
+              give_elb: data[i].elb,
+              give_balance: data[i].balance,
+              is_give_balance: data[i].is_give_balance,
+              newStatus:true,
+              newPrice:data[i].price+data[i].balance
+            })
+          }else{
+            this.recharge_list.push({
+              pay_type: 'over_charge',
+              pay_money: data[i].price,
+              give_elb: data[i].elb,
+              give_balance: data[i].balance,
+              is_give_balance: data[i].is_give_balance,
+              newStatus:false
+            })
+          }
+          
         }
         this.recharge_list.push({
           pay_type: 'normal_charge',
@@ -780,7 +802,17 @@
         -webkit-box-lines: multiple;
         justify-content: space-between;
       }
-
+      .discountIcon:before{
+          content:"";
+          display:inline-block;
+          width:53px;
+          height:68px;
+          background:url("../../assets/imgs/card/usage/85.png")no-repeat;
+          background-size:100% 100%;
+          position:absolute;
+          top:-30px;
+          right:-10px;
+      }
       li {
         display: table;
         position: relative;
@@ -793,7 +825,7 @@
         border: 1PX solid #e6e6e6;
         border-radius: 16px;
         -webkit-text-size-adjust: none;
-
+        
         &.special {
           min-height: 1px;
           margin: 0;

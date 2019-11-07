@@ -196,6 +196,9 @@
 
           //放底部
           for (let i in res.data) {
+            if(!res.data[i]&&typeof(res.data[i]!="undefined"&&res.data[i]!=0)){
+              continue;
+            }
             this.choose_plan_index = res.data[i][0].id;
             this.ref_plan_type_index = i;
             return this.choose_plan_index;
