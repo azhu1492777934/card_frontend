@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.15ff5217.js"
   },
   {
-    "revision": "43c49a7f23a066daa5d9",
+    "revision": "5d8d4ec4bb6a2b2c6101",
     "url": "/css/app.2608000f.css"
   },
   {
-    "revision": "43c49a7f23a066daa5d9",
-    "url": "/js/app.b206625b.js"
+    "revision": "5d8d4ec4bb6a2b2c6101",
+    "url": "/js/app.a6afb674.js"
   },
   {
     "revision": "b78845306ecb09f29083",
@@ -628,8 +628,16 @@ self.__precacheManifest = [
     "url": "/img/balanceBg2.565459ef.png"
   },
   {
-    "revision": "4ecd943eb3a2c5c0890145b943c1c659",
-    "url": "/img/85.4ecd943e.png"
+    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
+    "url": "/img/changeBg.af3ed0b3.png"
+  },
+  {
+    "revision": "f5f322478286641bd9887a155e35f222",
+    "url": "/img/btn.f5f32247.png"
+  },
+  {
+    "revision": "d140650fa64e0f1fc771610dba62aed7",
+    "url": "/img/bg.d140650f.png"
   },
   {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
@@ -640,12 +648,8 @@ self.__precacheManifest = [
     "url": "/img/android@2x.af8bbdfa.png"
   },
   {
-    "revision": "f5f322478286641bd9887a155e35f222",
-    "url": "/img/btn.f5f32247.png"
-  },
-  {
-    "revision": "d140650fa64e0f1fc771610dba62aed7",
-    "url": "/img/bg.d140650f.png"
+    "revision": "4ecd943eb3a2c5c0890145b943c1c659",
+    "url": "/img/85.4ecd943e.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -728,28 +732,24 @@ self.__precacheManifest = [
     "url": "/img/pkgBg3.d461d18e.png"
   },
   {
-    "revision": "6dedd4943e4c5848638196fb6f0c4145",
-    "url": "/img/bg.6dedd494.png"
-  },
-  {
-    "revision": "0078f03c08066d51d64b92a13e194ebb",
-    "url": "/img/balanceRefund.0078f03c.png"
-  },
-  {
-    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
-    "url": "/img/changeBg.af3ed0b3.png"
-  },
-  {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
   {
     "revision": "813b5319e378dafdda952c16ad89906b",
     "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
+    "revision": "6dedd4943e4c5848638196fb6f0c4145",
+    "url": "/img/bg.6dedd494.png"
+  },
+  {
+    "revision": "0078f03c08066d51d64b92a13e194ebb",
+    "url": "/img/balanceRefund.0078f03c.png"
   },
   {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
@@ -760,16 +760,16 @@ self.__precacheManifest = [
     "url": "/img/noData@2x.644e6e3c.png"
   },
   {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
+  },
+  {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -796,20 +796,20 @@ self.__precacheManifest = [
     "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
     "url": "/img/bg_network@3x.2c51a1e5.png"
   },
   {
     "revision": "32d70c8fc305e3647098f3de0c71b618",
     "url": "/img/bg_network@2x.32d70c8f.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -936,7 +936,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "7aa355dab2eff76b88af20a1600852f9",
+    "revision": "e30366fb71312fb48bba08c19d32939d",
     "url": "/index.html"
   },
   {
