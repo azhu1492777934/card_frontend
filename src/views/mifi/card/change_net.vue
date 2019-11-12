@@ -34,7 +34,8 @@
                 this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
                 this.disabled = true;
                 _post('/api/v1/app/cards/activated', {
-                    iccid: this.iccid
+                    iccid: this.iccid,
+                    cause:'c端用户操作'
                 }).then(res => {
                     this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false});
                     this.disabled = false;

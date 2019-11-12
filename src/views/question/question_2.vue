@@ -92,8 +92,9 @@
         let _this = this;
         _post('/api/v1/app/restart_device', {
           iccid: getStorage('check_iccid'),
+          cause:'c端用户操作'
         }).then(res => {
-          if (res.state == 1) {
+          if (res.state === 1) {
             Notify({
               message: '唤醒套餐成功',
               background: '#60ce53'
