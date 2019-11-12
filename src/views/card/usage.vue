@@ -749,6 +749,7 @@
                     total: this.usageInfo.usage.total,
                     used: this.usageInfo.usage.used
                   }, 0)
+
               }
 
               this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used, 0, 0)
@@ -857,7 +858,12 @@
           if (detailRight.total === detailRight.used) {
             return '0.00GB'
           } else {
-            return toDecimal(toDecimal(detailRight.total / 1024) - toDecimal(detailRight.used / 1000)) + 'GB'
+
+            if(toDecimal(toDecimal(detailRight.total / 1024) - toDecimal(detailRight.used / 1000))<0){
+              return "0GB";
+            }else{
+              return toDecimal(toDecimal(detailRight.total / 1024) - toDecimal(detailRight.used / 1000)) + 'GB';
+            }
           }
         }
 
