@@ -645,14 +645,14 @@
 
 
 
-            if(res.data.source==5){
-                Dialog.alert({
-                  message: '受双十一影响，新卡在线激活时间需要一个自然日，请谨慎充值。实名后如果一个自然日内没有激活，系统会自动退款。对您造成的不便，我们深表歉意。',
-                }).then(() => {
-                  // on close
+            // if(res.data.source==5){
+            //     Dialog.alert({
+            //       message: '受双十一影响，新卡在线激活时间需要一个自然日，请谨慎充值。实名后如果一个自然日内没有激活，系统会自动退款。对您造成的不便，我们深表歉意。',
+            //     }).then(() => {
+            //       // on close
                   
-                });
-            }
+            //     });
+            // }
             if (this.usageInfo.operator === 0) {
               this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/unicom-logo.svg')
             } else if (this.usageInfo.operator === 1) {
