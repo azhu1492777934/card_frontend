@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.0c5ed069.js"
   },
   {
-    "revision": "e8864d175a8c9c42a530",
+    "revision": "ee54d4e79aaa725423f8",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "e8864d175a8c9c42a530",
-    "url": "/js/app.71a85206.js"
+    "revision": "ee54d4e79aaa725423f8",
+    "url": "/js/app.6b08220a.js"
   },
   {
     "revision": "f2ff13c89acfaa3ce591",
@@ -100,12 +100,12 @@ self.__precacheManifest = [
     "url": "/js/card_more_flow.ef1569e6.js"
   },
   {
-    "revision": "0efb09f442a9ec22144a",
+    "revision": "250d9935dbcde9c8968b",
     "url": "/css/card_usage.dea230c8.css"
   },
   {
-    "revision": "0efb09f442a9ec22144a",
-    "url": "/js/card_usage.4f330fdb.js"
+    "revision": "250d9935dbcde9c8968b",
+    "url": "/js/card_usage.9ae17378.js"
   },
   {
     "revision": "0e1039d3aa563473d5e0",
@@ -620,20 +620,20 @@ self.__precacheManifest = [
     "url": "/fonts/element-icons.535877f5.woff"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
     "revision": "f5f322478286641bd9887a155e35f222",
     "url": "/img/btn.f5f32247.png"
   },
   {
     "revision": "d140650fa64e0f1fc771610dba62aed7",
     "url": "/img/bg.d140650f.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
@@ -736,20 +736,8 @@ self.__precacheManifest = [
     "url": "/img/pkgBg3.d461d18e.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
     "revision": "6dedd4943e4c5848638196fb6f0c4145",
     "url": "/img/bg.6dedd494.png"
-  },
-  {
-    "revision": "2a67b73145562669220aa4639e1ad58f",
-    "url": "/img/icon3.2a67b731.png"
-  },
-  {
-    "revision": "813b5319e378dafdda952c16ad89906b",
-    "url": "/img/icon2.813b5319.png"
   },
   {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
@@ -764,12 +752,24 @@ self.__precacheManifest = [
     "url": "/img/balanceRefund.0078f03c.png"
   },
   {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
-  },
-  {
     "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
     "url": "/img/changeBg.af3ed0b3.png"
+  },
+  {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
+    "revision": "2a67b73145562669220aa4639e1ad58f",
+    "url": "/img/icon3.2a67b731.png"
+  },
+  {
+    "revision": "813b5319e378dafdda952c16ad89906b",
+    "url": "/img/icon2.813b5319.png"
+  },
+  {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
@@ -778,6 +778,14 @@ self.__precacheManifest = [
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
+  },
+  {
+    "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
+    "url": "/img/iccid_bg@2x.a859e9ca.png"
+  },
+  {
+    "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
+    "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
     "revision": "b899232b79ad9962c5ab5572775a0400",
@@ -794,14 +802,6 @@ self.__precacheManifest = [
   {
     "revision": "d0ccbc8a35180bb40e027b44dd26035a",
     "url": "/img/youku.d0ccbc8a.png"
-  },
-  {
-    "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
-    "url": "/img/iccid_bg@2x.a859e9ca.png"
-  },
-  {
-    "revision": "fa9050c4e9870e8fc0cd184f8515af4a",
-    "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
@@ -936,7 +936,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "77101ccb65f95b36072dd9116e6e594a",
+    "revision": "45eab32148721bdbb9f2ea66a06c0503",
     "url": "/index.html"
   },
   {
