@@ -367,7 +367,7 @@
     checkBrowser,
     lossRate
   } from '../../utilies'
-  import {Popup, Notify, Toast} from 'vant'
+  import {Popup, Notify, Toast,Dialog} from 'vant'
   import {_post, _get} from "../../http";
   import cardButton from '../../components/button'
   import Empty from '../../components/empty'
@@ -572,8 +572,11 @@
             setStorage('new_auth_search_iccid', res.data.iccid);
             removeStorage('plan_list_new_card');
             localStorage.setItem("currentType", "card");
+
             if (res.data.status === 1) {
-              this.$router.push({path: '/weixin/card/usage'})
+              
+                  this.$router.push({path: '/weixin/card/usage'})
+              
             }
             if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);

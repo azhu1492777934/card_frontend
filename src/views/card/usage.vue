@@ -558,7 +558,7 @@
   // @ is an alias to /src
   import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast} from 'vant';
+  import {Notify, Popup, Toast,Dialog} from 'vant';
   import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage} from "../../utilies";
   import {_post, _get} from "../../http";
 
@@ -632,6 +632,8 @@
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');// remove more net flowing mark
       // this.$emit('getUserData');
+
+
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {
@@ -641,6 +643,16 @@
           if (res.state === 1) {
             this.usageInfo = res.data;
 
+
+
+            if(res.data.source==5){
+                Dialog.alert({
+                  message: '受双十一影响，新卡在线激活时间需要最长一个自然日时间，请谨慎充值。实名后如果一个自然日内没有激活，系统会自动退款。对您造成的不便，我们深表歉意。'
+                }).then(() => {
+                  // on close
+                  
+                });
+            }
             if (this.usageInfo.operator === 0) {
               this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/unicom-logo.svg')
             } else if (this.usageInfo.operator === 1) {
