@@ -558,7 +558,7 @@
   // @ is an alias to /src
   import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast,Dialog} from 'vant';
+  import {Notify, Popup, Toast, Dialog} from 'vant';
   import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage} from "../../utilies";
   import {_post, _get} from "../../http";
 
@@ -572,7 +572,7 @@
         load_skeleton: true,
         // load_plan: false,
         load_plan_msg: '',
-        watch_source: [5, 10, 12, 17, 18, 20, 22, 32, 38,44],
+        watch_source: [5, 10, 12, 17, 18, 20, 22, 32, 38, 44],
         auth_status: ['未实名', '审核中', '审核不通过'],
         card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
         order_state: ['未支付', '已支付', '已到账'],
@@ -632,8 +632,7 @@
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');// remove more net flowing mark
       // this.$emit('getUserData');
-
-
+      
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {
@@ -642,17 +641,6 @@
           this.load_skeleton = false;
           if (res.state === 1) {
             this.usageInfo = res.data;
-
-
-
-            // if(res.data.source==5){
-            //     Dialog.alert({
-            //       message: '受双十一影响，新卡在线激活时间需要一个自然日，请谨慎充值。实名后如果一个自然日内没有激活，系统会自动退款。对您造成的不便，我们深表歉意。',
-            //     }).then(() => {
-            //       // on close
-                  
-            //     });
-            // }
             if (this.usageInfo.operator === 0) {
               this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/unicom-logo.svg')
             } else if (this.usageInfo.operator === 1) {
@@ -870,12 +858,11 @@
           if (detailRight.total === detailRight.used) {
             return '0.00GB'
           } else {
-
-            if(toDecimal(toDecimal(detailRight.total / 1024) - toDecimal(detailRight.used / 1000))<0){
-              return "0GB";
-            }else{
-              return toDecimal(toDecimal(detailRight.total / 1024) - toDecimal(detailRight.used / 1000)) + 'GB';
+            if ((detailRight.total - detailRight.used) < 0) {
+              return "0.00GB";
             }
+            return (detailRight.total - detailRight.used >= 1024) ?
+              toDecimal(detailRight.total / 1024 - detailRight.used / 1024) + 'GB' : toDecimal(detailRight.total - detailRight.used) + 'MB';
           }
         }
 
