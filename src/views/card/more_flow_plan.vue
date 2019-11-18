@@ -162,6 +162,13 @@
     methods: {
       recharge: function () {
         this.choose_plan_info = this.plan_list[this.choose_plan_index];
+        if(!this.choose_plan_info.order_id || !this.choose_plan_info.id){
+          Toast({
+            position:'top',
+            message:"请选择主套餐"
+          });
+          return
+        }
         // 是否存在余额
         if (this.authorizedUserInfo.account.balance <= 0) {
           this.directRecharge(this.more_flow_plan_info);
