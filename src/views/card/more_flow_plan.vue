@@ -165,7 +165,7 @@
         if(!this.choose_plan_info.order_id || !this.choose_plan_info.id){
           Toast({
             position:'top',
-            message:"请选择主套餐"
+            message:"没有检测到主套餐，请刷新重试"
           });
           return
         }
