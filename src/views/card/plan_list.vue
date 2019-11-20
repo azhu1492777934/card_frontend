@@ -138,7 +138,7 @@
         iccid: getStorage("check_iccid")
       }).then(res => {
         if (res.state === 1) {
-          if (JSON.stringify(res.data) === "{}" || !res.data.length) {
+          if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
             this.load_plan_list = true;
             this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
             return;
