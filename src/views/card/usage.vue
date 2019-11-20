@@ -632,7 +632,7 @@
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');// remove more net flowing mark
       // this.$emit('getUserData');
-      
+
       if (getStorage('check_iccid')) {
         this.iccid = getStorage('check_iccid');
         _get('/api/v1/app/cards/telcom/usage', {
@@ -757,9 +757,9 @@
             }//流量卡
 
             // 是否显示套餐
-            this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false;
+            this.hasUsagePlan = !!this.usageInfo.usage.plans.length;
             this.usagePlanLength = this.usageInfo.usage.plans.length;
-            this.hasOrderPlan = this.usageInfo.orders.length ? true : false;
+            this.hasOrderPlan = !!this.usageInfo.orders.length;
             if (this.hasUsagePlan) setStorage('hasValidatedPlan', true);
 
             // this.swiper.slideTo(0, 500, false);

@@ -63,298 +63,7 @@
       <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
     </div>
   </div>
-
 </template>
-
-<style lang="less">
-  @import "../../assets/less/utitlies";
-  @import "../../assets/less/common";
-
-  .check-card-wrap {
-    padding: 0 40px;
-
-    .scanTop-wrap {
-      padding: 35px 0 90px;
-      text-align: center;
-
-      img {
-        display: block;
-        width: 77%;
-        margin: 0 auto;
-        height: auto;
-      }
-    }
-
-    .search-wrap {
-      position: relative;
-      display: flex;
-      height: 80px;
-      margin-bottom: 50px;
-      align-items: center;
-      border: 1PX solid #38b5ed;
-      border-radius: 7px;
-
-      input {
-        flex: 6;
-        padding-left: 20px;
-        font-size: 30px;
-      }
-
-      .clearIccid {
-        position: relative;
-        right: 20px;
-        font-size: 50px;
-        color: #888;
-        line-height: .8;
-        cursor: pointer;
-      }
-
-      .icon-scan {
-        font-size: 78px;
-        color: #38b5ed;
-        line-height: 1;
-      }
-
-      .icon-scanTip {
-        position: absolute;
-        top: -73px;
-        right: 0;
-        width: 221px;
-        height: 73px;
-        background-image: url("../../assets/imgs/card/lookup/scanTip.png");
-        background-size: 100% 100%;
-      }
-    }
-
-    .btn-check-wrap {
-      padding-bottom: 50px;
-
-      button {
-        display: inline-block;
-        width: 50%;
-        height: 70px;
-        line-height: 70px;
-        font-size: 28px;
-        color: #fff;
-        background-color: #38b5ed;
-        text-align: center;
-        border-radius: 70px;
-      }
-    }
-
-    .recording-wrap {
-      .recording-list-wrap {
-        max-height: 260px;
-        overflow: auto;
-      }
-
-      li {
-        display: flex;
-        padding: 20px;
-        align-items: center;
-        background-color: #fff;
-        line-height: 1;
-        font-size: 24px;
-        border-bottom: 1PX solid #f0f0f0;
-        box-sizing: border-box;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        span {
-          &:first-child {
-            flex: 4;
-            text-align: left;
-          }
-
-          &:nth-child(2) {
-            flex: 2;
-            text-align: right;
-          }
-
-          &:last-child {
-            max-width: 20px;
-            font-size: 48px;
-            line-height: .5;
-            padding-left: 10px;
-            color: #e0e0e0;
-          }
-
-        }
-      }
-    }
-
-    .recording-title {
-      display: flex;
-      padding: 20px;
-      background-color: #e8eefc;
-      color: #5679bf;
-
-      span {
-        &:first-child {
-          flex: 4;
-          text-align: left;
-        }
-
-        &:last-child {
-          flex: 2;
-          text-align: right;
-        }
-      }
-    }
-
-  }
-
-
-  // app样式
-  .appStyle {
-    // padding: 0 40px;
-    .scanTop-wrap {
-      padding: 31px 0 0px 0;
-      text-align: center;
-      background: #00CA9D;
-      height: 284px;
-
-      img {
-        display: block;
-        width: 586px;
-        height: 347px;
-        margin: 0 auto;
-
-      }
-    }
-
-    .search-wrap {
-      position: relative;
-      display: flex;
-      height: 128px;
-      align-items: center;
-      background: #FAFAFA;
-      margin: 144px 22px 32px 22px;
-
-      input {
-        flex: 6;
-        padding-left: 34px;
-        font-size: 32px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(46, 46, 46, 1);
-      }
-
-      .clearIccid {
-        position: relative;
-        right: 20px;
-        font-size: 50px;
-        color: #888;
-        line-height: .8;
-        cursor: pointer;
-      }
-
-      .icon-scan {
-        font-size: 78px;
-        color: #38b5ed;
-        line-height: 1;
-      }
-
-      .icon-scanTip {
-        position: absolute;
-        top: -73px;
-        right: 0;
-        width: 221px;
-        height: 73px;
-        background-size: 100% 100%;
-      }
-    }
-
-    .btn-check-wrap {
-      padding-bottom: 84px;
-
-      button {
-        display: inline-block;
-        width: 596px;
-        height: 80px;
-        line-height: 80px;
-        font-size: 32px;
-        font-family: PingFangSC-Regular;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        background-color: #00CA9D;
-        text-align: center;
-        border-radius: 100px;
-      }
-    }
-
-    .recording-wrap {
-      padding: 0 25px;
-
-      .recording-list-wrap {
-        max-height: 260px;
-        overflow: auto;
-      }
-
-      li {
-        display: flex;
-        padding: 20px;
-        align-items: center;
-        background-color: #fff;
-        line-height: 1;
-        font-size: 24px;
-        border-bottom: 1PX solid #f0f0f0;
-        box-sizing: border-box;
-
-        &:last-child {
-          border-bottom: none;
-        }
-
-        span {
-          &:first-child {
-            flex: 4;
-            text-align: left;
-          }
-
-          &:nth-child(2) {
-            flex: 2;
-            text-align: right;
-          }
-
-          &:last-child {
-            max-width: 20px;
-            font-size: 48px;
-            line-height: .5;
-            padding-left: 10px;
-            color: #e0e0e0;
-          }
-
-        }
-      }
-    }
-
-    .recording-title {
-      display: flex;
-      padding: 20px;
-      background-color: rgba(0, 202, 157, 0.2);
-      font-size: 28px;
-      font-family: SourceHanSansCN-Normal;
-      font-weight: 400;
-      color: rgba(0, 202, 157, 1);
-
-      span {
-        &:first-child {
-          flex: 4;
-          text-align: left;
-        }
-
-        &:last-child {
-          flex: 2;
-          text-align: right;
-        }
-      }
-    }
-
-  }
-</style>
-
 
 <script>
   // @ is an alias to /src
@@ -397,6 +106,7 @@
     created() {
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
+      removeStorage('hasValidatedPlan');
       var UA = navigator.userAgent.toLowerCase();
       if (/(app_charge)/.test(UA)) {
         this.newAppStyle = "app2";
@@ -574,9 +284,7 @@
             localStorage.setItem("currentType", "card");
 
             if (res.data.status === 1) {
-              
-                  this.$router.push({path: '/weixin/card/usage'})
-              
+              this.$router.push({path: '/weixin/card/usage'})
             }
             if (res.data.status === 2) {
               setStorage('check_realNameSource', res.data.source);
@@ -589,11 +297,11 @@
                     _get('/api/v1/app/cards/realname', {
                       iccid: data
                     }).then(res => {
-                        if(res.data==1){
-                          window.location.href = `http://realname.china-m2m.com/auth/new_card/real_name?iccid=${data}&source=${source}&urlType=1`;
-                        }else{
-                          this.$router.push({path: '/weixin/new_card/real_name'});
-                        }
+                      if(res.data===1){
+                        window.location.href = `http://realname.china-m2m.com/auth/new_card/real_name?iccid=${data}&source=${source}&urlType=1`;
+                      }else{
+                        this.$router.push({path: '/weixin/new_card/real_name'});
+                      }
                     })
                   } else {
                     Notify({message: res.msg});
@@ -692,7 +400,7 @@
       },
       clearInputIccid() {
         this.iccid = '';
-        this.$refs.iccidDom.focus()
+        this.$refs.iccidDom.focus();
         this.showClearBtn = false
       },
       iccidBlur() {
@@ -713,3 +421,288 @@
   };
 </script>
 
+<style lang="less">
+  @import "../../assets/less/utitlies";
+  @import "../../assets/less/common";
+
+  .check-card-wrap {
+    padding: 0 40px;
+
+    .scanTop-wrap {
+      padding: 35px 0 90px;
+      text-align: center;
+
+      img {
+        display: block;
+        width: 77%;
+        margin: 0 auto;
+        height: auto;
+      }
+    }
+
+    .search-wrap {
+      position: relative;
+      display: flex;
+      height: 80px;
+      margin-bottom: 50px;
+      align-items: center;
+      border: 1PX solid #38b5ed;
+      border-radius: 7px;
+
+      input {
+        flex: 6;
+        padding-left: 20px;
+        font-size: 30px;
+      }
+
+      .clearIccid {
+        position: relative;
+        right: 20px;
+        font-size: 50px;
+        color: #888;
+        line-height: .8;
+        cursor: pointer;
+      }
+
+      .icon-scan {
+        font-size: 78px;
+        color: #38b5ed;
+        line-height: 1;
+      }
+
+      .icon-scanTip {
+        position: absolute;
+        top: -73px;
+        right: 0;
+        width: 221px;
+        height: 73px;
+        background-image: url("../../assets/imgs/card/lookup/scanTip.png");
+        background-size: 100% 100%;
+      }
+    }
+
+    .btn-check-wrap {
+      padding-bottom: 50px;
+
+      button {
+        display: inline-block;
+        width: 50%;
+        height: 70px;
+        line-height: 70px;
+        font-size: 28px;
+        color: #fff;
+        background-color: #38b5ed;
+        text-align: center;
+        border-radius: 70px;
+      }
+    }
+
+    .recording-wrap {
+      .recording-list-wrap {
+        max-height: 260px;
+        overflow: auto;
+      }
+
+      li {
+        display: flex;
+        padding: 20px;
+        align-items: center;
+        background-color: #fff;
+        line-height: 1;
+        font-size: 24px;
+        border-bottom: 1PX solid #f0f0f0;
+        box-sizing: border-box;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        span {
+          &:first-child {
+            flex: 4;
+            text-align: left;
+          }
+
+          &:nth-child(2) {
+            flex: 2;
+            text-align: right;
+          }
+
+          &:last-child {
+            max-width: 20px;
+            font-size: 48px;
+            line-height: .5;
+            padding-left: 10px;
+            color: #e0e0e0;
+          }
+
+        }
+      }
+    }
+
+    .recording-title {
+      display: flex;
+      padding: 20px;
+      background-color: #e8eefc;
+      color: #5679bf;
+
+      span {
+        &:first-child {
+          flex: 4;
+          text-align: left;
+        }
+
+        &:last-child {
+          flex: 2;
+          text-align: right;
+        }
+      }
+    }
+
+  }
+
+
+  // app样式
+  .appStyle {
+    // padding: 0 40px;
+    .scanTop-wrap {
+      padding: 31px 0 0px 0;
+      text-align: center;
+      background: #00CA9D;
+      height: 284px;
+
+      img {
+        display: block;
+        width: 586px;
+        height: 347px;
+        margin: 0 auto;
+
+      }
+    }
+
+    .search-wrap {
+      position: relative;
+      display: flex;
+      height: 128px;
+      align-items: center;
+      background: #FAFAFA;
+      margin: 144px 22px 32px 22px;
+
+      input {
+        flex: 6;
+        padding-left: 34px;
+        font-size: 32px;
+        font-weight: 400;
+        color: rgba(46, 46, 46, 1);
+      }
+
+      .clearIccid {
+        position: relative;
+        right: 20px;
+        font-size: 50px;
+        color: #888;
+        line-height: .8;
+        cursor: pointer;
+      }
+
+      .icon-scan {
+        font-size: 78px;
+        color: #38b5ed;
+        line-height: 1;
+      }
+
+      .icon-scanTip {
+        position: absolute;
+        top: -73px;
+        right: 0;
+        width: 221px;
+        height: 73px;
+        background-size: 100% 100%;
+      }
+    }
+
+    .btn-check-wrap {
+      padding-bottom: 84px;
+
+      button {
+        display: inline-block;
+        width: 596px;
+        height: 80px;
+        line-height: 80px;
+        font-size: 32px;
+        font-weight: 400;
+        color: rgba(255, 255, 255, 1);
+        background-color: #00CA9D;
+        text-align: center;
+        border-radius: 100px;
+      }
+    }
+
+    .recording-wrap {
+      padding: 0 25px;
+
+      .recording-list-wrap {
+        max-height: 260px;
+        overflow: auto;
+      }
+
+      li {
+        display: flex;
+        padding: 20px;
+        align-items: center;
+        background-color: #fff;
+        line-height: 1;
+        font-size: 24px;
+        border-bottom: 1PX solid #f0f0f0;
+        box-sizing: border-box;
+
+        &:last-child {
+          border-bottom: none;
+        }
+
+        span {
+          &:first-child {
+            flex: 4;
+            text-align: left;
+          }
+
+          &:nth-child(2) {
+            flex: 2;
+            text-align: right;
+          }
+
+          &:last-child {
+            max-width: 20px;
+            font-size: 48px;
+            line-height: .5;
+            padding-left: 10px;
+            color: #e0e0e0;
+          }
+
+        }
+      }
+    }
+
+    .recording-title {
+      display: flex;
+      padding: 20px;
+      background-color: rgba(0, 202, 157, 0.2);
+      font-size: 28px;
+      font-weight: 400;
+      color: rgba(0, 202, 157, 1);
+
+      span {
+        &:first-child {
+          flex: 4;
+          text-align: left;
+        }
+
+        &:last-child {
+          flex: 2;
+          text-align: right;
+        }
+      }
+    }
+
+  }
+</style>
