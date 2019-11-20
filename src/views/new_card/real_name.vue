@@ -29,7 +29,7 @@
       </div>
       <div>
         <span>手机号</span>
-        <input v-model="info_phone" placeholder="请输入" type="number">
+        <input v-model="info_phone" placeholder="请输入手机号接收验证码" type="number">
       </div>
       <div class="code-wrap">
         <input v-model="info_code" placeholder="请输入验证码" type="number">
