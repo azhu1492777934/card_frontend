@@ -316,9 +316,9 @@ function appClickRate(params) {
 }
 
 function appRate(type){
-  if(localStorage.getItem("newAppStyle")=="app2"){
+  // if(localStorage.getItem("newAppStyle")=="app2"){
     appClickRate({user_id:getStorage('userInfo', 'obj').account.user_id ,type:type})
-  }
+  // }
 }
 function encodeUTF8(s) {
   var i, r = [], c, x;
