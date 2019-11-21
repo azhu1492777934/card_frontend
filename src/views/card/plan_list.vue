@@ -52,7 +52,7 @@
 
     <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
       <button @click="recharge">{{recharge_btn_text}}</button>
-      <router-link to="/weixin/coupon/index">卡券兑换</router-link>
+      <a @click="toCard()">卡券兑换</a>
     </div>
 
     <van-popup :close-on-click-overlay="false" v-model="load_plan_list">
@@ -81,7 +81,7 @@
 <script>
   import {mapState} from 'vuex'
   import {Toast, Popup, Notify, List, Dialog} from "vant";
-  import {setStorage, getStorage, checkBrowser, Today, lossRate} from "../../utilies";
+  import {setStorage, getStorage, checkBrowser, Today, lossRate,appRate} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
   export default {
@@ -244,7 +244,7 @@
           this.directRecharge(planInfo);
           return;
         }
-
+        appRate(3);
         //获取当前包月套餐信息
         _get("/api/v1/app/plans/renew_info", {
           user_id: getStorage("userInfo", "obj").account.user_id,
@@ -374,6 +374,10 @@
             return 0;
           }
         }
+      },
+       toCard(){
+        appRate(14);
+        this.$router.push({path:"/weixin/coupon/index"})
       }
     }
   };

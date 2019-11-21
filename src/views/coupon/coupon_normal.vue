@@ -138,7 +138,7 @@
 <script>
   // @ is an alias to /src
   import {Notify} from 'vant'
-  import {getStorage, setStorage} from "../../utilies";
+  import {getStorage, setStorage,appRate} from "../../utilies";
   import {_post} from "../../http";
 
   export default {
@@ -162,6 +162,8 @@
     },
     methods: {
       exchange: function () {
+        appRate(15)
+
         let _this = this;
         if (!this.coupon_code) {
           Notify({message: '请输入兑换码'})

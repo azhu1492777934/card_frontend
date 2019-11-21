@@ -173,6 +173,50 @@ function codeParam(param, type) {
 }//支付中心及用户中心 参数加密
 
 
+
+
+
+
+function appParam(param, type) {
+  let timeSpan = getStorage('timeSpan') == 0 ? 0 : getStorage('timeSpan'),
+    commParam = {
+      timestamp: (Date.parse(new Date()) / 1000) + parseInt(timeSpan),
+      version: 'v1',
+      format: 'json',
+      app_key: "VC728xOw1yDgEXwaWI3ORlccemOj5hqy",
+      nonce: new Date().getMilliseconds() + '0' + Math.floor(Math.random() * 10000)
+    };
+
+  let newParam = Object.assign(param, commParam),
+    sortParm = objKeySort(newParam),
+    row_sign = '',
+    sign = '';
+  for (let i in sortParm) {
+    row_sign += i + '=' + sortParm[i] + '&'
+  }
+  row_sign += "qFWmkeSj9MtkraQAwcOqnc2XcFXtyoWwBPfZhaibDACUDBhBNs7dIDAWKn1CRG1l";
+  sign = md5(row_sign);
+  commParam.sign = sign;
+
+  let finalParam = {};
+
+  if (type === 'post') {
+    finalParam = commParam
+  } else {
+    finalParam = Object.assign(param, commParam);
+  }
+
+  let param_str = '';
+
+  for (let i in finalParam) {
+    param_str += i + '=' + finalParam[i] + '&';
+  }
+
+  param_str = param_str.substring(0, param_str.lastIndexOf("&"));
+
+  return param_str
+}//app统计的参数加密
+
 function checkBrowser() {
   var UA = navigator.userAgent.toLowerCase();
   if (/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|ipad|iris|kindle|Android|Silk|lge |maemo|midp|mmp|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows (ce|phone)|xda|xiino/i.test(navigator.userAgent)
@@ -264,6 +308,18 @@ function lossRate(params) {
     ...params
   });
 }// 流失率统计
+
+
+//app点击统计
+function appClickRate(params) {
+  return _post('/appRateApi/v1/userclicklog/click_log?'+appParam({},'post'),{...params});
+}
+
+function appRate(type){
+  if(localStorage.getItem("newAppStyle")=="app2"){
+    appClickRate({user_id:getStorage('userInfo', 'obj').account.user_id ,type:type})
+  }
+}
 function encodeUTF8(s) {
   var i, r = [], c, x;
   for (i = 0; i < s.length; i++)
@@ -362,4 +418,5 @@ export {
   GetUrlRelativePath,
   lossRate,
   Subtr,
+  appRate
 }

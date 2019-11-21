@@ -22,7 +22,7 @@
             </div>
             <div>
               <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-              <router-link to="/weixin/question/index">问题中心></router-link>
+              <a  @click="toQ()">问题中心></a>
 
             </div>
           </div>
@@ -179,7 +179,7 @@
       </div>
       <div ref="refCardButton" class="btn-recharge-wrap">
         <button @click="recharge">充值续费</button>
-        <router-link to="/weixin/coupon/index">卡券兑换</router-link>
+        <a  @click="toCard()">卡券兑换</a>
       </div>
     </div>
 
@@ -558,8 +558,8 @@
   // @ is an alias to /src
   import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast, Dialog} from 'vant';
-  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage} from "../../utilies";
+  import {Notify, Popup, Toast,Dialog} from 'vant';
+  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage,appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -801,10 +801,12 @@
       },
       recharge() {
         setStorage('check_iccid', this.iccid);
+        appRate(2);
         this.$router.push({path: '/weixin/card/plan_list'})
       },
       refreshOrActivated() {
         if (this.filterCardInfo.refresh_actived === '刷新') {
+          appRate(8);
           location.reload()
         } else {
           if (!this.usageInfo.canActivated) {
@@ -834,6 +836,7 @@
         }
       },
       toConnection() {
+        appRate(13)
         setStorage('check_iccid', this.iccid);
         this.$router.push({path: '/weixin/card/connection'});
       },
@@ -893,6 +896,14 @@
             }, 1000)
           }
         })
+      },
+      toQ(){
+        appRate(9);
+        this.$router.push({path:"/weixin/question/index"})
+      },
+      toCard(){
+        appRate(14);
+        this.$router.push({path:"/weixin/coupon/index"})
       }
     }
   };

@@ -130,7 +130,7 @@
           支付方式选择
         </div>
         <div class="content">
-          <p @click="changePayType(true)" :class="{'choose_type':appPay.type}">微信支付</p>
+          <!-- <p @click="changePayType(true)" :class="{'choose_type':appPay.type}">微信支付</p> -->
           <p @click="changePayType(false)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
         </div>
         <div class="footer">
@@ -146,7 +146,7 @@
 <script>
   import {mapState} from 'vuex'
   import {DatetimePicker, Area, Popup, Notify} from 'vant';
-  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today} from "../../utilies";
+  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today,appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -206,7 +206,7 @@
 
         appPay: {
           show: false,
-          type: true,//true 为微信，false 为支付宝
+          type: false,//true 为微信，false 为支付宝
         },
         settingRechargeList: []
       }
@@ -518,6 +518,8 @@
                   location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` :
                   location.href = res.data;
               } else {
+
+
                 if (this.planInfo.vip_type_id != 0) {
                   Notify({
                     message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
@@ -549,6 +551,9 @@
       },
       normalPay() {
         let rechargeInfo = this.new_recharge_list[this.activeIndex];
+
+        appRate(4);
+
         if (this.client_type === 'app') {
           if (rechargeInfo.pay_type === 'diamond_charge' && this.userInfo.account.balance > this.planInfo.price) {
             this.appPay.show = false;
@@ -562,6 +567,7 @@
 
       },//普通支付
       FinalAppPay() {
+        appRate(5);
         this.recharge();
       },//app支付
       filterRechargeList: function (rmb, planPrice) {
@@ -607,7 +613,8 @@
         this.appPay.type = !!type;
       },
       closePayType() {
-        this.appPay.type = true;
+        appRate(6);
+        this.appPay.type = false;
         this.appPay.show = false
       },
       getRechargeInfo() {

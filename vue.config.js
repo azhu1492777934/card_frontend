@@ -84,7 +84,13 @@ module.exports = {
           '^/verification': ''
         }
       },
-
+      '/appRateApi': {
+        target: 'http://wenzhangapi-test.china-m2m.com',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/appRateApi': ''
+        }
+      },
     }
   }
 };

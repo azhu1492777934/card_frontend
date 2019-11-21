@@ -3,16 +3,16 @@
     <p class="title">问题中心</p>
     <ul>
       <li>
-        <router-link to="/weixin/question/find_plan">1.套餐充值成功，流量通话未增加</router-link>
+        <a   @click="q1()">1.套餐充值成功，流量通话未增加</a>
       </li>
       <li>
-        <router-link to="/weixin/question/revoke_plan">2.流量通话显示正常，但无法使用</router-link>
+        <a  @click="q2()">2.流量通话显示正常，但无法使用</a>
       </li>
       <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
         <a @click="toRefund" href="javascript:;">3.套餐退款</a>
       </li>
       <li>
-        <router-link to="/weixin/question/release_plan"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">4</span>.解约自动续费套餐</router-link>
+        <a  @click="q3()"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">4</span>.解约自动续费套餐</a>
       </li>
      
      <li v-if="global_variables.packed_project=='mifi'">
@@ -69,7 +69,7 @@
 
 <script>
   // @ is an alias to /src
-  import {setStorage, getStorage,checkBrowser} from "../../utilies";
+  import {setStorage, getStorage,checkBrowser,appRate} from "../../utilies";
 
   export default {
     name: "home",
@@ -90,7 +90,25 @@
         this.$router.push({
           path: '/weixin/refund/argument',
         });
-      }
+      },
+      q1(){
+        appRate(10);
+        this.$router.push({
+          path: '/weixin/question/find_plan',
+        });
+      },
+      q2(){
+        appRate(11);
+        this.$router.push({
+          path: '/weixin/question/revoke_plan',
+        });
+      },
+      q3(){
+        appRate(12);
+        this.$router.push({
+          path: '/weixin/question/release_plan',
+        });
+      },
     }
   };
 </script>

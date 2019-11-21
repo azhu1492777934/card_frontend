@@ -74,7 +74,8 @@
     removeStorage,
     getUrlParam,
     checkBrowser,
-    lossRate
+    lossRate,
+    appRate
   } from '../../utilies'
   import {Popup, Notify, Toast,Dialog} from 'vant'
   import {_post, _get} from "../../http";
@@ -110,6 +111,9 @@
       var UA = navigator.userAgent.toLowerCase();
       if (/(app_charge)/.test(UA)) {
         this.newAppStyle = "app2";
+        localStorage.setItem("newAppStyle","app2");
+      }else{
+        localStorage.setItem("newAppStyle","app");
       }
       if (this.client_type !== 'wechat' || this.client_type !== 'alipay' || this.client_type !== 'app' || getStorage('token')) {
         this.forbidden_click = false
@@ -265,7 +269,7 @@
           this.recording_list.splice(20)
         }
         setStorage('recording_list', this.recording_list, 'arr', true);
-
+        appRate(1)
         //查询
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: newIccid,
