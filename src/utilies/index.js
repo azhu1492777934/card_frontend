@@ -311,14 +311,11 @@ function lossRate(params) {
 
 
 //app点击统计
-function appClickRate(params) {
-  return _post('/appRateApi/v1/userclicklog/click_log?'+appParam({},'post'),{...params});
-}
 
 function appRate(type){
-  // if(localStorage.getItem("newAppStyle")=="app2"){
-    appClickRate({user_id:getStorage('userInfo', 'obj').account.user_id ,type:type})
-  // }
+  if(localStorage.getItem("newAppStyle")=="app2"){
+    return _post('/appRateApi/v1/userclicklog/click_log?'+appParam({},'post'),{user_id:getStorage('userInfo', 'obj').account.user_id ,type:type});
+  }
 }
 function encodeUTF8(s) {
   var i, r = [], c, x;
