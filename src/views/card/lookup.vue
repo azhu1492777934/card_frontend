@@ -77,7 +77,7 @@
     lossRate,
     appRate
   } from '../../utilies'
-  import {Popup, Notify, Toast,Dialog} from 'vant'
+  import {Popup, Notify, Toast, Dialog} from 'vant'
   import {_post, _get} from "../../http";
   import cardButton from '../../components/button'
   import Empty from '../../components/empty'
@@ -111,9 +111,9 @@
       var UA = navigator.userAgent.toLowerCase();
       if (/(app_charge)/.test(UA)) {
         this.newAppStyle = "app2";
-        localStorage.setItem("newAppStyle","app2");
-      }else{
-        localStorage.setItem("newAppStyle","app");
+        localStorage.setItem("newAppStyle", "app2");
+      } else {
+        localStorage.setItem("newAppStyle", "app");
       }
       if (this.client_type !== 'wechat' || this.client_type !== 'alipay' || this.client_type !== 'app' || getStorage('token')) {
         this.forbidden_click = false
@@ -128,7 +128,7 @@
       let _this = this;
 
       if (getStorage('recording_list', 'arr')) {
-        let local_recording_list = getStorage('recording_list', 'arr')
+        let local_recording_list = getStorage('recording_list', 'arr');
         if (local_recording_list.length) {
           this.recording_list = local_recording_list;
           this.recording_show = true
@@ -291,26 +291,7 @@
               this.$router.push({path: '/weixin/card/usage'})
             }
             if (res.data.status === 2) {
-              setStorage('check_realNameSource', res.data.source);
-
-              let data=res.data.iccid;
-              let source=res.data.source;
-              lossRate({type: 3, iccid: res.data.iccid})
-                .then(res => {
-                  if (res.state === 1) {
-                    _get('/api/v1/app/cards/realname', {
-                      iccid: data
-                    }).then(res => {
-                      if(res.data===1){
-                        window.location.href = `http://realname.china-m2m.com/auth/new_card/real_name?iccid=${data}&source=${source}&urlType=1`;
-                      }else{
-                        this.$router.push({path: '/weixin/new_card/real_name'});
-                      }
-                    })
-                  } else {
-                    Notify({message: res.msg});
-                  }
-                });
+              this.toRealname(res.data.iccid, res.data.source);
             }
             if (res.data.status === 3) {
               this.getRealnameType(res.data.iccid);
@@ -321,6 +302,30 @@
             });
           }
         })
+      },
+      toRealname(iccid, source) {
+        let sourceArr = [45, 46];
+        let toInternal = false;
+        if (sourceArr.includes(source)) {
+          toInternal = true;
+        }
+        setStorage('check_realNameSource', source);
+        lossRate({type: 3, iccid: iccid})
+          .then(res => {
+            if (res.state === 1) {
+              _get('/api/v1/app/cards/realname', {
+                iccid: iccid
+              }).then(res => {
+                if (res.data === 1 || toInternal) {
+                  window.location.href = `${this.global_variables.realname_url}?iccid=${iccid}&source=${source}&urlType=1`;
+                } else {
+                  this.$router.push({path: '/weixin/new_card/real_name'});
+                }
+              })
+            } else {
+              Notify({message: res.msg});
+            }
+          });
       },
       scanIccid() {
         let _this = this;
@@ -411,7 +416,7 @@
         this.showClearBtn = false
       },
       debounce(func, delay) {
-        let timer
+        let timer;
         return (...args) => {
           if (timer) {
             clearTimeout(timer)
