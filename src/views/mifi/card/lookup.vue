@@ -165,10 +165,8 @@
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: iccid,
         }).then(res => {
-          this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false})
-
+          this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false});
           let autoCount = getStorage('watchAutoSearch');
-
           if (autoCount) {
             autoCount++;
             setStorage('watchAutoSearch', autoCount);
@@ -180,36 +178,40 @@
 
             this.recordingIccid({
               iccid: res.data.iccid,
-              realname: (res.data.status === 2 || res.data.status === 3) ? false : true
+              realname: (!(res.data.status === 2 || res.data.status === 3))
             }); // 增加iccid实名记录
 
             if (res.data.status === 1) {
               this.$router.push({path: '/mifi/card/index'});
-            } else if (res.data.status === 2 || res.data.status === 3) {
-              setStorage('check_realNameSource', res.data.source);
-              let data=res.data.iccid;
-              let source=res.data.source;
-               _get('/api/v1/app/cards/realname', {
-                      iccid: data
-                    }).then(res => {
-                        if(res.data==1){
-                          window.location.href = `http://realname.china-m2m.com/auth/new_card/real_name?iccid=${data}&source=${source}&urlType=2`;
-                        }else{
-                          this.$router.push({
-                            path: '/weixin/new_card/real_name',
-                            query: {from: 'mifi'}
-                          });
-                        }
-                    })
-              
+            }
+            if (res.data.status === 2 || res.data.status === 3) {
+              this.toRealname(res.data.iccid,res.data.source);
             }
           } else {
             Notify({message: res.msg})
           }
         })
-
       },
-
+      toRealname(iccid,source){
+        let sourceArr = [45, 46];
+        let toInternal = false;
+        if (sourceArr.includes(source)) {
+          toInternal = true;
+        }
+        setStorage('check_realNameSource', source);
+        _get('/api/v1/app/cards/realname', {
+          iccid: iccid
+        }).then(res => {
+          if (res.data === 1 || toInternal) {
+            window.location.href = `${this.global_variables.realname_url}?iccid=${iccid}&source=${source}&urlType=2`;
+          } else {
+            this.$router.push({
+              path: '/weixin/new_card/real_name',
+              query: {from: 'mifi'}
+            });
+          }
+        })
+      },
       recordingIccid(params) {
         let isExist = false;
         if (this.recording_list.length) {
@@ -291,7 +293,7 @@
             msg: '请输入ICCID'
           }
         }
-        if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != "89") && (iccid.length != 13 && iccid.length != 11 && iccid.length != 15 && iccid.length != 16)) {
+        if ((iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) !== "89") && (iccid.length !== 13 && iccid.length !== 11 && iccid.length !== 15 && iccid.length !== 16)) {
           return {
             state: 0,
             msg: 'ICCID有误,请检查'
