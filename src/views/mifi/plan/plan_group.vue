@@ -35,8 +35,10 @@
             <p>￥{{ inner_item.market_price }}</p>
           </div>
 
-          <img v-if="inner_item.is_recommend" class="recommend" src="../../../assets/imgs/mifi/plan_group/icon_recommend.png" alt=""><!--推荐-->
-          <span class="icon-sell-done" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span><!--售罄-->
+          <img v-if="inner_item.is_recommend" class="recommend"
+               src="../../../assets/imgs/mifi/plan_group/icon_recommend.png" alt=""><!--推荐-->
+          <span class="icon-sell-done" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times<=0"></span>
+          <!--售罄-->
           <span v-if="inner_item.vip_type_id!=0" class="youku"></span>   <!--优酷活动-->
         </li>
       </ul>
@@ -63,7 +65,13 @@
       :lazy-render="true"
       :close-on-click-overlay="true"
       :loading="picker.loading">
-      <van-picker ref="picker" show-toolbar title="套餐选择" :columns="columns" @confirm="handleConfirm" @cancel="handleCancel"/>
+      <van-picker
+        ref="picker"
+        show-toolbar title="套餐选择"
+        :columns="columns"
+        @confirm="handleConfirm"
+        @cancel="handleCancel">
+      </van-picker>
     </van-popup><!--套餐喧闹着-->
 
     <van-popup :close-on-click-overlay="false" v-model="appPay.show" class="border-radius-10">
@@ -82,14 +90,56 @@
       </div>
     </van-popup><!--app支付选择-->
 
+    <!--套餐生效时间-->
+    <van-dialog
+      v-model="showDateDialog"
+      title="套餐生效时间"
+      show-cancel-button
+      @confirm="dateDialogConfirm"
+    >
+      <van-radio-group
+        v-model="radio"
+      >
+        <div class="choose-date-wrapper">
+          <van-radio name="1">立即生效</van-radio>
+          <van-radio name="2" @click="showChooseDate">
+            <p class="text-left">自定义套餐生效时间</p>
+            <input v-model="valDate" class="date-val-wrapper" readonly placeholder="请选择生效时间" type="text">
+          </van-radio>
+        </div>
+
+
+      </van-radio-group>
+
+    </van-dialog>
+
+    <van-popup
+      v-model="showDate"
+      position="bottom"
+      :overlay="true"
+      :lock-scroll="true"
+      :lazy-render="true"
+      :close-on-click-overlay="true"
+    >
+      <van-datetime-picker
+        v-model="currentDate"
+        type="date"
+        :min-date="minDate"
+        :max-date="maxDate"
+        :formatter="dateFormatter"
+        @confirm="dateConfirm"
+        @cancel="dateCancel"
+      >
+      </van-datetime-picker>
+    </van-popup>
+
   </div>
 </template>
 
 <script>
-  import BScroll from 'better-scroll'
   import {_get} from "../../../http";
   import {getStorage, setStorage, checkBrowser} from "../../../utilies";
-  import {Popup, Picker, List, Toast, Notify, Dialog} from 'vant'
+  import {Popup, Toast, Notify, Dialog,RadioGroup, Radio,DatetimePicker} from 'vant'
   import {_post} from "../../../http";
 
   export default {
@@ -122,21 +172,31 @@
         planName: ["累计套餐", "包月套餐", "加油包", "加速包", "国际套餐", "周期性套餐", "超量自动充值套餐"],
         totalPlan: [],
         cur_plan_type_index: 0,
-        scrollTop: 0
+        scrollTop: 0,
+        // 套餐生效时间
+        // 选择套餐生效时间
+        showDateDialog: false,
+        radio: '1',
+        showDate: false,
+        valDate: this.getToday(),
+        minDate: new Date(),
+        maxDate: new Date(this.getEndDate().endYear, this.getEndDate().endMonth, this.getEndDate().endDay),
+        currentDate: new Date(),
       }
     },
     components: {
       [Popup.name]: Popup,
-      [Picker.name]: Picker,
-      [List.name]: List,
       [Toast.name]: Toast,
       [Dialog.name]: Dialog,
+      [RadioGroup.name]: RadioGroup,
+      [Radio.name]: Radio,
+      [DatetimePicker.name]: DatetimePicker,
     },
     created() {
       this.iccid ? this.initial({}) : this.$router.push({path: '/mifi/card/lookup'});
     },
     methods: {
-      initial(params) {
+      initial() {
         this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
         this.$store.commit('mifiCommon/changeErrStatus', {show: false});
         this.choose_plan_index = 0;
@@ -208,6 +268,49 @@
       choosePlanClick: function (index) {
         this.choose_plan_index = index;
       },
+      // 套餐生效时间
+      dateDialogConfirm(){
+        this.finallyRecharge();
+      },
+      showChooseDate() {
+        this.showDate = true;
+      },
+      dateConfirm(value) {
+        this.valDate = this.getToday(value);
+        this.showDate = false;
+      },
+      dateCancel() {
+        this.showDate = false;
+      },
+      getEndDate() {
+        let date = new Date();
+        date.setDate(date.getDate() + 90);
+        let end_month = date.getMonth() + 1,
+          end_date = date.getDate(),
+          end_year = date.getFullYear();
+        if (end_month < 10) {
+          end_month = '0' + end_month
+        }
+        if (end_date < 10) {
+          end_date = '0' + end_date
+        }
+        return {
+          endDay: end_date,
+          endMonth: end_month - 1,
+          endYear: end_year
+        }
+      },
+      dateFormatter(type, value) {
+        if (type === 'year') {
+          return `${value}年`;
+        } else if (type === 'month') {
+          return `${value}月`
+        } else if (type === 'day') {
+          return `${value}日`
+        }
+        return value;
+      },
+      // end 套餐生效时间
       showPLanDetail() {
         this.picker.showPlanSelect = true;
 
@@ -272,16 +375,14 @@
         }
 
         if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
-
           Dialog.confirm({
             title: '温馨提示',
             message: '您购买的套餐将在本月26号清零。'
           }).then(() => {
-            _this.toRechargeList(planInfo);
+            this.showDateDialog = true;
           })
-
         } else {
-          this.toRechargeList(planInfo)
+          this.showDateDialog = true;
         }
       },
       getToday: function (val) {
@@ -312,10 +413,10 @@
         this.appPay.show = false
       },
       FinalAppPay() {
-        let planInfo = getStorage('userInfo', 'obj');
-        this.toRechargeList(planInfo);
+        this.showDateDialog = true;
       },//app支付
-      toRechargeList(planInfo) {
+      finallyRecharge(){
+        let planInfo = getStorage('planInfo','obj');
         let userInfo = getStorage('userInfo', 'obj');
         let param = {
           status: 0,
@@ -325,7 +426,7 @@
           recharge_price: planInfo.price,
           user_id: userInfo.account.user_id,
           env: this.client_type,
-          start_time: this.getToday(),
+          start_time: this.valDate,
           type: 1,
           failed_page: window.location.href,
           success_page: window.location.protocol + '//' + `${window.location.host}/weixin/recharge/callback`
@@ -345,7 +446,6 @@
             if (res.state === 1) {
               this.rechargeShow = false;
               if (/<[^>]+>/.test(res.data)) {
-                // document.write(res.data);
                 const div = document.createElement('div');
                 div.innerHTML = res.data;
                 document.body.appendChild(div);
@@ -365,7 +465,6 @@
                     _this.global_variables.packed_project === 'mifi' ?
                       location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
                   }
-
                 }, 1500);
               }//纯钻石支付
             } else {
@@ -375,7 +474,6 @@
               })
             }
           })
-        // }
       },
       compare2(pro) {
         return function (obj1, obj2) {
@@ -388,7 +486,6 @@
           } else {
             return 0;
           }
-
         }
       },
       handleScroll() {
@@ -637,6 +734,25 @@
         font-size: 36px;
         border-radius: 80px;
         background-image: linear-gradient(45deg, #f0b546 10%, #fdd47a 100%);
+      }
+    }
+    // 选择生效时间
+    .choose-date-wrapper {
+      padding: 40px;
+
+      div[role='radio'] {
+        align-items: flex-start;
+        padding-bottom: 20px;
+      }
+
+      .text-left {
+        text-align: left !important;
+      }
+
+      .date-val-wrapper {
+        padding-top: 10px;
+        border-bottom: 1px solid #ccc;
+        border-radius: 0;
       }
     }
   }
