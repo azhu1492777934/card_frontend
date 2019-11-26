@@ -3,7 +3,8 @@
     <p class="recharge-success">
       <img class="icon-success" src="../../assets/imgs/recharge_success/icon-recharge_20181001.svg" alt=""><br>支付成功!
     </p>
-    <div class="oneMsg" v-if="planInfo.vip_type_id!=0">购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。</div>
+    <div class="oneMsg" v-if="planInfo.vip_type_id!=0&&global_variables.device!='iphone'&&client_type!='app'">购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。</div>
+
     <!-- <img class="success-banner" src="../../assets/imgs/recharge_success/recharge_callback_20181126.jpg" alt=""> -->
     <span class="btn_to_lottery">({{time}}S后跳转) </span>
     <!-- <span id="jump_plan" @click="to_another_way('card')" class="btn_to_plan">跳过</span> -->

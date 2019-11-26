@@ -181,7 +181,8 @@
               refPlanButton = this.$refs.refPlanButton.offsetHeight,
               userHeight = getStorage("userHeight") || 44;
               if(this.global_variables.device=="iphone"&&this.client_type=="app"){
-                    this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight-49) + 'px'
+                  this.$refs.vanSwiperWwrap.style.height =
+                      clientHeight - refPlanButton - userHeight-49 + "px";
               }else{
                   if (this.client_type === "wechat" || this.client_type === "alipay") {
                     this.$refs.vanSwiperWwrap.style.height =

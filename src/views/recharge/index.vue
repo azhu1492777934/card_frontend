@@ -519,9 +519,8 @@
                   location.href = res.data;
               } else {
 
-
                 if (this.planInfo.vip_type_id != 0) {
-                  if(this.global_variables.device=="iphone"){
+                  if(this.global_variables.device=="iphone"&&this.client_type=="app"){
                     Notify({
                       message: '购买成功。',
                       background: '#60ce53'
