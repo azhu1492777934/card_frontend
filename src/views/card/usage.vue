@@ -771,16 +771,17 @@
                 refCardData = this.$refs.refCardData.offsetHeight,
                 refCardButton = this.$refs.refCardButton.offsetHeight,
                 refPlanTitle = this.$refs.refPlanTitle.offsetHeight,
-                userHeight = getStorage('userHeight') || 44,
-                forIphoneHeight=window.screen.availHeight;
-                if(this.global_variables.device=="iphone"){
-                  clientHeight=forIphoneHeight;
+                userHeight = getStorage('userHeight') || 44;
+                if(this.global_variables.device=="iphone"&&this.client_type=="app"){
+                    this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight-49) + 'px'
+                }else{
+                  if (this.client_type === 'wechat' || this.client_type === 'alipay') {
+                    this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight) + 'px'
+                  } else {
+                    this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) - userHeight + 'px'
+                  }
                 }
-              if (this.client_type === 'wechat' || this.client_type === 'alipay') {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle - userHeight) + 'px'
-              } else {
-                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) - userHeight + 'px'
-              }
+              
             });
           } else {
             Toast({
