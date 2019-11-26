@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.0c5ed069.js"
   },
   {
-    "revision": "1ad8f23b26f7c1c26ce5",
+    "revision": "11492e87b326fa7c5095",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "1ad8f23b26f7c1c26ce5",
-    "url": "/js/app.ffa1d26b.js"
+    "revision": "11492e87b326fa7c5095",
+    "url": "/js/app.a3c8ff77.js"
   },
   {
     "revision": "cfa32c570c3df3065414",
@@ -444,12 +444,12 @@ self.__precacheManifest = [
     "url": "/js/real_name.df32d8ea.js"
   },
   {
-    "revision": "b7d7792bc44565ca1337",
-    "url": "/css/recharge.9e81fba0.css"
+    "revision": "3ddeca3df90bdf3d89f0",
+    "url": "/css/recharge.55841b6c.css"
   },
   {
-    "revision": "b7d7792bc44565ca1337",
-    "url": "/js/recharge.d40d03bb.js"
+    "revision": "3ddeca3df90bdf3d89f0",
+    "url": "/js/recharge.407b8f4c.js"
   },
   {
     "revision": "e27fa1f9067e7bf2344c",
@@ -636,16 +636,16 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
+    "revision": "4ecd943eb3a2c5c0890145b943c1c659",
+    "url": "/img/85.4ecd943e.png"
+  },
+  {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
     "url": "/img/ios@2x.e625229e.png"
   },
   {
     "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
     "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "4ecd943eb3a2c5c0890145b943c1c659",
-    "url": "/img/85.4ecd943e.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -752,14 +752,6 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
     "url": "/img/noData@3x.f40c7e0b.png"
   },
@@ -770,6 +762,14 @@ self.__precacheManifest = [
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
     "url": "/img/bg.01355f17.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -796,20 +796,20 @@ self.__precacheManifest = [
     "url": "/img/card_index_bg@2x.b899232b.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
     "url": "/img/bg_network@3x.2c51a1e5.png"
   },
   {
     "revision": "32d70c8fc305e3647098f3de0c71b618",
     "url": "/img/bg_network@2x.32d70c8f.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -884,6 +884,14 @@ self.__precacheManifest = [
     "url": "/img/telecom-logo.5f1f3403.svg"
   },
   {
+    "revision": "0b3c3297decbd1152a314cce115f9632",
+    "url": "/img/09.0b3c3297.png"
+  },
+  {
+    "revision": "3e217df4202e41ad9b030aafc8cfcc24",
+    "url": "/img/4.3e217df4.png"
+  },
+  {
     "revision": "aecc9531f2c3b1fd45338e7bf5084384",
     "url": "/img/bg_no_recharge.aecc9531.svg"
   },
@@ -928,15 +936,7 @@ self.__precacheManifest = [
     "url": "/img/06.999589aa.png"
   },
   {
-    "revision": "0b3c3297decbd1152a314cce115f9632",
-    "url": "/img/09.0b3c3297.png"
-  },
-  {
-    "revision": "3e217df4202e41ad9b030aafc8cfcc24",
-    "url": "/img/4.3e217df4.png"
-  },
-  {
-    "revision": "6f43ae5bfbe90caf1908a4f2ae71cb49",
+    "revision": "b07f9ae87d2254bd7e0fd1de585ac0c5",
     "url": "/index.html"
   },
   {
