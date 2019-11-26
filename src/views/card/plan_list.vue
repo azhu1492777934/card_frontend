@@ -180,6 +180,11 @@
               document.body.clientHeight,
               refPlanButton = this.$refs.refPlanButton.offsetHeight,
               userHeight = getStorage("userHeight") || 44;
+              forIphoneHeight=window.screen.availHeight;
+                if(this.global_variables.device=="iphone"){
+                  clientHeight=forIphoneHeight;
+                }
+
             if (this.client_type === "wechat" || this.client_type === "alipay") {
               this.$refs.vanSwiperWwrap.style.height =
                 clientHeight - refPlanButton - userHeight + "px";
