@@ -116,7 +116,7 @@
     import userHeader from '../../../components/common/uesrHead'
     import {getStorage,setStorage,toDecimal} from "../../../utilies";
     import {_get} from "../../../http";
-    import {Toast} from 'vant';
+    import {Toast,Dialog} from 'vant';
     export default {
         name: "index",
         data(){
@@ -167,6 +167,22 @@
 
                         setStorage('check_realNameSource',res.data.source);
                         this.usageInfo = res.data;
+
+
+                        //活动
+                        let activitySourceArray=[1,7,11,16];
+                        if(activitySourceArray.indexOf(res.data.source)!=-1){
+                            Dialog.confirm({
+                              title: '活动通知',
+                              message: '尊敬的客户，您好！即日起我司将推出各种“优惠活动套餐”和”价格美丽的超大流量套餐（527G、465G）”，如需参与活动请点击下方”同意“申请更换新卡后选购即可，如有疑问请联系我司在线客服，感谢您的支持！活动时间：11月25日-12月1日'
+                            }).then(() => {
+                              // on confirm
+                              this.toChangeCard();
+                            }).catch(() => {
+                              // on cancel
+                            });
+                        }
+                        
 
                         // 当日用量
                         if( res.data.today_used_flow >= 0){

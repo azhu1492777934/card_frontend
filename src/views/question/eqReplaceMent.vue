@@ -50,25 +50,21 @@
                   <span><span class="redWord">*</span> 详细地址</span>
                   <input v-model="replaceData.addr" placeholder="请输入详细地址" type="text">
                 </li>
-                <li>
+                <!-- <li>
                   <span class="redWord"><span class="redWord">*</span > 赠品</span>
-                  <!-- <div>
-                    <input type="radio" value="1" v-model="gift"> <span>优酷会员</span>
-                  </div> -->
+                  
                   <div >
-                    <!-- <input type="radio" value="2" v-model="gift">  -->
                     <span>流量套餐</span>
                   </div>
-                </li>
-                <!-- <li v-show="gift == 1">
-                  <span><span class="redWord">*</span> 优酷账号</span>
-                  <input v-model="youku_mobile" placeholder="请输入优酷绑定的手机号" type="number">
                 </li> -->
+                
               </ul>
 
               <div class="submitButton">
                 <div @click="submit()">提交</div>
                 <div>注：请仔细核对信息后再提交</div>
+                <div>1.新卡1-3个工作日发出</div>
+                <div>2.快件发出后方可在“物流查询”界面查询快递信息</div>
               </div>
             </div>
 
@@ -176,7 +172,6 @@
     created() {
       // this.currentType=getUrlParam("status");
       this.currentType = localStorage.getItem("replaceStatus");
-      console.log(this.currentType);
       if(this.currentType==0){
         this.statusList=["设备更换", "物流查询"];
       }else{
@@ -291,7 +286,7 @@
       },
 
       //表单提交
-      submit() {
+      async submit() {
         let _this = this;
 
         if (!(/^[1-9]\d*$/).test(this.replaceData.code)) {
@@ -333,7 +328,6 @@
           Notify({message: "请填写详细地址"});
           return false;
         }
-        console.log(this.replaceData.addr);
         if (this.replaceData.addr.length < 3) {
           Notify({message: "详细地址过短"});
           return false;
@@ -363,26 +357,30 @@
         newData.youku_mobile = this.youku_mobile;
         // newData.user_id="613639";
 
-        _post('/api/v1/app/equipment/change/apply', newData).then(res => {
-          if (res.state == 1) {
-            Notify({
-              message: '提交成功',
-              background: '#60ce53'
-            })
-            this.replaceData = {};
-            this.areaData = "";
-            this.gift = 2;
-            this.youku_mobile = ""
-          } else {
-            Notify({message: res.msg})
+        if(this.currentType==1){
+          let activitySourceArray=[1,7,11,16];
+          if(activitySourceArray.indexOf(await this.getSource(newData.iccid))!=-1){
+            Dialog.confirm({
+              title: '',
+              message: '换卡需支付10元快递费，请确认',
+            }).then(() => {
+              this.cfmSubmit(newData);
+            }).catch(() => {
+
+            });
+          }else{
+            this.cfmSubmit(newData);
           }
-        })
+        }else{
+          this.cfmSubmit(newData);
+        }
+        
+        
       },
 
 
       //扫码
       scanIccid(type) {
-        console.log("dd")
         let _this = this;
         this.wx.scanQRCode({
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -439,6 +437,40 @@
             Notify({message: res.msg})
           }
         })
+      },
+      cfmSubmit(newData){
+        _post('/api/v1/app/equipment/change/apply', newData).then(res => {
+          if (!res.data&&res.state==1) {
+            Notify({
+              message: '提交成功',
+              background: '#60ce53'
+            })
+            this.replaceData = {};
+            this.areaData = "";
+            this.gift = 2;
+            this.youku_mobile = ""
+          }else if(/<[^>]+>/.test(res.data)){
+            const div = document.createElement('div');
+            div.innerHTML = res.data;
+            document.body.appendChild(div);
+            document.forms[0].submit();
+          } else {
+            Notify({message: res.msg})
+          }
+        })
+      },
+      getSource(iccid){
+        let p =new Promise((resolve,reject)=>{
+          _get('/api/v1/app/cards/details',{
+              iccid:this.iccid,
+          }).then(res=>{
+              if(res.state==1){
+                resolve(res.data.source);
+              }
+          })
+        })
+        return p;
+        
       }
     }
   };
@@ -671,11 +703,12 @@
         color: rgba(68, 63, 56, 1);
       }
 
-      > div:nth-child(2) {
+      > div:nth-child(2),> div:nth-child(3),> div:nth-child(4) {
         font-size: 24px;
         font-family: SourceHanSansSC-Normal;
         font-weight: 400;
         color: rgba(255, 76, 35, 1);
+        margin-bottom:10px;
       }
     }
 

@@ -31,7 +31,7 @@
 <script>
   // @ is an alias to /src
   import {setStorage, formatterCardTime, getStorage, removeStorage, getUrlParam, checkBrowser} from '../../../utilies'
-  import {Popup, Notify} from 'vant'
+  import {Popup, Notify,Dialog} from 'vant'
   import {_post, _get} from "../../../http";
   import cardButton from '../../../components/button/index'
 
@@ -159,12 +159,12 @@
         this.processCheckIccid(iccid);
       },
 
-      processCheckIccid: function (iccid) {
+       processCheckIccid: function (iccid) {
         this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
         //查询
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: iccid,
-        }).then(res => {
+        }).then(async res => {
           this.$store.commit('mifiCommon/changeLoadingStatus', {flag: false});
           let autoCount = getStorage('watchAutoSearch');
           if (autoCount) {
@@ -185,7 +185,22 @@
               this.$router.push({path: '/mifi/card/index'});
             }
             if (res.data.status === 2 || res.data.status === 3) {
-              this.toRealname(res.data.iccid,res.data.source);
+
+              let activitySourceArray=[1,7,11,16];
+              if( activitySourceArray.indexOf(await this.getSource(iccid))!=-1){
+                Dialog.confirm({
+                  title: '活动通知',
+                  message: '尊敬的客户，您好！即日起我司将推出各种“优惠活动套餐”和”价格美丽的超大流量套餐（527G、465G）”，如需参与活动请点击下方”同意“申请更换新卡后选购即可，如有疑问请联系我司在线客服，感谢您的支持！活动时间：11月25日-12月1日'
+                }).then(() => {
+                  // on confirm
+                  this.toChangeCard();
+                }).catch(() => {
+                  // on cancel
+                  this.toRealname(res.data.iccid,res.data.source);
+                });
+              }else{
+                this.toRealname(res.data.iccid,res.data.source);
+              }
             }
           } else {
             Notify({message: res.msg})
@@ -346,7 +361,21 @@
             func.apply(this, args)
           }, delay)
         }
-      }
+      },
+      getSource(iccid){
+        let p =new Promise((resolve,reject)=>{
+          _get('/api/v1/app/cards/details',{
+              iccid:this.iccid,
+          }).then(res=>{
+              if(res.state==1){
+                resolve(res.data.source);
+              }
+          })
+        })
+        return p;
+      },
+      toChangeCard(){this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)},
+
 
     }
   };
