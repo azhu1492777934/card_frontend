@@ -96,6 +96,7 @@
       title="套餐生效时间"
       show-cancel-button
       @confirm="dateDialogConfirm"
+      message-align="left"
     >
       <van-radio-group
         v-model="radio"
@@ -739,12 +740,11 @@
     // 选择生效时间
     .choose-date-wrapper {
       padding: 40px;
-
       div[role='radio'] {
         align-items: flex-start;
         padding-bottom: 20px;
       }
-
+      
       .text-left {
         text-align: left !important;
       }

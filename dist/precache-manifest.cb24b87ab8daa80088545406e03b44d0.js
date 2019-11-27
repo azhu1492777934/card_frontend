@@ -4,16 +4,16 @@ self.__precacheManifest = [
     "url": "/js/recharge_wrapper.bd609ed7.js"
   },
   {
-    "revision": "90a35463b685efaa3a84",
-    "url": "/css/Layout.6f67a32f.css"
+    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
+    "url": "/robots.txt"
+  },
+  {
+    "revision": "509fcca0880128969718",
+    "url": "/css/refundRules.4bbcf20a.css"
   },
   {
     "revision": "10679cd21017d22a21aa",
     "url": "/css/Layout~card_usage.8ac0b02d.css"
-  },
-  {
-    "revision": "10679cd21017d22a21aa",
-    "url": "/js/Layout~card_usage.20fe43c5.js"
   },
   {
     "revision": "f6fe50ccd582c459975e",
@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.0c5ed069.js"
   },
   {
-    "revision": "554c66214b7bc9162e15",
+    "revision": "e040a0dc2d140006fa05",
     "url": "/css/app.72184c26.css"
   },
   {
-    "revision": "554c66214b7bc9162e15",
-    "url": "/js/app.32c2266b.js"
+    "revision": "e040a0dc2d140006fa05",
+    "url": "/js/app.e4d6873a.js"
   },
   {
     "revision": "cfa32c570c3df3065414",
@@ -356,12 +356,12 @@ self.__precacheManifest = [
     "url": "/js/mifi_order_wrapper.9b6be3de.js"
   },
   {
-    "revision": "a1058e8794fd3852102f",
+    "revision": "030488c3fc72ea0e553b",
     "url": "/css/mifi_plan_group.6b89e007.css"
   },
   {
-    "revision": "a1058e8794fd3852102f",
-    "url": "/js/mifi_plan_group.4d4cc3cd.js"
+    "revision": "030488c3fc72ea0e553b",
+    "url": "/js/mifi_plan_group.fd3775a2.js"
   },
   {
     "revision": "921c59e35ae6de7b8307",
@@ -484,8 +484,8 @@ self.__precacheManifest = [
     "url": "/js/Layout.ffe69126.js"
   },
   {
-    "revision": "509fcca0880128969718",
-    "url": "/css/refundRules.4bbcf20a.css"
+    "revision": "10679cd21017d22a21aa",
+    "url": "/js/Layout~card_usage.20fe43c5.js"
   },
   {
     "revision": "509fcca0880128969718",
@@ -648,20 +648,20 @@ self.__precacheManifest = [
     "url": "/img/85.4ecd943e.png"
   },
   {
-    "revision": "fa855242805b87da42c65763acd64ac0",
-    "url": "/img/bg-plan-type@2x.fa855242.png"
-  },
-  {
-    "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
-    "url": "/img/bg-plan-type@3x.4a9ca192.png"
-  },
-  {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
     "url": "/img/bg-check-wrap@3x.3f342771.png"
   },
   {
     "revision": "9713b21819c4019befecd095069977df",
     "url": "/img/bg-check-wrap@2x.9713b218.png"
+  },
+  {
+    "revision": "fa855242805b87da42c65763acd64ac0",
+    "url": "/img/bg-plan-type@2x.fa855242.png"
+  },
+  {
+    "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
+    "url": "/img/bg-plan-type@3x.4a9ca192.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -704,14 +704,6 @@ self.__precacheManifest = [
     "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
-    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
-    "url": "/img/noData@3x.f40c7e0b.png"
-  },
-  {
-    "revision": "644e6e3cf5f33943747b116316694e28",
-    "url": "/img/noData@2x.644e6e3c.png"
-  },
-  {
     "revision": "91e1d2771efacd45e5e465d9a001f197",
     "url": "/img/liantong.91e1d277.png"
   },
@@ -744,16 +736,16 @@ self.__precacheManifest = [
     "url": "/img/balanceRefund.0078f03c.png"
   },
   {
+    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
+    "url": "/img/changeBg.af3ed0b3.png"
+  },
+  {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@3x.42c0fbd4.png"
   },
   {
     "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
     "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "014d354b9b25b67ae95857ba17e2f4cc",
@@ -768,16 +760,12 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
-    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
-    "url": "/img/changeBg.af3ed0b3.png"
+    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
+    "url": "/img/noData@3x.f40c7e0b.png"
   },
   {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
+    "revision": "644e6e3cf5f33943747b116316694e28",
+    "url": "/img/noData@2x.644e6e3c.png"
   },
   {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
@@ -788,12 +776,24 @@ self.__precacheManifest = [
     "url": "/img/iccid_bg@3x.fa9050c4.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
-    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
-    "url": "/img/youku.d0ccbc8a.png"
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
   },
   {
     "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
@@ -804,12 +804,12 @@ self.__precacheManifest = [
     "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
   },
   {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
+    "url": "/img/youku.d0ccbc8a.png"
   },
   {
     "revision": "114a6e12b42b9b48586dd341105188fe",
@@ -936,12 +936,12 @@ self.__precacheManifest = [
     "url": "/img/4.3e217df4.png"
   },
   {
-    "revision": "8607db346081aef1ded5afc9d1835e68",
+    "revision": "60a05620734f38e5799b183b927860d4",
     "url": "/index.html"
   },
   {
-    "revision": "b6216d61c03e6ce0c9aea6ca7808f7ca",
-    "url": "/robots.txt"
+    "revision": "90a35463b685efaa3a84",
+    "url": "/css/Layout.6f67a32f.css"
   },
   {
     "revision": "9ce16f441b39b493af8b96d7e97cce22",
