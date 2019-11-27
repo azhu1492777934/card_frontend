@@ -357,23 +357,23 @@
         newData.youku_mobile = this.youku_mobile;
         // newData.user_id="613639";
 
-        if(this.currentType==1){
-          let activitySourceArray=[1,7,11,16];
-          if(activitySourceArray.indexOf(await this.getSource(newData.iccid))!=-1){
-            Dialog.confirm({
-              title: '',
-              message: '换卡需支付10元快递费，请确认',
-            }).then(() => {
-              this.cfmSubmit(newData);
-            }).catch(() => {
+        // if(this.currentType==1){
+        //   let activitySourceArray=[1,7,11,16];
+        //   if(activitySourceArray.indexOf(await this.getSource(newData.iccid))!=-1){
+        //     Dialog.confirm({
+        //       title: '',
+        //       message: '换卡需支付10元快递费，请确认',
+        //     }).then(() => {
+        //       this.cfmSubmit(newData);
+        //     }).catch(() => {
 
-            });
-          }else{
-            this.cfmSubmit(newData);
-          }
-        }else{
+        //     });
+        //   }else{
+        //     this.cfmSubmit(newData);
+        //   }
+        // }else{
           this.cfmSubmit(newData);
-        }
+        // }
         
         
       },
