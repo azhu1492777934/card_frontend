@@ -162,10 +162,10 @@
     methods: {
       recharge: function () {
         this.choose_plan_info = this.plan_list[this.choose_plan_index];
-        if(!this.choose_plan_info.order_id || !this.choose_plan_info.id){
+        if (!this.choose_plan_info.order_id || !this.choose_plan_info.id) {
           Toast({
-            position:'top',
-            message:"没有检测到主套餐，请刷新重试"
+            position: 'top',
+            message: "没有检测到主套餐，请刷新重试"
           });
           return
         }
@@ -228,11 +228,10 @@
               div.innerHTML = res.data;
               document.body.appendChild(div);
               document.forms[0].submit();
-            }
-            if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
+            } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
               //app
-              this.global_variables.packed_project === "mifi" ?
-                location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
+              this.global_variables.packed_project === "mifi"
+                ? location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
                 : location.href = res.data;
             } else {
               Notify({
@@ -244,7 +243,9 @@
                 if (localStorage.getItem("currentType") === "esim") {
                   location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
                 } else {
-                  _this.global_variables.packed_project === "mifi" ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url;
+                  _this.global_variables.packed_project === "mifi"
+                    ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`
+                    : location.href = res.data.return_url;
                 }
               }, 1500);
             } //纯钻石支付
