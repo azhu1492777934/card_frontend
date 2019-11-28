@@ -367,13 +367,13 @@
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
 
-        if (!getStorage("userInfo", "obj")) {
-          Toast({
-            message: '请在微信或支付宝客服端打开充值',
-            position: 'top'
-          });
-          return
-        }
+        // if (!getStorage("userInfo", "obj")) {
+        //   Toast({
+        //     message: '请在微信或支付宝客服端打开充值',
+        //     position: 'top'
+        //   });
+        //   return
+        // }
 
         if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
           Dialog.confirm({
@@ -503,7 +503,7 @@
   }
 </script>
 
-<style lang="less">
+<style lang="less" >
   .plan-group-wrapper {
     position: relative;
     width: 100%;
@@ -744,7 +744,9 @@
         align-items: flex-start;
         padding-bottom: 20px;
       }
-      
+      .van-radio__label{
+        width:60%;
+      }
       .text-left {
         text-align: left !important;
       }

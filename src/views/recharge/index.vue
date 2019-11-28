@@ -130,8 +130,8 @@
           支付方式选择
         </div>
         <div class="content">
-          <p @click="changePayType(true)" :class="{'choose_type':appPay.type}">微信支付</p>
-          <p @click="changePayType(false)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
+          <p @click="changePayType(true)" :class="{'choose_type':appPay.type}" v-if="global_variables.device!='android'&&client_type=='app'">微信支付</p>
+          <p @click="changePayType(false)" :class="{'choose_type':!appPay.type}" >支付宝支付</p>
         </div>
         <div class="footer">
           <button @click="closePayType">取消</button>
@@ -219,6 +219,9 @@
           iccid: getStorage("check_iccid")
         });
       }
+      if(this.global_variables.device=="android"&&this.client_type=="app"){
+          this.appPay.type = false;
+        }
 
       if (!this.planInfo) {
         this.$router.push({'path': '/weixin/card/plan_list'});
@@ -621,7 +624,11 @@
       },
       closePayType() {
         appRate(6);
-        this.appPay.type = true;
+        if(this.global_variables.device=="android"&&this.client_type=="app"){
+          this.appPay.type = false;
+        }else{
+          this.appPay.type = true;
+        }
         this.appPay.show = false
       },
       getRechargeInfo() {
