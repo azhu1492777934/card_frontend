@@ -1,7 +1,7 @@
 import md5 from 'js-md5';
+import MobileDetect from 'mobile-detect'
 import {_post} from "../http";
 import global_variables from "./domain";
-import {isUndefined} from "element-ui/src/utils/types";
 
 function checkICCID(iccid) {
   if (iccid.length < 19 || iccid.length > 20 || iccid.substr(0, 2) != '89') {
@@ -309,11 +309,21 @@ function lossRate(params) {
   });
 }// 流失率统计
 
+// 绑定也访问统计
+function pageRate() {
+  if(checkBrowser() !=='pc'){
+    let md = new MobileDetect(window.navigator.userAgent);
+    return _post('/accountCenter/v2/user/click-log?' + codeParam({}, 'post'),{
+      mobile_sys:md.os() ,
+      mobile_data:md.mobile(),
+      click_type:2
+    })
+  }
+}
 
 //app点击统计
-
 function appRate(type){
-  if(localStorage.getItem("newAppStyle")=="app2"){
+  if(localStorage.getItem("newAppStyle")==="app2"){
     return _post('/appRateApi/v1/userclicklog/click_log?'+appParam({},'post'),{user_id:getStorage('userInfo', 'obj').account.user_id ,type:type});
   }
 }
@@ -414,6 +424,7 @@ export {
   Today,
   GetUrlRelativePath,
   lossRate,
+  pageRate,
   Subtr,
   appRate
 }

@@ -5,7 +5,6 @@ import './registerServiceWorker'
 import store from '../src/store/index'
 import 'normalize.css'
 
-import {GetUrlRelativePath} from './utilies/index'
 import {Popover} from 'element-ui';
 import 'element-ui/lib/theme-chalk/index.css';
 
@@ -24,7 +23,7 @@ import vueBounce from 'vue-bounce'
 import vueWeChatTitle from 'vue-wechat-title'
 import globalFunction from '../src/utilies/global_function'//全局函数
 import {_get} from "./http";
-import {checkBrowser} from "./utilies";
+import {checkBrowser,pageRate} from "./utilies";
 
 import global_variables from '../src/utilies/domain'
 
@@ -55,9 +54,14 @@ router.afterEach((to, from) => {
         })
     }
   }
-  const u = navigator.userAgent.toLowerCase();
-  if (u.indexOf("like mac os x") < 0 || u.match(/micromessenger/i) != 'micromessenger') return;
+  if((to.path === '/login' && global_variables.packed_project === 'card')
+    || (to.path === '/binding' && global_variables.packed_project === 'mifi')
+  ){
+    pageRate()
+  }
 
+  const u = navigator.userAgent.toLowerCase();
+  if (u.indexOf("like mac os x") < 0 || u.match(/micromessenger/i) !== 'micromessenger') return;
   if (to.path !== global.location.pathname) {
     location.assign(to.fullPath);
   }
