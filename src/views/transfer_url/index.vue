@@ -1,22 +1,22 @@
 <template>
   <div v-show="visible" class="transfer-url-wrapper">
-    <div class="note-tip-wrapper">
-      {{message}}
-      <span class="triangle"></span>
+    <div>
+      <span class="deco-left"></span>
+      <span class="deco-right"></span>
+      <span class="word-left"></span>
+      <span class="word-right"></span>
     </div>
-    <div class="qrImg-wrapper">
-      <div class="animater-wrapper">
-        <div class="animater-img"></div>
-      </div>
 
-      <div class="qr-inner-wrapper">
-        <img :src="qrImg" alt="">
-      </div>
-
-      <div class="bar-wrapper">
-        <p>{{name}}</p>
-      </div>
+    <div class="subscribe-wrapper">
+      <img src="../../assets/imgs/transferUrl/subscribe@3x.png" alt="">
     </div>
+    <div class="qr-wrapper">
+      <img :src="qrImg" alt="二维码">
+    </div>
+    <div class="box-wrapper">
+      <img src="../../assets/imgs/transferUrl/box@3x.png" alt="">
+    </div>
+
   </div>
 </template>
 
@@ -64,73 +64,113 @@
 </script>
 
 <style lang="less">
+  @import "../../assets/less/utitlies";
   .transfer-url-wrapper {
     position: relative;
     width: 100%;
+    height: 100vh;
     min-height: 100vh;
-    padding:10vh 0;
+    padding: 7vh 0 45px;
     box-sizing: border-box;
-    background-image: url("../../assets/imgs/transferUrl/bg.jpeg");
+    background-image: url("../../assets/imgs/transferUrl/bg.png");
     background-repeat: no-repeat;
     background-size: 100% 100%;
+    overflow: hidden;
 
-    .note-tip-wrapper {
-      width: 55%;
-      height: 147px;
-      margin-left: 220px;
-      padding: 20px;
-      color: #fff;
-      text-align: left;
-      font-size: 28px;
-      background-image: url("../../assets/imgs/transferUrl/dialog.png");
-      background-size: 100% 100%;
-      box-sizing: border-box;
-      .triangle{
-        position: absolute;
+    .deco-left {
+      display: inline-block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 110px;
+      height: 411px;
+      .bg-image('../../assets/imgs/transferUrl/icon-left');
+      z-index: 1;
+    }
+
+    .deco-right {
+      display: inline-block;
+      position: absolute;
+      top: 15px;
+      right: 0;
+      width: 110px;
+      height: 424px;
+      .bg-image('../../assets/imgs/transferUrl/icon-right');
+      z-index: 1;
+    }
+
+    .word-left {
+      display: inline-block;
+      position: absolute;
+      width: 146px;
+      height: 393px;
+      top: 50%;
+      left: -40px;
+      margin-top: -196.5px;
+      .bg-image('../../assets/imgs/transferUrl/call-word');
+    }
+
+    .word-right {
+      display: inline-block;
+      position: absolute;
+      width: 186px;
+      height: 378px;
+      top: 50%;
+      right: 0;
+      margin-top: -189px;
+      .bg-image('../../assets/imgs/transferUrl/recharge-word');
+    }
+
+    .subscribe-wrapper {
+      img {
+        width: 490px;
+        /*width: 63%;*/
+        height: auto;
       }
     }
 
-    .qrImg-wrapper {
-      /*padding-top: 20vh;*/
+    .qr-wrapper {
 
-      .animater-img {
-        width: 411px;
-        height: 300px;
-        margin: 0 auto;
-        background-image: url("../../assets/imgs/transferUrl/animater.png");
-        background-size: 100% 100%;
+      img {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 260px;
+        height: 260px;
+        margin-top: -130px;
+        margin-left: -130px;
+        z-index: 99;
+      }
+    }
+
+    .box-wrapper {
+
+      img {
+        position: absolute;
+        left: 50%;
+        margin-left: -50%;
+        bottom: 0;
+        width: 100%;
+        height: auto;
+      }
+    }
+  }
+
+  @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+    .transfer-url-wrapper{
+      padding-top: 15vh;
+
+      .deco-left {
+        top: 10vh;
       }
 
-      .qr-inner-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin: -15px auto 0;
-        width: 430px;
-        height: 430px;
-        padding: 15px;
-        background-color: #fff;
-
-        img {
-          width: 400px;
-          height: 400px;
-        }
+      .deco-right{
+        top: 10vh;
       }
 
-      .bar-wrapper {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 500px;
-        height: 100px;
-        margin: 0 auto;
-        font-size: 26px;
-        color: #fff;
-        background-image: url("../../assets/imgs/transferUrl/bar.png");
-        background-size: 100% 100%;
-
-        p {
-          padding-top: 5px;
+      .box-wrapper{
+        img{
+          bottom: 45px;
         }
       }
     }
