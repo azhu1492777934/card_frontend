@@ -104,10 +104,10 @@
     .word-left {
       display: inline-block;
       position: absolute;
-      width: 146px;
-      height: 393px;
+      width: 226px;
+      height: 363px;
       top: 50%;
-      left: 0;
+      left: -70px;
       margin-top: -196.5px;
       .bg-image('../../assets/imgs/transferUrl/call-word');
     }
@@ -117,7 +117,7 @@
       position: absolute;
       width: 186px;
       height: 378px;
-      top: 50%;
+      top: 49%;
       right: 0;
       margin-top: -189px;
       .bg-image('../../assets/imgs/transferUrl/recharge-word');
@@ -131,20 +131,20 @@
     }
 
     .qr-wrapper {
+      padding-top: 70px;
 
       img {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        width: 270px;
-        height: 270px;
-        margin-top: -155px;
-        margin-left: -135px;
-        z-index: 99;
+        position: relative;
+        width: 300px;
+        height: 300px;
+        z-index: 1;
       }
     }
 
     .box-wrapper {
+      position: absolute;
+      width: 100%;
+      margin-top: calc(100vh * 0.38);
 
       img {
         &:first-child {
@@ -169,6 +169,7 @@
     }
   }
 
+
   @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
     .transfer-url-wrapper {
       padding-top: 15vh;
@@ -181,16 +182,20 @@
         top: 10vh;
       }
 
-      .box-wrapper{
-        img{
-          &:first-child{
+      .box-wrapper {
+        margin-top: calc(100vh * 0.39);
+
+        img {
+          &:first-child {
             bottom: 314px;
           }
-          &:last-child{
+
+          &:last-child {
             bottom: 145px;
           }
         }
       }
     }
   }
+
 </style>
