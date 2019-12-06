@@ -109,6 +109,9 @@
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');
       var UA = navigator.userAgent.toLowerCase();
+      if(/(ylkids_android)/.test(UA)&&!/(app_charge)/.test(UA) || /(ios1.1.0)/.test(UA)&&!/(app_charge)/.test(UA) ){
+        window.location.href="https://card.qiyu-m2m.com";
+      }
       if (/(app_charge)/.test(UA)) {
         this.newAppStyle = "app2";
         localStorage.setItem("newAppStyle", "app2");

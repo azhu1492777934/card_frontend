@@ -402,7 +402,7 @@
       },
       //直接充值
       directRecharge(planInfo) {
-        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+        if (!getStorage("userInfo", "obj").account.user_id) {
           Notify({message: '请在微信或支付宝客户端充值'});
           return
         }
