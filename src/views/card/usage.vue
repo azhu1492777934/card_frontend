@@ -22,8 +22,7 @@
             </div>
             <div>
               <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-              <router-link to="/weixin/question/index">问题中心></router-link>
-
+              <a  @click="toQ()">问题中心></a>
             </div>
           </div>
         </div>
@@ -71,20 +70,19 @@
       <div class="card-plan-wrap">
         <p ref="refPlanTitle" class="card-plan-wrap-title">
           <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
-                :class="{'checked':index==cur_plan_type_index}">{{item}}</span>
+                :class="{'checked':index==cur_plan_type_index}" v-bind:key="index">{{item}}</span>
         </p>
         <div class="van-swipe-wrap">
           <swiper ref="mySwiper" :options="swiperOption">
             <swiper-slide>
               <ul v-if="hasUsagePlan" class="usage-plan-wrap">
-                <li v-for="(item,index) in usageInfo.usage.plans">
+                <li v-for="(item,index) in usageInfo.usage.plans" v-bind:key="index">
                   <div class="plan-info-wrap">
                     <p class="plan-name">{{item.rps_name}}</p>
                     <div class="plan-describe">
                       <!--/*套餐描述-->
                       <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
-                        <div>
-                          <!--                          <div v-if="item.planCellInfo.key!='MG500'">-->
+                        <div v-if="item.planCellInfo.key!='MG500'">
                           <p v-if="item.describe && item.describe!='None'">
                             <span>{{item.describe}}</span><br/>
                             <span class="">{{item.remark}}</span>
@@ -93,8 +91,8 @@
                             <span>{{item.remark}}</span>
                           </p>
                         </div>
-                        <span v-if="item.planCellInfo.max_high && item.planCellInfo.key !=='MG500'">高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}</span><br>
-                        <span v-if="item.planCellInfo.max_normal && item.planCellInfo.key !=='MG500'">中速流量:{{item.planCellInfo.max_normal}}</span>
+                        <span v-if="item.planCellInfo.max_high">高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}</span><br>
+                        <span v-if="item.planCellInfo.max_normal">中速流量:{{item.planCellInfo.max_normal}}</span>
                       </div>
                       <div v-else>
                         <p v-if="item.describe && item.describe!='None'">
@@ -129,12 +127,10 @@
                     </div>
 
                     <div class="prefer_use" v-if="usagePlanLength > 1">
-                      <a
-                        @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
-                        v-if="item.priority >= 1">优先使用</a>
-                      <a
-                        @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
-                        v-if="item.priority == 0">取消优先</a>
+                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
+                         v-if="item.priority >= 1">优先使用</a>
+                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
+                         v-if="item.priority == 0">取消优先</a>
                     </div>
                   </div>
                 </li>
@@ -146,7 +142,7 @@
 
             <swiper-slide>
               <ul v-if="hasOrderPlan" class="order-plan-wrap">
-                <li v-for="(item,index) in usageInfo.orders">
+                <li v-for="(item,index) in usageInfo.orders" v-bind:key="index">
                   <div class="plan-info-wrap">
                     <p class="plan-name">{{item.name}}</p>
                     <p class="plan-describe" v-if="item.rating_id==2522">
@@ -169,7 +165,6 @@
                       <span v-if="item.refund==2">已退款</span>
                       <span v-if="item.refund!=2&&item.status!=-1">{{order_state[item.status]}}</span>
                       <span v-if="item.refund!=2&&item.status==-1">已删除</span>
-
                     </p>
                   </div>
                 </li>
@@ -183,7 +178,7 @@
       </div>
       <div ref="refCardButton" class="btn-recharge-wrap">
         <button @click="recharge">充值续费</button>
-        <router-link to="/weixin/coupon/index">卡券兑换</router-link>
+        <a  @click="toCard()">卡券兑换</a>
       </div>
     </div>
 
@@ -196,15 +191,6 @@
         </div>
       </div>
     </div>
-
-
-    <!--设置优先使用-->
-    <van-popup
-      v-model="priorityShow"
-    >
-      <van-loading size="28px" color="#1989fa" vertical>加载中...</van-loading>
-    </van-popup>
-
     <!--      <UsageSkeleton v-else/>-->
     <!--    </transition>-->
   </div>
@@ -569,10 +555,10 @@
 
 <script>
   // @ is an alias to /src
-  // import UsageSkeleton from '@/components/skeletons/Usage'
+  import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast, Loading} from 'vant';
-  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage} from "../../utilies";
+  import {Notify, Popup, Toast,Dialog} from 'vant';
+  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage,appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -585,7 +571,7 @@
         load_skeleton: true,
         // load_plan: false,
         load_plan_msg: '',
-        watch_source: [5, 10, 12, 17, 18, 20, 22, 32, 38],
+        watch_source: [5, 10, 12, 17, 18, 20, 22, 32, 38, 44],
         auth_status: ['未实名', '审核中', '审核不通过'],
         card_state: ["未激活", "已激活", "已停机", "已废弃", "可测试", "可激活"],
         order_state: ['未支付', '已支付', '已到账'],
@@ -613,7 +599,6 @@
             'detail_right': ''//右侧详情
           }//流量卡
         },
-        priorityShow: false,// 优先使用加载
         hasUsagePlan: false,
         usagePlanLength: 0,
         hasOrderPlan: false,
@@ -625,15 +610,14 @@
             }
           }
         },
-        // prefer_priority: 0
+        prefer_priority: 0
       }
     },
     components: {
       [Notify.name]: Notify,
       [Popup.name]: Popup,
       [Toast.name]: Toast,
-      [Loading.name]: Loading,
-      // UsageSkeleton,
+      UsageSkeleton,
       swiper,
       swiperSlide
     },
@@ -810,10 +794,12 @@
       },
       recharge() {
         setStorage('check_iccid', this.iccid);
+        appRate(2);
         this.$router.push({path: '/weixin/card/plan_list'})
       },
       refreshOrActivated() {
         if (this.filterCardInfo.refresh_actived === '刷新') {
+          appRate(8);
           location.reload()
         } else {
           if (!this.usageInfo.canActivated) {
@@ -843,6 +829,7 @@
         }
       },
       toConnection() {
+        appRate(13);
         setStorage('check_iccid', this.iccid);
         this.$router.push({path: '/weixin/card/connection'});
       },
@@ -902,6 +889,14 @@
             });
           }
         })
+      },
+      toQ(){
+        appRate(9);
+        this.$router.push({path:"/weixin/question/index"})
+      },
+      toCard(){
+        appRate(14);
+        this.$router.push({path:"/weixin/coupon/index"})
       }
     }
   };
