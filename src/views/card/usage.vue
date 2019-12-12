@@ -191,6 +191,19 @@
         </div>
       </div>
     </div>
+
+    <van-popup
+      v-model="priorityShow"
+      :close-on-click-overlay="false"
+    >
+      <van-loading
+        size="50px"
+        vertical
+        color="#1989fa"
+      >
+        加载中...
+      </van-loading>
+    </van-popup>
     <!--      <UsageSkeleton v-else/>-->
     <!--    </transition>-->
   </div>
@@ -557,7 +570,7 @@
   // @ is an alias to /src
   import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast,Dialog} from 'vant';
+  import {Notify, Popup, Toast,Loading} from 'vant';
   import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage,appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
@@ -603,6 +616,7 @@
         usagePlanLength: 0,
         hasOrderPlan: false,
         usageInfo: {},
+        priorityShow:false,
         swiperOption: {
           on: {
             slideChangeTransitionEnd: function (swiper) {
@@ -610,14 +624,14 @@
             }
           }
         },
-        prefer_priority: 0
+        // prefer_priority: 0
       }
     },
     components: {
       [Notify.name]: Notify,
       [Popup.name]: Popup,
       [Toast.name]: Toast,
-      UsageSkeleton,
+      [Loading.name]:Loading,
       swiper,
       swiperSlide
     },
