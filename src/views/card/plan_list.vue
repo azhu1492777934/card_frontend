@@ -92,7 +92,6 @@
       }),
     },
     data() {
-      const _this = this;
       return {
         client_type: checkBrowser(),
         load_plan_list: false,
@@ -193,7 +192,7 @@
                   }
               }
 
-            
+
           });
 
           //防止第一次加载气泡提示框显示错误的问题

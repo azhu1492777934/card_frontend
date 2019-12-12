@@ -641,6 +641,7 @@
     //   }
     // },
     created() {
+      removeStorage('hasValidatedPlan');
       removeStorage('plan_list_new_card');
       this.initial();
     },
@@ -723,7 +724,7 @@
                 this.filterCardInfo.is_flow_card = false;
 
                 if (this.usageInfo.usage.noMax === 1) {
-                  this.filterCardInfo.watch_card_usage.total_flow = '无限'
+                  this.filterCardInfo.watch_card_usage.total_flow = '无限';
                   this.filterCardInfo.watch_card_usage.detail_right = '无限'//右侧详情
 
                 } else {
@@ -754,12 +755,12 @@
                 this.filterCardInfo.is_flow_card = true;
 
                 if (this.usageInfo.source === 6 || this.usageInfo.usage.noMax === 1) {
-                  this.filterCardInfo.flow_card_usage.total_flow = '无限'
-                  this.filterCardInfo.flow_card_usage.detail_right = '无限'
+                  this.filterCardInfo.flow_card_usage.total_flow = '无限';
+                  this.filterCardInfo.flow_card_usage.detail_right = '无限';
                 }
 
                 if (this.usageInfo.source !== 6 && this.usageInfo.usage.noMax !== 1) {
-                  this.filterCardInfo.flow_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total, 0, 1)
+                  this.filterCardInfo.flow_card_usage.total_flow = this.flowUnit(this.usageInfo.usage.total, 0, 1);
                   this.filterCardInfo.flow_card_usage.detail_right =
                     this.flowUnit(0, {
                       flowCard: true,
@@ -768,16 +769,14 @@
                     }, 0)
                 }
 
-                this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used, 0, 0)
+                this.filterCardInfo.flow_card_usage.used_flow = this.flowUnit(this.usageInfo.usage.used, 0, 0);
                 localStorage.setItem("is_flow_card", 1);
               }//流量卡
 
               // 是否显示套餐
-              this.hasUsagePlan = this.usageInfo.usage.plans.length ? true : false;
+              this.hasUsagePlan = !!this.usageInfo.usage.plans.length;
               this.usagePlanLength = this.usageInfo.usage.plans.length;
-              this.hasOrderPlan = this.usageInfo.orders.length ? true : false;
-
-              // this.swiper.slideTo(0, 500, false);
+              this.hasOrderPlan = !!this.usageInfo.orders.length;
 
               this.$nextTick(() => {
                 this.$refs.mySwiper.swiper.slideTo(0, 500, false);
@@ -808,6 +807,7 @@
       },
       recharge() {
         setStorage('check_iccid', this.iccid);
+        if(this.hasUsagePlan) setStorage('hasValidatedPlan',this.hasUsagePlan);
         appRate(2);
         this.$router.push({path: '/weixin/card/plan_list'})
       },
