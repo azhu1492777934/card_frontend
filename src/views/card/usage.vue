@@ -127,9 +127,9 @@
                     </div>
 
                     <div class="prefer_use" v-if="usagePlanLength > 1 && inArray(usageInfo.source,watch_source) < 0">
-                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
+                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
                          v-if="item.priority >= 1">优先使用</a>
-                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source)"
+                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
                          v-if="item.priority == 0">取消优先</a>
                     </div>
                   </div>
