@@ -1,53 +1,100 @@
 <template>
   <div class="plan-wrap">
+
+    <div ref="refPLanTitle" class="plan-type-wrap">
+      <!--      <div class="plan-type-inner-wrap">-->
+      <!--        <div ref="RefPlanTypeScroll" class="plan-type-scroll-wrapper">-->
+      <!--          <span-->
+      <!--            ref="ref_plan_type"-->
+      <!--            @click="planTypeClikc(index)"-->
+      <!--            v-for="(item,index) in render_type_name"-->
+      <!--            :class="[{'active_type':index===cur_plan_type_index},index] "-->
+      <!--          >-->
+      <!--              {{item}}-->
+      <!--            </span>-->
+      <!--        </div>-->
+      <!--      </div>-->
+
+      <swiper
+        ref="swiperThumbs"
+        :options="swiperOptionThumbs"
+      >
+        <swiper-slide
+          @click="planTypeClikc(index)"
+          v-for="(item,index) in render_type_name"
+          :key="index"
+        >
+          {{item}}
+        </swiper-slide>
+      </swiper>
+
+    </div>
+
     <div class="van-swipe-wrap" ref="vanSwiperWwrap">
-      <div v-for="(item,index) in plan_list" v-bind:key="index">
-
-        <div class="plan-type-name" v-if="index==='0'">{{plan_type_name[0]}}</div>
-        <div class="plan-type-name" v-if="index==='1'">{{plan_type_name[1]}}</div>
-        <div class="plan-type-name" v-if="index==='100'&&plan_list[100]">{{'加油包'}}</div>
-        <div class="plan-type-name" v-if="index==='5'">{{plan_type_name[5]}}</div>
-        <div class="plan-type-name" v-if="index==='6'">{{plan_type_name[6]}}</div>
-
-        <div class="planContent">
-          <div
-            @click="choosePlanClick(item_inner.id,index)"
-            v-for="(item_inner,index_inner) in item"
-            v-bind:key="index_inner"
-            :class="{'activedPlan':item_inner.id==choose_plan_index,'plan-sell-done':item_inner.surplus_times!='False' && item_inner.surplus_times<=0}"
-          >
-            <el-popover
-              placement="bottom"
-              :content="item_inner.describe ? item_inner.describe:item_inner.remark?item_inner.remark:''"
-              :value="item_inner.id==choose_plan_index&&firstStatus"
+      <swiper ref="swiperVant" :options="swiperOption">
+        <swiper-slide v-for="(item,index) in plan_type" :key="item" :class="item">
+          <ul class="plan-list-wrap">
+            <li @click="choosePlanClick(inner_index)"
+                v-for="(inner_item,inner_index) in plan_list[item]"
+                :key="inner_index"
+                :class="{
+                'activedPlan':inner_index==choose_plan_index,
+                'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0
+                }"
             >
-              <div slot="reference" class="centerBox">
-                <div class="contentWord1">{{item_inner.name}}</div>
-                <div class="contentWord2"></div>
-                <div class="contentWord3">
-                  <p>￥{{ item_inner.price }}</p>
-                  <del>￥{{ item_inner.market_price }}</del>
-                </div>
-                <p :class="{'plan-icon-recommend':item_inner.is_recommend}" class="plan-name">
-                  <span v-if="item_inner.is_recommend" class="iconfont icon-recommend"></span>
+              <div class="plan-info-wrap">
+                <p
+                  :class="{'plan-icon-recommend':inner_item.is_recommend}"
+                  class="plan-name">
+                  {{ inner_item.name }}
                 </p>
-                <div class="gift" v-if="item_inner.image_url">
-                  <img :src="item_inner.image_url" alt="">
-                </div>
+
+                <p class="sub-plan-name">5G优享服务</p>
+
+                <van-collapse
+                  :border="false"
+
+                  v-model="activeNames"
+                  class="van-collapse-reset"
+                >
+                  <van-collapse-item
+                    title="套餐简介"
+                    :name="inner_item.id"
+                  >
+                    <!--                    <div slot="title"></div>-->
+                    <p class="plan-desc">
+                      {{
+                      inner_item.describe
+                      ? inner_item.describe
+                      :inner_item.remark
+                      ?inner_item.remark
+                      :''
+                      }}
+                    </p>
+                  </van-collapse-item>
+                </van-collapse>
+
+                <div class="plan-split"></div>
+                <p class="plan-limited-wrap">
+                  <span
+                    class="limited-num"
+                    v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">
+                    剩{{inner_item.surplus_times}}笔</span>
+                  <span
+                    class="limited-num"
+                    v-show="inner_item.is_elb_deductible!=0">可抵扣{{inner_item.max_deductible_elb}}
+                    个ELB</span>
+                </p>
+
               </div>
-
-            </el-popover>
-          </div>
-
-          <div v-if="index==='100'&&plan_list[100]" class="warning-wrapper">
-            <p>加油包暂不支持退款请慎重选择</p>
-            <p>加油包有效期和指定套餐有效期相同</p>
-            <p>月套餐充值加油包仅当月有效</p>
-            <p>加油包需充值到指定套餐中方可使用</p>
-          </div>
-
-        </div>
-      </div>
+              <div class="plan-price-wrap">
+                <p class="plan-price">￥{{ inner_item.price }}</p>
+              </div>
+              <span class="plan-selected"></span>
+            </li>
+          </ul>
+        </swiper-slide>
+      </swiper>
     </div>
 
     <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
@@ -79,9 +126,10 @@
 </template>
 
 <script>
+  import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import {mapState} from 'vuex'
-  import {Toast, Popup, Notify, List, Dialog} from "vant";
-  import {setStorage, getStorage, checkBrowser, Today, lossRate,appRate} from "../../utilies";
+  import {Toast, Popup, Notify, List, Dialog, Icon, Collapse, CollapseItem} from "vant";
+  import {setStorage, getStorage, checkBrowser, Today, lossRate, appRate} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
   export default {
@@ -90,8 +138,15 @@
       ...mapState({
         authorizedUserInfo: state => state.userInfo.userInfoInner
       }),
+      swiper() {
+        return this.$refs.swiperVant.swiper
+      },
+      swiperThumbs() {
+        return this.$refs.swiperThumbs.swiper
+      }
     },
     data() {
+      const _this = this;
       return {
         client_type: checkBrowser(),
         load_plan_list: false,
@@ -103,17 +158,164 @@
           1: "月套餐",
           2: "加油包",
           5: "周期性套餐",
-          6: "超量自动续费套餐"
+          6: "超量自动续费套餐",
+          100: '加油包'
         },// 套餐名称
-        cur_plan_type_index: 0, //当前选中套餐类型
+        render_type_name: {},
+        cur_plan_type_index: "0", //当前选中套餐类型
         choose_plan_index: 0, //当前选中套餐
         plan_list: {},
         hasValidatedPlan: getStorage('hasValidatedPlan'),
         rechargeShow: false,
         ref_plan_type_index: 0,
         firstStatus: false,
+        activeNames: [],
         //实名类型
         realnameType: getStorage('realnameType'),
+        // swiper
+        swiperOption: {
+          loop: true,
+          loopedSlides: 3, //looped slides should be the same
+          on: {
+            slideChangeTransitionEnd: function () {
+              _this.cur_plan_type_index = _this.plan_type[this.realIndex];
+              console.log(_this.cur_plan_type_index);
+            }
+          }
+        },
+        swiperOptionThumbs: {
+          slidesPerView: 3,
+          touchRatio: 0.2,
+          loop: true,
+          loopedSlides:3, //looped slides should be the same
+          slideToClickedSlide: true,
+        },
+        // mockData
+        mockData: {
+          "0": [
+            {
+              "c_price": 1099,
+              "call_time": 0,
+              "card_source": 7,
+              "data": -4,
+              "day": 360,
+              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
+              "first_price": null,
+              "id": 3286,
+              "image_url": null,
+              "is_can_renew": 0,
+              "is_elb_deductible": 0,
+              "is_recommend": false,
+              "market_price": 1299,
+              "max_deductible_elb": null,
+              "meal_message": 0,
+              "name": "无限量/1年-累计套餐",
+              "price": 1099,
+              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
+              "surplus_times": "False",
+              "type": 0,
+              "vip_type_id": 0
+            },
+            {
+              "c_price": 1099,
+              "call_time": 0,
+              "card_source": 7,
+              "data": -4,
+              "day": 360,
+              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
+              "first_price": null,
+              "id": 32862,
+              "image_url": null,
+              "is_can_renew": 0,
+              "is_elb_deductible": 1,
+              "is_recommend": false,
+              "market_price": 1299,
+              "max_deductible_elb": 10,
+              "meal_message": 0,
+              "name": "无限量/1年-test-累计套餐",
+              "price": 1000,
+              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
+              "surplus_times": "False",
+              "type": 0,
+              "vip_type_id": 0
+            }
+          ],
+          "1": [
+            {
+              "c_price": 1099,
+              "call_time": 0,
+              "card_source": 7,
+              "data": -4,
+              "day": 360,
+              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
+              "first_price": null,
+              "id": 3286,
+              "image_url": null,
+              "is_can_renew": 0,
+              "is_elb_deductible": 0,
+              "is_recommend": false,
+              "market_price": 1299,
+              "max_deductible_elb": null,
+              "meal_message": 0,
+              "name": "无限量/1年-月套餐",
+              "price": 1099,
+              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
+              "surplus_times": "False",
+              "type": 0,
+              "vip_type_id": 0
+            }
+          ],
+          "2": [
+            {
+              "c_price": 1099,
+              "call_time": 0,
+              "card_source": 7,
+              "data": -4,
+              "day": 360,
+              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
+              "first_price": null,
+              "id": 3286,
+              "image_url": null,
+              "is_can_renew": 0,
+              "is_elb_deductible": 0,
+              "is_recommend": false,
+              "market_price": 1299,
+              "max_deductible_elb": null,
+              "meal_message": 0,
+              "name": "无限量/1年-加油包",
+              "price": 1099,
+              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
+              "surplus_times": "False",
+              "type": 0,
+              "vip_type_id": 0
+            }
+          ],
+          "5": [
+            {
+              "c_price": 1099,
+              "call_time": 0,
+              "card_source": 7,
+              "data": -4,
+              "day": 360,
+              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
+              "first_price": null,
+              "id": 3286,
+              "image_url": null,
+              "is_can_renew": 0,
+              "is_elb_deductible": 0,
+              "is_recommend": false,
+              "market_price": 1299,
+              "max_deductible_elb": null,
+              "meal_message": 0,
+              "name": "无限量/1年-周期性套餐",
+              "price": 1099,
+              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
+              "surplus_times": "False",
+              "type": 0,
+              "vip_type_id": 0
+            }
+          ]
+        }
       };
     },
     components: {
@@ -121,6 +323,11 @@
       [Popup.name]: Popup,
       [List.name]: List,
       [Dialog.name]: Dialog,
+      [Icon.name]: Icon,
+      [Collapse.name]: Collapse,
+      [CollapseItem.name]: CollapseItem,
+      swiper,
+      swiperSlide,
     },
     created() {
       // 流失率统计
@@ -133,103 +340,142 @@
       let _this = this;
       //处理套餐数据
 
-      _get("/api/v1/app/plan_list", {
-        iccid: getStorage("check_iccid")
-      }).then(res => {
-        if (res.state === 1) {
-          if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
-            this.load_plan_list = true;
-            this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
-            return;
+      // _get("/api/v1/app/plan_list", {
+      //   iccid: getStorage("check_iccid")
+      // }).then(res => {
+      let res = {
+        state: 1,
+        data: this.mockData
+      };
+      if (res.state === 1) {
+        if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
+          this.load_plan_list = true;
+          this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
+          return;
+        }
+        this.load_plan_msg = res.msg;
+        this.load_plan_list = false;
+        this.plan_list = res.data;
+        for (let item in this.plan_list) {
+          // 套餐类型
+          if (this.plan_type_name.hasOwnProperty(item)) {
+            this.render_type_name[item] = this.plan_type_name[item];
           }
-          this.load_plan_msg = res.msg;
-          this.load_plan_list = false;
-          this.plan_list = res.data;
-          for (let item in this.plan_list) {
-            let newArray1 = [], newArray2 = [], newArray3 = [];
-            for (let i = 0; i < this.plan_list[item].length; i++) {
-              //区分推荐/未推荐
-              if (this.plan_list[item][i].is_recommend === true) {
-                newArray1.push(this.plan_list[item][i]);
-              } else {
-                newArray2.push(this.plan_list[item][i]);
-              }
+
+          let newArray1 = [], newArray2 = [], newArray3 = [];
+          for (let i = 0; i < this.plan_list[item].length; i++) {
+            //区分推荐/未推荐
+            if (this.plan_list[item][i].is_recommend === true) {
+              newArray1.push(this.plan_list[item][i]);
+            } else {
+              newArray2.push(this.plan_list[item][i]);
             }
-            //分别进行排序
-            newArray1.sort(this.compare2("price"));
-            newArray2.sort(this.compare2("price"));
-            newArray3 = newArray1.concat(newArray2);
-            this.plan_list[item] = newArray3;
-            this.plan_type.push(item);
           }
+          //分别进行排序
+          newArray1.sort(this.compare2("id"));
+          newArray2.sort(this.compare2("id"));
+          newArray3 = newArray1.concat(newArray2);
+
+          this.plan_list[item] = newArray3;
 
           // 处理加油包
           if (!this.hasValidatedPlan) {
-            this.plan_list[2] = null;
+            if (item !== '2') {
+              this.plan_type.push(item);
+            }
           } else {
-            let more_flow_list = this.plan_list[2] || [];
-            if (more_flow_list.length) {
-              delete this.plan_list[2];
-              this.plan_list[100] = more_flow_list
-            }
+            this.plan_type.push(item);
           }
-
-          this.$nextTick(() => {
-            let clientHeight = document.documentElement.clientHeight ||
-              document.body.clientHeight,
-              refPlanButton = this.$refs.refPlanButton.offsetHeight,
-              userHeight = getStorage("userHeight") || 44;
-              if(this.global_variables.device=="iphone"&&this.client_type=="app"){
-                  this.$refs.vanSwiperWwrap.style.height =
-                      clientHeight - refPlanButton - userHeight-49 + "px";
-              }else{
-                  if (this.client_type === "wechat" || this.client_type === "alipay") {
-                    this.$refs.vanSwiperWwrap.style.height =
-                      clientHeight - refPlanButton - userHeight + "px";
-                  } else {
-                    this.$refs.vanSwiperWwrap.style.height =
-                      clientHeight - refPlanButton - userHeight + "px";
-                  }
-              }
-
-
-          });
-
-          //防止第一次加载气泡提示框显示错误的问题
-          setTimeout(function () {
-            _this.firstStatus = true;
-          }, 100);
-
-          //放底部
-          for (let i in res.data) {
-            if (!res.data[i] && typeof res.data[i] !== "undefined" && res.data[i] !== 0) {
-              continue;
-            }
-            this.choose_plan_index = res.data[i][0].id;
-            this.ref_plan_type_index = i;
-            return this.choose_plan_index;
-          }
-        } else {
-          this.load_plan_list = true;
-          this.load_plan_msg = res.msg;
         }
-      });
+
+        // 处理加油包
+        if (!this.hasValidatedPlan) {
+          if (this.plan_list.hasOwnProperty(2)) {
+            delete this.plan_list[2];
+          }
+          if (this.render_type_name.hasOwnProperty(2)) {
+            delete this.render_type_name[2]
+          }
+        }
+        // else {
+        //   let more_flow_list = this.plan_list[2] || [];
+        //   if (more_flow_list.length) {
+        //     delete this.plan_list[2];
+        //     this.plan_list[100] = more_flow_list
+        //   }
+        // }
+
+        this.swiperOption.loopedSlides = this.plan_type.length;
+        this.swiperOptionThumbs.loopedSlides = this.plan_type.length;
+
+        this.$nextTick(() => {
+          let clientHeight = document.documentElement.clientHeight ||
+            document.body.clientHeight,
+            refPlanButton = this.$refs.refPlanButton.offsetHeight,
+            userHeight = getStorage("userHeight") || 44;
+          let planTypeScrollWidth = "";
+          if (this.global_variables.device === "iphone" && this.client_type === "app") {
+            this.$refs.vanSwiperWwrap.style.height =
+              clientHeight - refPlanButton - userHeight - 49 + "px";
+          } else {
+            if (this.client_type === "wechat" || this.client_type === "alipay") {
+              this.$refs.vanSwiperWwrap.style.height =
+                clientHeight - refPlanButton - userHeight + "px";
+            } else {
+              this.$refs.vanSwiperWwrap.style.height =
+                clientHeight - refPlanButton - userHeight + "px";
+            }
+          }
+
+        });
+
+        //防止第一次加载气泡提示框显示错误的问题
+        // setTimeout(function () {
+        //   _this.firstStatus = true;
+        // }, 100);
+
+        //放底部
+        // for (let i in res.data) {
+        //   if (!res.data[i] && typeof res.data[i] !== "undefined" && res.data[i] !== 0) {
+        //     continue;
+        //   }
+        //   this.choose_plan_index = res.data[i][0].id;
+        //   this.ref_plan_type_index = i;
+        //   return this.choose_plan_index;
+        // }
+      } else {
+        this.load_plan_list = true;
+        this.load_plan_msg = res.msg;
+      }
+      // });
     },
     mounted() {
+      this.$nextTick(() => {
+        const swiper = this.swiper;
+        const swiperThumbs = this.swiperThumbs;
+        swiper.controller.control = swiperThumbs;
+        swiperThumbs.controller.control = swiper;
+      })
     },
     methods: {
+      planTypeClikc(index) {
+        this.cur_plan_type_index = index;
+        this.swiper.slideTo(index);
+      },
       choosePlanClick: function (id, index) {
         this.ref_plan_type_index = index;
         this.choose_plan_index = id;
         index === '2' ? this.recharge_btn_text = '选择叠加加油包套餐' : this.recharge_btn_text = '充值';
       },
       recharge: function () {
-        let planInfo = null;
-        for (let i = 0; i < this.plan_list[this.ref_plan_type_index].length; i++) {
-          if (this.choose_plan_index == this.plan_list[this.ref_plan_type_index][i].id) {
-            planInfo = this.plan_list[this.ref_plan_type_index][i];
-          }
-        }
+        let planInfo = this.plan_list[this.cur_plan_type_index][this.choose_plan_index];
+
+        // for (let i = 0; i < this.plan_list[this.ref_plan_type_index].length; i++) {
+        //   if (this.choose_plan_index === this.plan_list[this.ref_plan_type_index][i].id) {
+        //     planInfo = this.plan_list[this.ref_plan_type_index][i];
+        //   }
+        // }
+
         if (planInfo.surplus_times <= 0) {
           Toast("此套餐已售罄, 请更换套餐");
           return;
@@ -238,9 +484,10 @@
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
 
+        console.log(this.cur_plan_type_index);
 
         // 加油包套餐充值
-        if (this.ref_plan_type_index === '100') {
+        if (this.cur_plan_type_index === '2') {
           this.$router.push('/weixin/card/more_flow');
           return;
         }
@@ -354,20 +601,6 @@
           }
         });
       },
-      //排序
-      compare(pro) {
-        return function (obj) {
-          let val = obj[pro];
-          if (val == true) {
-            return -1;
-          } else if (val == false) {
-            return 1;
-          } else {
-            return 0;
-          }
-        }
-      },
-      //排序2
       compare2(pro) {
         return function (obj1, obj2) {
           let val1 = obj1[pro];
@@ -381,9 +614,9 @@
           }
         }
       },
-       toCard(){
+      toCard() {
         appRate(14);
-        this.$router.push({path:"/weixin/coupon/index"})
+        this.$router.push({path: "/weixin/coupon/index"})
       }
     }
   };
@@ -399,232 +632,278 @@
     height: 100%;
   }
 
-  .el-popover {
-    font-size: 24px !important;
-  }
+  /*.el-popover {*/
+  /*  font-size: 24px !important;*/
+  /*}*/
 
   .plan-wrap {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #F4F4F4;
+    box-sizing: border-box;
+
     .van-swipe-wrap {
       overflow: auto;
       -webkit-overflow-scrolling: touch;
     }
 
-    .m-t-0 {
-      margin-top: 0 !important;
-    }
+    /*.plan-type-name {*/
+    /*  display: flex;*/
+    /*  height: 55px;*/
+    /*  margin-bottom: 10px;*/
+    /*  align-items: center;*/
+    /*  justify-content: center;*/
+    /*  font-size: 30px;*/
+    /*  font-weight: bold;*/
+    /*  text-align: center;*/
+    /*  color: #f1a53c;*/
+    /*  background: rgba(255, 251, 243, 1);*/
 
-    .plan-type-name {
-      display: flex;
-      height: 55px;
-      margin-bottom: 10px;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      font-weight: bold;
-      text-align: center;
-      color: #f1a53c;
-      background: rgba(255, 251, 243, 1);
+    /*  &::before, &::after {*/
+    /*    display: block;*/
+    /*    width: 129px;*/
+    /*    height: 8px;*/
+    /*    content: '';*/
+    /*    background-size: 100% 100% !important;*/
+    /*  }*/
 
-      &::before, &::after {
-        display: block;
-        width: 129px;
-        height: 8px;
-        content: '';
-        background-size: 100% 100% !important;
-      }
+    /*  &::before {*/
+    /*    margin-right: 24px;*/
+    /*    background: url("../../assets/imgs/card/usage/leftIcon.png") no-repeat;*/
+    /*  }*/
 
-      &::before {
-        margin-right: 24px;
-        background: url("../../assets/imgs/card/usage/leftIcon.png") no-repeat;
-      }
+    /*  &::after {*/
+    /*    margin-left: 24px;*/
+    /*    background: url("../../assets/imgs/card/usage/rightIcon.png") no-repeat;*/
+    /*  }*/
+    /*}*/
 
-      &::after {
-        margin-left: 24px;
-        background: url("../../assets/imgs/card/usage/rightIcon.png") no-repeat;
-      }
-    }
+    /*.planContent {*/
+    /*  display: flex;*/
+    /*  width: 100%;*/
+    /*  flex-flow: row wrap;*/
+    /*  align-content: flex-start;*/
+    /*  padding: 0 20px;*/
+    /*  box-sizing: border-box;*/
 
-    .planContent {
-      display: flex;
-      width: 100%;
-      flex-flow: row wrap;
-      align-content: flex-start;
-      padding: 0 20px;
-      box-sizing: border-box;
+    /*  .plan-icon-recommend {*/
+    /*    text-align: left;*/
+    /*    position: absolute;*/
+    /*    bottom: 4px;*/
+    /*    left: 8px;*/
+    /*  }*/
 
-      .plan-icon-recommend {
-        text-align: left;
-        position: absolute;
-        bottom: 4px;
-        left: 8px;
-      }
+    /*  .iconfont {*/
+    /*    font-size: 38px;*/
+    /*  }*/
 
-      .iconfont {
-        font-size: 38px;
-      }
+    /*  .centerBox {*/
+    /*    height: 100%;*/
+    /*    display: flex;*/
+    /*    align-items: center;*/
+    /*    flex-direction: column;*/
+    /*    justify-content: center;*/
+    /*    position: relative;*/
 
-      .centerBox {
-        height: 100%;
-        display: flex;
-        align-items: center;
-        flex-direction: column;
-        justify-content: center;
-        position: relative;
+    /*    .gift {*/
+    /*      position: absolute;*/
+    /*      top: -35px;*/
+    /*      right: -20px;*/
 
-        .gift {
-          position: absolute;
-          top: -35px;
-          right: -20px;
+    /*      > img {*/
+    /*        width: 40px;*/
+    /*        height: 40px;*/
+    /*      }*/
+    /*    }*/
+    /*  }*/
 
-          > img {
-            width: 40px;
-            height: 40px;
-          }
-        }
-      }
+    /*  > div {*/
+    /*    border: 2px solid rgba(230, 230, 230, 1);*/
+    /*    border-radius: 13px;*/
+    /*    padding: 10px;*/
+    /*    margin: 10px;*/
+    /*    box-sizing: border-box;*/
+    /*    flex: 0 0 30%;*/
+    /*    position: relative;*/
 
-      > div {
-        border: 2px solid rgba(230, 230, 230, 1);
-        border-radius: 13px;
-        padding: 10px;
-        margin: 10px;
-        box-sizing: border-box;
-        flex: 0 0 30%;
-        position: relative;
+    /*    .contentWord1 {*/
+    /*      font-size: 24px;*/
+    /*      font-weight: 400;*/
+    /*      color: rgba(51, 51, 51, 1);*/
+    /*    }*/
 
-        .contentWord1 {
-          font-size: 24px;
-          font-weight: 400;
-          color: rgba(51, 51, 51, 1);
-        }
+    /*    .contentWord2 {*/
+    /*      width: 60px;*/
+    /*      height: 3px;*/
+    /*      background: rgba(241, 165, 60, 1);*/
+    /*      margin: 10px auto;*/
+    /*    }*/
 
-        .contentWord2 {
-          width: 60px;
-          height: 3px;
-          background: rgba(241, 165, 60, 1);
-          margin: 10px auto;
-        }
+    /*    .contentWord3 {*/
+    /*      font-size: 28px;*/
+    /*      font-weight: 400;*/
+    /*      color: #fd720d;*/
 
-        .contentWord3 {
-          font-size: 28px;
-          font-weight: 400;
-          color: #fd720d;
+    /*      del {*/
+    /*        color: #868686;*/
+    /*        font-size: 21px;*/
+    /*      }*/
+    /*    }*/
+    /*  }*/
 
-          del {
-            color: #868686;
-            font-size: 21px;
-          }
-        }
-      }
+    /*  //当前选中样式*/
+    /*  .activedPlan {*/
+    /*    position: relative;*/
+    /*    border-color: #dca85f;*/
+    /*    box-shadow: 0 0 30px 0 #eae9e9;*/
 
-      //当前选中样式
-      .activedPlan {
-        position: relative;
-        border-color: #dca85f;
-        box-shadow: 0 0 30px 0 #eae9e9;
+    /*    .plan-name {*/
+    /*      color: #fd720d;*/
+    /*    }*/
+    /*  }*/
 
-        .plan-name {
-          color: #fd720d;
-        }
-      }
+    /*  .activedPlan::after {*/
+    /*    content: "";*/
+    /*    position: absolute;*/
+    /*    width: 21px;*/
+    /*    height: 21px;*/
+    /*    right: -2px;*/
+    /*    bottom: 0;*/
+    /*    background: url("../../assets/imgs/card/usage/right.png") no-repeat;*/
+    /*    background-size: 100% 100%;*/
+    /*  }*/
 
-      .activedPlan::after {
-        content: "";
-        position: absolute;
-        width: 21px;
-        height: 21px;
-        right: -2px;
-        bottom: 0;
-        background: url("../../assets/imgs/card/usage/right.png") no-repeat;
-        background-size: 100% 100%;
-      }
+    /*  //售罄状态*/
+    /*  .plan-sell-done {*/
+    /*    background-color: #f0f0f0;*/
 
-      //售罄状态
-      .plan-sell-done {
-        background-color: #f0f0f0;
+    /*    .plan-name,*/
+    /*    .plan-price {*/
+    /*      color: #868686;*/
+    /*    }*/
 
-        .plan-name,
-        .plan-price {
-          color: #868686;
-        }
+    /*    .icon-sell-done {*/
+    /*      position: absolute;*/
+    /*      top: 40px;*/
+    /*      left: 50%;*/
+    /*      margin-left: -100px;*/
+    /*      padding: 10px 20px;*/
+    /*      font-size: 28px;*/
+    /*      box-sizing: border-box;*/
+    /*      border: 4px solid #ed6153;*/
+    /*      color: #ed6153;*/
+    /*      border-radius: 12px;*/
+    /*      transform: rotate(-28deg);*/
+    /*    }*/
 
-        .icon-sell-done {
-          position: absolute;
-          top: 40px;
-          left: 50%;
-          margin-left: -100px;
-          padding: 10px 20px;
-          font-size: 28px;
-          box-sizing: border-box;
-          border: 4px solid #ed6153;
-          color: #ed6153;
-          border-radius: 12px;
-          transform: rotate(-28deg);
-        }
+    /*    .icon-sell-done::after {*/
+    /*      content: "已售罄";*/
+    /*    }*/
+    /*  }*/
 
-        .icon-sell-done::after {
-          content: "已售罄";
-        }
-      }
+    /*  // 加油提示*/
+    /*  !*.warning-wrapper {*!*/
+    /*  !*  flex: auto;*!*/
+    /*  !*  border: none;*!*/
+    /*  !*  width: 100%;*!*/
 
-      // 加油提示
-      .warning-wrapper {
-        flex: auto;
-        border: none;
-        width: 100%;
+    /*  !*  p {*!*/
+    /*  !*    color: #654828;*!*/
+    /*  !*    font-size: 26px;*!*/
+    /*  !*    line-height: 1.5;*!*/
+    /*  !*    text-align: left;*!*/
 
-        p {
-          color: #654828;
-          font-size: 26px;
-          line-height: 1.5;
-          text-align: left;
+    /*  !*    &:first-child {*!*/
+    /*  !*      color: #ff3448;*!*/
+    /*  !*      font-size: 28px;*!*/
+    /*  !*    }*!*/
 
-          &:first-child {
-            color: #ff3448;
-            font-size: 28px;
-          }
-
-          &:before {
-            content: "*";
-            color: #ff4e35;
-          }
-        }
-      }
-    }
+    /*  !*    &:before {*!*/
+    /*  !*      content: "*";*!*/
+    /*  !*      color: #ff4e35;*!*/
+    /*  !*    }*!*/
+    /*  !*  }*!*/
+    /*  !*}*!*/
+    /*}*/
 
     .swiper-container {
       height: 100%;
     }
 
     .plan-type-wrap {
-      display: flex;
-      flex-wrap: wrap;
-      -webkit-box-lines: multiple;
-      justify-content: center;
-      align-items: center;
-      padding: 20px 0;
+      /*display: flex;*/
+      /*flex-wrap: wrap;*/
+      /*-webkit-box-lines: multiple;*/
+      /*justify-content: center;*/
+      /*align-items: center;*/
+      background: #fff;
 
-      .plan-type-inner-wrap {
-        border: 1px solid #dca85f;
-        border-radius: 46px;
-        width: 90%;
-        display: flex;
-      }
+      /*.plan-type-inner-wrap {*/
+      /*  width: 90%;*/
+      /*overflow: auto;*/
+
+      /*.plan-type-scroll-wrapper {*/
+      /*  display: flex;*/
+      /*  flex-wrap: nowrap;*/
+      /*  -webkit-box-lines: single;*/
+      /*}*/
+
+
+      /*}*/
 
       span {
         display: inline-block;
-        height: 46px;
         flex: 1;
-        color: #868686;
+        min-width: 33.33%;
+        height: 46px;
+        padding: 28px 0;
+        white-space: nowrap;
+        color: #A6A6A6;
+        font-size: 30px;
         border: 1px solid transparent;
-        font-size: 28px;
-        line-height: 50px;
-        border-radius: 46px;
 
         &.active_type {
-          color: #fff;
-          background-color: #dca85f;
+          position: relative;
+          color: #3E3E3E;
+
+          &:after {
+            position: absolute;
+            left: 50%;
+            bottom: 25px;
+            content: '';
+            width: 40%;
+            height: 5px;
+            margin-left: -20%;
+            background: #3E3E3E;
+          }
         }
+      }
+
+      .swiper-slide {
+        width: 25%;
+        height: 46px;
+        line-height: 46px;
+        padding: 28px 0;
+        /*opacity: 0.4;*/
+        color: #A6A6A6;
+      }
+
+      .swiper-slide-active {
+        position: relative;
+        color: #3E3E3E;
+        opacity: 1;
+        &:after {
+          position: absolute;
+          left: 50%;
+          bottom: 25px;
+          content: '';
+          width: 40%;
+          height: 5px;
+          margin-left: -20%;
+          background: #3E3E3E;
+        }
+
       }
     }
 
@@ -637,17 +916,18 @@
       li {
         position: relative;
         display: flex;
-        width: 90%;
+        width: 94%;
         min-height: 95px;
         margin: 0 auto;
-        padding: 0 15px;
+        padding: 0 15px 24px;
         box-sizing: border-box;
         color: #868686;
-        border: 1px solid #e6e6e6;
         border-radius: 10px;
         margin-bottom: 25px;
-        align-items: center;
         font-size: 20px;
+        background: #fff;
+        align-items: self-start;
+        border: 1px solid transparent;
 
         &:first-child {
           margin-top: 20px;
@@ -665,10 +945,16 @@
           font-size: 24px;
 
           .plan-name {
-            padding: 20px 0 10px;
+            padding: 32px 0;
             font-size: 30px;
             color: #2c251d;
             font-weight: 500;
+          }
+
+          .sub-plan-name {
+            padding-bottom: 20px;
+            font-size: 22px;
+            color: #666;
           }
 
           .plan-icon-recommend {
@@ -697,7 +983,7 @@
 
           .plan-desc {
             font-size: 28px;
-            padding-bottom: 20px;
+            /*padding-bottom: 20px;*/
           }
         }
 
@@ -705,18 +991,20 @@
           flex: 1.5;
 
           .plan-price {
-            color: #fd720d;
+            padding: 32px 0;
+            color: #F1B94C;
             font-size: 36px;
+            font-weight: 700;
           }
         }
 
         //当前选中样式
         &.activedPlan {
-          border: 1px solid #dca85f;
+          border: 1px solid #F1B94C;
           box-shadow: 0 0 30px 0 #eae9e9;
 
           .plan-name {
-            color: #fd720d;
+            color: #e8a92d;
           }
 
           .selected-plan {
@@ -753,6 +1041,37 @@
             content: "已售罄";
           }
         }
+      }
+
+      // 重置collapse类
+      .van-collapse-reset {
+
+        .van-collapse-item__title {
+          display: block;
+        }
+
+        .van-cell__title {
+          display: inline-block;
+          font-size: 24px;
+          color: #3E3E3E;
+        }
+
+        .van-cell__right-icon {
+          vertical-align: middle;
+        }
+
+        .van-collapse-item__title,
+        .van-collapse-item__content {
+          padding: 0;
+        }
+
+        .van-cell:not(:last-child)::after {
+          border: none;
+        }
+
+        /*&::after{*/
+        /*  border:none;*/
+        /*}*/
       }
     }
 
