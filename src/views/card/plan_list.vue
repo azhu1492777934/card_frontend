@@ -1,20 +1,6 @@
 <template>
   <div class="plan-wrap">
-
     <div ref="refPLanTitle" class="plan-type-wrap">
-      <!--      <div class="plan-type-inner-wrap">-->
-      <!--        <div ref="RefPlanTypeScroll" class="plan-type-scroll-wrapper">-->
-      <!--          <span-->
-      <!--            ref="ref_plan_type"-->
-      <!--            @click="planTypeClikc(index)"-->
-      <!--            v-for="(item,index) in render_type_name"-->
-      <!--            :class="[{'active_type':index===cur_plan_type_index},index] "-->
-      <!--          >-->
-      <!--              {{item}}-->
-      <!--            </span>-->
-      <!--        </div>-->
-      <!--      </div>-->
-
       <swiper
         ref="swiperThumbs"
         :options="swiperOptionThumbs"
@@ -30,7 +16,15 @@
 
     </div>
 
-    <div class="van-swipe-wrap" ref="vanSwiperWwrap">
+    <div
+      class="van-swipe-wrap"
+      ref="vanSwiperWwrap"
+      :class="{
+      'plan-no-user__height':plan_list_height.is_normal,
+      'plan-has-user__height':plan_list_height.is_c_frontend,
+      'plan-app__height':plan_list_height.is_app
+      }"
+    >
       <swiper ref="swiperVant" :options="swiperOption">
         <swiper-slide v-for="(item,index) in plan_type" :key="item" :class="item">
           <ul class="plan-list-wrap">
@@ -172,7 +166,6 @@
         activeNames: [],
         //实名类型
         realnameType: getStorage('realnameType'),
-        // swiper
         swiperOption: {
           loop: true,
           loopedSlides: 3, //looped slides should be the same
@@ -187,10 +180,9 @@
           slidesPerView: 3,
           touchRatio: 0.2,
           loop: true,
-          loopedSlides:3, //looped slides should be the same
+          loopedSlides: 3, //looped slides should be the same
           slideToClickedSlide: true,
         },
-        // mockData
         mockData: {
           "0": [
             {
@@ -315,6 +307,12 @@
               "vip_type_id": 0
             }
           ]
+        },
+        // 套餐高度
+        plan_list_height: {
+          is_app: false,
+          is_c_frontend: true,
+          is_normal: false,
         }
       };
     },
@@ -397,52 +395,39 @@
             delete this.render_type_name[2]
           }
         }
-        // else {
-        //   let more_flow_list = this.plan_list[2] || [];
-        //   if (more_flow_list.length) {
-        //     delete this.plan_list[2];
-        //     this.plan_list[100] = more_flow_list
-        //   }
-        // }
 
         this.swiperOption.loopedSlides = this.plan_type.length;
         this.swiperOptionThumbs.loopedSlides = this.plan_type.length;
 
-        this.$nextTick(() => {
-          let clientHeight = document.documentElement.clientHeight ||
-            document.body.clientHeight,
-            refPlanButton = this.$refs.refPlanButton.offsetHeight,
-            userHeight = getStorage("userHeight") || 44;
-          let planTypeScrollWidth = "";
-          if (this.global_variables.device === "iphone" && this.client_type === "app") {
-            this.$refs.vanSwiperWwrap.style.height =
-              clientHeight - refPlanButton - userHeight - 49 + "px";
+        if (this.global_variables.device === 'iphone' && this.client_type === "app") {
+          this.plan_list_height.is_app = true;
+        } else {
+          this.plan_list_height.is_app = false;
+          if (this.client_type === "wechat" || this.client_type === "alipay") {
+            this.plan_list_height.is_c_frontend = true;
           } else {
-            if (this.client_type === "wechat" || this.client_type === "alipay") {
-              this.$refs.vanSwiperWwrap.style.height =
-                clientHeight - refPlanButton - userHeight + "px";
-            } else {
-              this.$refs.vanSwiperWwrap.style.height =
-                clientHeight - refPlanButton - userHeight + "px";
-            }
+            this.plan_list_height.is_c_frontend = false;
+            this.plan_list_height.is_normal = true;
           }
+        }
 
-        });
-
-        //防止第一次加载气泡提示框显示错误的问题
-        // setTimeout(function () {
-        //   _this.firstStatus = true;
-        // }, 100);
-
-        //放底部
-        // for (let i in res.data) {
-        //   if (!res.data[i] && typeof res.data[i] !== "undefined" && res.data[i] !== 0) {
-        //     continue;
+        // this.$nextTick(() => {
+        //   let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
+        //   let refPlanButton = this.$refs.refPlanButton.offsetHeight;
+        //   let userHeight = getStorage("userHeight") || 44;
+        //
+        //   if (this.global_variables.device === "iphone" && this.client_type === "app") {
+        //     this.$refs.vanSwiperWwrap.style.height = clientHeight - refPlanButton - userHeight - 49 + "px";
+        //   } else {
+        //     if (this.client_type === "wechat" || this.client_type === "alipay") {
+        //       this.$refs.vanSwiperWwrap.style.height =
+        //         clientHeight - refPlanButton - userHeight + "px";
+        //     } else {
+        //       this.$refs.vanSwiperWwrap.style.height =
+        //         clientHeight - refPlanButton - userHeight + "px";
+        //     }
         //   }
-        //   this.choose_plan_index = res.data[i][0].id;
-        //   this.ref_plan_type_index = i;
-        //   return this.choose_plan_index;
-        // }
+        // });
       } else {
         this.load_plan_list = true;
         this.load_plan_msg = res.msg;
@@ -470,12 +455,6 @@
       recharge: function () {
         let planInfo = this.plan_list[this.cur_plan_type_index][this.choose_plan_index];
 
-        // for (let i = 0; i < this.plan_list[this.ref_plan_type_index].length; i++) {
-        //   if (this.choose_plan_index === this.plan_list[this.ref_plan_type_index][i].id) {
-        //     planInfo = this.plan_list[this.ref_plan_type_index][i];
-        //   }
-        // }
-
         if (planInfo.surplus_times <= 0) {
           Toast("此套餐已售罄, 请更换套餐");
           return;
@@ -483,8 +462,6 @@
 
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
-
-        console.log(this.cur_plan_type_index);
 
         // 加油包套餐充值
         if (this.cur_plan_type_index === '2') {
@@ -626,19 +603,9 @@
   @import "~swiper/dist/css/swiper.min.css";
   @import "../../assets/less/common";
 
-  html,
-  body,
-  #app {
-    height: 100%;
-  }
-
-  /*.el-popover {*/
-  /*  font-size: 24px !important;*/
-  /*}*/
-
   .plan-wrap {
-    position: fixed;
-    top: 0;
+    /*position: fixed;*/
+    /*top: 0;*/
     width: 100%;
     background: #F4F4F4;
     box-sizing: border-box;
@@ -648,244 +615,19 @@
       -webkit-overflow-scrolling: touch;
     }
 
-    /*.plan-type-name {*/
-    /*  display: flex;*/
-    /*  height: 55px;*/
-    /*  margin-bottom: 10px;*/
-    /*  align-items: center;*/
-    /*  justify-content: center;*/
-    /*  font-size: 30px;*/
-    /*  font-weight: bold;*/
-    /*  text-align: center;*/
-    /*  color: #f1a53c;*/
-    /*  background: rgba(255, 251, 243, 1);*/
-
-    /*  &::before, &::after {*/
-    /*    display: block;*/
-    /*    width: 129px;*/
-    /*    height: 8px;*/
-    /*    content: '';*/
-    /*    background-size: 100% 100% !important;*/
-    /*  }*/
-
-    /*  &::before {*/
-    /*    margin-right: 24px;*/
-    /*    background: url("../../assets/imgs/card/usage/leftIcon.png") no-repeat;*/
-    /*  }*/
-
-    /*  &::after {*/
-    /*    margin-left: 24px;*/
-    /*    background: url("../../assets/imgs/card/usage/rightIcon.png") no-repeat;*/
-    /*  }*/
-    /*}*/
-
-    /*.planContent {*/
-    /*  display: flex;*/
-    /*  width: 100%;*/
-    /*  flex-flow: row wrap;*/
-    /*  align-content: flex-start;*/
-    /*  padding: 0 20px;*/
-    /*  box-sizing: border-box;*/
-
-    /*  .plan-icon-recommend {*/
-    /*    text-align: left;*/
-    /*    position: absolute;*/
-    /*    bottom: 4px;*/
-    /*    left: 8px;*/
-    /*  }*/
-
-    /*  .iconfont {*/
-    /*    font-size: 38px;*/
-    /*  }*/
-
-    /*  .centerBox {*/
-    /*    height: 100%;*/
-    /*    display: flex;*/
-    /*    align-items: center;*/
-    /*    flex-direction: column;*/
-    /*    justify-content: center;*/
-    /*    position: relative;*/
-
-    /*    .gift {*/
-    /*      position: absolute;*/
-    /*      top: -35px;*/
-    /*      right: -20px;*/
-
-    /*      > img {*/
-    /*        width: 40px;*/
-    /*        height: 40px;*/
-    /*      }*/
-    /*    }*/
-    /*  }*/
-
-    /*  > div {*/
-    /*    border: 2px solid rgba(230, 230, 230, 1);*/
-    /*    border-radius: 13px;*/
-    /*    padding: 10px;*/
-    /*    margin: 10px;*/
-    /*    box-sizing: border-box;*/
-    /*    flex: 0 0 30%;*/
-    /*    position: relative;*/
-
-    /*    .contentWord1 {*/
-    /*      font-size: 24px;*/
-    /*      font-weight: 400;*/
-    /*      color: rgba(51, 51, 51, 1);*/
-    /*    }*/
-
-    /*    .contentWord2 {*/
-    /*      width: 60px;*/
-    /*      height: 3px;*/
-    /*      background: rgba(241, 165, 60, 1);*/
-    /*      margin: 10px auto;*/
-    /*    }*/
-
-    /*    .contentWord3 {*/
-    /*      font-size: 28px;*/
-    /*      font-weight: 400;*/
-    /*      color: #fd720d;*/
-
-    /*      del {*/
-    /*        color: #868686;*/
-    /*        font-size: 21px;*/
-    /*      }*/
-    /*    }*/
-    /*  }*/
-
-    /*  //当前选中样式*/
-    /*  .activedPlan {*/
-    /*    position: relative;*/
-    /*    border-color: #dca85f;*/
-    /*    box-shadow: 0 0 30px 0 #eae9e9;*/
-
-    /*    .plan-name {*/
-    /*      color: #fd720d;*/
-    /*    }*/
-    /*  }*/
-
-    /*  .activedPlan::after {*/
-    /*    content: "";*/
-    /*    position: absolute;*/
-    /*    width: 21px;*/
-    /*    height: 21px;*/
-    /*    right: -2px;*/
-    /*    bottom: 0;*/
-    /*    background: url("../../assets/imgs/card/usage/right.png") no-repeat;*/
-    /*    background-size: 100% 100%;*/
-    /*  }*/
-
-    /*  //售罄状态*/
-    /*  .plan-sell-done {*/
-    /*    background-color: #f0f0f0;*/
-
-    /*    .plan-name,*/
-    /*    .plan-price {*/
-    /*      color: #868686;*/
-    /*    }*/
-
-    /*    .icon-sell-done {*/
-    /*      position: absolute;*/
-    /*      top: 40px;*/
-    /*      left: 50%;*/
-    /*      margin-left: -100px;*/
-    /*      padding: 10px 20px;*/
-    /*      font-size: 28px;*/
-    /*      box-sizing: border-box;*/
-    /*      border: 4px solid #ed6153;*/
-    /*      color: #ed6153;*/
-    /*      border-radius: 12px;*/
-    /*      transform: rotate(-28deg);*/
-    /*    }*/
-
-    /*    .icon-sell-done::after {*/
-    /*      content: "已售罄";*/
-    /*    }*/
-    /*  }*/
-
-    /*  // 加油提示*/
-    /*  !*.warning-wrapper {*!*/
-    /*  !*  flex: auto;*!*/
-    /*  !*  border: none;*!*/
-    /*  !*  width: 100%;*!*/
-
-    /*  !*  p {*!*/
-    /*  !*    color: #654828;*!*/
-    /*  !*    font-size: 26px;*!*/
-    /*  !*    line-height: 1.5;*!*/
-    /*  !*    text-align: left;*!*/
-
-    /*  !*    &:first-child {*!*/
-    /*  !*      color: #ff3448;*!*/
-    /*  !*      font-size: 28px;*!*/
-    /*  !*    }*!*/
-
-    /*  !*    &:before {*!*/
-    /*  !*      content: "*";*!*/
-    /*  !*      color: #ff4e35;*!*/
-    /*  !*    }*!*/
-    /*  !*  }*!*/
-    /*  !*}*!*/
-    /*}*/
-
     .swiper-container {
       height: 100%;
     }
 
     .plan-type-wrap {
-      /*display: flex;*/
-      /*flex-wrap: wrap;*/
-      /*-webkit-box-lines: multiple;*/
-      /*justify-content: center;*/
-      /*align-items: center;*/
       background: #fff;
-
-      /*.plan-type-inner-wrap {*/
-      /*  width: 90%;*/
-      /*overflow: auto;*/
-
-      /*.plan-type-scroll-wrapper {*/
-      /*  display: flex;*/
-      /*  flex-wrap: nowrap;*/
-      /*  -webkit-box-lines: single;*/
-      /*}*/
-
-
-      /*}*/
-
-      span {
-        display: inline-block;
-        flex: 1;
-        min-width: 33.33%;
-        height: 46px;
-        padding: 28px 0;
-        white-space: nowrap;
-        color: #A6A6A6;
-        font-size: 30px;
-        border: 1px solid transparent;
-
-        &.active_type {
-          position: relative;
-          color: #3E3E3E;
-
-          &:after {
-            position: absolute;
-            left: 50%;
-            bottom: 25px;
-            content: '';
-            width: 40%;
-            height: 5px;
-            margin-left: -20%;
-            background: #3E3E3E;
-          }
-        }
-      }
 
       .swiper-slide {
         width: 25%;
         height: 46px;
-        line-height: 46px;
         padding: 28px 0;
-        /*opacity: 0.4;*/
+        font-size: 30px;
+        line-height: 46px;
         color: #A6A6A6;
       }
 
@@ -893,6 +635,7 @@
         position: relative;
         color: #3E3E3E;
         opacity: 1;
+
         &:after {
           position: absolute;
           left: 50%;
@@ -983,7 +726,6 @@
 
           .plan-desc {
             font-size: 28px;
-            /*padding-bottom: 20px;*/
           }
         }
 
@@ -1068,10 +810,6 @@
         .van-cell:not(:last-child)::after {
           border: none;
         }
-
-        /*&::after{*/
-        /*  border:none;*/
-        /*}*/
       }
     }
 
@@ -1104,7 +842,20 @@
       }
     }
 
+    .plan-no-user__height {
+      height: calc(~ '100vh - 102px - 160px');
+    }
+
+    .plan-has-user__height {
+      height: calc(~ '100vh - 60px - 102px - 190px');
+    }
+
+    .plan-app__height {
+      height: calc(~ '100vh - 60px - 102px - 190px - 49px');
+    }
+
   }
+
 </style>
 
 

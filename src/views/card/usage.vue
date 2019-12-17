@@ -22,7 +22,7 @@
             </div>
             <div>
               <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-              <a  @click="toQ()">问题中心></a>
+              <a @click="toQ()">问题中心></a>
             </div>
           </div>
         </div>
@@ -69,10 +69,21 @@
       </div>
       <div class="card-plan-wrap">
         <p ref="refPlanTitle" class="card-plan-wrap-title">
-          <span @click="planTypeClikc(index)" v-for="(item,index) in plan_title_array"
-                :class="{'checked':index==cur_plan_type_index}" v-bind:key="index">{{item}}</span>
+          <span
+            @click="planTypeClikc(index)"
+            v-for="(item,index) in plan_title_array"
+            :class="{'checked':index==cur_plan_type_index}" v-bind:key="index">
+            {{item}}
+          </span>
         </p>
-        <div class="van-swipe-wrap">
+        <div
+          class="van-swipe-wrap"
+          :class="{
+            'plan-no-user__height':plan_list_height.is_normal,
+            'plan-has-user__height':plan_list_height.is_c_frontend,
+            'plan-app__height':plan_list_height.is_app
+            }"
+        >
           <swiper ref="mySwiper" :options="swiperOption">
             <swiper-slide>
               <ul v-if="hasUsagePlan" class="usage-plan-wrap">
@@ -127,10 +138,12 @@
                     </div>
 
                     <div class="prefer_use" v-if="usagePlanLength > 1 && inArray(usageInfo.source,watch_source) < 0">
-                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
-                         v-if="item.priority >= 1">优先使用</a>
-                      <a @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
-                         v-if="item.priority == 0">取消优先</a>
+                      <a
+                        @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
+                        v-if="item.priority >= 1">优先使用</a>
+                      <a
+                        @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
+                        v-if="item.priority == 0">取消优先</a>
                     </div>
                   </div>
                 </li>
@@ -178,7 +191,7 @@
       </div>
       <div ref="refCardButton" class="btn-recharge-wrap">
         <button @click="recharge">充值续费</button>
-        <a  @click="toCard()">卡券兑换</a>
+        <a @click="toCard()">卡券兑换</a>
       </div>
     </div>
 
@@ -204,17 +217,12 @@
         加载中...
       </van-loading>
     </van-popup>
-    <!--      <UsageSkeleton v-else/>-->
-    <!--    </transition>-->
+
   </div>
 </template>
 
 <style lang="less">
   @import "~swiper/dist/css/swiper.min.css";
-
-  #app, html, body {
-    height: 100%
-  }
 
   html {
     background-color: #fbfafa;
@@ -232,8 +240,7 @@
     transition: all .8s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
 
-  .slide-fade-enter, .slide-fade-leave-to
-    /* .slide-fade-leave-active for below version 2.1.8 */ {
+  .slide-fade-enter, .slide-fade-leave-to {
     transform: translateX(10px);
     opacity: 0;
   }
@@ -256,7 +263,9 @@
 
     .card-info-wrap {
       display: flex;
+      height: 190px;
       padding: 15px;
+      box-sizing: border-box;
 
       .operation-logo-wrap {
         margin-right: 15px;
@@ -338,12 +347,14 @@
     }
 
     .card-used-wrap {
+      height: 200px;
       padding: 25px;
       font-size: 26px;
       color: #fff;
       font-weight: 500;
       background-image: linear-gradient(167deg, #00d2ff 0%, #3a7bd5 100%);
       box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.14);
+      box-sizing: border-box;
 
       .card-surplus-flow {
         display: flex;
@@ -385,6 +396,7 @@
         .to-flow-wrap {
           position: absolute;
           right: 0;
+          bottom: -15px;
           text-align: right;
 
           a {
@@ -408,6 +420,7 @@
 
       .card-plan-wrap-title {
         display: flex;
+        height: 86px;
 
         span {
           display: inline-block;
@@ -437,6 +450,7 @@
         box-sizing: border-box;
 
         .swiper-container {
+          height: 100%;
           background-color: #fff;
           border-radius: 8px;
         }
@@ -542,7 +556,9 @@
 
     .btn-recharge-wrap {
       position: relative;
+      height: 140px;
       padding: 30px 0;
+      box-sizing: border-box;
 
       button {
         display: inline-block;
@@ -561,17 +577,28 @@
         color: #38b5ed;
         font-size: 28px;
       }
-
     }
+
+    .plan-no-user__height {
+      height: calc(~ '100vh - 190px - 200px - 86px - 140px');
+    }
+
+    .plan-has-user__height {
+      height: calc(~ '100vh - 60px - 190px - 200px - 86px - 180px');
+    }
+
+    .plan-app__height {
+      height: calc(~ '100vh - 60px - 190px - 200px - 86px - 160px - 49px');
+    }
+
   }
 </style>
 
 <script>
   // @ is an alias to /src
-  import UsageSkeleton from '@/components/skeletons/Usage'
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast,Loading} from 'vant';
-  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage,appRate} from "../../utilies";
+  import {Notify, Popup, Toast, Loading} from 'vant';
+  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage, appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -616,7 +643,7 @@
         usagePlanLength: 0,
         hasOrderPlan: false,
         usageInfo: {},
-        priorityShow:false,
+        priorityShow: false,
         swiperOption: {
           on: {
             slideChangeTransitionEnd: function (swiper) {
@@ -624,14 +651,19 @@
             }
           }
         },
-        // prefer_priority: 0
+        // 订单高度
+        plan_list_height: {
+          is_app: false,
+          is_c_frontend: true,
+          is_normal: false,
+        }
       }
     },
     components: {
       [Notify.name]: Notify,
       [Popup.name]: Popup,
       [Toast.name]: Toast,
-      [Loading.name]:Loading,
+      [Loading.name]: Loading,
       swiper,
       swiperSlide
     },
@@ -648,7 +680,7 @@
     mounted() {
     },
     methods: {
-      initial(){
+      initial() {
         if (getStorage('check_iccid')) {
           this.iccid = getStorage('check_iccid');
           _get('/api/v1/app/cards/telcom/usage', {
@@ -778,15 +810,28 @@
               this.usagePlanLength = this.usageInfo.usage.plans.length;
               this.hasOrderPlan = !!this.usageInfo.orders.length;
 
-              this.$nextTick(() => {
-                this.$refs.mySwiper.swiper.slideTo(0, 500, false);
-                let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-                  refCardInfo = this.$refs.refCardInfo.offsetHeight,
-                  refCardData = this.$refs.refCardData.offsetHeight,
-                  refCardButton = this.$refs.refCardButton.offsetHeight,
-                  refPlanTitle = this.$refs.refPlanTitle.offsetHeight;
-                this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) + 'px'
-              });
+              // this.$nextTick(() => {
+              //   this.$refs.mySwiper.swiper.slideTo(0, 500, false);
+              //   let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
+              //     refCardInfo = this.$refs.refCardInfo.offsetHeight,
+              //     refCardData = this.$refs.refCardData.offsetHeight,
+              //     refCardButton = this.$refs.refCardButton.offsetHeight,
+              //     refPlanTitle = this.$refs.refPlanTitle.offsetHeight;
+              //   this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) + 'px'
+              // });
+
+              if (this.global_variables.device === 'iphone' && this.client_type === "app") {
+                this.plan_list_height.is_app = true;
+              } else {
+                this.plan_list_height.is_app = false;
+                if (this.client_type === "wechat" || this.client_type === "alipay") {
+                  this.plan_list_height.is_c_frontend = true;
+                } else {
+                  this.plan_list_height.is_c_frontend = false;
+                  this.plan_list_height.is_normal = true;
+                }
+              }
+
             } else {
               Toast({
                 icon: 'warning-o',
@@ -807,7 +852,7 @@
       },
       recharge() {
         setStorage('check_iccid', this.iccid);
-        if(this.hasUsagePlan) setStorage('hasValidatedPlan',this.hasUsagePlan);
+        if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
         appRate(2);
         this.$router.push({path: '/weixin/card/plan_list'})
       },
@@ -904,13 +949,13 @@
           }
         })
       },
-      toQ(){
+      toQ() {
         appRate(9);
-        this.$router.push({path:"/weixin/question/index"})
+        this.$router.push({path: "/weixin/question/index"})
       },
-      toCard(){
+      toCard() {
         appRate(14);
-        this.$router.push({path:"/weixin/coupon/index"})
+        this.$router.push({path: "/weixin/coupon/index"})
       }
     }
   };
