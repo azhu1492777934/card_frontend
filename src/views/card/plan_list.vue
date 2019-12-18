@@ -1,18 +1,14 @@
 <template>
   <div class="plan-wrap">
     <div ref="refPLanTitle" class="plan-type-wrap">
-      <swiper
-        ref="swiperThumbs"
-        :options="swiperOptionThumbs"
+      <span
+        @click="planTypeClikc(index)"
+        v-for="(item,index) in render_type_name"
+        :key="index"
+        :class="[{'active_type':index==cur_plan_type_index},index]"
       >
-        <swiper-slide
-          @click="planTypeClikc(index)"
-          v-for="(item,index) in render_type_name"
-          :key="index"
-        >
           {{item}}
-        </swiper-slide>
-      </swiper>
+        </span>
 
     </div>
 
@@ -38,12 +34,11 @@
             >
               <div class="plan-info-wrap">
                 <p
-                  :class="{'plan-icon-recommend':inner_item.is_recommend}"
                   class="plan-name">
                   {{ inner_item.name }}
                 </p>
 
-                <p class="sub-plan-name">5G优享服务</p>
+                <p class="sub-plan-name">{{ inner_item.specialty ? inner_item.specialty : '5G优享服务' }}</p>
 
                 <van-collapse
                   :border="false"
@@ -83,6 +78,7 @@
               </div>
               <div class="plan-price-wrap">
                 <p class="plan-price">￥{{ inner_item.price }}</p>
+                <p class="plan-sell-count">已售：{{inner_item.sell_count}}</p>
               </div>
               <span class="plan-selected"></span>
             </li>
@@ -91,9 +87,37 @@
       </swiper>
     </div>
 
-    <div ref="refPlanButton" class="btn-recharge-wrap" :class="{'noDataHide':load_plan_list}">
+    <!--商家答疑-->
+<!--    <div class="QA-wrapper">-->
+<!--      <div class="title">-->
+<!--        <span>商家答疑(20)</span>-->
+<!--        <span></span>-->
+<!--      </div>-->
+<!--      <ul class="QA-list">-->
+<!--        <li>-->
+<!--          <span>月套餐可以叠加加油包吗</span>-->
+<!--          <span>4个回答</span>-->
+<!--        </li>-->
+<!--        <li>-->
+<!--          <span>手表卡充值优惠在哪里看？</span>-->
+<!--          <span>1个回答</span>-->
+<!--        </li>-->
+<!--      </ul>-->
+<!--    </div>-->
+
+    <!--购买套餐及在线客服-->
+
+    <div
+      class="btn-recharge-wrap"
+      :class="{'noDataHide':load_plan_list}"
+    >
+      <button
+        @click="toService"
+      >
+        <span class="iconfont icon-servicer"></span>
+        <br>客服
+      </button>
       <button @click="recharge">{{recharge_btn_text}}</button>
-      <a @click="toCard()">卡券兑换</a>
     </div>
 
     <van-popup :close-on-click-overlay="false" v-model="load_plan_list">
@@ -135,9 +159,9 @@
       swiper() {
         return this.$refs.swiperVant.swiper
       },
-      swiperThumbs() {
-        return this.$refs.swiperThumbs.swiper
-      }
+      // swiperThumbs() {
+      //   return this.$refs.swiperThumbs.swiper
+      // }
     },
     data() {
       const _this = this;
@@ -147,16 +171,17 @@
         load_plan_msg: "",
         recharge_btn_text: '充值',
         plan_type: [],// 套餐类型
+        // plan_type_str:'',// 套餐类型字符串
         plan_type_name: {
           0: "累计套餐",
           1: "月套餐",
           2: "加油包",
-          5: "周期性套餐",
+          5: "周期套餐",
           6: "超量自动续费套餐",
-          100: '加油包'
+          // 100: '加油包'
         },// 套餐名称
-        render_type_name: {},
-        cur_plan_type_index: "0", //当前选中套餐类型
+        render_type_name: [],
+        cur_plan_type_index: 0, //当前选中套餐类型
         choose_plan_index: 0, //当前选中套餐
         plan_list: {},
         hasValidatedPlan: getStorage('hasValidatedPlan'),
@@ -166,147 +191,21 @@
         activeNames: [],
         //实名类型
         realnameType: getStorage('realnameType'),
+        // swiperOption variable
         swiperOption: {
           loop: true,
-          loopedSlides: 3, //looped slides should be the same
           on: {
             slideChangeTransitionEnd: function () {
-              _this.cur_plan_type_index = _this.plan_type[this.realIndex];
-              console.log(_this.cur_plan_type_index);
+              _this.cur_plan_type_index = this.activeIndex;
             }
           }
         },
         swiperOptionThumbs: {
-          slidesPerView: 3,
-          touchRatio: 0.2,
           loop: true,
-          loopedSlides: 3, //looped slides should be the same
-          slideToClickedSlide: true,
-        },
-        mockData: {
-          "0": [
-            {
-              "c_price": 1099,
-              "call_time": 0,
-              "card_source": 7,
-              "data": -4,
-              "day": 360,
-              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
-              "first_price": null,
-              "id": 3286,
-              "image_url": null,
-              "is_can_renew": 0,
-              "is_elb_deductible": 0,
-              "is_recommend": false,
-              "market_price": 1299,
-              "max_deductible_elb": null,
-              "meal_message": 0,
-              "name": "无限量/1年-累计套餐",
-              "price": 1099,
-              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
-              "surplus_times": "False",
-              "type": 0,
-              "vip_type_id": 0
-            },
-            {
-              "c_price": 1099,
-              "call_time": 0,
-              "card_source": 7,
-              "data": -4,
-              "day": 360,
-              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
-              "first_price": null,
-              "id": 32862,
-              "image_url": null,
-              "is_can_renew": 0,
-              "is_elb_deductible": 1,
-              "is_recommend": false,
-              "market_price": 1299,
-              "max_deductible_elb": 10,
-              "meal_message": 0,
-              "name": "无限量/1年-test-累计套餐",
-              "price": 1000,
-              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
-              "surplus_times": "False",
-              "type": 0,
-              "vip_type_id": 0
-            }
-          ],
-          "1": [
-            {
-              "c_price": 1099,
-              "call_time": 0,
-              "card_source": 7,
-              "data": -4,
-              "day": 360,
-              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
-              "first_price": null,
-              "id": 3286,
-              "image_url": null,
-              "is_can_renew": 0,
-              "is_elb_deductible": 0,
-              "is_recommend": false,
-              "market_price": 1299,
-              "max_deductible_elb": null,
-              "meal_message": 0,
-              "name": "无限量/1年-月套餐",
-              "price": 1099,
-              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
-              "surplus_times": "False",
-              "type": 0,
-              "vip_type_id": 0
-            }
-          ],
-          "2": [
-            {
-              "c_price": 1099,
-              "call_time": 0,
-              "card_source": 7,
-              "data": -4,
-              "day": 360,
-              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
-              "first_price": null,
-              "id": 3286,
-              "image_url": null,
-              "is_can_renew": 0,
-              "is_elb_deductible": 0,
-              "is_recommend": false,
-              "market_price": 1299,
-              "max_deductible_elb": null,
-              "meal_message": 0,
-              "name": "无限量/1年-加油包",
-              "price": 1099,
-              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
-              "surplus_times": "False",
-              "type": 0,
-              "vip_type_id": 0
-            }
-          ],
-          "5": [
-            {
-              "c_price": 1099,
-              "call_time": 0,
-              "card_source": 7,
-              "data": -4,
-              "day": 360,
-              "describe": "全国通用，360天有效期。80G后限速到2M，可充值加速包50元30G，每30天后重置一次。",
-              "first_price": null,
-              "id": 3286,
-              "image_url": null,
-              "is_can_renew": 0,
-              "is_elb_deductible": 0,
-              "is_recommend": false,
-              "market_price": 1299,
-              "max_deductible_elb": null,
-              "meal_message": 0,
-              "name": "无限量/1年-周期性套餐",
-              "price": 1099,
-              "remark": "月底流量不清零, 12个月有效，全国通用，套餐到期即停机",
-              "surplus_times": "False",
-              "type": 0,
-              "vip_type_id": 0
-            }
-          ]
+          centeredSlides: true,
+          slidesPerView: 'auto',
+          touchRatio: 0.2,
+          slideToClickedSlide: true
         },
         // 套餐高度
         plan_list_height: {
@@ -338,111 +237,105 @@
       let _this = this;
       //处理套餐数据
 
-      // _get("/api/v1/app/plan_list", {
-      //   iccid: getStorage("check_iccid")
-      // }).then(res => {
-      let res = {
-        state: 1,
-        data: this.mockData
-      };
-      if (res.state === 1) {
-        if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
-          this.load_plan_list = true;
-          this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
-          return;
-        }
-        this.load_plan_msg = res.msg;
-        this.load_plan_list = false;
-        this.plan_list = res.data;
-        for (let item in this.plan_list) {
-          // 套餐类型
-          if (this.plan_type_name.hasOwnProperty(item)) {
-            this.render_type_name[item] = this.plan_type_name[item];
+      _get("/api/v1/app/plan_list", {
+        iccid: getStorage("check_iccid")
+      }).then(res => {
+        if (res.state === 1) {
+          if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
+            this.load_plan_list = true;
+            this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
+            return;
           }
+          this.load_plan_msg = res.msg;
+          this.load_plan_list = false;
+          this.plan_list = res.data;
+          for (let item in this.plan_list) {
+            // 套餐类型
+            if (this.plan_type_name.hasOwnProperty(item)) {
+              this.render_type_name.push(this.plan_type_name[item]);
 
-          let newArray1 = [], newArray2 = [], newArray3 = [];
-          for (let i = 0; i < this.plan_list[item].length; i++) {
-            //区分推荐/未推荐
-            if (this.plan_list[item][i].is_recommend === true) {
-              newArray1.push(this.plan_list[item][i]);
+              // this.render_type_name[item] = this.plan_type_name[item];
+            }
+
+            let newArray1 = [], newArray2 = [], newArray3 = [];
+            for (let i = 0; i < this.plan_list[item].length; i++) {
+              //区分推荐/未推荐
+              if (this.plan_list[item][i].is_recommend === true) {
+                newArray1.push(this.plan_list[item][i]);
+              } else {
+                newArray2.push(this.plan_list[item][i]);
+              }
+            }
+            //分别进行排序
+            newArray1.sort(this.compare2("id"));
+            newArray2.sort(this.compare2("id"));
+            newArray3 = newArray1.concat(newArray2);
+
+            this.plan_list[item] = newArray3;
+
+            // 处理加油包
+            if (!this.hasValidatedPlan) {
+              if (item !== '2') {
+                this.plan_type.push(item);
+              }
             } else {
-              newArray2.push(this.plan_list[item][i]);
+              this.plan_type.push(item);
             }
           }
-          //分别进行排序
-          newArray1.sort(this.compare2("id"));
-          newArray2.sort(this.compare2("id"));
-          newArray3 = newArray1.concat(newArray2);
 
-          this.plan_list[item] = newArray3;
+          // this.plan_type_str = this.plan_type.join('');
 
           // 处理加油包
           if (!this.hasValidatedPlan) {
-            if (item !== '2') {
-              this.plan_type.push(item);
+            if (this.plan_list.hasOwnProperty(2)) {
+              delete this.plan_list[2];
             }
+            if (this.render_type_name.includes('加油包')) {
+              this.render_type_name.splice(this.render_type_name.findIndex(item => item === '加油包'), 1);
+              // delete this.render_type_name[2]
+            }
+          }
+
+          if (this.global_variables.device === 'iphone' && this.client_type === "app") {
+            this.plan_list_height.is_app = true;
           } else {
-            this.plan_type.push(item);
+            this.plan_list_height.is_app = false;
+            if (this.client_type === "wechat" || this.client_type === "alipay") {
+              this.plan_list_height.is_c_frontend = true;
+            } else {
+              this.plan_list_height.is_c_frontend = false;
+              this.plan_list_height.is_normal = true;
+            }
           }
-        }
 
-        // 处理加油包
-        if (!this.hasValidatedPlan) {
-          if (this.plan_list.hasOwnProperty(2)) {
-            delete this.plan_list[2];
-          }
-          if (this.render_type_name.hasOwnProperty(2)) {
-            delete this.render_type_name[2]
-          }
-        }
+          // this.$nextTick(() => {
+          // this.swiperOption.loopedSlides = this.plan_type.length;
+          // this.swiperOptionThumbs.loopedSlides = this.plan_type.length;
 
-        this.swiperOption.loopedSlides = this.plan_type.length;
-        this.swiperOptionThumbs.loopedSlides = this.plan_type.length;
+          // const swiper = this.swiper;
+          // const swiperThumbs = this.swiperThumbs;
+          // swiper.controller.control = swiperThumbs;
+          // swiperThumbs.controller.control = swiper;
 
-        if (this.global_variables.device === 'iphone' && this.client_type === "app") {
-          this.plan_list_height.is_app = true;
+          // });
         } else {
-          this.plan_list_height.is_app = false;
-          if (this.client_type === "wechat" || this.client_type === "alipay") {
-            this.plan_list_height.is_c_frontend = true;
-          } else {
-            this.plan_list_height.is_c_frontend = false;
-            this.plan_list_height.is_normal = true;
-          }
+          this.load_plan_list = true;
+          this.load_plan_msg = res.msg;
         }
-
-        // this.$nextTick(() => {
-        //   let clientHeight = document.documentElement.clientHeight || document.body.clientHeight;
-        //   let refPlanButton = this.$refs.refPlanButton.offsetHeight;
-        //   let userHeight = getStorage("userHeight") || 44;
-        //
-        //   if (this.global_variables.device === "iphone" && this.client_type === "app") {
-        //     this.$refs.vanSwiperWwrap.style.height = clientHeight - refPlanButton - userHeight - 49 + "px";
-        //   } else {
-        //     if (this.client_type === "wechat" || this.client_type === "alipay") {
-        //       this.$refs.vanSwiperWwrap.style.height =
-        //         clientHeight - refPlanButton - userHeight + "px";
-        //     } else {
-        //       this.$refs.vanSwiperWwrap.style.height =
-        //         clientHeight - refPlanButton - userHeight + "px";
-        //     }
-        //   }
-        // });
-      } else {
-        this.load_plan_list = true;
-        this.load_plan_msg = res.msg;
-      }
-      // });
+      });
     },
-    mounted() {
-      this.$nextTick(() => {
-        const swiper = this.swiper;
-        const swiperThumbs = this.swiperThumbs;
-        swiper.controller.control = swiperThumbs;
-        swiperThumbs.controller.control = swiper;
-      })
-    },
+    // mounted() {
+    //   this.$nextTick(() => {
+    //     const swiper = this.swiper;
+    //     const swiperThumbs = this.swiperThumbs;
+    //     swiper.controller.control = swiperThumbs;
+    //     swiperThumbs.controller.control = swiper;
+    //   })
+    // },
     methods: {
+      toService(){
+        location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#'
+      },
       planTypeClikc(index) {
         this.cur_plan_type_index = index;
         this.swiper.slideTo(index);
@@ -453,7 +346,18 @@
         index === '2' ? this.recharge_btn_text = '选择叠加加油包套餐' : this.recharge_btn_text = '充值';
       },
       recharge: function () {
-        let planInfo = this.plan_list[this.cur_plan_type_index][this.choose_plan_index];
+        let planName = this.render_type_name[this.cur_plan_type_index];
+        let planType = '';
+        for (let i in this.plan_type_name) {
+          if (this.plan_type_name[i] === planName) {
+            planType = i;
+            break
+          }
+        }
+
+        let planInfo = this.plan_list[planType][this.choose_plan_index];
+
+        console.log(planInfo);
 
         if (planInfo.surplus_times <= 0) {
           Toast("此套餐已售罄, 请更换套餐");
@@ -503,7 +407,6 @@
           });
           return;
         }
-        let _this = this;
         let param = {
           status: this.authorizedUserInfo.account.balance > 0 ? 1 : 0,
           recharge_price: planInfo.price,
@@ -620,34 +523,65 @@
     }
 
     .plan-type-wrap {
+      display: flex;
       background: #fff;
 
-      .swiper-slide {
-        width: 25%;
+      /*.swiper-slide {*/
+      /*  width: 25%;*/
+      /*  height: 46px;*/
+      /*  padding: 28px 0;*/
+      /*  font-size: 30px;*/
+      /*  line-height: 46px;*/
+      /*  color: #A6A6A6;*/
+      /*}*/
+
+      /*.swiper-slide-active {*/
+      /*  position: relative;*/
+      /*  color: #3E3E3E;*/
+      /*  opacity: 1;*/
+
+      /*  &:after {*/
+      /*    position: absolute;*/
+      /*    left: 50%;*/
+      /*    bottom: 25px;*/
+      /*    content: '';*/
+      /*    width: 40%;*/
+      /*    height: 5px;*/
+      /*    margin-left: -20%;*/
+      /*    background: #3E3E3E;*/
+      /*  }*/
+
+      /*}*/
+
+      span {
+        display: inline-block;
+        flex: 1;
+        /*min-width: 33.33%;*/
         height: 46px;
         padding: 28px 0;
-        font-size: 30px;
-        line-height: 46px;
+        white-space: nowrap;
         color: #A6A6A6;
-      }
+        font-size: 26px;
+        border: 1px solid transparent;
 
-      .swiper-slide-active {
-        position: relative;
-        color: #3E3E3E;
-        opacity: 1;
+        &.active_type {
+          position: relative;
+          color: #3E3E3E;
 
-        &:after {
-          position: absolute;
-          left: 50%;
-          bottom: 25px;
-          content: '';
-          width: 40%;
-          height: 5px;
-          margin-left: -20%;
-          background: #3E3E3E;
+          &:after {
+            position: absolute;
+            left: 50%;
+            bottom: 25px;
+            content: '';
+            width: 80px;
+            height: 5px;
+            margin-left: -40px;
+            background: #3E3E3E;
+          }
         }
-
       }
+
+
     }
 
     //套餐列表
@@ -738,6 +672,11 @@
             font-size: 36px;
             font-weight: 700;
           }
+
+          .plan-sell-count {
+            color: #3E3E3E;
+            font-size: 24px;
+          }
         }
 
         //当前选中样式
@@ -814,8 +753,9 @@
     }
 
     .btn-recharge-wrap {
-      padding: 40px 32px;
       position: relative;
+      display: flex;
+      padding-top: 40px;
 
       &.noDataHide {
         display: none;
@@ -823,13 +763,23 @@
 
       button {
         display: block;
-        width: 430px;
-        height: 80px;
-        font-size: 36px;
-        color: #000;
-        background: linear-gradient(-33deg, rgba(253, 212, 122, 1), rgba(240, 181, 70, 1));
-        border-radius: 40px;
-        margin: 0 auto;
+        height: 100px;
+
+        &:first-child {
+          flex: 2;
+          font-size: 26px;
+          color: #868686;
+          background: #fff;
+        }
+
+        &:last-child {
+          flex: 3;
+          color: #fff;
+          font-size: 32px;
+          font-weight: 500;
+          background: linear-gradient(60deg, rgba(251, 208, 116, 1), rgba(241, 185, 76, 1));
+        }
+
       }
 
       a {
@@ -842,16 +792,63 @@
       }
     }
 
+    // 商家答疑
+    .QA-wrapper {
+      width: 94%;
+      height: 190px;
+      margin: 40px auto 0;
+      padding: 29px 24px 0;
+      box-sizing: border-box;
+      border-radius: 26px;
+      background-color: #fff;
+
+      .title {
+        display: flex;
+        padding-bottom: 20px;
+
+        span {
+          &:first-child {
+            font-size: 26px;
+            color: #3E3E3E;
+            font-weight: 500;
+          }
+        }
+      }
+
+      .QA-list {
+        li {
+          display: flex;
+          padding: 10px 0;
+
+          span {
+            font-size: 24px;
+
+            &:first-child {
+              flex: 3;
+              color: #3E3E3E;
+              text-align: left;
+            }
+
+            &:last-child {
+              flex: 1;
+              color: #666;
+              text-align: right;
+            }
+          }
+        }
+      }
+    }
+
     .plan-no-user__height {
-      height: calc(~ '100vh - 102px - 160px');
+      height: calc(~ '100vh - 100px  - 140px');
     }
 
     .plan-has-user__height {
-      height: calc(~ '100vh - 60px - 102px - 190px');
+      height: calc(~ '100vh - 60px - 100px  - 175px');
     }
 
     .plan-app__height {
-      height: calc(~ '100vh - 60px - 102px - 190px - 49px');
+      height: calc(~ '100vh - 60px - 102px - 175px - 49px');
     }
 
   }

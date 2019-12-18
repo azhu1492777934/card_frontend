@@ -134,7 +134,7 @@
 </script>
 
 <style lang="less">
-  @import url("https://at.alicdn.com/t/font_963137_x1unpij862.css");
+  @import url("https://at.alicdn.com/t/font_963137_ssq5ffif4ea.css");
   @import "./assets/less/common.less";
 
   html, body, #app, .inner-wrap {
