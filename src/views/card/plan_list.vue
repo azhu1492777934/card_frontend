@@ -1,5 +1,6 @@
 <template>
   <div class="plan-wrap">
+
     <div ref="refPLanTitle" class="plan-type-wrap">
       <span
         @click="planTypeClikc(index)"
@@ -9,7 +10,6 @@
       >
           {{item}}
         </span>
-
     </div>
 
     <div
@@ -27,6 +27,7 @@
             <li @click="choosePlanClick(inner_index)"
                 v-for="(inner_item,inner_index) in plan_list[item]"
                 :key="inner_index"
+                :name="inner_item.id"
                 :class="{
                 'activedPlan':inner_index==choose_plan_index,
                 'plan-sell-done':inner_item.surplus_times!='False' && inner_item.surplus_times<=0
@@ -34,7 +35,9 @@
             >
               <div class="plan-info-wrap">
                 <p
+                  :class="{'plan-icon-recommend':inner_item.is_recommend}"
                   class="plan-name">
+                  <span v-if="inner_item.is_recommend" class="iconfont icon-recommend"></span>
                   {{ inner_item.name }}
                 </p>
 
@@ -50,7 +53,6 @@
                     title="套餐简介"
                     :name="inner_item.id"
                   >
-                    <!--                    <div slot="title"></div>-->
                     <p class="plan-desc">
                       {{
                       inner_item.describe
@@ -86,26 +88,6 @@
         </swiper-slide>
       </swiper>
     </div>
-
-    <!--商家答疑-->
-<!--    <div class="QA-wrapper">-->
-<!--      <div class="title">-->
-<!--        <span>商家答疑(20)</span>-->
-<!--        <span></span>-->
-<!--      </div>-->
-<!--      <ul class="QA-list">-->
-<!--        <li>-->
-<!--          <span>月套餐可以叠加加油包吗</span>-->
-<!--          <span>4个回答</span>-->
-<!--        </li>-->
-<!--        <li>-->
-<!--          <span>手表卡充值优惠在哪里看？</span>-->
-<!--          <span>1个回答</span>-->
-<!--        </li>-->
-<!--      </ul>-->
-<!--    </div>-->
-
-    <!--购买套餐及在线客服-->
 
     <div
       class="btn-recharge-wrap"
@@ -159,9 +141,6 @@
       swiper() {
         return this.$refs.swiperVant.swiper
       },
-      // swiperThumbs() {
-      //   return this.$refs.swiperThumbs.swiper
-      // }
     },
     data() {
       const _this = this;
@@ -171,7 +150,6 @@
         load_plan_msg: "",
         recharge_btn_text: '充值',
         plan_type: [],// 套餐类型
-        // plan_type_str:'',// 套餐类型字符串
         plan_type_name: {
           0: "累计套餐",
           1: "月套餐",
@@ -191,7 +169,6 @@
         activeNames: [],
         //实名类型
         realnameType: getStorage('realnameType'),
-        // swiperOption variable
         swiperOption: {
           loop: true,
           on: {
@@ -253,8 +230,6 @@
             // 套餐类型
             if (this.plan_type_name.hasOwnProperty(item)) {
               this.render_type_name.push(this.plan_type_name[item]);
-
-              // this.render_type_name[item] = this.plan_type_name[item];
             }
 
             let newArray1 = [], newArray2 = [], newArray3 = [];
@@ -267,8 +242,8 @@
               }
             }
             //分别进行排序
-            newArray1.sort(this.compare2("id"));
-            newArray2.sort(this.compare2("id"));
+            newArray1.sort(this.compare("id",'asc'));
+            newArray2.sort(this.compare("id",'asc'));
             newArray3 = newArray1.concat(newArray2);
 
             this.plan_list[item] = newArray3;
@@ -283,8 +258,6 @@
             }
           }
 
-          // this.plan_type_str = this.plan_type.join('');
-
           // 处理加油包
           if (!this.hasValidatedPlan) {
             if (this.plan_list.hasOwnProperty(2)) {
@@ -292,7 +265,6 @@
             }
             if (this.render_type_name.includes('加油包')) {
               this.render_type_name.splice(this.render_type_name.findIndex(item => item === '加油包'), 1);
-              // delete this.render_type_name[2]
             }
           }
 
@@ -308,30 +280,12 @@
             }
           }
 
-          // this.$nextTick(() => {
-          // this.swiperOption.loopedSlides = this.plan_type.length;
-          // this.swiperOptionThumbs.loopedSlides = this.plan_type.length;
-
-          // const swiper = this.swiper;
-          // const swiperThumbs = this.swiperThumbs;
-          // swiper.controller.control = swiperThumbs;
-          // swiperThumbs.controller.control = swiper;
-
-          // });
         } else {
           this.load_plan_list = true;
           this.load_plan_msg = res.msg;
         }
       });
     },
-    // mounted() {
-    //   this.$nextTick(() => {
-    //     const swiper = this.swiper;
-    //     const swiperThumbs = this.swiperThumbs;
-    //     swiper.controller.control = swiperThumbs;
-    //     swiperThumbs.controller.control = swiper;
-    //   })
-    // },
     methods: {
       toService(){
         location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#'
@@ -357,8 +311,6 @@
 
         let planInfo = this.plan_list[planType][this.choose_plan_index];
 
-        console.log(planInfo);
-
         if (planInfo.surplus_times <= 0) {
           Toast("此套餐已售罄, 请更换套餐");
           return;
@@ -368,7 +320,7 @@
         setStorage("planInfo", planInfo, "obj");
 
         // 加油包套餐充值
-        if (this.cur_plan_type_index === '2') {
+        if (planType === '2') {
           this.$router.push('/weixin/card/more_flow');
           return;
         }
@@ -481,17 +433,12 @@
           }
         });
       },
-      compare2(pro) {
+      compare(pro,sort) {
         return function (obj1, obj2) {
-          let val1 = obj1[pro];
-          let val2 = obj2[pro];
-          if (val1 > val2) {
-            return 1;
-          } else if (val1 < val2) {
-            return -1;
-          } else {
-            return 0;
-          }
+          let v1 = obj1[pro];
+          let v2 = obj2[pro];
+          if(sort === 'asc') return v1 - v2;
+          if(sort === 'desc') return v2 - v1
         }
       },
       toCard() {
@@ -507,8 +454,6 @@
   @import "../../assets/less/common";
 
   .plan-wrap {
-    /*position: fixed;*/
-    /*top: 0;*/
     width: 100%;
     background: #F4F4F4;
     box-sizing: border-box;
@@ -524,6 +469,8 @@
 
     .plan-type-wrap {
       display: flex;
+      border-bottom: 1px solid #f4f4f4;
+      box-sizing: border-box;
       background: #fff;
 
       /*.swiper-slide {*/
@@ -635,12 +582,12 @@
           }
 
           .plan-icon-recommend {
-            padding: 20px 0 20px 60px;
+            padding: 32px 0 32px 60px;
           }
 
           .icon-recommend {
             position: absolute;
-            top: 5px;
+            top: 14px;
             left: 10px;
             font-size: 60px;
           }
