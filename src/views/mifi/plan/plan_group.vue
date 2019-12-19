@@ -208,22 +208,16 @@
           this.picker.loading = false;
           if (res.state === 1) {
             if (JSON.stringify(res.data) !== "{}") {
-              this.totalPlan = res.data;
-              for (let item in this.totalPlan) {
-                let newArray1 = [], newArray2 = [], newArray3 = [];
-                for (let i = 0; i < this.totalPlan[item].length; i++) {
-                  //区分推荐/未推荐
-                  if (this.totalPlan[item][i].is_recommend === true) {
-                    newArray1.push(this.totalPlan[item][i]);
-                  } else {
-                    newArray2.push(this.totalPlan[item][i]);
-                  }
+              this.totalPlan = {};
+              for (let item in res.data) {
+                if(res.data[item].length === 1){
+                  this.totalPlan[item] = res.data[item]
+                }else{
+                  let newArray1 = [], newArray2 = [];
+                  newArray1 = res.data[item].filter(item=>item.is_recommend).sort(this.compare2('id'));
+                  newArray2 = res.data[item].filter(item=>!item.is_recommend).sort(this.compare2('id'));
+                  this.totalPlan[item] = newArray1.concat(newArray2);
                 }
-                //分别进行排序
-                newArray1.sort(this.compare2("price"));
-                newArray2.sort(this.compare2("price"));
-                newArray3 = newArray1.concat(newArray2);
-                this.totalPlan[item] = newArray3;
               }
 
               for (let item in this.totalPlan) {
@@ -232,6 +226,7 @@
                   'text': this.planName[item]
                 })
               }
+
               if (this.columns[0].values.length > 0) {
                 if (this.cur_plan_group_name === '请选择套餐') {
                   this.cur_plan_group_name = this.columns[0].values[0].text;
