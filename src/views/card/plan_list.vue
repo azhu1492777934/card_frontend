@@ -55,11 +55,11 @@
                   >
                     <p class="plan-desc">
                       {{
-                      inner_item.describe
-                      ? inner_item.describe
-                      :inner_item.remark
+                      (inner_item.describe !== 'None' && inner_item.describe)
+                      ?inner_item.describe
+                      :(inner_item.remark !== 'None' && inner_item.remark)
                       ?inner_item.remark
-                      :''
+                      :'暂无描述'
                       }}
                     </p>
                   </van-collapse-item>
@@ -242,8 +242,8 @@
               }
             }
             //分别进行排序
-            newArray1.sort(this.compare("id",'asc'));
-            newArray2.sort(this.compare("id",'asc'));
+            newArray1.sort(this.compare("id", 'asc'));
+            newArray2.sort(this.compare("id", 'asc'));
             newArray3 = newArray1.concat(newArray2);
 
             this.plan_list[item] = newArray3;
@@ -287,7 +287,7 @@
       });
     },
     methods: {
-      toService(){
+      toService() {
         location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#'
       },
       planTypeClikc(index) {
@@ -433,12 +433,12 @@
           }
         });
       },
-      compare(pro,sort) {
+      compare(pro, sort) {
         return function (obj1, obj2) {
           let v1 = obj1[pro];
           let v2 = obj2[pro];
-          if(sort === 'asc') return v1 - v2;
-          if(sort === 'desc') return v2 - v1
+          if (sort === 'asc') return v1 - v2;
+          if (sort === 'desc') return v2 - v1
         }
       },
       toCard() {
