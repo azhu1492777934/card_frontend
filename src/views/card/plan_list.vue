@@ -99,6 +99,11 @@
         <span class="iconfont icon-servicer"></span>
         <br>客服
       </button>
+      <button
+        @click="toQuestion"
+      >
+        提问
+      </button>
       <button @click="recharge">{{recharge_btn_text}}</button>
     </div>
 
