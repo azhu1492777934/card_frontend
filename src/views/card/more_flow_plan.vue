@@ -217,6 +217,14 @@
           this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
         }
 
+        if(!param.band_rating_id || !param.band_order_id){
+          Toast({
+            position: 'top',
+            message: "没有检测到主套餐，请刷新重试"
+          });
+          return
+        }
+
         this.rechargeShow = true;
         let payDom = document.querySelector('form');
         if (payDom) document.removeChild(payDom);
