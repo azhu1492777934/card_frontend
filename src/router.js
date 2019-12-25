@@ -60,10 +60,12 @@ const question_wrapper = r => require.ensure([], () => r(require('./views/questi
 const question = r => require.ensure([], () => r(require('./views/question/index')), 'question');
 const find_plan = r => require.ensure([], () => r(require('./views/question/question_1')), 'find_plan'); // 流量通话未增加
 const revoke_plan = r => require.ensure([], () => r(require('./views/question/question_2')), 'revoke_plan'); // 无法使用
-const release_plan = r => require.ensure([], () => r(require('./views/question/question_3')), 'question') // 解约自动续约套餐
-const commonProblem = r => require.ensure([], () => r(require('./views/question/commonProblem')), 'commonProblem') //  常见问题
-const realNameCourse = r => require.ensure([], () => r(require('./views/question/realNameCourse')), 'realNameCourse') //  实名教程
-
+const release_plan = r => require.ensure([], () => r(require('./views/question/question_3')), 'question'); // 解约自动续约套餐
+const commonProblem = r => require.ensure([], () => r(require('./views/question/commonProblem')), 'commonProblem'); //  常见问题
+const realNameCourse = r => require.ensure([], () => r(require('./views/question/realNameCourse')), 'realNameCourse'); //  实名教程
+// 常见问题
+const commonQuestion = r => require.ensure([], () => r(require('./views/question/common_question')), 'commonQuestion'); //  客户常见问题
+const customerFeedback = r => require.ensure([], () => r(require('./views/question/customer_feedback')), 'customerFeedback'); //  客户反馈
 // 退款
 const refund_wrapper = r => require.ensure([], () => r(require('./views/refund/refund_wrapper')), 'refund_wrapper');
 const refund_plan = r => require.ensure([], () => r(require('./views/refund/list')), 'refund_plan') // 退款
@@ -238,7 +240,21 @@ export const constantRouterMap = [{
             title: '实名认证教程',
             requireAuth: true,
           }
-        }
+        },
+        {
+          path: 'common_question',
+          component: commonQuestion,
+          meta: {
+            title: '常见问题',
+          }
+        },
+        {
+          path: 'customer_feedback',
+          component: customerFeedback,
+          meta: {
+            title: '反馈',
+          }
+        },
       ]
     }, {
       path: 'refund',
@@ -544,7 +560,7 @@ export const constantRouterMap = [{
 }, {
   path: '*',
   component: Not_fund
-}]
+}];
 
 const router = new Router({
   mode: 'history',

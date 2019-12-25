@@ -664,6 +664,7 @@
 
           // rest vant-collapse
           .van-collapse-reset{
+            .van-cell__title span,
             .van-cell__title + i{
               color: #533606 !important;
             }
