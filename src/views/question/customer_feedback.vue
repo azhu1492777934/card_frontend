@@ -1,39 +1,65 @@
 <template>
   <div class="feedback-wrap">
-    <div
-      @click="showPickerTrue"
-    >
-      {{pickerValue ? pickerValue : '请选择问题类型'}}
+
+    <div class="type-wrapper">
+      <p class="title">问题类型</p>
+      <div class="type-inner-wrapper">
+        <span
+          v-for="(item,index) in columns"
+          :class="{'active':index === choose_type}"
+          @click="changeType(index)"
+        >
+        {{item}}
+      </span>
+      </div>
     </div>
+
     <div>
-      问题描述
-      <textarea v-model="describe"></textarea>
+      <p class="title">问题描述</p>
+      <textarea placeholder="请输入您要提问的问题......" v-model="describe"></textarea>
     </div>
-    <div>
-      上传图片
+
+    <div class="upload-img-wrapper">
+      <p class="title">上传图片</p>
       <van-uploader
         v-model="fileList"
         multiple
         accept="image/jpg,image/jpeg,image/png"
         :max-count="3"
         :before-read="beforeRead"
-        :after-read="afterRead"></van-uploader>
+        :after-read="afterRead">
+        <van-button icon="plus" class="btn-upload" type="primary"></van-button>
+      </van-uploader>
     </div>
-    <button
-      @click="commit"
-    >提交
-    </button>
 
-    <van-popup v-model="showPicker" position="bottom">
-      <van-picker
-        ref="pickerDom"
-        show-toolbar
-        :value="pickerValue"
-        :columns="columns"
-        @cancel="onCancel"
-        @confirm="onConfirm">
-      </van-picker>
+    <button class="btn-commit" @click="commit">提交</button>
+
+
+    <!--    <van-popup v-model="showPicker" position="bottom">-->
+    <!--      <van-picker-->
+    <!--        ref="pickerDom"-->
+    <!--        show-toolbar-->
+    <!--        :value="pickerValue"-->
+
+    <!--        :columns="columns"-->
+    <!--        @cancel="onCancel"-->
+    <!--        @confirm="onConfirm">-->
+    <!--      </van-picker>-->
+    <!--    </van-popup>-->
+
+    <van-popup
+      v-model="showLoading"
+      :close-on-click-overlay="false"
+      :overlay-style="{'background-color':'rgba(255, 255, 255, 0.8)'}"
+    >
+      <van-loading
+        color="#1989fa"
+        vertical
+      >
+        正在提交您的问题， 请等候。
+      </van-loading>
     </van-popup>
+
 
   </div>
 </template>
@@ -41,7 +67,8 @@
 <script>
   // @ is an alias to /src
   import {getStorage, checkBrowser} from "../../utilies";
-  import {Uploader, Picker, Popup, Toast} from 'vant'
+  import {Uploader, Picker, Popup, Toast, Button, Loading} from 'vant'
+  import {Reg} from '../../utilies/reg'
   import {_post} from "../../http";
 
   Toast.setDefaultOptions({
@@ -54,17 +81,21 @@
       [Uploader.name]: Uploader,
       [Picker.name]: Picker,
       [Popup.name]: Popup,
-      [Toast.name]: Toast
+      [Toast.name]: Toast,
+      [Button.name]: Button,
+      [Loading.name]: Loading
     },
     data() {
       return {
-        iccid: getStorage('check_iccid'),
+        iccid: getStorage('check_iccid') || '8986011775000766991',
         clientType: checkBrowser(),
+        choose_type: 0,
         describe: '',
         fileList: [],
         imgType: ['image/png', 'image/jpeg', 'image/jpg'],
         columns: ["停机", "体验问题", "新功能建议", "其他"],
         pickerValue: '',
+        showLoading: false,
         showPicker: false,
       }
     },
@@ -72,6 +103,9 @@
 
     },
     methods: {
+      changeType(index) {
+        this.choose_type = index;
+      },
       beforeRead(file) {
         if (this.imgType.indexOf(file.type) < 0) {
           Toast({
@@ -82,7 +116,8 @@
         return true;
       },
       afterRead(file) {
-        console.log(file);
+        // console.log(file);
+        // console.log(this.fileList);
       },
       showPickerTrue() {
         this.showPicker = true;
@@ -98,45 +133,54 @@
         this.showPicker = false;
       },
       commit() {
-        if (!this.$refs.pickerDom) {
-          Toast({
-            position: 'top',
-            message: '请选择问题类型'
-          });
-          return
-        }
+
         if (!this.describe) {
           Toast({
-            position: 'top',
             message: '请输入问题描述'
           });
           return;
         }
-
-        // _post('/test',{
-        //   type:this.$refs.pickerDom.getValues()[0],
-        //   describe:this.describe
-        // })
-        //   .then(res=>{
-        //     if(res.state === 1){
-        //       Toast({
-        //         position:'top',
-        //         message:'提交成功，即将跳转至套餐列表页'
-        //       });
-        //     }else{
-        //       Toast({
-        //         position:'top',
-        //         message:res.msg
-        //       });
-        //     }
-        //   })
+        if (Reg.emoji.test(this.describe)) {
+          Toast({
+            message: '请勿输入表情符'
+          });
+          return;
+        }
 
 
-        // .getIndexes();
+        let formData = new FormData();
+        formData.append('iccid', this.iccid);
+        formData.append('type', this.choose_type + 1);
+        formData.append('content', this.describe);
 
-        // if(type === undefined || type === null){
-        //
-        // }
+        if (this.fileList.length > 0) {
+          for (let i = 0; i < this.fileList.length; i++) {
+            formData.append(`img${i + 1}`, this.fileList[i].file);
+          }
+        }
+        let _this = this;
+        this.showLoading = true;
+        _post('/iot/v1/question/create1', formData)
+          .then(res => {
+            this.showLoading = false;
+            if (res.state === 1) {
+              this.fileList = [];
+              Toast({
+                position: 'top',
+                message: '提交成功，即将跳转至套餐列表页'
+              });
+              setTimeout(()=>{
+                _this.$router.push({
+                  path:'/weixin/card/plan_list'
+                })
+              },1500)
+            } else {
+              Toast({
+                position: 'top',
+                message: res.msg
+              });
+            }
+          })
       }
     }
   };
@@ -144,7 +188,79 @@
 
 <style lang="less">
   .feedback-wrap {
+    padding: 0 20px;
 
+    .title {
+      padding: 56px 0;
+      font-size: 34px;
+      font-weight: 500;
+      color: #000;
+      text-align: left;
+    }
+
+    .type-inner-wrapper {
+      display: flex;
+      flex-wrap: wrap;
+      -webkit-box-lines: multiple;
+
+      span {
+        display: inline-block;
+        height: 51px;
+        margin: 0 20px 26px 0;
+        padding: 0 54px;
+        font-size: 28px;
+        line-height: 51px;
+        border-radius: 51px;
+        color: #000;
+        background: #efefef;
+
+        &.active {
+          color: #fff;
+          background-color: #ffb428;
+          background-image: linear-gradient(63deg, #ffb428 0%, #ffd247 100%);
+        }
+      }
+    }
+
+    textarea {
+      width: 100%;
+      padding: 30px 20px;
+      height: 275px;
+      font-size: 30px;
+      color: #808080;
+      background-color: #efefef;
+      border: none;
+      border-radius: 30px;
+      box-sizing: border-box;
+    }
+
+    .upload-img-wrapper {
+      text-align: left;
+
+      .btn-upload {
+        width: 167px;
+        height: 167px;
+        border: none;
+        border-radius: 15px;
+        color: #ababab;
+        background-color: #efefef;
+      }
+    }
+
+    .btn-commit {
+      margin: 105px 0;
+      font-size: 36px;
+      height: 85px;
+      width: 67%;
+      border-radius: 85px;
+      color: #433f38;
+      background-color: #fba703;
+      background-image: linear-gradient(137deg, #fba703 0%, #f6d587 100%);
+    }
+
+    .van-loading {
+      overflow: hidden;
+    }
   }
 </style>
 
