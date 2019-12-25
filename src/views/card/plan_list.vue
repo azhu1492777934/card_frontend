@@ -41,7 +41,7 @@
                   {{ inner_item.name }}
                 </p>
 
-                <p class="sub-plan-name">{{ inner_item.specialty ? inner_item.specialty : '5G优享服务' }}</p>
+                <p class="sub-plan-name">{{ inner_item.specialty ? inner_item.specialty : '优享服务' }}</p>
 
                 <van-collapse
                   :border="false"
@@ -173,6 +173,7 @@
           loop: true,
           on: {
             slideChangeTransitionEnd: function () {
+              _this.choose_plan_index = 0;
               _this.cur_plan_type_index = this.activeIndex;
             }
           }
@@ -287,6 +288,11 @@
       });
     },
     methods: {
+      toQuestion(){
+        this.$route.path({
+          path:'/question/user'
+        });
+      },
       toService() {
         location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#'
       },
@@ -551,7 +557,7 @@
         font-size: 20px;
         background: #fff;
         align-items: self-start;
-        border: 1px solid transparent;
+        /*border: 1px solid transparent;*/
 
         &:first-child {
           margin-top: 20px;
@@ -615,7 +621,7 @@
 
           .plan-price {
             padding: 32px 0;
-            color: #F1B94C;
+            color: #fd720d;
             font-size: 36px;
             font-weight: 700;
           }
@@ -628,17 +634,33 @@
 
         //当前选中样式
         &.activedPlan {
-          border: 1px solid #F1B94C;
+          /*border: 1px solid #F1B94C;*/
           box-shadow: 0 0 30px 0 #eae9e9;
+          background-image: url("../../assets/imgs/mifi/plan_group/bg_test.png");
+          background-size: cover;
 
-          .plan-name {
-            color: #e8a92d;
+          .plan-name{
+            font-weight: 500;
+          }
+
+          .plan-name,
+          .sub-plan-name,
+          .plan-desc{
+            color: #533606;
           }
 
           .selected-plan {
             position: absolute;
             right: 0;
             bottom: 0;
+          }
+
+          // rest vant-collapse
+          .van-collapse-reset{
+            .van-cell__title + i,
+            .van-cell__title span{
+              color: #533606 !important;
+            }
           }
         }
 
@@ -691,6 +713,7 @@
         .van-collapse-item__title,
         .van-collapse-item__content {
           padding: 0;
+          background: transparent;
         }
 
         .van-cell:not(:last-child)::after {
