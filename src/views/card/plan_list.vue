@@ -99,11 +99,13 @@
         <span class="iconfont icon-servicer"></span>
         <br>客服
       </button>
+
       <button
         @click="toQuestion"
       >
         提问
       </button>
+
       <button @click="recharge">{{recharge_btn_text}}</button>
     </div>
 
@@ -178,6 +180,7 @@
           loop: true,
           on: {
             slideChangeTransitionEnd: function () {
+              _this.choose_plan_index = 0;
               _this.cur_plan_type_index = this.activeIndex;
             }
           }
@@ -292,6 +295,11 @@
       });
     },
     methods: {
+      toQuestion(){
+        this.$route.path({
+          path:'/question/user'
+        });
+      },
       toService() {
         location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#'
       },
@@ -556,7 +564,7 @@
         font-size: 20px;
         background: #fff;
         align-items: self-start;
-        border: 1px solid transparent;
+        /*border: 1px solid transparent;*/
 
         &:first-child {
           margin-top: 20px;
@@ -620,7 +628,7 @@
 
           .plan-price {
             padding: 32px 0;
-            color: #F1B94C;
+            color: #fd720d;
             font-size: 36px;
             font-weight: 700;
           }
@@ -633,17 +641,32 @@
 
         //当前选中样式
         &.activedPlan {
-          border: 1px solid #F1B94C;
+          /*border: 1px solid #F1B94C;*/
           box-shadow: 0 0 30px 0 #eae9e9;
+          background-image: url("../../assets/imgs/mifi/plan_group/bg_test.png");
+          background-size: cover;
 
-          .plan-name {
-            color: #e8a92d;
+          .plan-name{
+            font-weight: 500;
+          }
+
+          .plan-name,
+          .sub-plan-name,
+          .plan-desc{
+            color: #533606;
           }
 
           .selected-plan {
             position: absolute;
             right: 0;
             bottom: 0;
+          }
+
+          // rest vant-collapse
+          .van-collapse-reset{
+            .van-cell__title + i{
+              color: #533606 !important;
+            }
           }
         }
 
@@ -696,6 +719,7 @@
         .van-collapse-item__title,
         .van-collapse-item__content {
           padding: 0;
+          background: transparent;
         }
 
         .van-cell:not(:last-child)::after {
@@ -716,12 +740,13 @@
       button {
         display: block;
         height: 100px;
+        flex:1;
+        font-size: 26px;
+        color: #868686;
+        background: #fff;
 
         &:first-child {
-          flex: 2;
-          font-size: 26px;
-          color: #868686;
-          background: #fff;
+          border-right: 1px solid #f4f4f4;
         }
 
         &:last-child {
