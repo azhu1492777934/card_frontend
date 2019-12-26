@@ -181,6 +181,7 @@
 <style lang="less">
   .feedback-wrap {
     padding: 0 20px;
+    background-color: #fff;
 
     .title {
       padding: 56px 0;
