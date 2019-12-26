@@ -114,6 +114,7 @@
           //app环境隐藏顶部个人信息
           if (getStorage('token')) {
             if (this.global_variables.packed_project !== 'mifi') {
+              if(this.$route.path.indexOf('question') === 8 || this.$route.path.indexOf('coupon') ===8) return;
               this.getUserInfo();//获取用户信息 其他项目的跳转
             }
           } else {

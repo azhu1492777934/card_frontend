@@ -212,6 +212,7 @@
       swiperSlide,
     },
     created() {
+      if(!getStorage('check_iccid')) this.$router.push({path:'/weixin/card/lookup'});
       // 流失率统计
       if (getStorage('plan_list_new_card') === "1") {
         lossRate({
@@ -221,7 +222,6 @@
       }
       let _this = this;
       //处理套餐数据
-
       _get("/api/v1/app/plan_list", {
         iccid: getStorage("check_iccid")
       }).then(res => {
@@ -296,8 +296,8 @@
     },
     methods: {
       toQuestion(){
-        this.$route.path({
-          path:'/question/user'
+        this.$router.push({
+          path:'/weixin/question/common_question'
         });
       },
       toService() {

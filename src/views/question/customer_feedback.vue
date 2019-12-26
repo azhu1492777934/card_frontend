@@ -23,29 +23,19 @@
       <p class="title">上传图片</p>
       <van-uploader
         v-model="fileList"
-        multiple
         accept="image/jpg,image/jpeg,image/png"
+        :preview-full-image="false"
         :max-count="3"
         :before-read="beforeRead"
         :after-read="afterRead">
-        <van-button icon="plus" class="btn-upload" type="primary"></van-button>
+        <van-button class="btn-upload" type="primary">
+          <van-icon v-show="!imgUploadLoading" name="plus"></van-icon>
+          <van-loading v-show="imgUploadLoading"></van-loading>
+        </van-button>
       </van-uploader>
     </div>
 
     <button class="btn-commit" @click="commit">提交</button>
-
-
-    <!--    <van-popup v-model="showPicker" position="bottom">-->
-    <!--      <van-picker-->
-    <!--        ref="pickerDom"-->
-    <!--        show-toolbar-->
-    <!--        :value="pickerValue"-->
-
-    <!--        :columns="columns"-->
-    <!--        @cancel="onCancel"-->
-    <!--        @confirm="onConfirm">-->
-    <!--      </van-picker>-->
-    <!--    </van-popup>-->
 
     <van-popup
       v-model="showLoading"
@@ -67,7 +57,7 @@
 <script>
   // @ is an alias to /src
   import {getStorage, checkBrowser} from "../../utilies";
-  import {Uploader, Picker, Popup, Toast, Button, Loading} from 'vant'
+  import {Uploader, Picker, Popup, Toast, Button, Loading, Icon} from 'vant'
   import {Reg} from '../../utilies/reg'
   import {_post} from "../../http";
 
@@ -83,7 +73,8 @@
       [Popup.name]: Popup,
       [Toast.name]: Toast,
       [Button.name]: Button,
-      [Loading.name]: Loading
+      [Loading.name]: Loading,
+      [Icon.name]: Icon
     },
     data() {
       return {
@@ -91,6 +82,7 @@
         clientType: checkBrowser(),
         choose_type: 0,
         describe: '',
+        imgUploadLoading: false,
         fileList: [],
         imgType: ['image/png', 'image/jpeg', 'image/jpg'],
         columns: ["停机", "体验问题", "新功能建议", "其他"],
@@ -113,11 +105,11 @@
           });
           return false
         }
+        this.imgUploadLoading = true;
         return true;
       },
       afterRead(file) {
-        // console.log(file);
-        // console.log(this.fileList);
+        this.imgUploadLoading = false;
       },
       showPickerTrue() {
         this.showPicker = true;
@@ -160,7 +152,7 @@
         }
         let _this = this;
         this.showLoading = true;
-        _post('/iot/v1/question/create1', formData)
+        _post('/iot/v1/question/create', formData)
           .then(res => {
             this.showLoading = false;
             if (res.state === 1) {
@@ -169,11 +161,11 @@
                 position: 'top',
                 message: '提交成功，即将跳转至套餐列表页'
               });
-              setTimeout(()=>{
+              setTimeout(() => {
                 _this.$router.push({
-                  path:'/weixin/card/plan_list'
+                  path: '/weixin/card/plan_list'
                 })
-              },1500)
+              }, 1500)
             } else {
               Toast({
                 position: 'top',
