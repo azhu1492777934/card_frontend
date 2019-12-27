@@ -3,7 +3,7 @@
     <div v-show="!card_tip" class="tip-wrap p-15">
       <span>请在支付宝生活号‘万物互联’或微信公众号‘物联网通信运营商’中充值续费，在其他平台充值无法到账且无法退款</span>
     </div>
-    <img class="realname-tip" src="../../assets/imgs/card/realname/realnameTip.png" alt="">
+    <img class="realname-tip" src="../../assets/imgs/card/realname/tip.png" alt="">
     <div class="info-wrap">
       <div>
         <span>ICCID</span>
