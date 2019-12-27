@@ -117,7 +117,7 @@
         return true;
       },
       afterRead(file) {
-        if (this.global_variables.device === 'iphone' || this.isSamsung) {
+        // if (this.global_variables.device === 'iphone' || this.isSamsung) {
           let orientation = 1;
           new Promise(resolve => {
             EXIF.getData(file.file, function () {
@@ -131,10 +131,11 @@
             } else {
               this.handleIOSImg(file.file, 1);
             }
-          })
-        } else {
-          this.handleIOSImg(file.file, 1);
-        }
+          });
+        // }
+        // else {
+        //   this.handleIOSImg(file.file, 1);
+        // }
         this.imgUploadLoading = false;
       },
       commit() {

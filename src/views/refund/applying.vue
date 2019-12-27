@@ -1,6 +1,7 @@
 <template>
   <div class="refund-applying-wrap">
     <div class="reason-wrapper">
+      <p class="title">请选择退款原因</p>
       <van-radio-group
         v-model="radio"
         @change="radioChange"
@@ -148,7 +149,7 @@
   @import "../../assets/less/common";
 
   html, body, #app, .inner-wrap, .refund-applying-wrap {
-    height: 100%;
+    min-height: 100%;
     background-color: #f9fafc;
   }
 
@@ -156,8 +157,14 @@
 
     .reason-wrapper {
 
+      .title{
+        padding: 40px;
+        font-size: 40px;
+        font-weight: 500;
+      }
+
       .van-radio {
-        padding: 30px 15px;
+        padding: 30px 60px;
       }
 
       span {
