@@ -41,7 +41,7 @@
                   {{ inner_item.name }}
                 </p>
 
-                <p class="sub-plan-name">{{ inner_item.specialty ? inner_item.specialty : '5G优享服务' }}</p>
+                <p class="sub-plan-name">{{ inner_item.specialty ? inner_item.specialty : '优享服务' }}</p>
 
                 <van-collapse
                   :border="false"

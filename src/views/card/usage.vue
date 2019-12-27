@@ -61,7 +61,7 @@
                 <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
               </p>
             </div>
-            <div @click="toConnection" class="to-flow-wrap">
+            <div @click="toConnection" class="to-flow-wrap watch-card__to-flow-wrapper">
               <a> 流量用量详情> </a>
             </div>
           </div>
@@ -404,6 +404,10 @@
             padding: 25px 30px;
             background-color: rgba(0, 0, 0, 0.1);
           }
+        }
+
+        .watch-card__to-flow-wrapper{
+          bottom: 10px;
         }
 
       }
