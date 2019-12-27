@@ -27,6 +27,7 @@
         :preview-full-image="false"
         :max-count="3"
         :before-read="beforeRead"
+        @delete="beforeDelete"
         :after-read="afterRead">
         <van-button class="btn-upload" type="primary">
           <van-icon v-show="!imgUploadLoading" name="plus"></van-icon>
@@ -60,6 +61,7 @@
   import {Uploader, Picker, Popup, Toast, Button, Loading, Icon} from 'vant'
   import {Reg} from '../../utilies/reg'
   import {_post} from "../../http";
+  import EXIF from 'exif-js'
 
   Toast.setDefaultOptions({
     position: 'top'
@@ -80,10 +82,12 @@
       return {
         iccid: getStorage('check_iccid') || '8986011775000766991',
         clientType: checkBrowser(),
+        isSamsung: /sm-/i.test((navigator.userAgent.toLowerCase())),
         choose_type: 0,
         describe: '',
         imgUploadLoading: false,
         fileList: [],
+        handleFileList: [],
         imgType: ['image/png', 'image/jpeg', 'image/jpg'],
         columns: ["停机", "体验问题", "新功能建议", "其他"],
         pickerValue: '',
@@ -98,7 +102,11 @@
       changeType(index) {
         this.choose_type = index;
       },
-      beforeRead(file) {
+      beforeDelete(file, detail) {
+        this.handleFileList.splice(detail.index, 1);
+      },
+      beforeRead(file, detail) {
+        console.log(detail);
         if (this.imgType.indexOf(file.type) < 0) {
           Toast({
             message: '图片只支持.png,.jpeg,.jpg格式,请重新上传'
@@ -109,23 +117,27 @@
         return true;
       },
       afterRead(file) {
+        if (this.global_variables.device === 'iphone' || this.isSamsung) {
+          let orientation = 1;
+          new Promise(resolve => {
+            EXIF.getData(file.file, function () {
+              orientation = EXIF.getTag(this, 'Orientation');
+              resolve(orientation);
+            });
+          }).then(res => {
+            if (typeof res === "number") {
+              let newOrientation = res || 1;
+              this.handleIOSImg(file.file, newOrientation);
+            } else {
+              this.handleIOSImg(file.file, 1);
+            }
+          })
+        } else {
+          this.handleIOSImg(file.file, 1);
+        }
         this.imgUploadLoading = false;
       },
-      showPickerTrue() {
-        this.showPicker = true;
-      },
-      onCancel() {
-        this.showPicker = false;
-        if (this.pickerValue) {
-          this.$refs.pickerDom.setValues([this.pickerValue]);
-        }
-      },
-      onConfirm(value) {
-        this.pickerValue = value;
-        this.showPicker = false;
-      },
       commit() {
-
         if (!this.describe) {
           Toast({
             message: '请输入问题描述'
@@ -138,20 +150,19 @@
           });
           return;
         }
-
-
+        let _this = this;
+        this.showLoading = true;
         let formData = new FormData();
         formData.append('iccid', this.iccid);
         formData.append('type', this.choose_type + 1);
         formData.append('content', this.describe);
 
-        if (this.fileList.length > 0) {
-          for (let i = 0; i < this.fileList.length; i++) {
-            formData.append(`img${i + 1}`, this.fileList[i].file);
+        if (this.handleFileList.length) {
+          for (let i = 0; i < this.handleFileList.length; i++) {
+            formData.append(`img${i + 1}`, this.handleFileList[i]);
           }
         }
-        let _this = this;
-        this.showLoading = true;
+
         _post('/iot/v1/question/create', formData)
           .then(res => {
             this.showLoading = false;
@@ -172,8 +183,48 @@
                 message: res.msg
               });
             }
-          })
-      }
+          });
+      },
+      handleIOSImg(file, orientation) {
+        let _this = this;
+        let canvas = document.createElement("canvas");
+        let context = canvas.getContext('2d');
+        let url = window.URL.createObjectURL(file);
+        let img = new Image();
+        img.onload = function () {
+          canvas.width = img.width;
+          canvas.height = img.height;
+          context.clearRect(0, 0, canvas.width, canvas.height);
+          if (orientation && orientation !== 1) {
+            switch (orientation) {
+              case 6:
+                canvas.width = img.height;
+                canvas.height = img.width;
+                context.rotate(Math.PI / 2);
+                // (0,-imgHeight) 从旋转原理图那里获得的起始点
+                context.drawImage(this, 0, -img.height, img.width, img.height);
+                break;
+              case 3:
+                context.rotate(Math.PI);
+                context.drawImage(this, -img.width, -img.height, img.width, img.height);
+                break;
+              case 8:     // 旋转-90度
+                canvas.width = img.height;
+                canvas.height = img.width;
+                context.rotate(3 * Math.PI / 2);
+                context.drawImage(this, -img.width, 0, img.width, img.height);
+                break;
+            }
+          } else {
+            context.drawImage(img, 0, 0, img.width, img.height);
+          }
+          let quality = file.size / 1024 > 1025 ? 0.3 : 0.7;
+          if (_this.global_variables.device === 'iphone') quality = 0.2;
+          let imgData64 = canvas.toDataURL("image/jpeg", quality);
+          _this.handleFileList.push(imgData64);
+        };
+        img.src = url;
+      },
     }
   };
 </script>
