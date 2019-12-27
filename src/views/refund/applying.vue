@@ -1,29 +1,28 @@
 <template>
   <div class="refund-applying-wrap">
-    <div class="reason-wrapper">
-      <p class="title">请选择退款原因</p>
-      <van-radio-group
-        v-model="radio"
-        @change="radioChange"
-      >
-        <van-radio name="1" checked-color="#dca85f">停机无法使用</van-radio>
-        <van-radio name="2" checked-color="#dca85f">无短信功能</van-radio>
-        <van-radio name="3" checked-color="#dca85f">用量显示不准确</van-radio>
-        <van-radio name="4" checked-color="#dca85f">服务态度不好/客服无应答</van-radio>
-        <van-radio name="5" checked-color="#dca85f">其他</van-radio>
-      </van-radio-group>
-    </div>
     <ul>
-      <transition name="fade">
-        <li v-show="isOther">
-          <span>其他原因</span>
-          <input v-model="refundInfo.reason" placeholder="请输入其他退款原因" type="text">
-        </li>
-      </transition>
+      <li>
+        <span>设备品牌</span>
+        <input v-model="refundInfo.brand" placeholder="请输入设备品牌" type="text">
+      </li>
+      <li>
+        <span>设备型号</span>
+        <input v-model="refundInfo.model" placeholder="请输入设备型号" type="text">
+      </li>
+      <li>
+        <span>使用地址</span>
+        <input v-model="refundInfo.address" placeholder="请输入设备使用地址" type="text">
+      </li>
+      <li>
+        <span>退款原因</span>
+        <input v-model="refundInfo.reason" placeholder="请输入退款原因" type="text">
+      </li>
+
       <li v-show="isShowAccount">
         <span>支付宝账号</span>
         <input v-model="refundInfo.aliAccount" placeholder="请填写支付宝账号" type="text">
       </li>
+
       <li v-show="isShowAccount">
         <span>支付宝姓名</span>
         <input v-model="refundInfo.aliName" placeholder="请填写支付宝实名验证真实姓名" type="text">
@@ -38,140 +37,15 @@
   </div>
 </template>
 
-<script>
-  // @ is an alias to /src
-  import {_post} from "../../http";
-  import {getStorage} from "../../utilies";
-  import {Notify, Popup, RadioGroup, Radio, Toast} from "vant";
-  import cardButton from "../../components/button";
-  import {mapState} from 'vuex'
-
-  Toast.setDefaultOptions({
-    position: 'top'
-  });
-
-  export default {
-    name: "home",
-
-    data() {
-      return {
-        radio: '1',
-        order_id: getStorage('refundOrderId'),
-        isOther: false,
-        reasonArr: ['停机无法使用', '无短信功能', '用量显示不准确', '服务态度不好/客服无应答', '其他'],
-        refundInfo: {
-          brand: '',
-          model: '',
-          address: '',
-          reason: '',
-          aliAccount: '',
-          aliName: '',
-        },
-        isShowAccount: false
-      };
-    },
-    computed: {
-      ...mapState({
-        authorizedUserInfo: state => state.userInfo.userInfoInner
-      }),
-    },
-    components: {
-      cardButton,
-      [Notify.name]: Notify,
-      [Popup.name]: Popup,
-      [RadioGroup.name]: RadioGroup,
-      [Radio.name]: Radio,
-      [Toast.name]: Toast
-    },
-    created() {
-      if (!this.authorizedUserInfo.account.user_id) {
-        Toast({message: '请在微信或支付宝客户端查询'});
-        return
-      }
-
-      if (getStorage('refundPayType') == 3) {
-        this.isShowAccount = true
-      }
-    },
-    methods: {
-      radioChange(name) {
-        if(name !== '5') this.refundInfo.reason = '';
-        this.isOther = name === '5';
-      },
-      btnRefund() {
-        let _this = this;
-
-        if (this.radio === '5' && !this.refundInfo.reason) {
-          Toast({message: '请输入退款原因'});
-          return
-        }
-
-        if (this.isShowAccount) {
-          if (!this.refundInfo.aliAccount) {
-            Toast({message: '请填写支付宝账号'});
-            return
-          }
-          if (!this.refundInfo.aliName) {
-            Toast({message: '请填写支付宝实名验证真实姓名'});
-            return
-          }
-        }
-
-        _post('/api/v1/app/cards/refund', {
-          order_id: this.order_id,
-          device_brand: this.refundInfo.brand,
-          device_model: this.refundInfo.model,
-          use_address: this.refundInfo.address,
-          refund_reason: this.radio === '5' ? this.refundInfo.reason : this.refund_reason[this.radio - 1],
-          refund_account: this.refundInfo.aliAccount,
-          refund_account_name: this.refundInfo.aliName,
-          user_id: this.authorizedUserInfo.account.user_id
-        }).then(res => {
-          if (res.state === 1) {
-            Notify({
-              message: '退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候',
-              background: '#60ce53'
-            });
-            setTimeout(function () {
-              _this.$router.push({path: '/weixin/refund/index'});
-            }, 1500)
-          } else {
-            Toast({message: res.msg})
-          }
-        })
-
-      }//申请退款
-    }
-  };
-</script>
-
 <style lang="less">
   @import "../../assets/less/common";
 
   html, body, #app, .inner-wrap, .refund-applying-wrap {
-    min-height: 100%;
+    height: 100%;
     background-color: #f9fafc;
   }
 
   .refund-applying-wrap {
-
-    .reason-wrapper {
-
-      .title{
-        padding: 40px;
-        font-size: 40px;
-        font-weight: 500;
-      }
-
-      .van-radio {
-        padding: 30px 60px;
-      }
-
-      span {
-        font-size: 30px;
-      }
-    }
-
     ul {
       li {
         display: flex;
@@ -202,10 +76,6 @@
     }
 
     .btn-wrap {
-      position: absolute;
-      width: 100%;
-      bottom: 40px;
-
       button {
         width: 80%;
         margin: 60px auto 0;
@@ -217,16 +87,117 @@
 
       }
     }
-
-    .fade-enter-active, .fade-leave-active {
-      transition: opacity .5s;
-    }
-
-    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
-      opacity: 0;
-    }
-
   }
 </style>
 
+<script>
+  // @ is an alias to /src
+  import {_post, _get} from "../../http";
+  import {getStorage} from "../../utilies";
+  import {Notify, Popup} from "vant";
+  import cardButton from "../../components/button";
+
+  import {mapState} from 'vuex'
+
+
+  export default {
+    name: "home",
+
+    data() {
+      return {
+        order_id: getStorage('refundOrderId'),
+        refundInfo: {
+          brand: '',
+          model: '',
+          address: '',
+          reason: '',
+          aliAccount: '',
+          aliName: '',
+        },
+        isShowAccount: false
+      };
+    },
+    computed: {
+      ...mapState({
+        authorizedUserInfo: state => state.userInfo.userInfoInner
+      }),
+    },
+    components: {
+      cardButton,
+      [Notify.name]: Notify,
+      [Popup.name]: Popup,
+    },
+    created() {
+
+      if (!this.authorizedUserInfo.account.user_id) {
+        Notify({message: '请在微信或支付宝客户端查询'});
+        return
+      }
+
+      if (getStorage('refundPayType') == 3) {
+        this.isShowAccount = true
+      }
+    },
+    methods: {
+      btnRefund() {
+
+        let _this = this;
+
+        if (!this.refundInfo.brand) {
+          Notify({message: '请填写设备品牌'})
+          return
+        }
+        if (!this.refundInfo.model) {
+          Notify({message: '请填写设备型号'})
+          return
+        }
+        if (!this.refundInfo.address) {
+          Notify({message: '请填写设备使用地址'})
+          return
+        }
+        if (!this.refundInfo.reason) {
+          Notify({message: '请填写退款理由'})
+          return
+        }
+
+        if (this.isShowAccount) {
+          if (!this.refundInfo.aliAccount) {
+            Notify({message: '请填写支付宝账号'})
+            return
+          }
+          if (!this.refundInfo.aliName) {
+            Notify({message: '请填写支付宝实名验证真实姓名'})
+            return
+          }
+
+        }
+
+        _post('/api/v1/app/cards/refund', {
+          order_id: this.order_id,
+          device_brand: this.refundInfo.brand,
+          device_model: this.refundInfo.model,
+          use_address: this.refundInfo.address,
+          refund_reason: this.refundInfo.reason,
+          refund_account: this.refundInfo.aliAccount,
+          refund_account_name: this.refundInfo.aliName,
+          user_id: this.authorizedUserInfo.account.user_id
+        }).then(res => {
+          if (res.state == 1) {
+            Notify({
+              message: '退款申请成功,3-5个工作日退款将原路返还至用户账户,请耐心等候',
+              background: '#60ce53'
+            })
+            setTimeout(function () {
+              _this.$router.push({path: '/weixin/refund/index'});
+
+            }, 1500)
+          } else {
+            Notify({message: res.msg})
+          }
+        })
+
+      }//申请退款
+    }
+  };
+</script>
 
