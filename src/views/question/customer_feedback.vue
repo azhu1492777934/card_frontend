@@ -41,14 +41,15 @@
     <van-popup
       v-model="showLoading"
       :close-on-click-overlay="false"
-      :overlay-style="{'background-color':'rgba(255, 255, 255, 0.8)'}"
     >
-      <van-loading
-        color="#1989fa"
-        vertical
-      >
-        正在提交您的问题， 请等候。
-      </van-loading>
+      <div class="pd-tb-15">
+        <van-loading
+          color="#1989fa"
+          vertical
+        >
+          正在提交您的问题， 请等候。
+        </van-loading>
+      </div>
     </van-popup>
 
 
@@ -235,6 +236,9 @@
     padding: 0 20px;
     background-color: #fff;
 
+    .pd-tb-15{
+      padding: 15px 0;
+    }
     .title {
       padding: 56px 0;
       font-size: 34px;
