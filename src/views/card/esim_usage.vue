@@ -175,9 +175,9 @@
                           v-if="item.planCellInfo.max_high"
                         >高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}</span>
                         <br>
-                        <span
+                        <!-- <span
                           v-if="item.planCellInfo.max_normal"
-                        >中速流量:{{item.planCellInfo.max_normal}}</span>
+                        >中速流量:{{item.planCellInfo.max_normal}}</span> -->
                       </div>
                       <div v-else>
                         <p v-if="item.describe && item.describe!='None'">
