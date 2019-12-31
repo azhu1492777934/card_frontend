@@ -302,7 +302,48 @@
                 },
             flowCheck(){this.$router.push('/mifi/plan/usage');},
             checkOrder(){this.$router.push('/mifi/order/index');},
-            couponExchange(){this.$router.push('/mifi/coupon/index');},
+            couponExchange(){
+                let _this=this;
+                    if(this.usageInfo.source==23){
+                        if(this.usageInfo.activated_date!=""){
+                          let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
+                          if(time>360){
+                            Dialog.confirm({
+                              title: '提示',
+                              message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                              confirmButtonText:"去换卡",
+                               cancelButtonText:"取消",
+                            }).then(() => {
+                              // on confirm
+                              _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+                            }).catch(() => {
+                              // on cancel
+                              return false;
+                            });
+                          }else if(360-time<=30){
+                            let overplus=(360-time).toFixed(0);
+                            Dialog.confirm({
+                              title: '提示',
+                              message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
+                              confirmButtonText:"去换卡",
+                               cancelButtonText:"取消",
+                            }).then(() => {
+                              // on confirm
+                              _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+                            }).catch(() => {
+                              // on cancel
+                              return false;
+                            });
+                          }else{
+                                this.$router.push('/mifi/coupon/index');
+                          }
+                        }else{
+                            this.$router.push('/mifi/coupon/index');
+                        }
+                    }else{
+                        this.$router.push('/mifi/coupon/index');
+                    }
+                },
             toQuestion(){this.$router.push('/weixin/question/index');},
             changedCard(){this.$router.push('/mifi/card/lookup')},
             toChangeNework(){this.$router.push('/mifi/card/change_network')},
