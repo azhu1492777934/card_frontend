@@ -258,7 +258,48 @@
                     }
                 })
             },
-            buyPlan(){this.$router.push('/mifi/plan/group');},
+            buyPlan(){
+                let _this=this;
+                    if(this.usageInfo.source==23){
+                        if(this.usageInfo.activated_date!=""){
+                          let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
+                          if(time>360){
+                            Dialog.confirm({
+                              title: '提示',
+                              message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                              confirmButtonText:"去换卡",
+                               cancelButtonText:"取消",
+                            }).then(() => {
+                              // on confirm
+                              _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+                            }).catch(() => {
+                              // on cancel
+                              return false;
+                            });
+                          }else if(360-time<=30){
+                            let overplus=(360-time).toFixed(0);
+                            Dialog.confirm({
+                              title: '提示',
+                              message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
+                              confirmButtonText:"去换卡",
+                               cancelButtonText:"取消",
+                            }).then(() => {
+                              // on confirm
+                              _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+                            }).catch(() => {
+                              // on cancel
+                              return false;
+                            });
+                          }else{
+                                this.$router.push('/mifi/plan/group');
+                          }
+                        }else{
+                            this.$router.push('/mifi/plan/group');
+                        }
+                    }else{
+                        this.$router.push('/mifi/plan/group');
+                    }
+                },
             flowCheck(){this.$router.push('/mifi/plan/usage');},
             checkOrder(){this.$router.push('/mifi/order/index');},
             couponExchange(){this.$router.push('/mifi/coupon/index');},
@@ -303,7 +344,36 @@
                     setStorage('check_realNameSource',this.usageInfo.source);
                     this.$router.push({path:'/weixin/new_card/real_name'});
                 }
-            }
+            },
+            dateDiff(date1, date2) {
+              var type1 = typeof date1,
+                type2 = typeof date2;
+              if (type1 == "string") {
+                date1 = this.stringToTime(date1);
+              } else if (date1.getTime) {
+                date1 = date1.getTime();
+              }
+              if (type2 == "string") {
+                date2 = this.stringToTime(date2);
+              } else if (date2.getTime) {
+                date2 = date2.getTime();
+              }
+              return (date2 - date1) / 1000 / 60 / 60 / 24; //除1000是毫秒，不加是秒
+            },
+             //字符串转成Time(dateDiff)所需方法
+            stringToTime(string) {
+              var f = string.split(" ", 2);
+              var d = (f[0] ? f[0] : "").split("-", 3);
+              var t = (f[1] ? f[1] : "").split(":", 3);
+              return new Date(
+                parseInt(d[0], 10) || null,
+                (parseInt(d[1], 10) || 1) - 1,
+                parseInt(d[2], 10) || null,
+                parseInt(t[0], 10) || null,
+                parseInt(t[1], 10) || null,
+                parseInt(t[2], 10) || null
+              ).getTime();
+            },
         }
     }
 </script>

@@ -601,7 +601,7 @@
 <script>
   // @ is an alias to /src
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast, Loading} from 'vant';
+  import {Notify, Popup, Toast, Loading,Dialog} from 'vant';
   import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage, appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
@@ -855,10 +855,55 @@
         this.$refs.mySwiper.swiper.slideTo(index);
       },
       recharge() {
-        setStorage('check_iccid', this.iccid);
-        if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
-        appRate(2);
-        this.$router.push({path: '/weixin/card/plan_list'})
+        let _this=this;
+        if(this.usageInfo.source==23){
+            if(this.usageInfo.activated_date!=""){
+              let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
+              if(time>360){
+                Dialog.confirm({
+                  title: '提示',
+                  message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                  confirmButtonText:"去换卡",
+                   cancelButtonText:"取消",
+                }).then(() => {
+                  // on confirm
+                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+                }).catch(() => {
+                  // on cancel
+                  return false;
+                });
+              }else if(360-time<=30){
+                let overplus=(360-time).toFixed(0);
+                Dialog.confirm({
+                  title: '提示',
+                  message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
+                  confirmButtonText:"去换卡",
+                   cancelButtonText:"取消",
+                }).then(() => {
+                  // on confirm
+                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+                }).catch(() => {
+                  // on cancel
+                  return false;
+                });
+              }else{
+                setStorage('check_iccid', this.iccid);
+                if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+                appRate(2);
+                this.$router.push({path: '/weixin/card/plan_list'})
+              }
+            }else{
+                setStorage('check_iccid', this.iccid);
+                if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+                appRate(2);
+                this.$router.push({path: '/weixin/card/plan_list'})
+            }
+        }else{
+          setStorage('check_iccid', this.iccid);
+          if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+          appRate(2);
+          this.$router.push({path: '/weixin/card/plan_list'})
+        }
       },
       refreshOrActivated() {
         if (this.filterCardInfo.refresh_actived === '刷新') {
@@ -960,7 +1005,36 @@
       toCard() {
         appRate(14);
         this.$router.push({path: "/weixin/coupon/index"})
-      }
+      },
+      dateDiff(date1, date2) {
+        var type1 = typeof date1,
+          type2 = typeof date2;
+        if (type1 == "string") {
+          date1 = this.stringToTime(date1);
+        } else if (date1.getTime) {
+          date1 = date1.getTime();
+        }
+        if (type2 == "string") {
+          date2 = this.stringToTime(date2);
+        } else if (date2.getTime) {
+          date2 = date2.getTime();
+        }
+        return (date2 - date1) / 1000 / 60 / 60 / 24; //除1000是毫秒，不加是秒
+      },
+       //字符串转成Time(dateDiff)所需方法
+      stringToTime(string) {
+        var f = string.split(" ", 2);
+        var d = (f[0] ? f[0] : "").split("-", 3);
+        var t = (f[1] ? f[1] : "").split(":", 3);
+        return new Date(
+          parseInt(d[0], 10) || null,
+          (parseInt(d[1], 10) || 1) - 1,
+          parseInt(d[2], 10) || null,
+          parseInt(t[0], 10) || null,
+          parseInt(t[1], 10) || null,
+          parseInt(t[2], 10) || null
+        ).getTime();
+      },
     }
   };
 </script>
