@@ -836,6 +836,7 @@
                 }
               }
 
+              
             } else {
               Toast({
                 icon: 'warning-o',
@@ -856,6 +857,23 @@
       },
       recharge() {
         let _this=this;
+
+        if(this.usageInfo.source==22){
+          Dialog.confirm({
+            title: '提示',
+            message: '您的物联网卡已到期，无法充值使用，如需继续使用请申请更换新卡，如有疑问请联系我司在线客服！',
+            confirmButtonText:"去换卡",
+             cancelButtonText:"联系客服",
+          }).then(() => {
+            // on confirm
+            _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+          }).catch(() => {
+            // on cancel
+            location.href="https://ykf-webchat.7moor.com/wapchat.html?accessId=505a9e80-2075-11ea-9c67-676d79fbc218&fromUrl=&urlTitle=";
+          });
+          return false;
+        }
+        
         if(this.usageInfo.source==23){
             if(this.usageInfo.activated_date!=""){
               let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
@@ -872,6 +890,7 @@
                   // on cancel
                   return false;
                 });
+                return false;
               }else if(360-time<=30){
                 let overplus=(360-time).toFixed(0);
                 Dialog.confirm({
@@ -886,6 +905,7 @@
                   // on cancel
                   return false;
                 });
+                return false;
               }else{
                 setStorage('check_iccid', this.iccid);
                 if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
@@ -1004,6 +1024,22 @@
       },
       toCard() {
         let _this=this;
+        if(this.usageInfo.source==22){
+          Dialog.confirm({
+            title: '提示',
+            message: '您的物联网卡已到期，无法充值使用，如需继续使用请申请更换新卡，如有疑问请联系我司在线客服！',
+            confirmButtonText:"去换卡",
+             cancelButtonText:"联系客服",
+          }).then(() => {
+            // on confirm
+            _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
+          }).catch(() => {
+            // on cancel
+            location.href="https://ykf-webchat.7moor.com/wapchat.html?accessId=505a9e80-2075-11ea-9c67-676d79fbc218&fromUrl=&urlTitle=";
+          });
+          return false;
+        }
+
         if(this.usageInfo.source==23){
             if(this.usageInfo.activated_date!=""){
               let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
@@ -1020,6 +1056,7 @@
                   // on cancel
                   return false;
                 });
+                return false;
               }else if(360-time<=30){
                 let overplus=(360-time).toFixed(0);
                 Dialog.confirm({
@@ -1034,6 +1071,7 @@
                   // on cancel
                   return false;
                 });
+                return false;
               }else{
                 appRate(14);
                 this.$router.push({path: "/weixin/coupon/index"})
