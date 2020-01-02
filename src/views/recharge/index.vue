@@ -12,7 +12,7 @@
       <ul class="discount-wrap">
         <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"   v-bind:key="index"
             data-elb="20"
-            :class="{'checked':index==activeIndex,'discountIcon':item.newStatus&&item.is_give_balance&&global_variables.packed_project == 'card'}"  >
+            :class="{'checked':index==activeIndex}"  >
           <div :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">
 
             <div class="monthlyTop " v-if="item.is_first==true">
@@ -51,6 +51,9 @@
               class="cl-elb">
               {{item.pay_money}}</em>元
             </p>
+          </div>
+          <div class="discountIcon" v-if="item.newStatus&&item.is_give_balance&&global_variables.packed_project == 'card'">
+            <span>{{item.discount|discountFilters}}</span><span>折</span>
           </div>
         </li>
         <li class="special"></li>
@@ -211,6 +214,15 @@
         settingRechargeList: []
       }
     },
+    filters:{
+      discountFilters(val){
+        if(String((val*100)).indexOf(0)){
+          return String(val*100).replace("0","");
+        }else{
+          return val*100
+        }
+      }
+    },
     async created() {
       // 用户流失率统计
       if (getStorage('plan_list_new_card') === "1") {
@@ -260,15 +272,16 @@
         data.sort(this.jsonSort);
         for (let i = 0; i < data.length; i++) {
 
-          if(data[i].balance==15||data[i].balance==30||data[i].balance==45){
+          if(data[i].type==1){
             this.recharge_list.push({
               pay_type: 'over_charge',
-              pay_money: data[i].price,
+              pay_money: data[i].price*data[i].discount,
               give_elb: data[i].elb,
-              give_balance: data[i].balance,
+              give_balance: data[i].price*(1-data[i].discount),
               is_give_balance: data[i].is_give_balance,
               newStatus:true,
-              newPrice:data[i].price+data[i].balance
+              newPrice:data[i].price,
+              discount:data[i].discount
             })
           }else{
             this.recharge_list.push({
@@ -313,7 +326,6 @@
           }
         ]
       }
-
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
       /*
      * 增加包月套餐
@@ -823,16 +835,28 @@
         -webkit-box-lines: multiple;
         justify-content: space-between;
       }
-      .discountIcon:before{
-          content:"";
+      .discountIcon{
           display:inline-block;
           width:53px;
           height:68px;
-          background:url("../../assets/imgs/card/usage/85.png")no-repeat;
+          background:url("../../assets/imgs/card/usage/fire.png")no-repeat;
           background-size:100% 100%;
           position:absolute;
           top:-30px;
           right:-10px;
+          color:#fff;
+          font-size:27px;
+          font-family: SourceHanSansSC-Bold;
+          font-weight:bold;
+          display:flex;
+          box-sizing:border-box;
+          justify-content: center;
+          align-items:center;
+          padding-top:20px;
+          >span:nth-child(2){
+            font-size:15px;
+          }
+                            
       }
       li {
         display: table;
