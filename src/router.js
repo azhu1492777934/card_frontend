@@ -133,20 +133,12 @@ const repeatRecharge = r => require.ensure([], () => r(require('./views/card/rep
 //设备更换
 const eqReplaceMent = r => require.ensure([], () => r(require('./views/question/eqReplaceMent')), 'eqReplaceMent');  //设备更换
 
-// 引导页
-const wifi_management = r => require.ensure([], () => r(require('./views/transition/wifi_management')), 'wifi_management');
-
-
 Vue.use(Router);
 
 export const constantRouterMap = [{
   path: '/transfer_url',
   component: transfer_url,
   meta: {title: "公众号二维码"}
-}, {
-  path: '/wifi_management',
-  component: wifi_management,
-  meta: '随身wifi管家'
 }, {
   path: '/login',
   component: login,
