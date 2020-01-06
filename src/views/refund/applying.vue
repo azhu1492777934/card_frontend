@@ -153,7 +153,7 @@
   }
 
   .refund-applying-wrap {
-
+    position: relative;
     .reason-wrapper {
 
       .van-radio {
