@@ -51,8 +51,11 @@
               class="cl-elb">
               {{item.pay_money}}</em>元
             </p>
+
+            <p v-show="" class="third-appendix">赠送7天咪咕会员</p>
+
           </div>
-          <div class="discountIcon" v-if="item.newStatus&&item.is_give_balance&&global_variables.packed_project == 'card'">
+          <div class="discountIcon" v-if="item.newStatus&&item.is_give_balance&&global_variables.packed_project === 'card'">
             <span>{{item.discount|discountFilters}}</span><span>折</span>
           </div>
         </li>
@@ -231,7 +234,7 @@
           iccid: getStorage("check_iccid")
         });
       }
-      if(this.global_variables.device=="android"&&this.client_type=="app"){
+      if(this.global_variables.device==="android"&&this.client_type==="app"){
           this.appPay.type = false;
         }
 
@@ -271,7 +274,6 @@
         let data = this.settingRechargeList;
         data.sort(this.jsonSort);
         for (let i = 0; i < data.length; i++) {
-
           if(data[i].type==1){
             this.recharge_list.push({
               pay_type: 'over_charge',
@@ -293,7 +295,7 @@
               newStatus:false
             })
           }
-          
+
         }
         this.recharge_list.push({
           pay_type: 'normal_charge',
@@ -546,7 +548,7 @@
                       background: '#60ce53'
                     });
                   }
-                  
+
                 } else {
                   Notify({
                     message: '充值成功',
@@ -856,7 +858,7 @@
           >span:nth-child(2){
             font-size:15px;
           }
-                            
+
       }
       li {
         display: table;
@@ -870,7 +872,7 @@
         border: 1PX solid #e6e6e6;
         border-radius: 16px;
         -webkit-text-size-adjust: none;
-        
+
         &.special {
           min-height: 1px;
           margin: 0;
@@ -967,6 +969,12 @@
           color: #888;
           font-size: 20px;
           letter-spacing: 1PX;
+        }
+
+        .third-appendix{
+          padding-top: 5px;
+          color: #333;
+          font-size: 22px;
         }
 
         &.checked {

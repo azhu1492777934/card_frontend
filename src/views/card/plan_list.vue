@@ -219,6 +219,15 @@
           type: 4,
           iccid: getStorage("check_iccid")
         });
+        if(!getStorage('planListShowMiGu')){
+          Dialog.alert({
+            title: '限时活动',
+            message: '现购买任意套餐参加充值折扣活动即赠送7天咪咕体验会员',
+            confirmButtonText: "知道了",
+          }).then(() => {
+            setStorage('planListShowMiGu',true);
+          })
+        }
       }
       let _this = this;
       //处理套餐数据

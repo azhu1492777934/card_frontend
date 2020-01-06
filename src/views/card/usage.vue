@@ -406,7 +406,7 @@
           }
         }
 
-        .watch-card__to-flow-wrapper{
+        .watch-card__to-flow-wrapper {
           bottom: 10px;
         }
 
@@ -601,7 +601,7 @@
 <script>
   // @ is an alias to /src
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast, Loading,Dialog} from 'vant';
+  import {Notify, Popup, Toast, Loading, Dialog} from 'vant';
   import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage, appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
@@ -814,6 +814,9 @@
               this.usagePlanLength = this.usageInfo.usage.plans.length;
               this.hasOrderPlan = !!this.usageInfo.orders.length;
 
+              // 限时活动
+              this.showMiGu(this.usageInfo.operator);
+
               // this.$nextTick(() => {
               //   this.$refs.mySwiper.swiper.slideTo(0, 500, false);
               //   let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
@@ -836,7 +839,6 @@
                 }
               }
 
-              
             } else {
               Toast({
                 icon: 'warning-o',
@@ -856,55 +858,54 @@
         this.$refs.mySwiper.swiper.slideTo(index);
       },
       recharge() {
-        let _this=this;
-
-        
-        
-        if(this.usageInfo.source==23){
-            if(this.usageInfo.activated_date!=""){
-              let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
-              if(time>360){
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡已到期,无法继续充值,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+        let _this = this;
+        if (this.usageInfo.source == 23) {
+          if (this.usageInfo.activated_date != "") {
+            let time = this.dateDiff(this.usageInfo.activated_date, this.usageInfo.current_time);
+            if (time > 360) {
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else if(360-time<=30){
-                let overplus=(360-time).toFixed(0);
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+              });
+              return false;
+            } else if (360 - time <= 30) {
+              let overplus = (360 - time).toFixed(0);
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡还有' + overplus + '天到期,到期后无法继续充值使用,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else{
-                setStorage('check_iccid', this.iccid);
-                if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
-                appRate(2);
-                this.$router.push({path: '/weixin/card/plan_list'})
-              }
-            }else{
-                setStorage('check_iccid', this.iccid);
-                if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
-                appRate(2);
-                this.$router.push({path: '/weixin/card/plan_list'})
+              });
+              return false;
+            } else {
+              setStorage('check_iccid', this.iccid);
+              if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+              appRate(2);
+              this.$router.push({path: '/weixin/card/plan_list'})
             }
-        }else{
+          } else {
+            setStorage('check_iccid', this.iccid);
+            if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+            appRate(2);
+            this.$router.push({path: '/weixin/card/plan_list'})
+          }
+        } else {
           setStorage('check_iccid', this.iccid);
           if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
           appRate(2);
@@ -1009,54 +1010,54 @@
         this.$router.push({path: "/weixin/question/index"})
       },
       toCard() {
-        let _this=this;
-       
-
-        if(this.usageInfo.source==23){
-            if(this.usageInfo.activated_date!=""){
-              let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
-              if(time>360){
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡已到期,无法继续充值,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+        let _this = this;
+        if (this.usageInfo.source == 23) {
+          if (this.usageInfo.activated_date != "") {
+            let time = this.dateDiff(this.usageInfo.activated_date, this.usageInfo.current_time);
+            if (time > 360) {
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else if(360-time<=30){
-                let overplus=(360-time).toFixed(0);
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+              });
+              return false;
+            } else if (360 - time <= 30) {
+              let overplus = (360 - time).toFixed(0);
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡还有' + overplus + '天到期,到期后无法继续充值使用,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else{
-                appRate(14);
-                this.$router.push({path: "/weixin/coupon/index"})
-              }
-            }else{
-                appRate(14);
-                this.$router.push({path: "/weixin/coupon/index"})
+              });
+              return false;
+            } else {
+              appRate(14);
+              this.$router.push({path: "/weixin/coupon/index"})
             }
-        }else{
+          } else {
+            appRate(14);
+            this.$router.push({path: "/weixin/coupon/index"})
+          }
+        } else {
           appRate(14);
           this.$router.push({path: "/weixin/coupon/index"})
         }
-        
+
       },
       dateDiff(date1, date2) {
         var type1 = typeof date1,
@@ -1073,7 +1074,7 @@
         }
         return (date2 - date1) / 1000 / 60 / 60 / 24; //除1000是毫秒，不加是秒
       },
-       //字符串转成Time(dateDiff)所需方法
+      //字符串转成Time(dateDiff)所需方法
       stringToTime(string) {
         var f = string.split(" ", 2);
         var d = (f[0] ? f[0] : "").split("-", 3);
@@ -1087,6 +1088,22 @@
           parseInt(t[2], 10) || null
         ).getTime();
       },
+      showMiGu(operation) {
+        if (operation === 1 && !getStorage('showGuMi')) {
+          Dialog.confirm({
+            title: '限时活动',
+            message: '现购买任意套餐参加充值折扣活动即赠送7天咪咕体验会员',
+            confirmButtonText: "去购买",
+            cancelButtonText: '知道了'
+          }).then(() => {
+            this.$router.push({
+              path: '/weixin/card/plan_list'
+            })
+          }).catch(() => {
+            setStorage('showGuMi', true);
+          })
+        }
+      }
     }
   };
 </script>
