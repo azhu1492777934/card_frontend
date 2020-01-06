@@ -26,7 +26,7 @@
               <span class="limited-num" v-show="inner_item.is_elb_deductible!=0">可抵扣{{inner_item.max_deductible_elb}}个ELB</span>
             </p>
             <p class="plan-desc">
-              {{ inner_item.describe ? inner_item.describe:inner_item.remark?inner_item.remark:''}}
+              {{ inner_item.remark ? inner_item.remark:inner_item.describe?inner_item.describe:''}}
             </p>
           </div>
 
