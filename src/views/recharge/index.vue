@@ -52,7 +52,7 @@
               {{item.pay_money}}</em>元
             </p>
 
-            <p v-show="" class="third-appendix">赠送7天咪咕会员</p>
+            <p v-show="item.migu===true" class="third-appendix">赠送7天咪咕会员</p>
 
           </div>
           <div class="discountIcon" v-if="item.newStatus&&item.is_give_balance&&global_variables.packed_project === 'card'">
@@ -274,7 +274,7 @@
         let data = this.settingRechargeList;
         data.sort(this.jsonSort);
         for (let i = 0; i < data.length; i++) {
-          if(data[i].type==1){
+          if(data[i].type===1){
             this.recharge_list.push({
               pay_type: 'over_charge',
               pay_money: data[i].price*data[i].discount,
@@ -283,7 +283,8 @@
               is_give_balance: data[i].is_give_balance,
               newStatus:true,
               newPrice:data[i].price,
-              discount:data[i].discount
+              discount:data[i].discount,
+              migu:!!data[i].migu_music_id
             })
           }else{
             this.recharge_list.push({
@@ -292,7 +293,8 @@
               give_elb: data[i].elb,
               give_balance: data[i].balance,
               is_give_balance: data[i].is_give_balance,
-              newStatus:false
+              newStatus:false,
+              migu:!!data[i].migu_music_id
             })
           }
 

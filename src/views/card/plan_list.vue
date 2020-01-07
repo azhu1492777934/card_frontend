@@ -229,9 +229,6 @@
           type: 4,
           iccid: getStorage("check_iccid")
         });
-        if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu')) {
-          this.showMiGuModel = true;
-        }
       }
       let _this = this;
       //处理套餐数据
@@ -244,6 +241,13 @@
             this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
             return;
           }
+
+          if (getStorage('plan_list_new_card') === '1') {
+            if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic'))) {
+              this.showMiGuModel = true;
+            }
+          }
+
           this.load_plan_msg = res.msg;
           this.load_plan_list = false;
           this.plan_list = res.data;

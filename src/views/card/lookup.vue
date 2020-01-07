@@ -289,6 +289,8 @@
             setStorage('new_auth_search_iccid', res.data.iccid);
             removeStorage('plan_list_new_card');
             localStorage.setItem("currentType", "card");
+            if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
+
 
             if (res.data.status === 1) {
               this.$router.push({path: '/weixin/card/usage'})

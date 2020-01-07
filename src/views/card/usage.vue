@@ -641,7 +641,7 @@
       return {
         client_type: checkBrowser(),
         iccid: '',
-        load_skeleton: false,
+        load_skeleton: true,
         // load_plan: false,
         load_plan_msg: '',
         watch_source: [5, 10, 12, 17, 18, 20, 22, 32, 38, 44],
@@ -677,7 +677,7 @@
         hasOrderPlan: false,
         usageInfo: {},
         priorityShow: false,
-        showMiGuModel: true,
+        showMiGuModel: false,
         swiperOption: {
           on: {
             slideChangeTransitionEnd: function (swiper) {
@@ -961,7 +961,6 @@
                 })
               }
             })
-
         }
       },
       toConnection() {
@@ -1110,7 +1109,7 @@
         ).getTime();
       },
       showMiGu(mobile) {
-        if (isMobile(mobile) && !getStorage('showGuMi')) {
+        if (isMobile(mobile) && !getStorage('showGuMi' && getStorage('MiGuMusic'))) {
           this.showMiGuModel = true;
         }
       },
