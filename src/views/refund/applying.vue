@@ -1,5 +1,12 @@
 <template>
-  <div class="refund-applying-wrap">
+  <div
+    class="refund-applying-wrap"
+    :class="{
+      'plan-no-user__height':plan_list_height.is_normal,
+      'plan-has-user__height':plan_list_height.is_c_frontend,
+      'plan-app__height':plan_list_height.is_app
+      }"
+  >
     <div class="reason-wrapper">
       <van-radio-group
         v-model="radio"
@@ -28,19 +35,16 @@
         <input v-model="refundInfo.aliName" placeholder="请填写支付宝实名验证真实姓名" type="text">
       </li>
     </ul>
-
     <card-button @clickThrotle="btnRefund" :btnText="'提交申请'">
       <button @click="btnRefund" class="btn"></button>
     </card-button>
-
-
   </div>
 </template>
 
 <script>
   // @ is an alias to /src
   import {_post} from "../../http";
-  import {getStorage} from "../../utilies";
+  import {getStorage, checkBrowser} from "../../utilies";
   import {Notify, Popup, RadioGroup, Radio, Toast} from "vant";
   import cardButton from "../../components/button";
   import {mapState} from 'vuex'
@@ -54,6 +58,7 @@
 
     data() {
       return {
+        client_type: checkBrowser(),
         radio: '1',
         order_id: getStorage('refundOrderId'),
         isOther: false,
@@ -65,6 +70,11 @@
           reason: '',
           aliAccount: '',
           aliName: '',
+        },
+        plan_list_height: {
+          is_app: false,
+          is_c_frontend: true,
+          is_normal: false,
         },
         isShowAccount: false
       };
@@ -83,6 +93,18 @@
       [Toast.name]: Toast
     },
     created() {
+      if (this.global_variables.device === 'iphone' && this.client_type === "app") {
+        this.plan_list_height.is_app = true;
+      } else {
+        this.plan_list_height.is_app = false;
+        if (this.client_type === "wechat" || this.client_type === "alipay") {
+          this.plan_list_height.is_c_frontend = true;
+        } else {
+          this.plan_list_height.is_c_frontend = false;
+          this.plan_list_height.is_normal = true;
+        }
+      }
+
       if (!this.authorizedUserInfo.account.user_id) {
         Toast({message: '请在微信或支付宝客户端查询'});
         return
@@ -94,7 +116,7 @@
     },
     methods: {
       radioChange(name) {
-        if(name !== '5') this.refundInfo.reason = '';
+        if (name !== '5') this.refundInfo.reason = '';
         this.isOther = name === '5';
       },
       btnRefund() {
@@ -121,7 +143,7 @@
           device_brand: this.refundInfo.brand,
           device_model: this.refundInfo.model,
           use_address: this.refundInfo.address,
-          refund_reason: this.radio === '5' ? this.refundInfo.reason : this.refund_reason[this.radio - 1],
+          refund_reason: this.radio === '5' ? this.refundInfo.reason : this.reasonArr[this.radio - 1],
           refund_account: this.refundInfo.aliAccount,
           refund_account_name: this.refundInfo.aliName,
           user_id: this.authorizedUserInfo.account.user_id
@@ -147,13 +169,11 @@
 <style lang="less">
   @import "../../assets/less/common";
 
-  html, body, #app, .inner-wrap, .refund-applying-wrap {
-    height: 100%;
-    background-color: #f9fafc;
-  }
-
   .refund-applying-wrap {
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+
     .reason-wrapper {
 
       .van-radio {
@@ -195,13 +215,10 @@
     }
 
     .btn-wrap {
-      position: absolute;
-      width: 100%;
-      bottom: 40px;
+      margin: auto 0 50px;
 
       button {
         width: 80%;
-        margin: 60px auto 0;
         padding: 20px 0;
         font-size: 30px;
         background-color: #dca85f;
@@ -219,5 +236,17 @@
       opacity: 0;
     }
 
+
+    &.plan-no-user__height {
+      height: 100vh;
+    }
+
+    &.plan-has-user__height {
+      height: calc(~ '100vh - 60px');
+    }
+
+    &.plan-app__height {
+      height: calc(~ '100vh - 60px - 49px');
+    }
   }
 </style>
