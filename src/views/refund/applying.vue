@@ -242,11 +242,11 @@
     }
 
     &.plan-has-user__height {
-      height: calc(~ '100vh - 60px');
+      height: calc(~ '100vh - 80px');
     }
 
     &.plan-app__height {
-      height: calc(~ '100vh - 60px - 49px');
+      height: calc(~ '100vh - 80px - 49px');
     }
   }
 </style>
