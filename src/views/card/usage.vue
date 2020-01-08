@@ -716,6 +716,9 @@
     },
     methods: {
       initial() {
+        // 限时活动
+        this.showMiGu(this.authorizedUserInfo.mobile);
+
         if (getStorage('check_iccid')) {
           this.iccid = getStorage('check_iccid');
           _get('/api/v1/app/cards/telcom/usage', {
@@ -844,9 +847,6 @@
               this.hasUsagePlan = !!this.usageInfo.usage.plans.length;
               this.usagePlanLength = this.usageInfo.usage.plans.length;
               this.hasOrderPlan = !!this.usageInfo.orders.length;
-
-              // 限时活动
-              this.showMiGu(this.authorizedUserInfo.mobile);
 
               if (this.global_variables.device === 'iphone' && this.client_type === "app") {
                 this.plan_list_height.is_app = true;
@@ -1109,7 +1109,7 @@
         ).getTime();
       },
       showMiGu(mobile) {
-        if (isMobile(mobile) && !getStorage('showGuMi' && getStorage('MiGuMusic'))) {
+        if (isMobile(mobile) && !getStorage('showMiGu') && getStorage('MiGuMusic')) {
           this.showMiGuModel = true;
         }
       },

@@ -68,7 +68,7 @@
       },
       noTip() {
         this.showMigu = false;
-        setStorage('showGuMi', true);
+        setStorage('showMiGu', true);
       },
       checkedTip() {
         this.showMigu = false;

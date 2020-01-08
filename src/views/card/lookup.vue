@@ -105,6 +105,11 @@
       cardButton,
     },
     created() {
+      // 暂时去除咪咕缓存数据
+      // removeStorage('showMiGu');
+      // removeStorage('planListShowMiGu');
+
+      removeStorage('MiGuMusic');
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');

@@ -415,6 +415,7 @@ function Subtr(arg1, arg2) {
 
 // 判断移动号码
 function isMobile(phone) {
+  if(!phone) return false;
   let arr = ['1340','1341','1342','1343','1344','1345','1346','1347','1348', '135', '136', '137', '138', '139', '147','150','151','152','157','158','159','172','178','182','183','184','187','188','198'];
   let subThree = phone.substr(0, 3);
   let subFourth = phone.substr(0, 4);
