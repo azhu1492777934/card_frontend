@@ -281,7 +281,8 @@
               is_give_balance: data[i].is_give_balance,
               newStatus:true,
               newPrice:data[i].price,
-              discount:data[i].discount
+              discount:data[i].discount,
+              id:data[i].id
             })
           }else{
             this.recharge_list.push({
@@ -290,7 +291,9 @@
               give_elb: data[i].elb,
               give_balance: data[i].balance,
               is_give_balance: data[i].is_give_balance,
-              newStatus:false
+              newStatus:false,
+              id:data[i].id
+
             })
           }
           
@@ -446,7 +449,8 @@
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
           failed_page: window.location.href,
-          success_page: window.location.protocol+'//'+`${window.location.host}/weixin/recharge/callback`
+          success_page: window.location.protocol+'//'+`${window.location.host}/weixin/recharge/callback`,
+          recharge_id:rechargeInfo.id
         };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
