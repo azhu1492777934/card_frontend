@@ -57,7 +57,7 @@
               {{item.pay_money}}</em>元
             </p>
 
-            <p v-show="item.migu===true" class="third-appendix">赠送7天咪咕音乐会员</p>
+            <p v-show="item.migu===true && isMobile" class="third-appendix">赠送7天咪咕铃声会员</p>
 
           </div>
           <div class="discountIcon"
@@ -110,8 +110,8 @@
         </div><!---elb-->
       </div>
       <button @click="normalPay" class="btn-large">支付</button>
-      <div v-show="showMiGuTip" class="migu-expression-wrapper">
-        <p>咪咕音乐会员规则说明</p>
+      <div v-show="showMiGuTip && isMobile" class="migu-expression-wrapper">
+        <p>咪咕铃声会员规则说明</p>
         <ul>
           <li>1、使用新讯手表的用户充值成功后，使用该物联网卡可在手表上享用咪咕音乐振铃会员包月。</li>
           <li>2、未有新讯手表的用户可下载咪咕音乐后使用绑定公众号的手机号码进行登录，享受咪咕音乐振铃会员权限。</li>
@@ -168,7 +168,7 @@
 <script>
   import {mapState} from 'vuex'
   import {DatetimePicker, Area, Popup, Notify} from 'vant';
-  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today, appRate} from "../../utilies";
+  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today, appRate, isMobile} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -220,6 +220,7 @@
         activeIndex: 0,//当前选择充值方式索引
         showDate: false,//选择时间弹出
 
+        isMobile: false,
         showMiGuTip: false,
 
         userInfo: '',//用户信息
@@ -303,7 +304,8 @@
               newStatus: true,
               newPrice: data[i].price,
               discount: data[i].discount,
-              migu: !!data[i].migu_music_id
+              migu: !!data[i].migu_music_id,
+              migu_music_id:data[i].migu_music_id
             })
           } else {
             this.recharge_list.push({
@@ -313,7 +315,8 @@
               give_balance: data[i].balance,
               is_give_balance: data[i].is_give_balance,
               newStatus: false,
-              migu: !!data[i].migu_music_id
+              migu: !!data[i].migu_music_id,
+              migu_music_id:data[i].migu_music_id
             })
           }
 
@@ -323,6 +326,11 @@
           pay_money: 0,
           give_elb: 0
         });
+
+        if (isMobile(this.authorizedUserInfo.mobile)) {
+          this.isMobile = true;
+        }
+
       } else {
         this.recharge_list = [
           {
@@ -469,7 +477,8 @@
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
           failed_page: window.location.href,
-          success_page: window.location.protocol + '//' + `${window.location.host}/weixin/recharge/callback`
+          success_page: window.location.protocol + '//' + `${window.location.host}/weixin/recharge/callback`,
+          recharge_id:rechargeInfo.migu_music_id ? rechargeInfo.migu_music_id : 0
         };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
@@ -659,7 +668,7 @@
       },
       closePayType() {
         appRate(6);
-        if (this.global_variables.device == "android" && this.client_type == "app") {
+        if (this.global_variables.device === "android" && this.client_type === "app") {
           this.appPay.type = false;
         } else {
           this.appPay.type = true;
@@ -1077,13 +1086,14 @@
 
     }
 
-    .migu-expression-wrapper{
-      p{
+    .migu-expression-wrapper {
+      p {
         padding-bottom: 15px;
         font-size: 30px;
         color: #2c251d;
       }
-      li{
+
+      li {
         padding-bottom: 10px;
         line-height: 1.5;
         font-size: 26px;
