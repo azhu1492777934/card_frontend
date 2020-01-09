@@ -55,10 +55,10 @@
                   >
                     <p class="plan-desc">
                       {{
-                      (inner_item.remark !== 'None' && inner_item.remark)
-                      ?inner_item.remark
-                      :(inner_item.describe !== 'None' && inner_item.describe)
+                      (inner_item.describe !== 'None' && inner_item.describe)
                       ?inner_item.describe
+                      :(inner_item.remark !== 'None' && inner_item.remark)
+                      ?inner_item.remark
                       :'暂无描述'
                       }}
                     </p>
