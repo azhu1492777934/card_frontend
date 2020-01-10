@@ -231,7 +231,7 @@
         });
 
         // 限时活动
-        if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic'))) {
+        if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic')) && getStorage('migu_watch_card')) {
           this.showMiGuModel = true;
         }
       }

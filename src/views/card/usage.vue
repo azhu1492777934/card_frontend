@@ -1109,7 +1109,7 @@
         ).getTime();
       },
       showMiGu(mobile) {
-        if (isMobile(mobile) && !getStorage('showMiGu') && getStorage('MiGuMusic')) {
+        if (isMobile(mobile) && !getStorage('showMiGu') && getStorage('MiGuMusic') && getStorage('migu_watch_card')) {
           this.showMiGuModel = true;
         }
       },

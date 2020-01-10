@@ -57,7 +57,7 @@
               {{item.pay_money}}</em>元
             </p>
 
-            <p v-show="item.migu===true && isMobile" class="third-appendix">赠送7天咪咕铃声会员</p>
+            <p v-show="item.migu===true && isMobile && isMiGuWatch" class="third-appendix">赠送7天咪咕铃声会员</p>
 
           </div>
           <div class="discountIcon"
@@ -110,13 +110,14 @@
         </div><!---elb-->
       </div>
       <button @click="normalPay" class="btn-large">支付</button>
-      <div v-show="showMiGuTip && isMobile" class="migu-expression-wrapper">
+      <div v-show="showMiGuTip && isMobile && isMiGuWatch" class="migu-expression-wrapper">
         <p>咪咕铃声会员规则说明</p>
         <ul>
-          <li>1、使用新讯手表的用户充值成功后，使用该物联网卡可在手表上享用咪咕音乐振铃会员包月。</li>
-          <li>2、未有新讯手表的用户可下载咪咕音乐后使用绑定公众号的手机号码进行登录，享受咪咕音乐振铃会员权限。</li>
-          <li>3、赠送7天铃声会员无需扣费，7天过后会按月收取4元/月资费，由用户话费支付。每月月初1号扣费自动续订。</li>
-          <li>4、可通过电话10086人工，或者按照退订短信提示即可完成退订。</li>
+          <li>1、赠送7天咪咕音乐振铃会员可在已安装手表铃声的新讯4G手表使用；</li>
+          <li>2、未有已安装咪咕音乐的新讯4G手表的用户可下载咪咕音乐后使用绑定公众号的手机号码进行登录，享受咪咕音乐振铃会员权限，仅限安卓手机可设置；</li>
+          <li>3、赠送7天铃声会员无需扣费，7天过后会按月收取4元/月资费，由用户话费支付。每月月初1号扣费自动续订；</li>
+          <li>4、可通过电话10086人工，或者按照退订短信提示即可完成退订；</li>
+          <li>5、活动解释权归前海翼联所有。</li>
         </ul>
       </div>
     </div>
@@ -221,6 +222,7 @@
         showDate: false,//选择时间弹出
 
         isMobile: false,
+        isMiGuWatch:getStorage('migu_watch_card') === '1',
         showMiGuTip: false,
 
         userInfo: '',//用户信息
@@ -305,7 +307,8 @@
               newPrice: data[i].price,
               discount: data[i].discount,
               migu: !!data[i].migu_music_id,
-              migu_music_id:data[i].migu_music_id
+              migu_music_id: data[i].migu_music_id,
+              id: data[i].id ? data[i].id : undefined
             })
           } else {
             this.recharge_list.push({
@@ -316,7 +319,8 @@
               is_give_balance: data[i].is_give_balance,
               newStatus: false,
               migu: !!data[i].migu_music_id,
-              migu_music_id:data[i].migu_music_id
+              migu_music_id: data[i].migu_music_id,
+              id: data[i].id ? data[i].id : undefined
             })
           }
 
@@ -478,7 +482,7 @@
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
           failed_page: window.location.href,
           success_page: window.location.protocol + '//' + `${window.location.host}/weixin/recharge/callback`,
-          recharge_id:rechargeInfo.migu_music_id ? rechargeInfo.migu_music_id : 0
+          recharge_id: rechargeInfo.id ? rechargeInfo.id : 0
         };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
