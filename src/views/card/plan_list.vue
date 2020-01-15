@@ -129,14 +129,22 @@
       <p class="showTip">创建订单中,请等候</p>
     </van-popup>
 
+    <transition name="bounce">
+      <MiGu
+        :show-mi-gu-model="showMiGuModel"
+        :show-checked="true"
+      />
+    </transition>
+
   </div>
 </template>
 
 <script>
+  import MiGu from '../../components/activity/migu';
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import {mapState} from 'vuex'
   import {Toast, Popup, Notify, List, Dialog, Icon, Collapse, CollapseItem} from "vant";
-  import {setStorage, getStorage, checkBrowser, Today, lossRate, appRate} from "../../utilies";
+  import {setStorage, getStorage, checkBrowser, Today, lossRate, appRate, isMobile} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
   export default {
@@ -174,6 +182,7 @@
         ref_plan_type_index: 0,
         firstStatus: false,
         activeNames: [],
+        showMiGuModel: false,
         //实名类型
         realnameType: getStorage('realnameType'),
         swiperOption: {
@@ -208,17 +217,23 @@
       [Icon.name]: Icon,
       [Collapse.name]: Collapse,
       [CollapseItem.name]: CollapseItem,
+      MiGu,
       swiper,
       swiperSlide,
     },
     created() {
-      if(!getStorage('check_iccid')) this.$router.push({path:'/weixin/card/lookup'});
+      if (!getStorage('check_iccid')) this.$router.push({path: '/weixin/card/lookup'});
       // 流失率统计
       if (getStorage('plan_list_new_card') === "1") {
         lossRate({
           type: 4,
           iccid: getStorage("check_iccid")
         });
+
+        // 限时活动
+        if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic')) && getStorage('migu_watch_card')) {
+          this.showMiGuModel = true;
+        }
       }
       let _this = this;
       //处理套餐数据
@@ -231,6 +246,7 @@
             this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
             return;
           }
+
           this.load_plan_msg = res.msg;
           this.load_plan_list = false;
           this.plan_list = res.data;
@@ -295,9 +311,9 @@
       });
     },
     methods: {
-      toQuestion(){
+      toQuestion() {
         this.$router.push({
-          path:'/weixin/question/common_question'
+          path: '/weixin/question/common_question'
         });
       },
       toService() {
@@ -646,13 +662,13 @@
           background-image: url("../../assets/imgs/mifi/plan_group/bg_test.png");
           background-size: cover;
 
-          .plan-name{
+          .plan-name {
             font-weight: 500;
           }
 
           .plan-name,
           .sub-plan-name,
-          .plan-desc{
+          .plan-desc {
             color: #533606;
           }
 
@@ -663,9 +679,9 @@
           }
 
           // rest vant-collapse
-          .van-collapse-reset{
+          .van-collapse-reset {
             .van-cell__title span,
-            .van-cell__title + i{
+            .van-cell__title + i {
               color: #533606 !important;
             }
           }
@@ -741,7 +757,7 @@
       button {
         display: block;
         height: 100px;
-        flex:1;
+        flex: 1;
         font-size: 26px;
         color: #868686;
         background: #fff;
@@ -827,6 +843,26 @@
 
     .plan-app__height {
       height: calc(~ '100vh - 60px - 102px - 175px - 49px');
+    }
+
+    .bounce-enter-active {
+      animation: bounce-in .5s;
+    }
+
+    .bounce-leave-active {
+      animation: bounce-in .5s reverse;
+    }
+
+    @keyframes bounce-in {
+      0% {
+        transform: scale(0);
+      }
+      50% {
+        transform: scale(1.5);
+      }
+      100% {
+        transform: scale(1);
+      }
     }
 
   }

@@ -10,9 +10,10 @@
         <em class="title-line rotate-180"></em>
       </div>
       <ul class="discount-wrap">
-        <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"   v-bind:key="index"
+        <li @click="rechargeTypeClick(index)" v-for="(item,index) in new_recharge_list" data-rmb="100"
+            v-bind:key="index"
             data-elb="20"
-            :class="{'checked':index==activeIndex}"  >
+            :class="{'checked':index==activeIndex}">
           <div :class="{'monthlyPlan ':item.is_renew==true,'midPlan':item.is_first==false}">
 
             <div class="monthlyTop " v-if="item.is_first==true">
@@ -22,7 +23,8 @@
             <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" v-show="!item.newStatus">
               {{item.pay_type=='diamond_charge'?'余额支付':'充值'+item.pay_money+'元'}}
             </p>
-            <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}" v-show="item.newStatus&&global_variables.packed_project == 'card'">
+            <p class="discount-rmb" :class="{'monthly-rmb':item.is_renew}"
+               v-show="item.newStatus&&global_variables.packed_project == 'card'">
               {{item.pay_type=='diamond_charge'?'余额支付':'充值'+item.newPrice+'元'}}
             </p>
             <span v-show="item.pay_type!='diamond_charge'" class="line"></span>
@@ -37,22 +39,29 @@
             <!-- <p v-show="item.pay_type=='normal_charge'" class="discount-appendix">无ELB赠送</p>      -->
 
             <p class="discount-appendix"
-               v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance&&!item.newStatus">赠送<em
+               v-show="item.pay_type=='over_charge'&&item.give_elb&&item.give_elb>0&&item.is_give_balance&&!item.newStatus">
+              赠送<em
               class="cl-elb">
               {{item.give_elb}}</em>ELB
             </p><!--多充值支付-->
             <p class="discount-appendix"
-               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance&&!item.newStatus">赠送<em
+               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance&&!item.newStatus">
+              赠送<em
               class="cl-elb">
               {{item.give_balance}}</em>元余额
             </p>
             <p class="discount-appendix"
-               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance&&item.newStatus&&global_variables.packed_project == 'card'">只需支付<em
+               v-show="item.pay_type=='over_charge'&&item.give_balance&&item.give_balance>0&&item.is_give_balance&&item.newStatus&&global_variables.packed_project == 'card'">
+              只需支付<em
               class="cl-elb">
               {{item.pay_money}}</em>元
             </p>
+
+            <p v-show="item.migu===true && isMobile && isMiGuWatch" class="third-appendix">赠送7天咪咕铃声会员</p>
+
           </div>
-          <div class="discountIcon" v-if="item.newStatus&&item.is_give_balance&&global_variables.packed_project == 'card'">
+          <div class="discountIcon"
+               v-if="item.newStatus&&item.is_give_balance&&global_variables.packed_project === 'card'">
             <span>{{item.discount|discountFilters}}</span><span>折</span>
           </div>
         </li>
@@ -101,6 +110,17 @@
         </div><!---elb-->
       </div>
       <button @click="normalPay" class="btn-large">支付</button>
+      <div v-show="showMiGuTip && isMobile && isMiGuWatch" class="migu-expression-wrapper">
+        <p>咪咕铃声会员规则说明</p>
+        <ul>
+          <li>1、赠送7天咪咕音乐振铃会员可在已安装手表铃声的新讯4G手表使用；</li>
+          <li>2、未有已安装咪咕音乐的新讯4G手表的用户可下载咪咕音乐后使用绑定公众号的手机号码进行登录，享受咪咕音乐振铃会员权限，仅限安卓手机可设置；</li>
+          <li>3、单账号限制赠送一次，取消或再次购买亦无法享受赠送咪咕7天铃声会员的权益。</li>
+          <li>4、赠送7天铃声会员无需扣费，7天过后会按月收取4元/月资费，由用户话费支付。每月月初1号扣费自动续订；</li>
+          <li>5、可通过电话10086人工，或者按照退订短信提示即可完成退订；</li>
+          <li>5、活动解释权归前海翼联所有。</li>
+        </ul>
+      </div>
     </div>
 
     <van-popup
@@ -133,8 +153,9 @@
           支付方式选择
         </div>
         <div class="content">
-          <p @click="changePayType(true)" :class="{'choose_type':appPay.type}" v-if="global_variables.device!='android'&&client_type=='app'">微信支付</p>
-          <p @click="changePayType(false)" :class="{'choose_type':!appPay.type}" >支付宝支付</p>
+          <p @click="changePayType(true)" :class="{'choose_type':appPay.type}"
+             v-if="global_variables.device!='android'&&client_type=='app'">微信支付</p>
+          <p @click="changePayType(false)" :class="{'choose_type':!appPay.type}">支付宝支付</p>
         </div>
         <div class="footer">
           <button @click="closePayType">取消</button>
@@ -149,7 +170,7 @@
 <script>
   import {mapState} from 'vuex'
   import {DatetimePicker, Area, Popup, Notify} from 'vant';
-  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today,appRate} from "../../utilies";
+  import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today, appRate, isMobile} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -201,6 +222,10 @@
         activeIndex: 0,//当前选择充值方式索引
         showDate: false,//选择时间弹出
 
+        isMobile: false,
+        isMiGuWatch:getStorage('migu_watch_card') === '1',
+        showMiGuTip: false,
+
         userInfo: '',//用户信息
         openid: '', //用户openid
         planInfo: getStorage('planInfo', 'obj'),//当前充值套餐信息
@@ -214,12 +239,12 @@
         settingRechargeList: []
       }
     },
-    filters:{
-      discountFilters(val){
-        if(String((val*100)).indexOf(0)){
-          return String(val*100).replace("0","");
-        }else{
-          return val*100
+    filters: {
+      discountFilters(val) {
+        if (String((val * 100)).indexOf(0)) {
+          return String(val * 100).replace("0", "");
+        } else {
+          return val * 100
         }
       }
     },
@@ -231,9 +256,9 @@
           iccid: getStorage("check_iccid")
         });
       }
-      if(this.global_variables.device=="android"&&this.client_type=="app"){
-          this.appPay.type = false;
-        }
+      if (this.global_variables.device === "android" && this.client_type === "app") {
+        this.appPay.type = false;
+      }
 
       if (!this.planInfo) {
         this.$router.push({'path': '/weixin/card/plan_list'});
@@ -271,38 +296,46 @@
         let data = this.settingRechargeList;
         data.sort(this.jsonSort);
         for (let i = 0; i < data.length; i++) {
-
-          if(data[i].type==1){
+          if (data[i].migu_music_id) this.showMiGuTip = true;
+          if (data[i].type === 1) {
             this.recharge_list.push({
               pay_type: 'over_charge',
-              pay_money: data[i].price*data[i].discount,
+              pay_money: data[i].price * data[i].discount,
               give_elb: data[i].elb,
-              give_balance: data[i].price*(1-data[i].discount),
+              give_balance: data[i].price * (1 - data[i].discount),
               is_give_balance: data[i].is_give_balance,
-              newStatus:true,
-              newPrice:data[i].price,
-              discount:data[i].discount,
-              id:data[i].id
+              newStatus: true,
+              newPrice: data[i].price,
+              discount: data[i].discount,
+              migu: !!data[i].migu_music_id,
+              migu_music_id: data[i].migu_music_id,
+              id: data[i].id ? data[i].id : undefined
             })
-          }else{
+          } else {
             this.recharge_list.push({
               pay_type: 'over_charge',
               pay_money: data[i].price,
               give_elb: data[i].elb,
               give_balance: data[i].balance,
               is_give_balance: data[i].is_give_balance,
-              newStatus:false,
-              id:data[i].id
-
+              newStatus: false,
+              migu: !!data[i].migu_music_id,
+              migu_music_id: data[i].migu_music_id,
+              id: data[i].id ? data[i].id : undefined
             })
           }
-          
+
         }
         this.recharge_list.push({
           pay_type: 'normal_charge',
           pay_money: 0,
           give_elb: 0
         });
+
+        if (isMobile(this.authorizedUserInfo.mobile)) {
+          this.isMobile = true;
+        }
+
       } else {
         this.recharge_list = [
           {
@@ -449,8 +482,8 @@
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
           failed_page: window.location.href,
-          success_page: window.location.protocol+'//'+`${window.location.host}/weixin/recharge/callback`,
-          recharge_id:rechargeInfo.id
+          success_page: window.location.protocol + '//' + `${window.location.host}/weixin/recharge/callback`,
+          recharge_id: rechargeInfo.id ? rechargeInfo.id : 0
         };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
@@ -539,18 +572,18 @@
               } else {
 
                 if (this.planInfo.vip_type_id != 0) {
-                  if(this.global_variables.device=="iphone"&&this.client_type=="app"){
+                  if (this.global_variables.device === "iphone" && this.client_type === "app") {
                     Notify({
                       message: '购买成功。',
                       background: '#60ce53'
                     });
-                  }else{
+                  } else {
                     Notify({
                       message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
                       background: '#60ce53'
                     });
                   }
-                  
+
                 } else {
                   Notify({
                     message: '充值成功',
@@ -640,9 +673,9 @@
       },
       closePayType() {
         appRate(6);
-        if(this.global_variables.device=="android"&&this.client_type=="app"){
+        if (this.global_variables.device === "android" && this.client_type === "app") {
           this.appPay.type = false;
-        }else{
+        } else {
           this.appPay.type = true;
         }
         this.appPay.show = false
@@ -838,162 +871,170 @@
         flex-wrap: wrap;
         -webkit-box-lines: multiple;
         justify-content: space-between;
-      }
-      .discountIcon{
-          display:inline-block;
-          width:53px;
-          height:68px;
-          background:url("../../assets/imgs/card/usage/fire.png")no-repeat;
-          background-size:100% 100%;
-          position:absolute;
-          top:-30px;
-          right:-10px;
-          color:#fff;
-          font-size:27px;
-          font-family: SourceHanSansSC-Bold;
-          font-weight:bold;
-          display:flex;
-          box-sizing:border-box;
-          justify-content: center;
-          align-items:center;
-          padding-top:20px;
-          >span:nth-child(2){
-            font-size:15px;
-          }
-                            
-      }
-      li {
-        display: table;
-        position: relative;
-        width: 31%;
-        max-width: 33.33%;
-        min-height: 183px;
-        margin: 0 0 20px;
-        font-size: 28px;
-        text-align: center;
-        border: 1PX solid #e6e6e6;
-        border-radius: 16px;
-        -webkit-text-size-adjust: none;
-        
-        &.special {
-          min-height: 1px;
-          margin: 0;
-          border-color: transparent;
-          visibility: hidden
-        }
 
-        .midPlan {
-          vertical-align: middle;
-          padding-top: 30px;
-        }
-
-        .monthlyPlan {
-          vertical-align: top;
-          border-radius: 16px;
-          background: linear-gradient(-45deg, rgba(255, 222, 123, 1), rgba(250, 197, 84, 1), rgba(255, 209, 120, 1), rgba(247, 194, 80, 1));
-        }
-
-        .monthlyTop {
-          margin-top: 10px;
-          display: flex;
-          justify-content: space-between;
-
-          > div:nth-child(1) {
-            margin-left: 12px;
-          }
-
-          > div:nth-child(2) {
-            margin-right: 9px;
-          }
-        }
-
-        .monthlyDes {
-          font-size: 20px;
-          font-weight: 400;
-          color: rgba(131, 96, 25, 1);
-        }
-
-        .monthlyFirst {
-          font-size: 20px;
-          font-weight: 400;
-          color: rgba(255, 255, 255, 1);
-        }
-
-        .monthlyMoney {
-          font-size: 20px;
-          font-weight: 400;
-          text-decoration: line-through;
-          color: rgba(44, 37, 29, 1);
-        }
-
-        .monthly-rmb {
-          margin-top: 12px;
-          font-size: 38px !important;
-          font-weight: 400;
-          color: rgba(44, 37, 29, 1) !important;
-        }
-
-        .line {
-          display: block;
-          width: 60px;
-          height: 3px;
-          margin: 10px auto 13px;
-          background-color: #c89439;
-        }
-
-        div {
-          display: table-cell;
-          vertical-align: middle;
-        }
-
-        .cl-elb {
-          color: #70a6ec;
-        }
-
-        .discount-rmb {
+        li {
+          display: table;
+          position: relative;
+          width: 31%;
+          max-width: 33.33%;
+          min-height: 183px;
+          margin: 0 0 20px;
           font-size: 28px;
-          color: #2c251d;
-          line-height: 1;
-        }
+          text-align: center;
+          border: 1PX solid #e6e6e6;
+          border-radius: 16px;
+          -webkit-text-size-adjust: none;
 
-        .discount-diamond {
-          padding-top: 5px;
-
-          .surplus-recharge {
-            display: block;
-            padding: 8px 0;
-            font-size: 24px;
-            color: #2c251d;
+          &.special {
+            min-height: 1px;
+            margin: 0;
+            border-color: transparent;
+            visibility: hidden
           }
-        }
 
-        .discount-appendix {
-          color: #888;
-          font-size: 20px;
-          letter-spacing: 1PX;
-        }
+          .midPlan {
+            vertical-align: middle;
+            padding-top: 30px;
+          }
 
-        &.checked {
-          border-color: #c89439;
-          box-shadow: 0 50px 0 #fff;
+          .monthlyPlan {
+            vertical-align: top;
+            border-radius: 16px;
+            background: linear-gradient(-45deg, rgba(255, 222, 123, 1), rgba(250, 197, 84, 1), rgba(255, 209, 120, 1), rgba(247, 194, 80, 1));
+          }
+
+          .monthlyTop {
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+
+            > div:nth-child(1) {
+              margin-left: 12px;
+            }
+
+            > div:nth-child(2) {
+              margin-right: 9px;
+            }
+          }
+
+          .monthlyDes {
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(131, 96, 25, 1);
+          }
+
+          .monthlyFirst {
+            font-size: 20px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+          }
+
+          .monthlyMoney {
+            font-size: 20px;
+            font-weight: 400;
+            text-decoration: line-through;
+            color: rgba(44, 37, 29, 1);
+          }
+
+          .monthly-rmb {
+            margin-top: 12px;
+            font-size: 38px !important;
+            font-weight: 400;
+            color: rgba(44, 37, 29, 1) !important;
+          }
+
+          .line {
+            display: block;
+            width: 60px;
+            height: 3px;
+            margin: 10px auto 13px;
+            background-color: #c89439;
+          }
+
+          div {
+            display: table-cell;
+            vertical-align: middle;
+          }
+
+          .cl-elb {
+            color: #70a6ec;
+          }
 
           .discount-rmb {
-            color: #fd720d;
+            font-size: 28px;
+            color: #2c251d;
+            line-height: 1;
           }
 
-          &::after {
-            position: absolute;
-            right: 0;
-            bottom: 0;
-            content: '✓';
-            width: 33px;
-            height: 25px;
-            color: #fff;
-            background-color: #c89439;
-            font-size: 22px;
-            border-top-left-radius: 16px;
-            border-bottom-right-radius: 16px;
+          .discount-diamond {
+            padding-top: 5px;
+
+            .surplus-recharge {
+              display: block;
+              padding: 8px 0;
+              font-size: 24px;
+              color: #2c251d;
+            }
           }
+
+          .discount-appendix {
+            color: #888;
+            font-size: 20px;
+            letter-spacing: 1PX;
+          }
+
+          .third-appendix {
+            padding-top: 5px;
+            color: #333;
+            font-size: 22px;
+          }
+
+          &.checked {
+            border-color: #c89439;
+            box-shadow: 0 50px 0 #fff;
+
+            .discount-rmb {
+              color: #fd720d;
+            }
+
+            &::after {
+              position: absolute;
+              right: 0;
+              bottom: 0;
+              content: '✓';
+              width: 33px;
+              height: 25px;
+              color: #fff;
+              background-color: #c89439;
+              font-size: 22px;
+              border-top-left-radius: 16px;
+              border-bottom-right-radius: 16px;
+            }
+          }
+
+        }
+      }
+
+      .discountIcon {
+        display: inline-block;
+        width: 53px;
+        height: 68px;
+        background: url("../../assets/imgs/card/usage/fire.png") no-repeat;
+        background-size: 100% 100%;
+        position: absolute;
+        top: -30px;
+        right: -10px;
+        color: #fff;
+        font-size: 27px;
+        font-weight: bold;
+        display: flex;
+        box-sizing: border-box;
+        justify-content: center;
+        align-items: center;
+        padding-top: 20px;
+
+        > span:nth-child(2) {
+          font-size: 15px;
         }
 
       }
@@ -1049,12 +1090,27 @@
 
     }
 
+    .migu-expression-wrapper {
+      p {
+        padding-bottom: 15px;
+        font-size: 30px;
+        color: #2c251d;
+      }
+
+      li {
+        padding-bottom: 10px;
+        line-height: 1.5;
+        font-size: 26px;
+        color: #888;
+      }
+    }
+
     //充值方式选择
     .btn-large {
       display: block;
       width: 100%;
       padding: 20px;
-      margin: 90px 0;
+      margin: 70px 0;
       color: #fff;
       background-color: #dca85f;
       font-size: 34px;

@@ -93,28 +93,28 @@
       authorized() {
         if ((this.client_type === 'wechat' || this.client_type === 'alipay' || this.client_type === 'app') && process.env.NODE_ENV !== 'development') {
           // if (this.client_type !== 'app') {
-            if (getStorage('userInfo', 'obj')) {
-              this.$store.commit('userInfo/changeUserStatus', true);
-              let userDom = document.querySelector('.user-wrap');
-              if (userDom) setStorage('userHeight', userDom.offsetHeight);
+          if (getStorage('userInfo', 'obj')) {
+            this.$store.commit('userInfo/changeUserStatus', true);
+            let userDom = document.querySelector('.user-wrap');
+            if (userDom) setStorage('userHeight', userDom.offsetHeight);
 
-              if (this.global_variables.packed_project === 'mifi') {
-                this.$store.commit('userInfo/changeUserStatus', false);
-              }
+            if (this.global_variables.packed_project === 'mifi') {
+              this.$store.commit('userInfo/changeUserStatus', false);
             }
+          }
 
-            if ((this.client_type === 'wechat' && getStorage('wechat_version') !== this.global_variables.version) ||
-              (this.client_type === 'alipay' && getStorage('alipay_version') !== this.global_variables.version)
-            ) {
-              removeStorage('token');
-              removeStorage('state');
-            }
+          if ((this.client_type === 'wechat' && getStorage('wechat_version') !== this.global_variables.version) ||
+            (this.client_type === 'alipay' && getStorage('alipay_version') !== this.global_variables.version)
+          ) {
+            removeStorage('token');
+            removeStorage('state');
+          }
 
           // }
           //app环境隐藏顶部个人信息
           if (getStorage('token')) {
             if (this.global_variables.packed_project !== 'mifi') {
-              if(this.$route.path.indexOf('question') === 8 || this.$route.path.indexOf('coupon') ===8) return;
+              if (this.$route.path.indexOf('question') === 8 || this.$route.path.indexOf('coupon') === 8) return;
               this.getUserInfo();//获取用户信息 其他项目的跳转
             }
           } else {
@@ -123,7 +123,7 @@
             //   title: '授权',
             //   message: '为了您的账号安全，我们需要您对本站进行授权操作并绑定账号。'
             // }).then(() => {
-              _this.authorizedRediect()
+            _this.authorizedRediect()
             // })
           }
         } else {
@@ -153,6 +153,7 @@
                   account: res.data.account,
                   avatar: res.data.avatar,
                   nickname: res.data.nickname,
+                  mobile: res.data.mobile,
                 };
                 setStorage('userInfo', UserInfo, 'obj');
                 if (this.client_type === 'wechat' || this.client_type === 'alipay') {

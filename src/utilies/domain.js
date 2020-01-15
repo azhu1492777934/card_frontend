@@ -4,7 +4,7 @@
 import {checkBrowser, checkDevice} from "./index";
 
 let global_variables = {
-  packed_project: 'mifi', // 修改项目
+  packed_project: 'card', // 修改项目
   authorized_redirect_url: '',
   realname_url: '',
   version: '1.1',
@@ -38,8 +38,8 @@ let global_variables = {
 /*
 * 当前打包项目
 * */
-// if(process.env.NODE_ENV === 'development'){
-if (process.env.NODE_ENV === 'production') {
+if(process.env.NODE_ENV === 'development'){
+// if (process.env.NODE_ENV === 'production') {
   global_variables.realname_url = global_variables.realname.ProductionDomain;
   global_variables.authorized_redirect_url = global_variables[`${global_variables.packed_project}_project`].ProductionDomain;
 } else {

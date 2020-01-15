@@ -218,6 +218,13 @@
       </van-loading>
     </van-popup>
 
+    <transition name="bounce">
+      <MiGu
+        :show-mi-gu-model="showMiGuModel"
+        :show-btn-buy="true"
+        :show-btn-no-tip="true"
+      />
+    </transition>
   </div>
 </template>
 
@@ -243,6 +250,26 @@
   .slide-fade-enter, .slide-fade-leave-to {
     transform: translateX(10px);
     opacity: 0;
+  }
+
+  .bounce-enter-active {
+    animation: bounce-in .5s;
+  }
+
+  .bounce-leave-active {
+    animation: bounce-in .5s reverse;
+  }
+
+  @keyframes bounce-in {
+    0% {
+      transform: scale(0);
+    }
+    50% {
+      transform: scale(1.5);
+    }
+    100% {
+      transform: scale(1);
+    }
   }
 
   .plan-usage-wrap {
@@ -406,7 +433,7 @@
           }
         }
 
-        .watch-card__to-flow-wrapper{
+        .watch-card__to-flow-wrapper {
           bottom: 10px;
         }
 
@@ -600,9 +627,11 @@
 
 <script>
   // @ is an alias to /src
+  import {mapState} from 'vuex'
+  import MiGu from '../../components/activity/migu';
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Notify, Popup, Toast, Loading,Dialog} from 'vant';
-  import {getStorage, setStorage, toDecimal, checkBrowser, getUrlParam, removeStorage, appRate} from "../../utilies";
+  import {Notify, Popup, Toast, Loading, Dialog} from 'vant';
+  import {getStorage, setStorage, toDecimal, checkBrowser, isMobile, removeStorage, appRate} from "../../utilies";
   import {_post, _get} from "../../http";
 
   export default {
@@ -648,6 +677,7 @@
         hasOrderPlan: false,
         usageInfo: {},
         priorityShow: false,
+        showMiGuModel: false,
         swiperOption: {
           on: {
             slideChangeTransitionEnd: function (swiper) {
@@ -668,14 +698,15 @@
       [Popup.name]: Popup,
       [Toast.name]: Toast,
       [Loading.name]: Loading,
+      MiGu,
       swiper,
       swiperSlide
     },
-    // computed: {
-    //   swiper() {
-    //     return this.$refs.mySwiper.swiper
-    //   }
-    // },
+    computed: {
+      ...mapState({
+        authorizedUserInfo: state => state.userInfo.userInfoInner
+      }),
+    },
     created() {
       removeStorage('hasValidatedPlan');
       removeStorage('plan_list_new_card');
@@ -685,6 +716,9 @@
     },
     methods: {
       initial() {
+        // 限时活动
+        this.showMiGu(this.authorizedUserInfo.mobile);
+
         if (getStorage('check_iccid')) {
           this.iccid = getStorage('check_iccid');
           _get('/api/v1/app/cards/telcom/usage', {
@@ -814,16 +848,6 @@
               this.usagePlanLength = this.usageInfo.usage.plans.length;
               this.hasOrderPlan = !!this.usageInfo.orders.length;
 
-              // this.$nextTick(() => {
-              //   this.$refs.mySwiper.swiper.slideTo(0, 500, false);
-              //   let clientHeight = document.documentElement.clientHeight || document.body.clientHeight,
-              //     refCardInfo = this.$refs.refCardInfo.offsetHeight,
-              //     refCardData = this.$refs.refCardData.offsetHeight,
-              //     refCardButton = this.$refs.refCardButton.offsetHeight,
-              //     refPlanTitle = this.$refs.refPlanTitle.offsetHeight;
-              //   this.$refs.mySwiper.$el.style.height = (clientHeight - refCardInfo - refCardData - refCardButton - refPlanTitle) + 'px'
-              // });
-
               if (this.global_variables.device === 'iphone' && this.client_type === "app") {
                 this.plan_list_height.is_app = true;
               } else {
@@ -836,7 +860,6 @@
                 }
               }
 
-              
             } else {
               Toast({
                 icon: 'warning-o',
@@ -856,55 +879,54 @@
         this.$refs.mySwiper.swiper.slideTo(index);
       },
       recharge() {
-        let _this=this;
-
-        
-        
-        if(this.usageInfo.source==23){
-            if(this.usageInfo.activated_date!=""){
-              let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
-              if(time>360){
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡已到期,无法继续充值,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+        let _this = this;
+        if (this.usageInfo.source === 23) {
+          if (this.usageInfo.activated_date !== "") {
+            let time = this.dateDiff(this.usageInfo.activated_date, this.usageInfo.current_time);
+            if (time > 360) {
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else if(360-time<=30){
-                let overplus=(360-time).toFixed(0);
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+              });
+              return false;
+            } else if (360 - time <= 30) {
+              let overplus = (360 - time).toFixed(0);
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡还有' + overplus + '天到期,到期后无法继续充值使用,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else{
-                setStorage('check_iccid', this.iccid);
-                if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
-                appRate(2);
-                this.$router.push({path: '/weixin/card/plan_list'})
-              }
-            }else{
-                setStorage('check_iccid', this.iccid);
-                if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
-                appRate(2);
-                this.$router.push({path: '/weixin/card/plan_list'})
+              });
+              return false;
+            } else {
+              setStorage('check_iccid', this.iccid);
+              if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+              appRate(2);
+              this.$router.push({path: '/weixin/card/plan_list'})
             }
-        }else{
+          } else {
+            setStorage('check_iccid', this.iccid);
+            if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
+            appRate(2);
+            this.$router.push({path: '/weixin/card/plan_list'})
+          }
+        } else {
           setStorage('check_iccid', this.iccid);
           if (this.hasUsagePlan) setStorage('hasValidatedPlan', this.hasUsagePlan);
           appRate(2);
@@ -939,7 +961,6 @@
                 })
               }
             })
-
         }
       },
       toConnection() {
@@ -1009,54 +1030,54 @@
         this.$router.push({path: "/weixin/question/index"})
       },
       toCard() {
-        let _this=this;
-       
-
-        if(this.usageInfo.source==23){
-            if(this.usageInfo.activated_date!=""){
-              let time =this.dateDiff(this.usageInfo.activated_date,this.usageInfo.current_time);
-              if(time>360){
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡已到期,无法继续充值,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+        let _this = this;
+        if (this.usageInfo.source == 23) {
+          if (this.usageInfo.activated_date !== "") {
+            let time = this.dateDiff(this.usageInfo.activated_date, this.usageInfo.current_time);
+            if (time > 360) {
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡已到期,无法继续充值,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else if(360-time<=30){
-                let overplus=(360-time).toFixed(0);
-                Dialog.confirm({
-                  title: '提示',
-                  message: '您的物联网卡还有'+overplus+'天到期,到期后无法继续充值使用,请更换卡',
-                  confirmButtonText:"去换卡",
-                   cancelButtonText:"取消",
-                }).then(() => {
-                  // on confirm
-                  _this.$router.push({name:'eqReplaceMent',params:{status:1}});localStorage.setItem("replaceStatus",1)
-                }).catch(() => {
-                  // on cancel
-                  return false;
-                });
+              });
+              return false;
+            } else if (360 - time <= 30) {
+              let overplus = (360 - time).toFixed(0);
+              Dialog.confirm({
+                title: '提示',
+                message: '您的物联网卡还有' + overplus + '天到期,到期后无法继续充值使用,请更换卡',
+                confirmButtonText: "去换卡",
+                cancelButtonText: "取消",
+              }).then(() => {
+                // on confirm
+                _this.$router.push({name: 'eqReplaceMent', params: {status: 1}});
+                localStorage.setItem("replaceStatus", 1)
+              }).catch(() => {
+                // on cancel
                 return false;
-              }else{
-                appRate(14);
-                this.$router.push({path: "/weixin/coupon/index"})
-              }
-            }else{
-                appRate(14);
-                this.$router.push({path: "/weixin/coupon/index"})
+              });
+              return false;
+            } else {
+              appRate(14);
+              this.$router.push({path: "/weixin/coupon/index"})
             }
-        }else{
+          } else {
+            appRate(14);
+            this.$router.push({path: "/weixin/coupon/index"})
+          }
+        } else {
           appRate(14);
           this.$router.push({path: "/weixin/coupon/index"})
         }
-        
+
       },
       dateDiff(date1, date2) {
         var type1 = typeof date1,
@@ -1073,7 +1094,7 @@
         }
         return (date2 - date1) / 1000 / 60 / 60 / 24; //除1000是毫秒，不加是秒
       },
-       //字符串转成Time(dateDiff)所需方法
+      //字符串转成Time(dateDiff)所需方法
       stringToTime(string) {
         var f = string.split(" ", 2);
         var d = (f[0] ? f[0] : "").split("-", 3);
@@ -1086,6 +1107,11 @@
           parseInt(t[1], 10) || null,
           parseInt(t[2], 10) || null
         ).getTime();
+      },
+      showMiGu(mobile) {
+        if (isMobile(mobile) && !getStorage('showMiGu') && getStorage('MiGuMusic') && getStorage('migu_watch_card')) {
+          this.showMiGuModel = true;
+        }
       },
     }
   };

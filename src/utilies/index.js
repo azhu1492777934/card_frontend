@@ -173,10 +173,6 @@ function codeParam(param, type) {
 }//支付中心及用户中心 参数加密
 
 
-
-
-
-
 function appParam(param, type) {
   let timeSpan = getStorage('timeSpan') == 0 ? 0 : getStorage('timeSpan'),
     commParam = {
@@ -281,6 +277,9 @@ function getCardServerToken(params) {
   }
 }
 
+/**
+ * @return {string}
+ */
 function Today(val) {
   let newDate = val ? new Date(val) : new Date(),
     year = newDate.getFullYear(),
@@ -311,22 +310,26 @@ function lossRate(params) {
 
 // 绑定也访问统计
 function pageRate() {
-  if(checkBrowser() !=='pc'){
+  if (checkBrowser() !== 'pc') {
     let md = new MobileDetect(window.navigator.userAgent);
-    return _post('/accountCenter/v2/user/click-log?' + codeParam({}, 'post'),{
-      mobile_sys:md.os() ,
-      mobile_data:md.mobile(),
-      click_type:2
+    return _post('/accountCenter/v2/user/click-log?' + codeParam({}, 'post'), {
+      mobile_sys: md.os(),
+      mobile_data: md.mobile(),
+      click_type: 2
     })
   }
 }
 
 //app点击统计
-function appRate(type){
-  if(localStorage.getItem("newAppStyle")==="app2"){
-    return _post('/appRateApi/v1/userclicklog/click_log?'+appParam({},'post'),{user_id:getStorage('userInfo', 'obj').account.user_id ,type:type});
+function appRate(type) {
+  if (localStorage.getItem("newAppStyle") === "app2") {
+    return _post('/appRateApi/v1/userclicklog/click_log?' + appParam({}, 'post'), {
+      user_id: getStorage('userInfo', 'obj').account.user_id,
+      type: type
+    });
   }
 }
+
 function encodeUTF8(s) {
   var i, r = [], c, x;
   for (i = 0; i < s.length; i++)
@@ -390,6 +393,9 @@ function sha1(s) {
 }
 
 //减法精度问题
+/**
+ * @return {string}
+ */
 function Subtr(arg1, arg2) {
   var r1, r2, m, n;
   try {
@@ -405,6 +411,15 @@ function Subtr(arg1, arg2) {
   m = Math.pow(10, Math.max(r1, r2));
   n = (r1 >= r2) ? r1 : r2;
   return ((arg1 * m - arg2 * m) / m).toFixed(n);
+}
+
+// 判断移动号码
+function isMobile(phone) {
+  if(!phone) return false;
+  let arr = ['1340','1341','1342','1343','1344','1345','1346','1347','1348', '135', '136', '137', '138', '139', '147','150','151','152','157','158','159','172','178','182','183','184','187','188','198'];
+  let subThree = phone.substr(0, 3);
+  let subFourth = phone.substr(0, 4);
+  return arr.indexOf(subThree) > -1 || arr.indexOf(subFourth) > -1;
 }
 
 export {
@@ -426,5 +441,6 @@ export {
   lossRate,
   pageRate,
   Subtr,
-  appRate
+  appRate,
+  isMobile
 }

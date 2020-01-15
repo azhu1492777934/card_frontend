@@ -105,6 +105,8 @@
       cardButton,
     },
     created() {
+      removeStorage('migu_watch_card');
+      removeStorage('MiGuMusic');
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');
@@ -182,7 +184,7 @@
       }
     },
     methods: {
-      getRealnameType(iccid) {
+      getRealnameType(iccid,is_watch) {
         const toast = Toast({
           duration: 0,
           forbidClick: true
@@ -208,8 +210,9 @@
           lossRate({type: 3, iccid: iccid})
             .then(res => {
               if (res.state === 1) {
+                if(is_watch === 1) setStorage('migu_watch_card',1);
+                setStorage('plan_list_new_card', 1);
                 this.$router.push({path: '/weixin/card/plan_list'});
-                setStorage('plan_list_new_card', 1)
               } else {
                 Notify({message: res.msg});
               }
@@ -289,15 +292,18 @@
             setStorage('new_auth_search_iccid', res.data.iccid);
             removeStorage('plan_list_new_card');
             localStorage.setItem("currentType", "card");
+            if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
+
 
             if (res.data.status === 1) {
+              if(res.data.is_watch === 1) setStorage('migu_watch_card',1);
               this.$router.push({path: '/weixin/card/usage'})
             }
             if (res.data.status === 2) {
               this.toRealname(res.data.iccid, res.data.source);
             }
             if (res.data.status === 3) {
-              this.getRealnameType(res.data.iccid);
+              this.getRealnameType(res.data.iccid,res.data.is_watch);
             }
           } else {
             Notify({
