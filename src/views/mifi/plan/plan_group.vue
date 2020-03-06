@@ -21,13 +21,38 @@
             <p class="plan-name">
               {{ inner_item.name }}
             </p>
+            <div class="plan-label"></div>
             <p class="plan-limited-wrap">
               <span class="limited-num" v-show="inner_item.surplus_times!='False' && inner_item.surplus_times>0">剩{{inner_item.surplus_times}}笔</span>
               <span class="limited-num" v-show="inner_item.is_elb_deductible!=0">可抵扣{{inner_item.max_deductible_elb}}个ELB</span>
             </p>
-            <p class="plan-desc">
+
+            <!-- <p class="plan-desc">
               {{ inner_item.describe ? inner_item.describe:inner_item.remark?inner_item.remark:''}}
-            </p>
+            </p> -->
+            <van-collapse
+              :border="false"
+              class="van-collapse-reset"
+               v-model="activeNames"
+            >
+              <van-collapse-item
+                title="套餐简介"
+                :name="inner_item.id"
+              >
+                <p class="plan-desc">
+                  {{
+                  (inner_item.describe !== 'None' && inner_item.describe)
+                  ?inner_item.describe
+                  :(inner_item.remark !== 'None' && inner_item.remark)
+                  ?inner_item.remark
+                  :'暂无描述'
+                  }}
+                </p>
+              </van-collapse-item>
+            </van-collapse>
+            <!-- <p class="plan-desc">
+              {{ inner_item.describe ? inner_item.describe:inner_item.remark?inner_item.remark:''}}
+            </p> -->
           </div>
 
           <div class="plan-price-wrap">
@@ -41,6 +66,7 @@
           <!--售罄-->
           <span v-if="inner_item.vip_type_id!=0" class="youku"></span>   <!--优酷活动-->
         </li>
+
       </ul>
 
       <div v-if="showNoData">
@@ -140,13 +166,14 @@
 <script>
   import {_get} from "../../../http";
   import {getStorage, setStorage, checkBrowser} from "../../../utilies";
-  import {Popup, Toast, Notify, Dialog,RadioGroup, Radio,DatetimePicker} from 'vant'
+  import {Popup, Toast, Notify, Dialog,RadioGroup, Radio,DatetimePicker, Collapse, CollapseItem} from 'vant'
   import {_post} from "../../../http";
 
   export default {
     name: "plan_group",
     data() {
       return {
+        activeNames: [],
         rechargeShow: false,
         appPay: {
           show: false,
@@ -170,7 +197,8 @@
             values: [],//套餐组
           },
         ],
-        planName: ["累计套餐", "包月套餐", "加油包", "加速包", "国际套餐", "周期性套餐", "超量自动充值套餐"],
+        planName: ["累计套餐", "优质月套餐", "加油包", "加速包", "国际套餐", "合家欢土豪包", "超量自动充值套餐","活动优惠"],
+        //合家欢土豪包 => 周期性套餐  优质月套餐 => 月套餐
         totalPlan: [],
         cur_plan_type_index: 0,
         scrollTop: 0,
@@ -186,6 +214,8 @@
       }
     },
     components: {
+      [Collapse.name]: Collapse,
+      [CollapseItem.name]: CollapseItem,
       [Popup.name]: Popup,
       [Toast.name]: Toast,
       [Dialog.name]: Dialog,
@@ -213,12 +243,26 @@
                 if(res.data[item].length === 1){
                   this.totalPlan[item] = res.data[item]
                 }else{
+
+                                    if(item == 1) {
+                    Object.assign(res.data, { 7: []})
+
+                  }
                   let newArray1 = [], newArray2 = [];
                   newArray1 = res.data[item].filter(item=>item.is_recommend).sort(this.compare2('id'));
                   newArray2 = res.data[item].filter(item=>!item.is_recommend).sort(this.compare2('id'));
                   this.totalPlan[item] = newArray1.concat(newArray2);
                 }
               }
+              
+              //从月套餐中分离出 活动优惠套餐 start
+              for(let item in this.totalPlan){
+                  if(item == 1) {
+                    Object.assign(this.totalPlan, { 7: []})
+                  }
+
+              }
+              // end 活动优惠
 
               for (let item in this.totalPlan) {
                 this.columns[0].values.push({
@@ -244,8 +288,12 @@
                 this.group_list = this.totalPlan[i];
                 this.group_list.length ? this.showNoData = false : this.showNoData = true;
                 this.cur_plan_type_index = i;
+
+                this.activeNames.push(this.group_list[0].id)
+                //this.sortPlan(this.group_list)
                 return this.group_list;
               }
+              
 
             } else {
               this.$store.commit('mifiCommon/changeErrStatus', {
@@ -329,6 +377,8 @@
         this.picker.showPlanSelect = false;
         this.cur_plan_group_name = value.text;
         this.group_list = this.totalPlan[this.picker.choose_plan_id];
+        this.activeNames = [] // 套餐简介折叠
+        this.activeNames.push(this.group_list[0].id)
         this.backTop();
       },
       backTop() {
@@ -486,6 +536,16 @@
       },
       handleScroll() {
         this.scrollTop = this.$refs.innerPlanList.scrollTop;
+      },
+      sortPlan(plan) {
+
+        for( var i=0;i<plan.length;i++){
+          plan[i].index = plan[i].data/(plan[i].day/30)
+        }
+
+        plan.sort(this.compare2('index'))   
+
+   
       }
     },
     mounted() {
@@ -573,7 +633,7 @@
       height: 100%;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
-
+      background: #F5F5F5;
       li {
         position: relative;
         display: flex;
@@ -582,7 +642,21 @@
         border-bottom: 1px solid #efece6;
         background-size: cover;
         box-sizing: border-box;
+        width: 94%;
+        min-height: 95px;
+        margin: 0 auto;
+        color: #868686;
+        border-radius: 10px;
+        margin-bottom: 25px;
+        font-size: 20px;
+        background: #fff;
+        align-items: self-start;
 
+        &:first-child {
+          margin-top: 20px;
+        }
+
+       
         img.recommend {
           position: absolute;
           bottom: 0;
@@ -610,12 +684,17 @@
           font-size: 24px;
 
           .plan-name {
-            padding: 0 0 30px;
-            font-size: 34px;
+            padding: 10px 0 10px 0;
+            font-size: 30px;
             color: #2c251d;
             font-weight: 500;
           }
-
+          .plan-label {
+            width: 68px;
+            height: 4px;
+            margin-bottom: 20px;
+            background: linear-gradient(45deg, #f0b546 10%, #fdd47a 100%);
+          }
           .plan-icon-recommend {
             padding: 20px 0 20px 60px;
           }
@@ -683,6 +762,14 @@
               }
             }
           }
+
+                    // rest vant-collapse
+          .van-collapse-reset {
+            .van-cell__title span,
+            .van-cell__title + i {
+              color: #533606 !important;
+            }
+          }
         }
 
         //售罄状态
@@ -711,6 +798,37 @@
           .icon-sell-done::after {
             content: "已售罄";
           }
+        }
+      }
+
+            // 重置collapse类
+      .van-collapse-reset {
+
+        .van-collapse-item__title {
+          display: block;
+        }
+        .van-cell {
+          width: 200px
+        }
+        .van-cell__title {
+          display: inline-block;
+          font-size: 24px;
+          color: #3E3E3E;
+
+        }
+
+        .van-cell__right-icon {
+          vertical-align: middle;
+        }
+
+        .van-collapse-item__title,
+        .van-collapse-item__content {
+          padding: 0;
+          background: transparent;
+        }
+
+        .van-cell:not(:last-child)::after {
+          border: none;
         }
       }
     }
