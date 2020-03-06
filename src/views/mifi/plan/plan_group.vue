@@ -243,11 +243,6 @@
                 if(res.data[item].length === 1){
                   this.totalPlan[item] = res.data[item]
                 }else{
-
-                                    if(item == 1) {
-                    Object.assign(res.data, { 7: []})
-
-                  }
                   let newArray1 = [], newArray2 = [];
                   newArray1 = res.data[item].filter(item=>item.is_recommend).sort(this.compare2('id'));
                   newArray2 = res.data[item].filter(item=>!item.is_recommend).sort(this.compare2('id'));
@@ -255,14 +250,7 @@
                 }
               }
               
-              //从月套餐中分离出 活动优惠套餐 start
-              for(let item in this.totalPlan){
-                  if(item == 1) {
-                    Object.assign(this.totalPlan, { 7: []})
-                  }
-
-              }
-              // end 活动优惠
+   
 
               for (let item in this.totalPlan) {
                 this.columns[0].values.push({

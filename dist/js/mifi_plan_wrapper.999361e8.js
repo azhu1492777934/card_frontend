@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["mifi_plan_wrapper"],{"01a9":function(e,n,a){},"09b5":function(e,n,a){"use strict";var r=a("01a9"),t=a.n(r);t.a},"3e1b":function(e,n,a){"use strict";a.r(n);var r=function(){var e=this,n=e.$createElement,a=e._self._c||n;return a("router-view")},t=[],p={name:"plan_wrapper"},i=p,u=(a("09b5"),a("2877")),o=Object(u["a"])(i,r,t,!1,null,"77be437f",null);o.options.__file="plan_wrapper.vue";n["default"]=o.exports}}]);
+//# sourceMappingURL=mifi_plan_wrapper.999361e8.js.map
