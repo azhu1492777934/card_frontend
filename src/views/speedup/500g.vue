@@ -43,33 +43,46 @@
         open_id: '',
         iccid: '',
         client_type: checkBrowser(),
-        list: [{
-          name: '30G加速包',
-          flow: 30,
-          price: 57.00,
-          rating_id: '2530'
+        list: [
+        //   {
+        //   name: '30G加速包',
+        //   flow: 30,
+        //   price: 57.00,
+        //   rating_id: '2530'
 
-        }, {
-          name: '20G加速包',
-          flow: 20,
-          price: 38.00,
-          rating_id: '2531'
-        }, {
+        // }, {
+        //   name: '20G加速包',
+        //   flow: 20,
+        //   price: 38.00,
+        //   rating_id: '2531'
+        // }, {
+        //   name: '10G加速包',
+        //   flow: 10,
+        //   price: 19.00,
+        //   rating_id: '2532'
+        // }, {
+        //   name: '5G加速包',
+        //   flow: 5,
+        //   price: 9.50,
+        //   rating_id: '2533'
+        // }, {
+        //   name: '1G加速包',
+        //   flow: 1,
+        //   price: 1.90,
+        //   rating_id: '2534'
+        // }
+        {
           name: '10G加速包',
-          flow: 10,
-          price: 19.00,
-          rating_id: '2532'
-        }, {
-          name: '5G加速包',
-          flow: 5,
-          price: 9.50,
-          rating_id: '2533'
-        }, {
-          name: '1G加速包',
           flow: 1,
-          price: 1.90,
-          rating_id: '2534'
-        }],
+          price: 29.0,
+          rating_id: '52918'
+        },{
+          name: '20G加速包 ',
+          flow: 1,
+          price: 39.0,
+          rating_id: '52919'
+        }
+        ],
 
         speedupAppPay: {
           show: false,

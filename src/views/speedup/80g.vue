@@ -43,17 +43,30 @@
         open_id: '',
         iccid: '',
         client_type: checkBrowser(),
-        list: [{
-          name: '30G加速包',
-          flow: 30,
-          price: 50.00,
-          rating_id: '2870'
-        }, {
-          name: '5G加速包',
-          flow: 5,
-          price: 9.50,
-          rating_id: '2533'
-        }],
+        list: [
+        //   {
+        //   name: '30G加速包',
+        //   flow: 30,
+        //   price: 50.00,
+        //   rating_id: '2870'
+        // }, {
+        //   name: '5G加速包',
+        //   flow: 5,
+        //   price: 9.50,
+        //   rating_id: '2533'
+        // }
+        {
+          name: '10G加速包',
+          flow: 1,
+          price: 29.0,
+          rating_id: '52918'
+        },{
+          name: '20G加速包 ',
+          flow: 1,
+          price: 39.0,
+          rating_id: '52919'
+        }
+        ],
         speedupAppPay: {
           show: false,
           type: true,//true 为微信，false 为支付宝
