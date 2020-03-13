@@ -57,14 +57,20 @@
         // }
         {
           name: '10G加速包',
-          flow: 1,
+          flow: 30,
           price: 29.0,
           rating_id: '52918'
         },{
-          name: '20G加速包 ',
-          flow: 1,
+          name: '20G加速包',
+          flow: 20,
           price: 39.0,
           rating_id: '52919'
+        },
+        {
+          name: '30G加速包',
+          flow: 10,
+          price: 49.0,
+          rating_id: '53231'
         }
         ],
         speedupAppPay: {

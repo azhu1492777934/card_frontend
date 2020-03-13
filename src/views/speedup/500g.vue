@@ -77,10 +77,15 @@
           price: 29.0,
           rating_id: '52918'
         },{
-          name: '20G加速包 ',
+          name: '20G加速包',
           flow: 1,
           price: 39.0,
           rating_id: '52919'
+        },{
+          name: '30G加速包',
+          flow: 10,
+          price: 49.0,
+          rating_id: '53231'
         }
         ],
 
