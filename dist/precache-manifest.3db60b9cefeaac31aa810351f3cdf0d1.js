@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/js/userCenterWrap.140f6840.js"
   },
   {
-    "revision": "77e0b4266f161c6f404e",
-    "url": "/js/app.caefc7ea.js"
+    "revision": "964d6b2c9338dcc08e80",
+    "url": "/js/app.d36432f9.js"
   },
   {
     "revision": "52b3b5a4ba6b408f336d",
@@ -60,16 +60,16 @@ self.__precacheManifest = [
     "url": "/js/cardPackage.310dcc34.js"
   },
   {
-    "revision": "6485d987f175d8193c2a",
-    "url": "/js/speedup_80.041d21dd.js"
+    "revision": "5fc96f6e4f2e3b364209",
+    "url": "/js/speedup_80.2c95a185.js"
   },
   {
     "revision": "4c7ed2f0a5e47935aac5",
     "url": "/js/card_check.8e375806.js"
   },
   {
-    "revision": "67e8f98672bbf2f1c66d",
-    "url": "/js/speedup_500.903991ac.js"
+    "revision": "0955123163719c46c19a",
+    "url": "/js/speedup_500.623c9ba7.js"
   },
   {
     "revision": "85daa599a0701ed1bc2a",
@@ -100,8 +100,8 @@ self.__precacheManifest = [
     "url": "/js/card_usage.fc2e0ac2.js"
   },
   {
-    "revision": "591cf34dcd9474c52011",
-    "url": "/js/refund_plan.13f9d182.js"
+    "revision": "f430672bed3c11cc902d",
+    "url": "/js/refund_plan.0718268c.js"
   },
   {
     "revision": "4921167410515a5741cb",
@@ -148,8 +148,8 @@ self.__precacheManifest = [
     "url": "/js/chunk-vendors.6a1799b5.js"
   },
   {
-    "revision": "3fdf035789d3eae2e0f7",
-    "url": "/js/rechargeOrder.a7c106d8.js"
+    "revision": "e8f15ee944bbcfd4be88",
+    "url": "/js/rechargeOrder.1bf47a90.js"
   },
   {
     "revision": "ecae8e24008591a64fe8",
@@ -204,8 +204,8 @@ self.__precacheManifest = [
     "url": "/js/currencyConversion.c22cd70d.js"
   },
   {
-    "revision": "11c186a5e42ccfc9736d",
-    "url": "/js/orderRecord.a584d65d.js"
+    "revision": "44529b9400367679db87",
+    "url": "/js/orderRecord.2ae53ef0.js"
   },
   {
     "revision": "dae822416c4faeb29494",
@@ -320,7 +320,7 @@ self.__precacheManifest = [
     "url": "/css/mifi_change_network.3299a9ba.css"
   },
   {
-    "revision": "f1e25d18d12d687014d2fb54ca92594a",
+    "revision": "abf16194054dd608fb7cd2018268c5ea",
     "url": "/index.html"
   },
   {
@@ -412,8 +412,8 @@ self.__precacheManifest = [
     "url": "/img/08.b0ffa4a0.png"
   },
   {
-    "revision": "11c186a5e42ccfc9736d",
-    "url": "/css/orderRecord.8ba37cf6.css"
+    "revision": "44529b9400367679db87",
+    "url": "/css/orderRecord.e3815bdc.css"
   },
   {
     "revision": "34c67f6dfdb0ecc17c7a221aec74706f",
@@ -468,7 +468,7 @@ self.__precacheManifest = [
     "url": "/img/03.165beb68.png"
   },
   {
-    "revision": "3fdf035789d3eae2e0f7",
+    "revision": "e8f15ee944bbcfd4be88",
     "url": "/css/rechargeOrder.69857186.css"
   },
   {
@@ -524,7 +524,7 @@ self.__precacheManifest = [
     "url": "/img/2.7c28431d.png"
   },
   {
-    "revision": "591cf34dcd9474c52011",
+    "revision": "f430672bed3c11cc902d",
     "url": "/css/refund_plan.04b37d38.css"
   },
   {
@@ -556,7 +556,7 @@ self.__precacheManifest = [
     "url": "/img/scanTop2.3603a35a.png"
   },
   {
-    "revision": "67e8f98672bbf2f1c66d",
+    "revision": "0955123163719c46c19a",
     "url": "/css/speedup_500.76da9141.css"
   },
   {
@@ -564,7 +564,7 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
-    "revision": "6485d987f175d8193c2a",
+    "revision": "5fc96f6e4f2e3b364209",
     "url": "/css/speedup_80.51fe9728.css"
   },
   {
@@ -728,6 +728,10 @@ self.__precacheManifest = [
     "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
     "revision": "fa855242805b87da42c65763acd64ac0",
     "url": "/img/bg-plan-type@2x.fa855242.png"
   },
@@ -776,10 +780,6 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
-  },
-  {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
     "url": "/img/noData@3x.f40c7e0b.png"
   },
@@ -812,16 +812,16 @@ self.__precacheManifest = [
     "url": "/img/pkgBg3.d461d18e.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
     "revision": "6dedd4943e4c5848638196fb6f0c4145",
     "url": "/img/bg.6dedd494.png"
   },
   {
     "revision": "0078f03c08066d51d64b92a13e194ebb",
     "url": "/img/balanceRefund.0078f03c.png"
+  },
+  {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
@@ -840,7 +840,7 @@ self.__precacheManifest = [
     "url": "/css/coupon_telcom.0749aa31.css"
   },
   {
-    "revision": "77e0b4266f161c6f404e",
+    "revision": "964d6b2c9338dcc08e80",
     "url": "/css/app.15f7a604.css"
   },
   {
