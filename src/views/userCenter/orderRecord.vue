@@ -6,13 +6,13 @@
           v-model="searchValue"
           placeholder="请输入要查询的手表手机号"
           shape="round"
-          @search="onSearch"
-          @cancel="onCancel"
-          @clear="onSearch"
+          @search="onSearch()"
+          @cancel="onCancel()"
+          @clear="onSearch()"
         >
           <div slot="left-icon"></div>
         </van-search>
-        <b @click="onSearch"></b>
+        <b @click="onSearch()"></b>
       </form>
     </div>
 
@@ -60,7 +60,7 @@
             </div>
             <div class="planTime">
               <div>下单时间：{{item.paid_at}}</div>
-              <div @click="showMe(item.id)" v-if="item.refund==0&&item.status==1||item.refund==0&&item.status==2">申请退款
+              <div @click="showMe(item)" v-if="item.refund==0&&item.status==1||item.refund==0&&item.status==2">申请退款
               </div>
 
             </div>
@@ -274,10 +274,56 @@
           this.list = [];
         }
       },
+      today(){
+        var today=new Date();
+        var str="";
+        str+=today.getFullYear()+"-";
+        var month=today.getMonth()+1;
+        if(month<10){
+            str+="0";
+        }
+        str+=month+"-";
+        var day=today.getDate();
+        if(day<10){
+            str+="0";
+        }
+        str+=day;
+        return str;
+      },
+      daysDistance(date1, date2) {     
+
+          date1 = Date.parse(date1);
+          date2 = Date.parse(date2);
+          //计算两个日期之间相差的毫秒数的绝对值
+          let distance= Math.abs(date2 - date1);
+          //毫秒数除以一天的毫秒数,就得到了天数
+          let days = Math.floor(distance / (24 * 3600 * 1000));
+          
+          if(days<=90) {
+            return true
+          }
+          return false
+
+      },
+
       //退款
-      showMe(id) {
+      showMe(item) {
+        if(!this.daysDistance(item.paid_at, this.today())){
+          Dialog.confirm({
+            message: '充值时间超过三个月不可退款',
+            confirmButtonText:"客服",
+            cancelButtonText:"取消",
+            className:"shitDialog"
+          }).then(() => {
+            // on confirm
+            window.location.href = 'https://ykf-webchat.7moor.com/wapchat.html?accessId=505a9e80-2075-11ea-9c67-676d79fbc218&fromUrl=&urlTitle='
+          }).catch(() => {
+            
+          })
+          return
+        }
         this.showRefund = true;
-        this.currentId = id;
+        this.currentId = item.id;
         this.refundInfo = {
           brand: '',
           model: '',
@@ -388,7 +434,7 @@
         background: url("../../assets/imgs/userCenter/search.png") no-repeat;
         background-size: 100% 100%;
         position: absolute;
-        top: 30px;
+        top: 35px;
         right: 60px;
       }
 

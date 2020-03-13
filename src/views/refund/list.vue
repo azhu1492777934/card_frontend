@@ -40,7 +40,7 @@
             <div class="footer">
               <p>{{item.no}}</p>
               <p>
-                <span class="refund-apply" @click="btnRefund(index)" v-if="item.refund==0">申请退款</span>
+                <span class="refund-apply" @click="btnRefund(index, item)" v-if="item.refund==0">申请退款</span>
                 <span class="refunding" v-if="item.refund==1">退款中</span>
                 <span class="refund-finished" v-if="item.refund==2">退款完成</span>
                 <span class="refund-failed" v-if="item.refund==3">退款失败</span>
@@ -163,7 +163,7 @@
   // @ is an alias to /src
   import {_post, _get} from "../../http";
   import {getStorage, setStorage} from "../../utilies";
-  import {Notify, PullRefresh, List, Popup} from "vant";
+  import {Notify, PullRefresh, List, Popup, Dialog} from "vant";
   import cardButton from "../../components/button";
 
   import {mapState} from 'vuex'
@@ -283,13 +283,59 @@
         })
 
       },
-      btnRefund(index) {
+      btnRefund(index, item) {
+        if(!this.daysDistance(item.created_at, this.today())){
+      
+          Dialog.confirm({
+            message: '充值时间超过三个月不可退款',
+            confirmButtonText:"客服",
+            cancelButtonText:"取消",
+            className:"shitDialog"
+          }).then(() => {
+            // on confirm
+            window.location.href = 'https://ykf-webchat.7moor.com/wapchat.html?accessId=505a9e80-2075-11ea-9c67-676d79fbc218&fromUrl=&urlTitle='
+          }).catch(() => {
+            
+          })
+          return
+        }
         //存储订单id
         let refundOrderId = this.refundList[index];
         setStorage('refundPayType', refundOrderId.pay_type);
         setStorage('refundOrderId', refundOrderId.order_id);
         this.$router.push({path: '/weixin/refund/applying'})
-      }
+      },
+      today(){
+        var today=new Date();
+        var str="";
+        str+=today.getFullYear()+"-";
+        var month=today.getMonth()+1;
+        if(month<10){
+            str+="0";
+        }
+        str+=month+"-";
+        var day=today.getDate();
+        if(day<10){
+            str+="0";
+        }
+        str+=day;
+        return str;
+      },
+      daysDistance(date1, date2) {     
+
+        date1 = Date.parse(date1);
+        date2 = Date.parse(date2);
+        //计算两个日期之间相差的毫秒数的绝对值
+        let distance= Math.abs(date2 - date1);
+        //毫秒数除以一天的毫秒数,就得到了天数
+        let days = Math.floor(distance / (24 * 3600 * 1000));
+        
+        if(days<=90) {
+          return true
+        }
+        return false
+
+      },
     }
   };
 </script>

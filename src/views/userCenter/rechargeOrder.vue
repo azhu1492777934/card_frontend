@@ -16,8 +16,15 @@
                 <span v-show="item.balance&&item.balance>0">赠送{{item.balance}}元余额</span>
                 <span  v-if="item.refund==2&&item.refundAbleAmount<=0">已退款</span>
                 <span v-if="item.refund==1">退款中</span>
-                <span v-if="item.refund==0&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0||item.refund==4&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0||
-                  global_variables.packed_project=='mifi'&&active==3&&item.refund==0||global_variables.packed_project=='mifi'&&active==3&&item.refund==4" @click="showRefund(item)">申请退款</span>
+
+                <span v-if="item.refund==0&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0
+                  ||item.refund==4&&item.refundAbleAmount>0&&active==3&&authorizedUserInfo.account.balance>0
+                  ||global_variables.packed_project=='mifi'&&active==3&&item.refund==0
+                  ||global_variables.packed_project=='mifi'&&active==3&&item.refund==4"
+                  @click="showRefund(item)"
+                  >申请退款
+                </span>
+
                 
               </div>
               <div>
@@ -173,6 +180,20 @@
           },
 
           showRefund(data){
+            if(!this.daysDistance(data.created_at, this.today())){
+              Dialog.confirm({
+                message: '充值时间超过三个月不可退款',
+                confirmButtonText:"客服",
+                cancelButtonText:"取消",
+                className:"shitDialog"
+              }).then(() => {
+                // on confirm
+                window.location.href = 'https://iotmanager.china-m2m.com/v1/qrcode/jump?business_type=WX_M2M'
+              }).catch(() => {
+                
+              })
+              return
+            }
             this.currentInfo=data;
             let msg="";
             if(this.global_variables.packed_project=='mifi'){
@@ -233,6 +254,41 @@
                 })
               }
           },
+
+          today(){
+            var today=new Date();
+            var str="";
+            str+=today.getFullYear()+"-";
+            var month=today.getMonth()+1;
+            if(month<10){
+                str+="0";
+            }
+            str+=month+"-";
+            var day=today.getDate();
+            if(day<10){
+                str+="0";
+            }
+            str+=day;
+            return str;
+          },
+          daysDistance(date1, date2) {     
+    
+              date1 = Date.parse(date1);
+              date2 = Date.parse(date2);
+              //计算两个日期之间相差的毫秒数的绝对值
+              let distance= Math.abs(date2 - date1);
+              //毫秒数除以一天的毫秒数,就得到了天数
+              let days = Math.floor(distance / (24 * 3600 * 1000));
+              
+              if(days<=90) {
+                return true
+              }
+              return false
+
+          },
+
+
+
 
            
         },
