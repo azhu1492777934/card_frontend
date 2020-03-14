@@ -287,6 +287,15 @@
             setStorage('watchAutoSearch', autoCount);
           }
           if (res.state === 1) {
+
+            //奇宇卡控制
+            if(res.data.is_qiyu === 1 ) {
+              Notify({
+                message: '此卡不属于物联网通信运营商'
+              });
+              return
+            }
+
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);

@@ -173,6 +173,14 @@
           }
 
           if (res.state === 1) {
+
+            //奇宇卡控制
+            if(res.data.is_qiyu === 1 ) {
+              Notify({
+                message: '此卡不属于物联网M2M服务平台'
+              });
+              return
+            }
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);
 
