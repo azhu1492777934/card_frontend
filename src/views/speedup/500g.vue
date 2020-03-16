@@ -18,8 +18,8 @@
 
 <style lang="less">
   .speedup-wrap-parent, .speedup-wrap {
-    height: 100%;
-    min-height: 100%
+    height: 90%;
+
   }
 </style>
 
@@ -83,7 +83,7 @@
           rating_id: '52919'
         },{
           name: '30G加速包',
-          flow: 10,
+          flow: 1,
           price: 49.0,
           rating_id: '53231'
         }
