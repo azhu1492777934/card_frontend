@@ -24,7 +24,7 @@
 
 <script>
     import { setStorage, getStorage,getUrlParam,codeParam} from "../../utilies";
-    import { Search,List,Cell } from 'vant';
+    import { Search,List,Cell, Notify } from 'vant';
     import {_post, _get} from "../../http";
 
     export default {
