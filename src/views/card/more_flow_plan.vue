@@ -143,6 +143,7 @@
       noData
     },
     created() {
+
       _get("/api/v1/app/cards/plan/usage", {
         iccid: getStorage("check_iccid")
       }).then(res => {
@@ -206,7 +207,7 @@
           start_time: Today(),
           band_rating_id: this.choose_plan_info.id,
           band_order_id: this.choose_plan_info.order_id,
-          success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback`,
+          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
           failed_page: window.location.href
         };
         if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;

@@ -463,7 +463,7 @@
           start_time: this.valDate,
           type: 1,
           failed_page: window.location.href,
-          success_page: window.location.protocol + '//' + `${window.location.host}/weixin/recharge/callback`
+          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`
         };
 
         if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid;

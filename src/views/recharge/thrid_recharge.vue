@@ -308,7 +308,7 @@
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type:  0,
           failed_page: window.location.href,
-          success_page: window.location.protocol+'//'+`${window.location.host}/weixin/recharge/callback`
+          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`
         };
 
         if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
