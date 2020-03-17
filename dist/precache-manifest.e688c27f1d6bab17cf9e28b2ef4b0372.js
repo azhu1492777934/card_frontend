@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/js/userCenterWrap.140f6840.js"
   },
   {
-    "revision": "bb0d543fe83e4b929651",
-    "url": "/js/app.5c0b495f.js"
+    "revision": "33e5a2faeee2a214484d",
+    "url": "/js/app.90aa6b7c.js"
   },
   {
     "revision": "e8d6824e06a4bc16d461",
@@ -60,16 +60,16 @@ self.__precacheManifest = [
     "url": "/js/cardPackage.310dcc34.js"
   },
   {
-    "revision": "00f977b89e895d8d62c1",
-    "url": "/js/speedup_80.a9e0b523.js"
+    "revision": "207219eda3c34cf78fe6",
+    "url": "/js/speedup_80.bf9c4669.js"
   },
   {
     "revision": "52d9556d637a6960ff59",
     "url": "/js/card_check.d3980c69.js"
   },
   {
-    "revision": "66a94b55f7bde05ab84c",
-    "url": "/js/speedup_500.7d261bcd.js"
+    "revision": "2da631438e6624d9f98e",
+    "url": "/js/speedup_500.0f702518.js"
   },
   {
     "revision": "a43e4557c4eddaf6086f",
@@ -320,7 +320,7 @@ self.__precacheManifest = [
     "url": "/css/mifi_change_network.3299a9ba.css"
   },
   {
-    "revision": "caf902c18e5f809e0117311774a7b448",
+    "revision": "11a4b3a9399508a90412489067e81fdf",
     "url": "/index.html"
   },
   {
@@ -556,7 +556,7 @@ self.__precacheManifest = [
     "url": "/img/scanTop2.3603a35a.png"
   },
   {
-    "revision": "66a94b55f7bde05ab84c",
+    "revision": "2da631438e6624d9f98e",
     "url": "/css/speedup_500.9a0a827a.css"
   },
   {
@@ -564,7 +564,7 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
-    "revision": "00f977b89e895d8d62c1",
+    "revision": "207219eda3c34cf78fe6",
     "url": "/css/speedup_80.bf3bc527.css"
   },
   {
@@ -676,20 +676,20 @@ self.__precacheManifest = [
     "url": "/img/bg_network@2x.32d70c8f.png"
   },
   {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
-  },
-  {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
     "revision": "f5f322478286641bd9887a155e35f222",
     "url": "/img/btn.f5f32247.png"
   },
   {
     "revision": "d140650fa64e0f1fc771610dba62aed7",
     "url": "/img/bg.d140650f.png"
+  },
+  {
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
+  },
+  {
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
   },
   {
     "revision": "cc0636ca2944024fd3ebf33a5412ff35",
@@ -728,6 +728,14 @@ self.__precacheManifest = [
     "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
+    "revision": "fa855242805b87da42c65763acd64ac0",
+    "url": "/img/bg-plan-type@2x.fa855242.png"
+  },
+  {
+    "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
+    "url": "/img/bg-plan-type@3x.4a9ca192.png"
+  },
+  {
     "revision": "1d7515ee61c3f659227318b4050955ed",
     "url": "/img/mobile_sim@2x.1d7515ee.png"
   },
@@ -748,14 +756,6 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
-    "revision": "fa855242805b87da42c65763acd64ac0",
-    "url": "/img/bg-plan-type@2x.fa855242.png"
-  },
-  {
-    "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
-    "url": "/img/bg-plan-type@3x.4a9ca192.png"
-  },
-  {
     "revision": "3d0fc424b703032ca595090e99f8354b",
     "url": "/img/login_bg@2x.3d0fc424.png"
   },
@@ -768,6 +768,14 @@ self.__precacheManifest = [
     "url": "/img/activityPage.014d354b.png"
   },
   {
+    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
+    "url": "/img/noData@3x.f40c7e0b.png"
+  },
+  {
+    "revision": "644e6e3cf5f33943747b116316694e28",
+    "url": "/img/noData@2x.644e6e3c.png"
+  },
+  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
@@ -778,14 +786,6 @@ self.__precacheManifest = [
   {
     "revision": "01355f175bd20423ce45a838c1a998a9",
     "url": "/img/bg.01355f17.png"
-  },
-  {
-    "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
-    "url": "/img/noData@3x.f40c7e0b.png"
-  },
-  {
-    "revision": "644e6e3cf5f33943747b116316694e28",
-    "url": "/img/noData@2x.644e6e3c.png"
   },
   {
     "revision": "91e1d2771efacd45e5e465d9a001f197",
@@ -840,7 +840,7 @@ self.__precacheManifest = [
     "url": "/css/coupon_telcom.0749aa31.css"
   },
   {
-    "revision": "bb0d543fe83e4b929651",
+    "revision": "33e5a2faeee2a214484d",
     "url": "/css/app.15f7a604.css"
   },
   {

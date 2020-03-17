@@ -134,7 +134,10 @@
           price: this.list[speedupIndex].price,
           user_id: this.userInfo.account.user_id,
           open_id: this.open_id,
-          env: this.client_type
+          env: this.client_type,
+          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
+          failed_page: window.location.href
         };
 
         if (this.client_type === 'app') {
