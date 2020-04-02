@@ -195,13 +195,6 @@ export const constantRouterMap = [{
             requireAuth: true,
           }
         }, {
-          path: 'find_plan',
-          component: find_plan,
-          meta: {
-            title: '找回套餐',
-            requireAuth: true,
-          }
-        }, {
           path: 'revoke_plan',
           component: revoke_plan,
           meta: {
