@@ -3,20 +3,17 @@
     <p class="title">问题中心</p>
     <ul>
       <li>
-        <a   @click="q1()">1.套餐充值成功，流量通话未增加</a>
-      </li>
-      <li>
-        <a  @click="q2()">2.流量通话显示正常，但无法使用</a>
+        <a  @click="q2()">1.流量通话显示正常，但无法使用</a>
       </li>
       <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
-        <a @click="toRefund" href="javascript:;">3.套餐退款</a>
+        <a @click="toRefund" href="javascript:;">2.套餐退款</a>
       </li>
       <li>
-        <a  @click="q3()"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">4</span>.解约自动续费套餐</a>
+        <a  @click="q3()"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">2</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">3</span>.解约自动续费套餐</a>
       </li>
      
      <li v-if="global_variables.packed_project=='mifi'">
-        <router-link to="/weixin/userCenter/rechargeOrder">4.订单退款</router-link>
+        <router-link to="/weixin/userCenter/rechargeOrder">3.订单退款</router-link>
       </li>
     </ul>
   </div>
