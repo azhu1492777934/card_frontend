@@ -1017,6 +1017,8 @@
               message: res.msg
             });
             this.initial();
+          }else if (res.state === 0 && res.msg.includes('该套餐已限速')){ //前端不显示提示语该套餐限速
+            this.priorityShow = false;
           } else {
             this.priorityShow = false;
             Notify({
