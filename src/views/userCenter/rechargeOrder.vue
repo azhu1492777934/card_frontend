@@ -180,7 +180,7 @@
           },
 
           showRefund(data){
-            if(!this.daysDistance(data.created_at, this.today())){
+            if(!this.daysDistance(data.paid_at, this.today())){
               Dialog.confirm({
                 message: '充值时间超过三个月不可退款',
                 confirmButtonText:"客服",
@@ -273,14 +273,14 @@
           },
           daysDistance(date1, date2) {     
     
-              date1 = Date.parse(date1);
-              date2 = Date.parse(date2);
+              date1 = Date.parse(date1.replace(/-/g, '/'));
+              date2 = Date.parse(date2.replace(/-/g, '/'));
               //计算两个日期之间相差的毫秒数的绝对值
               let distance= Math.abs(date2 - date1);
               //毫秒数除以一天的毫秒数,就得到了天数
               let days = Math.floor(distance / (24 * 3600 * 1000));
               
-              if(days<=90) {
+              if(days<=90 || days == "NaN") {
                 return true
               }
               return false
