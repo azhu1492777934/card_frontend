@@ -24,8 +24,8 @@ self.__precacheManifest = [
     "url": "/js/userCenterWrap.140f6840.js"
   },
   {
-    "revision": "46ec98ee654428b8c032",
-    "url": "/js/app.1bbde401.js"
+    "revision": "5f270f2d94a46153e2bf",
+    "url": "/js/app.ab5eef7d.js"
   },
   {
     "revision": "e8d6824e06a4bc16d461",
@@ -320,7 +320,7 @@ self.__precacheManifest = [
     "url": "/css/mifi_change_network.3299a9ba.css"
   },
   {
-    "revision": "ebc0b07bc9bc35db2693141a3c7710c2",
+    "revision": "8f4907a06396045a06a63e2b4e47454d",
     "url": "/index.html"
   },
   {
@@ -692,6 +692,26 @@ self.__precacheManifest = [
     "url": "/img/android@2x.af8bbdfa.png"
   },
   {
+    "revision": "1d7515ee61c3f659227318b4050955ed",
+    "url": "/img/mobile_sim@2x.1d7515ee.png"
+  },
+  {
+    "revision": "0f980b79d9a52702004de9f652a68835",
+    "url": "/img/telcom_sim@2x.0f980b79.png"
+  },
+  {
+    "revision": "98141226a7e992e3072a280746a259c4",
+    "url": "/img/mobile_sim@3x.98141226.png"
+  },
+  {
+    "revision": "0c88168b284b92c37f3a873f26a97d69",
+    "url": "/img/bg.0c88168b.jpg"
+  },
+  {
+    "revision": "9e02095f31a07b972244f1c714c1dfe7",
+    "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
     "revision": "cc0636ca2944024fd3ebf33a5412ff35",
     "url": "/img/icon-right@3x.cc0636ca.png"
   },
@@ -728,26 +748,6 @@ self.__precacheManifest = [
     "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
-    "revision": "1d7515ee61c3f659227318b4050955ed",
-    "url": "/img/mobile_sim@2x.1d7515ee.png"
-  },
-  {
-    "revision": "0f980b79d9a52702004de9f652a68835",
-    "url": "/img/telcom_sim@2x.0f980b79.png"
-  },
-  {
-    "revision": "98141226a7e992e3072a280746a259c4",
-    "url": "/img/mobile_sim@3x.98141226.png"
-  },
-  {
-    "revision": "0c88168b284b92c37f3a873f26a97d69",
-    "url": "/img/bg.0c88168b.jpg"
-  },
-  {
-    "revision": "9e02095f31a07b972244f1c714c1dfe7",
-    "url": "/img/telcom_sim@3x.9e02095f.png"
-  },
-  {
     "revision": "fa855242805b87da42c65763acd64ac0",
     "url": "/img/bg-plan-type@2x.fa855242.png"
   },
@@ -764,10 +764,6 @@ self.__precacheManifest = [
     "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
@@ -776,16 +772,20 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
-  },
-  {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
     "url": "/img/noData@3x.f40c7e0b.png"
   },
   {
     "revision": "644e6e3cf5f33943747b116316694e28",
     "url": "/img/noData@2x.644e6e3c.png"
+  },
+  {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "91e1d2771efacd45e5e465d9a001f197",
@@ -812,20 +812,20 @@ self.__precacheManifest = [
     "url": "/img/pkgBg3.d461d18e.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
     "revision": "6dedd4943e4c5848638196fb6f0c4145",
     "url": "/img/bg.6dedd494.png"
   },
   {
-    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
-    "url": "/img/changeBg.af3ed0b3.png"
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
   },
   {
     "revision": "0078f03c08066d51d64b92a13e194ebb",
     "url": "/img/balanceRefund.0078f03c.png"
+  },
+  {
+    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
+    "url": "/img/changeBg.af3ed0b3.png"
   },
   {
     "revision": "d0ccbc8a35180bb40e027b44dd26035a",
@@ -840,7 +840,7 @@ self.__precacheManifest = [
     "url": "/css/coupon_telcom.0749aa31.css"
   },
   {
-    "revision": "46ec98ee654428b8c032",
+    "revision": "5f270f2d94a46153e2bf",
     "url": "/css/app.15f7a604.css"
   },
   {
