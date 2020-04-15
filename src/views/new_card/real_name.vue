@@ -25,7 +25,7 @@
       </div>
       <div>
         <span>手机号</span>
-        <input v-model="info_phone" placeholder="请输入手机号接收验证码" type="number">
+        <input v-model="info_phone" :placeholder="isPhoneMifi=='mifi'?'请输入手机号接收验证码':'请输入家长手机号接收验证码'" type="number">
       </div>
       <div class="code-wrap">
         <input v-model="info_code" placeholder="请输入验证码" type="number">
@@ -103,6 +103,7 @@
 
         timer: null,
         disabled_code: false,
+        isPhoneMifi: '' //判别mifi
       }
     },
     components: {
@@ -112,24 +113,25 @@
     created() {
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
-      if (getUrlParam('iccid')) {
-        this.info_iccid = getUrlParam('iccid');
-      } else {
-        if (getStorage('check_iccid')) {
-          this.info_iccid = getStorage('check_iccid');
-        } else {
-          this.$router.push({'path': '/weixin/card/lookup'});
-        }
-      }
-      if (getUrlParam('source')) {
-        this.card_source = getUrlParam('source');
-      } else {
-        if (getStorage('check_realNameSource')) {
-          this.card_source = getStorage('check_realNameSource');
-        } else {
-          this.$router.push({'path': '/weixin/card/lookup'});
-        }
-      }
+      this.isPhoneMifi = this.$route.query.from
+      // if (getUrlParam('iccid')) {
+      //   this.info_iccid = getUrlParam('iccid');
+      // } else {
+      //   if (getStorage('check_iccid')) {
+      //     this.info_iccid = getStorage('check_iccid');
+      //   } else {
+      //     this.$router.push({'path': '/weixin/card/lookup'});
+      //   }
+      // }
+      // if (getUrlParam('source')) {
+      //   this.card_source = getUrlParam('source');
+      // } else {
+      //   if (getStorage('check_realNameSource')) {
+      //     this.card_source = getStorage('check_realNameSource');
+      //   } else {
+      //     this.$router.push({'path': '/weixin/card/lookup'});
+      //   }
+      // }
 
       if (inArray(this.card_source, ['18', '19', '20', '21', '22', '27']) >= 0) {
         this.card_tip = !this.card_tip
