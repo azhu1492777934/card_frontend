@@ -1,6 +1,6 @@
 <template>
     <div class="rechargeOrder" >
-      <van-tabs v-model="active"  color="#2675ea" @click="getList" :swipe-threshold="3" >
+      <van-tabs v-model="active"  color="#2675ea" @click="getList" :swipe-threshold="4" >
           <van-tab :title="item.title" v-for="(item,index) in list" v-bind:key="index">
             <van-list
             v-model="loading"
@@ -70,7 +70,7 @@
     export default {
         data() {
             return {
-               list:[{title:"全部"},{title:"已支付"},{title:"已退款"}],
+               list:[{title:"全部"},{title:"已支付"},{title:"已退款"},{title:"申请退款"}],
                active:0,
                loading: false,
               finished: false,
@@ -133,18 +133,13 @@
                         refundList.push(data[i]);
                       }
                     }
-                    if(refundList.length>0&&this.list.length<4){
-                      this.list.push({title:"申请退款"})
-                    }
                   }else{
                     for(let i=0;i<data.length;i++){
                       if(parseFloat(data[i].refundAbleAmount)>0){
                         refundList.push(data[i]);
                       }
                     }
-                    if(refundList.length>0&&this.list.length<4&&this.authorizedUserInfo.account.balance>0){
-                      this.list.push({title:"申请退款"})
-                    }
+
                     
                   }
 
@@ -303,7 +298,7 @@
   background:#F1F1F1;
   min-height:100%;
   .van-tab{
-    flex-basis:35.3333% !important;
+    // flex-basis:35.3333% !important;
   }
   .orderContent{
     width:694px;
