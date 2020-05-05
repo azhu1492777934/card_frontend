@@ -1,8 +1,8 @@
 <template>
   <div class="recharge-wrap">
-    <div class="recharge-tip">
+    <!-- <div class="recharge-tip">
       <p>充值活动：充值余额送ELB，余额ELB可等额购买套餐。</p>
-    </div>
+    </div> -->
     <div class="content-wrap">
       <div class="title-wrap">
         <em class="title-line"></em>
