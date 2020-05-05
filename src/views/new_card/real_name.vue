@@ -28,7 +28,7 @@
         <input v-model="info_phone" :placeholder="isPhoneMifi=='mifi'?'请输入手机号接收验证码':'请输入家长手机号接收验证码'" type="number">
       </div>
       <div class="code-wrap">
-        <input v-model="info_code" placeholder="请输入验证码" type="number">
+        <input v-model="info_code" placeholder="请输入验证码" type="number" v-on:input ="limlit()"/>
         <button @click="getCode" class="btn-code" :disabled="disabled_code">{{countDownMsg}}</button>
       </div>
     </div>
@@ -427,6 +427,14 @@
           location.href = 'https://mp.weixin.qq.com/s?__biz=MzUxODA0OTAyOQ==&mid=100000010&idx=1&sn=a5269b403df4782a2413184f027a01d2&chksm=798f9d604ef81476a074d02828cc355331e354d3c37f89aa3f87ddb21004903190d858842300&mpshare=1&scene=23&srcid=0601LjTN6Zs9SunY3rvoUg4Y#rd';
         }
       },
+      limlit: function() { //ios键盘输入触发两次输入事件
+        if (this.info_code.length == 8) {
+          this.info_code = this.info_code.slice(0, 4)
+        }
+        if (this.info_code.length == 12) {
+          this.info_code = this.info_code.slice(0, 6)
+        }
+      }
     }
   };
 </script>
