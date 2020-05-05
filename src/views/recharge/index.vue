@@ -290,53 +290,53 @@
       if (this.userInfo.account.balance > 0) {
         user_rmb = this.userInfo.account.balance;
       }
-      this.settingRechargeList = await this.getRechargeInfo();
+      // this.settingRechargeList = await this.getRechargeInfo();
 
-      if (this.settingRechargeList.length > 0) {
-        let data = this.settingRechargeList;
-        data.sort(this.jsonSort);
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].migu_music_id) this.showMiGuTip = true;
-          if (data[i].type === 1) {
-            this.recharge_list.push({
-              pay_type: 'over_charge',
-              pay_money: data[i].price * data[i].discount,
-              give_elb: data[i].elb,
-              give_balance: data[i].price * (1 - data[i].discount),
-              is_give_balance: data[i].is_give_balance,
-              newStatus: true,
-              newPrice: data[i].price,
-              discount: data[i].discount,
-              migu: !!data[i].migu_music_id,
-              migu_music_id: data[i].migu_music_id,
-              id: data[i].id ? data[i].id : undefined
-            })
-          } else {
-            this.recharge_list.push({
-              pay_type: 'over_charge',
-              pay_money: data[i].price,
-              give_elb: data[i].elb,
-              give_balance: data[i].balance,
-              is_give_balance: data[i].is_give_balance,
-              newStatus: false,
-              migu: !!data[i].migu_music_id,
-              migu_music_id: data[i].migu_music_id,
-              id: data[i].id ? data[i].id : undefined
-            })
-          }
+      // if (this.settingRechargeList.length > 0) {
+      //   let data = this.settingRechargeList;
+      //   data.sort(this.jsonSort);
+      //   for (let i = 0; i < data.length; i++) {
+      //     if (data[i].migu_music_id) this.showMiGuTip = true;
+      //     if (data[i].type === 1) {
+      //       this.recharge_list.push({
+      //         pay_type: 'over_charge',
+      //         pay_money: data[i].price * data[i].discount,
+      //         give_elb: data[i].elb,
+      //         give_balance: data[i].price * (1 - data[i].discount),
+      //         is_give_balance: data[i].is_give_balance,
+      //         newStatus: true,
+      //         newPrice: data[i].price,
+      //         discount: data[i].discount,
+      //         migu: !!data[i].migu_music_id,
+      //         migu_music_id: data[i].migu_music_id,
+      //         id: data[i].id ? data[i].id : undefined
+      //       })
+      //     } else {
+      //       this.recharge_list.push({
+      //         pay_type: 'over_charge',
+      //         pay_money: data[i].price,
+      //         give_elb: data[i].elb,
+      //         give_balance: data[i].balance,
+      //         is_give_balance: data[i].is_give_balance,
+      //         newStatus: false,
+      //         migu: !!data[i].migu_music_id,
+      //         migu_music_id: data[i].migu_music_id,
+      //         id: data[i].id ? data[i].id : undefined
+      //       })
+      //     }
 
-        }
-        this.recharge_list.push({
-          pay_type: 'normal_charge',
-          pay_money: 0,
-          give_elb: 0
-        });
+      //   }
+      //   this.recharge_list.push({
+      //     pay_type: 'normal_charge',
+      //     pay_money: 0,
+      //     give_elb: 0
+      //   });
 
-        if (isMobile(this.authorizedUserInfo.mobile)) {
-          this.isMobile = true;
-        }
+      //   if (isMobile(this.authorizedUserInfo.mobile)) {
+      //     this.isMobile = true;
+      //   }
 
-      } else {
+      // } else {
         this.recharge_list = [
           {
             pay_type: 'diamond_charge',
@@ -344,24 +344,12 @@
             user_rmb: 0,
             give_elb: 0,
           }, {
-            pay_type: 'over_charge',
-            pay_money: 100,
-            give_elb: 50
-          }, {
-            pay_type: 'over_charge',
-            pay_money: 200,
-            give_elb: 200,
-          }, {
-            pay_type: 'over_charge',
-            pay_money: 300,
-            give_elb: 300
-          }, {
             pay_type: 'normal_charge',
             pay_money: 0,
             give_elb: 0
           }
         ]
-      }
+      // }
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
       /*
      * 增加包月套餐
