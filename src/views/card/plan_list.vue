@@ -266,8 +266,8 @@
               }
             }
             //分别进行排序
-            newArray1.sort(this.compare("id", 'asc'));
-            newArray2.sort(this.compare("id", 'asc'));
+            // newArray1.sort(this.compare("id", 'asc'));
+            // newArray2.sort(this.compare("id", 'asc'));
             newArray3 = newArray1.concat(newArray2);
 
             this.plan_list[item] = newArray3;
