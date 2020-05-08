@@ -11,6 +11,7 @@ const mifi_layout = r => require.ensure([], () => r(require('./components/mifi_l
 
 // 中转链接
 const transfer_url = r => require.ensure([], () => r(require('./views/transfer_url/index')), 'transfer_url');
+const official_accounts = r => require.ensure([], () => r(require('./views/transfer_url/official_accounts')), 'official_accounts');
 
 // 登录
 const login = r => require.ensure([], () => r(require('./views/login/index')), 'login');//查询
@@ -136,6 +137,10 @@ const eqReplaceMent = r => require.ensure([], () => r(require('./views/question/
 Vue.use(Router);
 
 export const constantRouterMap = [{
+  path: '/official_accounts',
+  component: official_accounts,
+  meta: {title: "公众号二维码"}
+},{
   path: '/transfer_url',
   component: transfer_url,
   meta: {title: "公众号二维码"}
