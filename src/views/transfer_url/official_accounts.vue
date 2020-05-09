@@ -76,7 +76,7 @@
     name: "index",
     data() {
       return {
-        iccid: getUrlParam('iccid'),
+        iccid: '',
         qrImg: '',
         visible: '',
         imei: getUrlParam('imei'),
@@ -88,13 +88,11 @@
     },
     created() {
       
-      if (!getUrlParam('iccid')) {
-        console.log(88)
+      if (!getUrlParam('imei')) {
         Toast({
-          message: '未识别到ICCID',
+          message: '未识别到IMEI',
           mask: true,
           duration: 0,
-        
         })
         return
       }
@@ -104,16 +102,23 @@
         forbidClick: true,
         duration: 0,
       });
-      if (this.iccid) {
+      if (this.imei) {
       _get('/iot/v1/partners/get_partner_wx_config', {
-        iccid: this.iccid
+        imei: this.imei
       }).then(res => {
           Toast.clear();
           if (res.state == 1) {
+            this.iccid = res.data.iccid
             this.qrImg = res.data.wx_img_path
             this.video = res.data.wx_video_path
             this.visible = res.data.is_qiyu
-          } 
+          }else {
+          Toast({
+            message: res.msg,
+            mask: true,
+            duration: 0,
+          })
+          }
         })
         return
       } else {
