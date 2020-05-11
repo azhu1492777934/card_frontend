@@ -218,13 +218,13 @@
       </van-loading>
     </van-popup>
 
-    <transition name="bounce">
+    <!-- <transition name="bounce">
       <MiGu
         :show-mi-gu-model="showMiGuModel"
         :show-btn-buy="true"
         :show-btn-no-tip="true"
       />
-    </transition>
+    </transition> -->
   </div>
 </template>
 
@@ -717,7 +717,7 @@
     methods: {
       initial() {
         // 限时活动
-        this.showMiGu(this.authorizedUserInfo.mobile);
+        // this.showMiGu(this.authorizedUserInfo.mobile);
 
         if (getStorage('check_iccid')) {
           this.iccid = getStorage('check_iccid');

@@ -129,12 +129,12 @@
       <p class="showTip">创建订单中,请等候</p>
     </van-popup>
 
-    <transition name="bounce">
+    <!-- <transition name="bounce">
       <MiGu
         :show-mi-gu-model="showMiGuModel"
         :show-checked="true"
       />
-    </transition>
+    </transition> -->
 
   </div>
 </template>
@@ -230,10 +230,10 @@
           iccid: getStorage("check_iccid")
         });
 
-        // 限时活动
-        if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic')) && getStorage('migu_watch_card')) {
-          this.showMiGuModel = true;
-        }
+        // // 限时活动
+        // if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic')) && getStorage('migu_watch_card')) {
+        //   this.showMiGuModel = true;
+        // }
       }
       let _this = this;
       //处理套餐数据

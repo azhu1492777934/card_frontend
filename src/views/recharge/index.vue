@@ -57,7 +57,7 @@
               {{item.pay_money}}</em>元
             </p>
 
-            <p v-show="item.migu===true && isMobile && isMiGuWatch" class="third-appendix">赠送7天咪咕铃声会员</p>
+            <!-- <p v-show="item.migu===true && isMobile && isMiGuWatch" class="third-appendix">赠送7天咪咕铃声会员</p> -->
 
           </div>
           <div class="discountIcon"
@@ -110,7 +110,7 @@
         </div><!---elb-->
       </div>
       <button @click="normalPay" class="btn-large">支付</button>
-      <div v-show="showMiGuTip && isMobile && isMiGuWatch" class="migu-expression-wrapper">
+      <!-- <div v-show="showMiGuTip && isMobile && isMiGuWatch" class="migu-expression-wrapper">
         <p>咪咕铃声会员规则说明</p>
         <ul>
           <li>1、赠送7天咪咕音乐振铃会员可在已安装手表铃声的新讯4G手表使用；</li>
@@ -120,7 +120,7 @@
           <li>5、可通过电话10086人工，或者按照退订短信提示即可完成退订；</li>
           <li>5、活动解释权归前海翼联所有。</li>
         </ul>
-      </div>
+      </div> -->
     </div>
 
     <van-popup
