@@ -206,7 +206,7 @@
           is_app: false,
           is_c_frontend: true,
           is_normal: false,
-        }
+        },
       };
     },
     components: {
@@ -328,7 +328,7 @@
         this.choose_plan_index = id;
         index === '2' ? this.recharge_btn_text = '选择叠加加油包套餐' : this.recharge_btn_text = '充值';
       },
-      recharge: function () {
+      async recharge() {
         let planName = this.render_type_name[this.cur_plan_type_index];
         let planType = '';
         for (let i in this.plan_type_name) {
@@ -348,9 +348,21 @@
         planInfo.iccid = getStorage("check_iccid");
         setStorage("planInfo", planInfo, "obj");
 
+
+        //判断余额是否可以支付
+       await _get("/api/v1/app/user/can_balance_pay", {
+          user_id: getStorage("userInfo", "obj").account.user_id,
+        }).then(res => {
+          if (res.state === 1) {
+              setStorage("can_balance_pay", res.data.can_balance_pay)
+          }
+        });
+
         // 加油包套餐充值
         if (planType === '2') {
-          this.$router.push('/weixin/card/more_flow');
+          this.$router.push({
+            path:"/weixin/card/more_flow",
+          });
           return;
         }
 
@@ -369,7 +381,9 @@
             setStorage("monthlyMsg", res.data, "obj");
             this.$router.push({
               path: "/weixin/recharge/index",
-              query: {type: this.$route.query.type}
+              query: {
+                type: this.$route.query.type
+              }
             });
           } else {
             Toast({

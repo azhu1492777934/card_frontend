@@ -236,7 +236,9 @@
           show: false,
           type: true,//true 为微信，false 为支付宝
         },
-        settingRechargeList: []
+        settingRechargeList: [],
+
+        can_balance_pay: getStorage('can_balance_pay') || 0
       }
     },
     filters: {
@@ -249,6 +251,7 @@
       }
     },
     async created() {
+
       // 用户流失率统计
       if (getStorage('plan_list_new_card') === "1") {
         lossRate({
@@ -337,18 +340,30 @@
       //   }
 
       // } else {
-        this.recharge_list = [
-          {
-            pay_type: 'diamond_charge',
-            pay_money: 0,
-            user_rmb: 0,
-            give_elb: 0,
-          }, {
-            pay_type: 'normal_charge',
-            pay_money: 0,
-            give_elb: 0
-          }
-        ]
+
+        if (this.can_balance_pay==1) {
+          this.recharge_list = [
+            {
+              pay_type: 'diamond_charge',
+              pay_money: 0,
+              user_rmb: 0,
+              give_elb: 0,
+            }, {
+              pay_type: 'normal_charge',
+              pay_money: 0,
+              give_elb: 0
+            }
+          ]
+        } else {
+          this.recharge_list = [
+            {
+              pay_type: 'normal_charge',
+              pay_money: 0,
+              give_elb: 0
+            }
+          ]
+        }
+
       // }
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
       /*

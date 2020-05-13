@@ -3,7 +3,7 @@
     <div v-if="plan_list.length">
       <ul class="plan-wrapper">
         <li :class="{'active':index === choose_plan_index}" v-for="(item,index) in plan_list"
-            @click="changePlan(index)">
+            @click="changePlan(index)" :key="item">
           <div>
             <span class="plan-name">{{item.name}}</span>
             <div class="plan-content">
@@ -48,7 +48,7 @@
       :beforeClose="balanceRecharge"
     >
       <div class="recharge-dialog-wrapper">
-        <div :class="{'active':isBalance}" @click="chooseRechargeType(true)">
+        <div :class="{'active':isBalance}" @click="chooseRechargeType(true)" v-if="can_balance_pay==1">
           <p class="cl-balance">余额支付</p>
           <p>支付{{final_money}}元</p>
           <p>可抵扣{{recharge_balance}}余额</p>
@@ -133,6 +133,7 @@
           show: false,
           type: true,//true 为微信，false 为支付宝
         },
+        can_balance_pay: getStorage('can_balance_pay') || 0
       };
     },
     components: {
@@ -143,7 +144,6 @@
       noData
     },
     created() {
-
       _get("/api/v1/app/cards/plan/usage", {
         iccid: getStorage("check_iccid")
       }).then(res => {
