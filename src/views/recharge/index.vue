@@ -82,7 +82,7 @@
                  placeholder="请选择时间"
                  type="text">
         </div><!--生效日期-->
-        <div v-show="isShowChoice.showCode">
+        <div v-show="isShowChoice.showCode &&can_balance_pay==1">
           <span class="cl-primary">使用抵扣券：</span>
           <div @click="changedCheck('coupon')">
             <input :checked="!check_coupon" type="radio">
