@@ -1,7 +1,7 @@
 import {getStorage, setStorage} from "../../utilies";
 
 const state = {
-  showBalancePay: false, //增加是否显示用户信息
+  showBalancePay: getStorage('balance_pay') || false, //增加是否显示用户信息
   showUser: false,//是否显示用户信息
   decrypt_data: getStorage('decrypt_data', 'obj'),
   userInfoInner: getStorage('userInfo', 'obj') || {
@@ -31,11 +31,9 @@ const mutations = {
     state.showUser = userStatus
   },
   changeCanBalancePay(state, canBalancePay) {
-    if (canBalancePay == 1) {
-      state.showBalancePay = true
-    } else if (canBalancePay == 0) {
-      state.showBalancePay = false
-    }
+   
+      state.showBalancePay = canBalancePay
+
     
   }
 }

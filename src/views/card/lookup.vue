@@ -110,6 +110,7 @@
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');
+      removeStorage('balance_pay');
       this.$store.commit('userInfo/changeCanBalancePay', false); //初始化
       var UA = navigator.userAgent.toLowerCase();
       // if(/(ylkids_android)/.test(UA)&&!/(app_charge)/.test(UA) || /(ios1.1.0)/.test(UA)&&!/(app_charge)/.test(UA) ){
@@ -455,7 +456,16 @@
           user_id: getStorage("userInfo", "obj").account.user_id,
         }).then(res => {
           if (res.state == 1) {
-            this.$store.commit('userInfo/changeCanBalancePay', res.data.can_balance_pay);
+                if (res.data.can_balance_pay == 1) {
+                  setStorage('balance_pay', true)
+                  this.$store.commit('userInfo/changeCanBalancePay', true);
+                } else if (res.data.can_balance_pay == 0) {
+                  setStorage('balance_pay', false)
+                  this.$store.commit('userInfo/changeCanBalancePay', false);
+                }
+            
+   
+            
           }
         });
       },//判断余额是否可以支付
