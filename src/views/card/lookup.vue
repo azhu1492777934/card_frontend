@@ -301,6 +301,7 @@
             if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj')) {
               await this.getCanBalancePay()
             } else {
+              setStorage('balance_pay', true)
               this.$store.commit('userInfo/changeCanBalancePay', true);
             }
             setStorage('originPrice', res.data.default_price);
