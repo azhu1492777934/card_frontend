@@ -82,7 +82,7 @@
                  placeholder="请选择时间"
                  type="text">
         </div><!--生效日期-->
-        <div v-show="isShowChoice.showCode &&can_balance_pay==1">
+        <div v-show="isShowChoice.showCode &&isShowBalancePay">
           <span class="cl-primary">使用抵扣券：</span>
           <div @click="changedCheck('coupon')">
             <input :checked="!check_coupon" type="radio">
@@ -177,7 +177,8 @@
     name: "recharge",
     computed: {
       ...mapState({
-        authorizedUserInfo: state => state.userInfo.userInfoInner
+        authorizedUserInfo: state => state.userInfo.userInfoInner,
+        isShowBalancePay: state => state.userInfo.showBalancePay,
       }),
     },
     components: {
@@ -238,7 +239,7 @@
         },
         settingRechargeList: [],
 
-        can_balance_pay: getStorage('can_balance_pay') || 0
+    
       }
     },
     filters: {
@@ -341,7 +342,7 @@
 
       // } else {
 
-        if (this.can_balance_pay==1) {
+        if (this.isShowBalancePay) {
           this.recharge_list = [
             {
               pay_type: 'diamond_charge',

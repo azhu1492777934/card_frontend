@@ -349,14 +349,7 @@
         setStorage("planInfo", planInfo, "obj");
 
 
-        //判断余额是否可以支付
-       await _get("/api/v1/app/user/can_balance_pay", {
-          user_id: getStorage("userInfo", "obj").account.user_id,
-        }).then(res => {
-          if (res.state === 1) {
-              setStorage("can_balance_pay", res.data.can_balance_pay)
-          }
-        });
+
 
         // 加油包套餐充值
         if (planType === '2') {

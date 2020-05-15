@@ -110,6 +110,7 @@
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
       removeStorage('hasValidatedPlan');
+      this.$store.commit('userInfo/changeCanBalancePay', false); //初始化
       var UA = navigator.userAgent.toLowerCase();
       // if(/(ylkids_android)/.test(UA)&&!/(app_charge)/.test(UA) || /(ios1.1.0)/.test(UA)&&!/(app_charge)/.test(UA) ){
       //   window.location.href="https://card.qiyu-m2m.com";
@@ -279,7 +280,7 @@
         //查询
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: newIccid,
-        }).then(res => {
+        }).then(async res => {
           Toast.clear();
           let autoCount = getStorage('watchAutoSearch');
           if (autoCount) {
@@ -295,7 +296,12 @@
               });
               return
             }
-
+            //针对卡源调起接口
+            if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj')) {
+              await this.getCanBalancePay()
+            } else {
+              this.$store.commit('userInfo/changeCanBalancePay', true);
+            }
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);
@@ -443,7 +449,16 @@
             func.apply(this, args)
           }, delay)
         }
-      }
+      },
+      getCanBalancePay() { 
+        _get("/api/v1/app/user/can_balance_pay", {
+          user_id: getStorage("userInfo", "obj").account.user_id,
+        }).then(res => {
+          if (res.state == 1) {
+            this.$store.commit('userInfo/changeCanBalancePay', res.data.can_balance_pay);
+          }
+        });
+      },//判断余额是否可以支付
     }
   };
 </script>

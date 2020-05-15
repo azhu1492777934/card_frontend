@@ -24,12 +24,12 @@ self.__precacheManifest = [
     "url": "/js/userCenterWrap.19135768.js"
   },
   {
-    "revision": "7c0e688aa9273d7b56db",
-    "url": "/js/app.6c59ab4a.js"
+    "revision": "9304408bd95efd2b9096",
+    "url": "/js/app.3e1cb211.js"
   },
   {
-    "revision": "6f71506271369012fad7",
-    "url": "/js/userCenter.cc74955d.js"
+    "revision": "614e49541ca795871f7c",
+    "url": "/js/userCenter.d923d426.js"
   },
   {
     "revision": "4870ae7c74df08066e23",
@@ -80,16 +80,16 @@ self.__precacheManifest = [
     "url": "/js/revoke_plan.1cd73f21.js"
   },
   {
-    "revision": "39b36454a9c85920853a",
-    "url": "/js/card_lookup.54ab571a.js"
+    "revision": "e7c64d433d74a7173505",
+    "url": "/js/card_lookup.b18f760a.js"
   },
   {
     "revision": "d339ac563cebc4dbbba8",
     "url": "/js/repeatRecharge.4ac9e9ae.js"
   },
   {
-    "revision": "c5a47521f64b73108c0c",
-    "url": "/js/card_more_flow.f08b650d.js"
+    "revision": "fad4968c2b888b473c56",
+    "url": "/js/card_more_flow.bd9aea77.js"
   },
   {
     "revision": "04e747471527a8a856bf",
@@ -156,8 +156,8 @@ self.__precacheManifest = [
     "url": "/js/commonProblem.d48086ce.js"
   },
   {
-    "revision": "3b1d4e4079266b131393",
-    "url": "/js/recharge.a3f41c6f.js"
+    "revision": "e0c110224df6426f94f0",
+    "url": "/js/recharge.0ed4565f.js"
   },
   {
     "revision": "e3ff9d34440c324308d6",
@@ -196,8 +196,8 @@ self.__precacheManifest = [
     "url": "/js/coupon_wrapper.0a92ab5a.js"
   },
   {
-    "revision": "44cc2949692d9947b9d6",
-    "url": "/js/plan_list.8f933e9d.js"
+    "revision": "a6fddd48137220146f84",
+    "url": "/js/plan_list.370a0846.js"
   },
   {
     "revision": "3f2128b5e6b4ff6e784e",
@@ -328,7 +328,7 @@ self.__precacheManifest = [
     "url": "/css/mifi_coupon_index.38895232.css"
   },
   {
-    "revision": "61fc743602a8bbd87dd9566f002c6a27",
+    "revision": "055c9a3074c622707de73c0fe270032a",
     "url": "/index.html"
   },
   {
@@ -428,7 +428,7 @@ self.__precacheManifest = [
     "url": "/img/bg_no_recharge.34c67f6d.svg"
   },
   {
-    "revision": "44cc2949692d9947b9d6",
+    "revision": "a6fddd48137220146f84",
     "url": "/css/plan_list.63bf4f83.css"
   },
   {
@@ -468,8 +468,8 @@ self.__precacheManifest = [
     "url": "/img/telecom-logo.8c605ac8.svg"
   },
   {
-    "revision": "3b1d4e4079266b131393",
-    "url": "/css/recharge.ab519314.css"
+    "revision": "e0c110224df6426f94f0",
+    "url": "/css/recharge.2f04a562.css"
   },
   {
     "revision": "165beb68d8ba0d2b70df0fbb3769787a",
@@ -508,8 +508,8 @@ self.__precacheManifest = [
     "url": "/img/mobile-logo.113f99e2.png"
   },
   {
-    "revision": "22d35353279cbc6b99c3",
-    "url": "/js/Layout.b6dd6b9b.js"
+    "revision": "a525727d8b5f38502857",
+    "url": "/js/Layout.0a39c3f6.js"
   },
   {
     "revision": "0b9e0b5f4f28c68416f916ddce3fc7ef",
@@ -604,7 +604,7 @@ self.__precacheManifest = [
     "url": "/img/unUsedOrder@2x.c0170ec2.png"
   },
   {
-    "revision": "6f71506271369012fad7",
+    "revision": "614e49541ca795871f7c",
     "url": "/css/userCenter.a92db948.css"
   },
   {
@@ -728,20 +728,20 @@ self.__precacheManifest = [
     "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
-    "revision": "e93b8c03293c5b6a311da784f9c19c8f",
-    "url": "/img/bg.e93b8c03.jpeg"
-  },
-  {
-    "revision": "ffb1612d9660e2ecd9d3872d57a8a2f9",
-    "url": "/img/bar.ffb1612d.png"
-  },
-  {
     "revision": "fa855242805b87da42c65763acd64ac0",
     "url": "/img/bg-plan-type@2x.fa855242.png"
   },
   {
     "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
     "url": "/img/bg-plan-type@3x.4a9ca192.png"
+  },
+  {
+    "revision": "e93b8c03293c5b6a311da784f9c19c8f",
+    "url": "/img/bg.e93b8c03.jpeg"
+  },
+  {
+    "revision": "ffb1612d9660e2ecd9d3872d57a8a2f9",
+    "url": "/img/bar.ffb1612d.png"
   },
   {
     "revision": "1d7515ee61c3f659227318b4050955ed",
@@ -772,10 +772,6 @@ self.__precacheManifest = [
     "url": "/img/login_bg@3x.11000d4e.png"
   },
   {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
     "revision": "2a67b73145562669220aa4639e1ad58f",
     "url": "/img/icon3.2a67b731.png"
   },
@@ -784,12 +780,20 @@ self.__precacheManifest = [
     "url": "/img/icon2.813b5319.png"
   },
   {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
     "url": "/img/noData@3x.f40c7e0b.png"
   },
   {
     "revision": "644e6e3cf5f33943747b116316694e28",
     "url": "/img/noData@2x.644e6e3c.png"
+  },
+  {
+    "revision": "01355f175bd20423ce45a838c1a998a9",
+    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "91e1d2771efacd45e5e465d9a001f197",
@@ -814,10 +818,6 @@ self.__precacheManifest = [
   {
     "revision": "d461d18e42a310bd709b2ce97d159153",
     "url": "/img/pkgBg3.d461d18e.png"
-  },
-  {
-    "revision": "01355f175bd20423ce45a838c1a998a9",
-    "url": "/img/bg.01355f17.png"
   },
   {
     "revision": "6e5cee7393060b0ec3dcd587c2518b94",
@@ -880,11 +880,11 @@ self.__precacheManifest = [
     "url": "/css/card_connection.3d383672.css"
   },
   {
-    "revision": "39b36454a9c85920853a",
-    "url": "/css/card_lookup.4787f142.css"
+    "revision": "e7c64d433d74a7173505",
+    "url": "/css/card_lookup.eff27fe4.css"
   },
   {
-    "revision": "c5a47521f64b73108c0c",
+    "revision": "fad4968c2b888b473c56",
     "url": "/css/card_more_flow.ce48287d.css"
   },
   {
@@ -992,7 +992,7 @@ self.__precacheManifest = [
     "url": "/css/mifi_card_info.b51f72d4.css"
   },
   {
-    "revision": "7c0e688aa9273d7b56db",
+    "revision": "9304408bd95efd2b9096",
     "url": "/css/app.15f7a604.css"
   },
   {
@@ -1000,7 +1000,7 @@ self.__precacheManifest = [
     "url": "/css/Not_fund.662737d2.css"
   },
   {
-    "revision": "22d35353279cbc6b99c3",
+    "revision": "a525727d8b5f38502857",
     "url": "/css/Layout.43b3cc9d.css"
   },
   {

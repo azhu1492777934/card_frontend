@@ -1,6 +1,6 @@
 <template>
   <div class="inner-wrap">
-    <user-header v-show="isShowUser" :userInfoData="authorizeUserInfo"></user-header>
+    <user-header v-show="isShowUser&&isShowBalancePay" :userInfoData="authorizeUserInfo"></user-header>
     <router-view @getUserData="getUserInfo"/>
     <van-popup :close-on-click-overlay="false" v-model="load_user_msg">
       <van-loading type="spinner" size="30" color="#fff"/>
@@ -47,7 +47,8 @@
     computed: {
       ...mapState({
         isShowUser: state => state.userInfo.showUser,
-        authorizeUserInfo: state => state.userInfo.userInfoInner
+        authorizeUserInfo: state => state.userInfo.userInfoInner,
+        isShowBalancePay: state => state.userInfo.showBalancePay,
       }),
     },
     created() {

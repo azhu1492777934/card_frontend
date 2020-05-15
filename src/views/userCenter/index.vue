@@ -29,27 +29,27 @@
 
 
           <div class="diamonds">
-            <div>
+            <!-- <div>
               <span>{{getUserInfo.account.rmb}} <i @click="getDiamonds"></i></span>
             </div>
             <div>
               <i ></i>
               <span>钻石</span>
               
-            </div>
+            </div> -->
           </div>
 
 
 
           <div class="elb">
-            <div>
+            <!-- <div>
               <span>{{getUserInfo.account.elb}}<i @click="getElb"></i> </span>
             </div>
             <div>
               <i ></i>
               <span>ELB</span>
               
-            </div>
+            </div> -->
           </div>
         </div>
 
@@ -71,13 +71,13 @@
             <div class="iconfont icon-rightArrow" ></div>
           </div> -->
           
-          <div @click="goChange">
+          <!-- <div @click="goChange">
             <div></div>
             <div>
               钻石转余额
             </div>
             <div class="iconfont icon-rightArrow"></div>
-          </div>
+          </div> -->
           <div @click="goConsumer">
             <div></div>
             <div>
@@ -156,7 +156,7 @@
           },
           getRmb(){
             Dialog.alert({
-              message: '余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额，也可将钻石转成余额。'
+              message: '余额：可用于购买套餐，套餐用量不停机时叠加包续费扣除。充值套餐剩余的钱会自动存到余额。'
             }).then(() => {
               // on close
             });
