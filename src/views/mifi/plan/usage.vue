@@ -21,8 +21,11 @@
               v-for="(inner_item,inner_index) in usageListObj[index]"
               :class="`flow-status-bg-${index}`"
             >
-
+              
               <div v-if="index==0" class="priority-wrap">
+
+                <div class="rule" @click="showRule(inner_item)">套餐简介</div>
+                
                 <button @click="usedPriority({iccid:iccid,source:source,id:inner_item.id,priority:inner_item.priority})"
                         v-if="inner_item.priority==1000">优先使用
                 </button>
@@ -39,6 +42,7 @@
                     <button @click="toSpeedup500" v-if="inner_item.planCellInfo.plan_cell_status===1">购买加速包</button>
                   </p>
                 </div>
+                
               </div>
 
               <div class="usage-data-inner-wrap">
@@ -72,7 +76,7 @@
                     <p v-if="inner_item.total_voice>0">{{inner_item.total_voice - inner_item.remaining_voice }}/分钟</p>
                     <p v-if="inner_item.total_voice<0">{{inner_item.current_used_voice}}/分钟</p>
                   </div>
-
+          
                   <!-- 不同时存在流量及通话-->
                   <!--<div class="data-wrap">-->
                   <div class="data-wrap"
@@ -81,8 +85,10 @@
                     <p v-if="index==1">{{ clacDaysSpan(inner_item.activated_at,inner_item.expired_at) }}天</p>
                     <p v-if="index==0 || index==2">{{ clacDaysSpan(today,inner_item.expired_at) }}天</p>
                   </div>
-
+                    
                 </div>
+
+                
 
                 <div class="usage-right">
                   <span class="plan-status" :class="`plan-status-${index}`">{{statusList[index]}}</span>
@@ -111,8 +117,9 @@
                   </div>
                   <!--./通话详情-->
                 </div>
+               
               </div>
-
+              
 
               <!--日期-->
               <div class="date-wrap">
@@ -135,7 +142,7 @@
 
 <script>
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
-  import {Toast, Popup, Notify, Loading} from "vant";
+  import {Toast, Popup, Notify, Loading, Dialog} from "vant";
   import {getStorage, setStorage, checkBrowser, Today} from "../../../utilies";
   import {_get, _post} from '../../../http'
 
@@ -145,6 +152,7 @@
       [Toast.name]: Toast,
       [Popup.name]: Popup,
       [Loading.name]: Loading,
+      [Dialog.name]: Dialog,
       swiper,
       swiperSlide,
     },
@@ -260,11 +268,20 @@
       //         })
       //     }
       // }
+      showRule(item) {
+        Dialog.alert({
+          message: item.planCellInfo.describe,
+          title: '套餐简介',
+          confirmButtonColor: '#000000'
+        }).then(() => {
+          // on close
+        });
+      }
     }
   }
 </script>
 
-<style lang="less">
+<style lang="less" scope>
   @import "~swiper/dist/css/swiper.min.css";
   @import "../../../assets/less/utitlies";
 
@@ -337,6 +354,15 @@
         position: absolute;
         top: 15px;
         z-index: 1;
+        
+        .rule {
+          padding: 8px 8px;
+          font-size: 20px;
+          color: #fff;
+          border-radius: 5px;
+          background-image: linear-gradient(45deg, #29B6F6 10%, #01579B 100%);
+          
+        }
 
         button {
           padding: 8px 8px;
@@ -344,12 +370,14 @@
           color: #fff;
           border-radius: 5px;
           background-image: linear-gradient(45deg, #92c7fa 10%, #457bad 100%);
+          margin-left: 20px;
         }
 
         .speedup-wrap {
           padding-left: 20px;
 
           button {
+            margin-left: 0px;
             background-image: linear-gradient(45deg, #27bcf3 70%, #31e4e5 100%);;
           }
         }
@@ -579,6 +607,23 @@
       }
 
     }
+  }
+
+  .van-dialog {
+    .bg-image('../../assets/imgs/mifi/order/bg_test');
+    background-size: cover;
+    .van-dialog__message {
+      text-align: left;
+      
+    }
+  }
+
+  .van-button--default {
+    background: transparent;
+    border: 0px;
+  }
+  .van-button::before {
+    border: 0px;
   }
 
 </style>
