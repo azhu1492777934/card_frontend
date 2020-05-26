@@ -12,6 +12,7 @@ Vue.use(Popover);
 import {Dialog} from 'vant';
 
 Vue.use(Dialog);
+require('animate.css/animate.min.css');
 require('../src/assets/css/loading/index.css');
 require('../src/assets/css/reset.css');
 require('../src/assets/css/SourceHanSansCNRegular.css');

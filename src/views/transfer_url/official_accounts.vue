@@ -1,6 +1,7 @@
 <template>
   <div>
     <div v-if="!visible" class="transfer-url-wrapper">
+
       <div>
         <span class="deco-left"></span>
         <span class="deco-right"></span>
@@ -21,15 +22,26 @@
 
       <div class="iccid-wrapper">
         <div>
-          <span>ICCID:</span>
-          <p type="text" disabled  id="copyMy">{{iccid}}</p>
-          <div @click="copyFn()"></div>
+          <span>卡号:</span>
+          <p type="text" disabled >{{iccid}}</p>
+          
         </div>
         <div>
-          <span>IMEI:</span>
-          <p type="text" disabled  >{{imei}}</p>
+          <span>设备号:</span>
+          <p type="text" disabled  id="copyMy">{{imei}}</p>
+          <div @click="copyFn()"></div>
+          
         </div>
-        <p v-if="video" @click="to_watch()">视频教程 <span></span></p>
+        <p @click="to_watch()" v-if="video">视频教程 
+          <transition 
+            :duration="50000" 
+            appear 
+            enter-active-class="animated animate__bounce" 
+            leave-active-class="animated animate__bounce" 
+            appear-active-class="animated animate__bounce">
+            <span v-show="!visible"></span>
+        </transition>
+        </p>
       </div>
 
     </div>
@@ -50,15 +62,26 @@
       </div>
       <div class="iccid-wrapper">
         <div>
-          <span>ICCID:</span>
-          <p type="text" disabled id="copyMy">{{iccid}}</p>
-          <div @click="copyFn()"></div>
+          <span>卡号:</span>
+          <p type="text" disabled >{{iccid}}</p>
+          
         </div>
         <div>
-          <span>IMEI:</span>
-          <p type="text" disabled >{{imei}}</p>
+          <span>设备号:</span>
+          <p type="text" disabled id="copyMy">{{imei}}</p>
+          <div @click="copyFn()"></div>
+
         </div>
-        <p v-if="video" @click="to_watch()">视频教程 <span></span></p>
+        <p @click="to_watch()" v-if="video">视频教程 
+          <transition 
+            :duration="50000" 
+            appear 
+            enter-active-class="animated animate__bounce" 
+            leave-active-class="animated animate__bounce" 
+            appear-active-class="animated animate__bounce">
+            <span v-show="visible"></span>
+        </transition>
+        </p>
       </div>
     </div>
     
@@ -80,7 +103,8 @@
         qrImg: '',
         visible: '',
         imei: getUrlParam('imei'),
-        video:''
+        video:'',
+        show: false
       }
     },
     components: {
@@ -125,11 +149,15 @@
         Toast.clear();
       }
     },
+    mounted() {
+      
+    },
     methods: {
       to_watch() {
         window.location.href = this.video
       },
       copyFn() {
+        this.show = !this.show
         let val = document.getElementById('copyMy');
         window.getSelection().selectAllChildren(val);
         document.execCommand("Copy");
@@ -306,9 +334,9 @@
         span {
           display: inline-block;
           position: relative;
-          top: 3px;
-          width: 32px;
-          height: 32px;
+          top: 10px;
+          width: 48px;
+          height: 48px;
           background-image: url("../../assets/imgs/transferUrl/video.png");
           background-size: 100% 100%;
         }
@@ -449,9 +477,9 @@
         span {
           display: inline-block;
           position: relative;
-          top: 3px;
-          width: 32px;
-          height: 32px;
+          top: 10px;
+          width: 48px;
+          height: 48px;
           background-image: url("../../assets/imgs/transferUrl/video2.png");
           background-size: 100% 100%;
         }
