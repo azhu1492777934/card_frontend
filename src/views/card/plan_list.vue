@@ -339,8 +339,8 @@
         }
 
         let planInfo = this.plan_list[planType][this.choose_plan_index];
-
-        if (planName === '月套餐') {
+        let date = new Date().getDate()
+        if (planName === '月套餐' && date<=26 && date>=22) {
           Dialog.alert({
             title: '温馨提醒',
             message: '此套餐默认为立即生效，并且26日24时流量清零，请注意根据需求选择生效日期。'
