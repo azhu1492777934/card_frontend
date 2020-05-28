@@ -21,15 +21,11 @@
       </div>
 
       <div class="iccid-wrapper">
-        <div>
-          <span>卡号:</span>
-          <p type="text" disabled >{{iccid}}</p>
-          
-        </div>
+        
         <div>
           <span>设备号:</span>
           <p type="text" disabled  id="copyMy">{{imei}}</p>
-          <div @click="copyFn()"></div>
+          <div @click="copyFn()">复制 <div class="talk"></div></div>
           
         </div>
         <p @click="to_watch()" v-if="video">视频教程 
@@ -61,15 +57,11 @@
         </div>
       </div>
       <div class="iccid-wrapper">
-        <div>
-          <span>卡号:</span>
-          <p type="text" disabled >{{iccid}}</p>
-          
-        </div>
+        
         <div>
           <span>设备号:</span>
           <p type="text" disabled id="copyMy">{{imei}}</p>
-          <div @click="copyFn()"></div>
+          <div @click="copyFn()">复制<div class="talk2"></div></div>
 
         </div>
         <p @click="to_watch()" v-if="video">视频教程 
@@ -290,6 +282,7 @@
       border-radius: 15px;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       div {
         width: 100%;
         height: 90px;
@@ -314,13 +307,16 @@
           text-align: left;
         }
         div {
-          width: 32px;
-          height: 32px;
-          background-image: url("../../assets/imgs/transferUrl/copy.png");
+          width: 64px;
+          height: 64px;
+          font-size: 22px;
+          font-weight: 600;
           background-size: 100% 100%;
           position: relative;
+          color: #FF6F00;
           top: 25px;
           left: 5px;
+          z-index: 999;
         }
       }
       p {
@@ -340,6 +336,17 @@
           background-image: url("../../assets/imgs/transferUrl/video.png");
           background-size: 100% 100%;
         }
+      }
+      .talk {
+        position: absolute;
+        top: 17px;
+        left: -3px;
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        background-image: url("../../assets/imgs/transferUrl/finger.png");
+        background-size: 100% 100%;
+        z-index: 999;
       }
     }
 
@@ -434,6 +441,7 @@
       border-radius: 15px;
       display: flex;
       flex-direction: column;
+      justify-content: center;
       div {
         width: 100%;
         height: 90px;
@@ -458,13 +466,16 @@
           text-align: left;
         }
         div {
-          width: 32px;
-          height: 32px;
-          background-image: url("../../assets/imgs/transferUrl/copy2.png");
+          width: 64px;
+          height: 64px;
+          font-size: 22px;
+          font-weight: 600;
           background-size: 100% 100%;
           position: relative;
+          color: #81d4fa;
           top: 25px;
           left: 5px;
+          z-index: 999;
         }
       }
       p {
@@ -483,6 +494,17 @@
           background-image: url("../../assets/imgs/transferUrl/video2.png");
           background-size: 100% 100%;
         }
+      }
+      .talk2 {
+        position: absolute;
+        top: 17px;
+        left: -3px;
+        display: inline-block;
+        width: 64px;
+        height: 64px;
+        background-image: url("../../assets/imgs/transferUrl/finger2.png");
+        background-size: 100% 100%;
+        z-index: 999;
       }
     }
 
