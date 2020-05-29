@@ -407,6 +407,14 @@
         //   });
         //   return
         // }
+        
+        // 加油包套餐充值
+        if (planInfo.type == '2') {
+          this.$router.push({
+            path:"/weixin/card/more_flow",
+          });
+          return;
+        }
 
         if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
           Dialog.confirm({

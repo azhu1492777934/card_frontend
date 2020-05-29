@@ -196,7 +196,7 @@
         }
         let _this = this;
         let param = {
-          status: isBalance ? 1 : 0,// 区分现金与非现金
+          status: this.global_variables.packed_project === 'mifi'? 0 : isBalance ? 1 : 0,// 区分现金与非现金
           recharge_price: planInfo.price,
           price: planInfo.price,
           iccid: planInfo.iccid || getStorage("check_iccid"),
