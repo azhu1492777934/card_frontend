@@ -93,8 +93,8 @@
                   <div v-if="item.operator_at"> 发货时间: {{item.operator_at}} </div>
                   <span v-if="!item.operator_at">暂无物流信息</span>
                   <div   v-if="item.operator_at" class="cfmButton"  :class="{'unreceived':item.plan_transfer==1}"  >
-                    <span v-if="item.plan_transfer!=1" @click="cfmButton(item.id,item.new_source)">确认收货</span>  
-                    <span v-if="item.plan_transfer==1">已收货</span>  
+                    <span v-if="item.plan_transfer!=1" @click="cfmButton(item.id,item.new_source,item.new_iccid)">确认收货</span>  
+                    <span v-if="item.plan_transfer==1">已收货</span>
                   </div>
                 </div>
               </div>
@@ -401,7 +401,7 @@
       },
 
       //确认收货
-      cfmButton(id,type){
+      cfmButton(id,type,new_iccid){
         let msg;
         if(type==35){
           msg="确认且实名";
@@ -414,21 +414,27 @@
           confirmButtonText:msg
         }).then(() => {
           // on confirm
-          this.transferPlan(id);
+          this.transferPlan(id, new_iccid);
         }).catch(() => {
           // on cancel
         });
       },
 
       //转移套餐
-      transferPlan(id){
+      transferPlan(id, new_iccid){
 
         _post('/api/v1/app/equipment/transfer', {id:id}).then(res => {
           if (res.state == 1) {
+
+            if (getStorage('is_flow_card') == 0) {
+              this.activate(new_iccid)
+            }
+
             Notify({
               message: '确认收货成功',
               background: '#60ce53'
             })
+
             this.getList();
             if(res.data){
               location.href=res.data;
@@ -471,7 +477,13 @@
         })
         return p;
         
-      }
+      },
+      //深圳移动 激活 只调不做任何提示
+      activate(new_iccid) {
+      _get('/v1/cards/yd_allow_cards_auth_confirm',{
+          iccid:new_iccid,
+      })
+      },
     }
   };
 </script>
