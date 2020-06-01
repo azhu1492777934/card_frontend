@@ -480,7 +480,7 @@
       },
       //深圳移动 激活 只调不做任何提示
       activate(new_iccid) {
-      _get('/v1/cards/yd_allow_cards_auth_confirm',{
+      _get('/iot/v1/cards/yd_allow_cards_auth_confirm',{
           iccid:new_iccid,
       })
       },
