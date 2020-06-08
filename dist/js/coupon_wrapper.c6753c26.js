@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["coupon_wrapper"],{"860e":function(e,n,o){},b782:function(e,n,o){"use strict";o.r(n);var r=function(){var e=this,n=e.$createElement,o=e._self._c||n;return o("router-view")},t=[],c={name:"coupon_wrapper"},p=c,u=(o("dfc2"),o("2877")),a=Object(u["a"])(p,r,t,!1,null,"b4037324",null);a.options.__file="coupon_wrapper.vue";n["default"]=a.exports},dfc2:function(e,n,o){"use strict";var r=o("860e"),t=o.n(r);t.a}}]);
+//# sourceMappingURL=coupon_wrapper.c6753c26.js.map

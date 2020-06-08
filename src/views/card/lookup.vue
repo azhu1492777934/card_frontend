@@ -298,7 +298,7 @@
               return
             }
             //针对卡源调起接口
-            if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj')) {
+            if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj').account.balance>0) {
               await this.getCanBalancePay()
             } else {
               setStorage('balance_pay', true)
@@ -453,20 +453,17 @@
         }
       },
       getCanBalancePay() { 
-        _get("/api/v1/app/user/can_balance_pay", {
+        _get("/api/v1/app/user/balance_deadline", {
           user_id: getStorage("userInfo", "obj").account.user_id,
         }).then(res => {
           if (res.state == 1) {
-                if (res.data.can_balance_pay == 1) {
-                  setStorage('balance_pay', true)
-                  this.$store.commit('userInfo/changeCanBalancePay', true);
-                } else if (res.data.can_balance_pay == 0) {
-                  setStorage('balance_pay', false)
-                  this.$store.commit('userInfo/changeCanBalancePay', false);
-                }
-            
-   
-            
+              if (res.data.in_balance_deadline	 == 1) {
+                setStorage('balance_pay', true)
+                this.$store.commit('userInfo/changeCanBalancePay', true);
+              } else if (res.data.in_balance_deadline	 == 0) {
+                setStorage('balance_pay', false)
+                this.$store.commit('userInfo/changeCanBalancePay', false);
+              }
           }
         });
       },//判断余额是否可以支付

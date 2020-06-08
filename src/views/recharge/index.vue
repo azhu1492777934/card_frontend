@@ -294,76 +294,32 @@
       if (this.userInfo.account.balance > 0) {
         user_rmb = this.userInfo.account.balance;
       }
-      // this.settingRechargeList = await this.getRechargeInfo();
 
-      // if (this.settingRechargeList.length > 0) {
-      //   let data = this.settingRechargeList;
-      //   data.sort(this.jsonSort);
-      //   for (let i = 0; i < data.length; i++) {
-      //     if (data[i].migu_music_id) this.showMiGuTip = true;
-      //     if (data[i].type === 1) {
-      //       this.recharge_list.push({
-      //         pay_type: 'over_charge',
-      //         pay_money: data[i].price * data[i].discount,
-      //         give_elb: data[i].elb,
-      //         give_balance: data[i].price * (1 - data[i].discount),
-      //         is_give_balance: data[i].is_give_balance,
-      //         newStatus: true,
-      //         newPrice: data[i].price,
-      //         discount: data[i].discount,
-      //         migu: !!data[i].migu_music_id,
-      //         migu_music_id: data[i].migu_music_id,
-      //         id: data[i].id ? data[i].id : undefined
-      //       })
-      //     } else {
-      //       this.recharge_list.push({
-      //         pay_type: 'over_charge',
-      //         pay_money: data[i].price,
-      //         give_elb: data[i].elb,
-      //         give_balance: data[i].balance,
-      //         is_give_balance: data[i].is_give_balance,
-      //         newStatus: false,
-      //         migu: !!data[i].migu_music_id,
-      //         migu_music_id: data[i].migu_music_id,
-      //         id: data[i].id ? data[i].id : undefined
-      //       })
-      //     }
 
-      //   }
-      //   this.recharge_list.push({
-      //     pay_type: 'normal_charge',
-      //     pay_money: 0,
-      //     give_elb: 0
-      //   });
+      let balance_pay_card = await this.getBalancePayCard()
 
-      //   if (isMobile(this.authorizedUserInfo.mobile)) {
-      //     this.isMobile = true;
-      //   }
-
-      // } else {
-
-        if (this.isShowBalancePay) {
-          this.recharge_list = [
-            {
-              pay_type: 'diamond_charge',
-              pay_money: 0,
-              user_rmb: 0,
-              give_elb: 0,
-            }, {
-              pay_type: 'normal_charge',
-              pay_money: 0,
-              give_elb: 0
-            }
-          ]
-        } else {
-          this.recharge_list = [
-            {
-              pay_type: 'normal_charge',
-              pay_money: 0,
-              give_elb: 0
-            }
-          ]
-        }
+      if (this.isShowBalancePay && balance_pay_card == 1) { //余额期限
+        this.recharge_list = [
+          {
+            pay_type: 'diamond_charge',
+            pay_money: 0,
+            user_rmb: 0,
+            give_elb: 0,
+          }, {
+            pay_type: 'normal_charge',
+            pay_money: 0,
+            give_elb: 0
+          }
+        ]
+      } else {
+        this.recharge_list = [
+          {
+            pay_type: 'normal_charge',
+            pay_money: 0,
+            give_elb: 0
+          }
+        ]
+      }
 
       // }
       this.new_recharge_list = this.filterRechargeList(user_rmb, this.planInfo.price);       //根据套餐价格过滤充值参数
@@ -405,6 +361,8 @@
         }
         this.new_recharge_list = newData;
       }
+
+
     },
     methods: {
       changedCheck: function (type) {
@@ -703,6 +661,21 @@
       },
       jsonSort(a, b) {
         return a.price - b.price;
+      },
+      getBalancePayCard() {
+        return new Promise((resolve) => {
+          _get("/api/v1/app/user/balance_pay_card", {
+            iccid: getStorage('check_iccid'),
+            user_id: getStorage("userInfo", "obj").account.user_id,
+          }).then(res => {
+            if (res.state === 1) {
+              resolve(res.data.balance_pay_card)
+            } else {
+              resolve(1)
+            }
+          });
+        })
+
       }
     },
     beforeDestroy() {
