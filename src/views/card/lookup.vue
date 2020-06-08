@@ -298,7 +298,7 @@
               return
             }
             //针对卡源调起接口
-            if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj').account.balance>0) {
+            if ([5, 10, 17, 18].includes(res.data.source)) {
               await this.getCanBalancePay()
             } else {
               setStorage('balance_pay', true)
