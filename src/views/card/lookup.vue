@@ -298,12 +298,15 @@
               return
             }
             //针对卡源调起接口
-            if ([5, 10, 17, 18].includes(res.data.source)) {
-              await this.getCanBalancePay()
-            } else {
-              setStorage('balance_pay', true)
-              this.$store.commit('userInfo/changeCanBalancePay', true);
+            if (getStorage('userInfo', 'obj')) {
+              if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj').account.balance>0) {
+                await this.getCanBalancePay()
+              } else {
+                setStorage('balance_pay', true)
+                this.$store.commit('userInfo/changeCanBalancePay', true);
+              }
             }
+
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);
