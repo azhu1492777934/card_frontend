@@ -64,6 +64,7 @@ const revoke_plan = r => require.ensure([], () => r(require('./views/question/qu
 const release_plan = r => require.ensure([], () => r(require('./views/question/question_3')), 'question'); // 解约自动续约套餐
 const commonProblem = r => require.ensure([], () => r(require('./views/question/commonProblem')), 'commonProblem'); //  常见问题
 const realNameCourse = r => require.ensure([], () => r(require('./views/question/realNameCourse')), 'realNameCourse'); //  实名教程
+const guardian = r => require.ensure([], () => r(require('./views/question/guardian')), 'guardian'); // 赔偿条款协议书
 // 常见问题
 const commonQuestion = r => require.ensure([], () => r(require('./views/question/common_question')), 'commonQuestion'); //  客户常见问题
 const customerFeedback = r => require.ensure([], () => r(require('./views/question/customer_feedback')), 'customerFeedback'); //  客户反馈
@@ -250,6 +251,13 @@ export const constantRouterMap = [{
           component: customerFeedback,
           meta: {
             title: '反馈',
+          }
+        },
+        {
+          path: 'guardian',
+          component: guardian,
+          meta: {
+            title: '协议书',
           }
         },
       ]

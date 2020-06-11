@@ -24,7 +24,7 @@
       <swiper ref="swiperVant" :options="swiperOption">
         <swiper-slide v-for="(item,index) in plan_type" :key="item" :class="item">
           <ul class="plan-list-wrap">
-            <li @click="choosePlanClick(inner_index)"
+            <li @click="choosePlanClick(inner_index, index, inner_item.name)"
                 v-for="(inner_item,inner_index) in plan_list[item]"
                 :key="inner_index"
                 :name="inner_item.id"
@@ -93,6 +93,13 @@
       class="btn-recharge-wrap"
       :class="{'noDataHide':load_plan_list}"
     >
+      <div class="guardian" v-show="guardian">
+        <van-checkbox v-model="guardianChecked" icon-size="16px" shape="square" checked-color="#FFB214" id="guardian">
+         
+        </van-checkbox>
+        <span>我同意</span>
+         <p @click="goGuardia">《中国人民财产保险股份有限公司少儿走失找寻费用补偿保险条款》</p>
+      </div>
       <button
         @click="toService"
       >
@@ -129,13 +136,6 @@
       <p class="showTip">创建订单中,请等候</p>
     </van-popup>
 
-    <!-- <transition name="bounce">
-      <MiGu
-        :show-mi-gu-model="showMiGuModel"
-        :show-checked="true"
-      />
-    </transition> -->
-
   </div>
 </template>
 
@@ -143,7 +143,7 @@
   import MiGu from '../../components/activity/migu';
   import {swiper, swiperSlide} from 'vue-awesome-swiper'
   import {mapState} from 'vuex'
-  import {Toast, Popup, Notify, List, Dialog, Icon, Collapse, CollapseItem} from "vant";
+  import {Toast, Popup, Notify, List, Dialog, Icon, Collapse, CollapseItem, Checkbox} from "vant";
   import {setStorage, getStorage, checkBrowser, Today, lossRate, appRate, isMobile} from "../../utilies";
   import {_get, _post} from "../../http";
   // @ is an alias to /src
@@ -207,6 +207,10 @@
           is_c_frontend: true,
           is_normal: false,
         },
+        // 协议
+        guardianChecked: false,
+        guardian: false,
+        guardianText: '翼联守护'
       };
     },
     components: {
@@ -217,6 +221,7 @@
       [Icon.name]: Icon,
       [Collapse.name]: Collapse,
       [CollapseItem.name]: CollapseItem,
+      [Checkbox.name]: Checkbox,
       MiGu,
       swiper,
       swiperSlide,
@@ -239,7 +244,7 @@
       //处理套餐数据
       _get("/api/v1/app/plan_list", {
         iccid: getStorage("check_iccid")
-      }).then(res => {
+      }).then(async res => {
         if (res.state === 1) {
           if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
             this.load_plan_list = true;
@@ -304,6 +309,11 @@
             }
           }
 
+
+          
+         let planInfo = await this.getPlanInfo(this.choose_plan_index)
+         if (planInfo.name.includes(this.guardianText))this.guardian = true
+
         } else {
           this.load_plan_list = true;
           this.load_plan_msg = res.msg;
@@ -319,16 +329,37 @@
       toService() {
         location.href = 'https://cschat.antcloud.com.cn/index.htm?tntInstId=QWGLZKQM&scene=SCE00040313#'
       },
-      planTypeClikc(index) {
+      async planTypeClikc(index) {
         this.cur_plan_type_index = index;
         this.swiper.slideTo(index);
+        /* 获取当前套餐信息*/
+        let planInfo = await this.getPlanInfo(0)
+      
+        if (planInfo.name.includes(this.guardianText))this.guardian = true
+        else this.guardian = false
       },
-      choosePlanClick: function (id, index) {
+      choosePlanClick: function (id, index, name) {
         this.ref_plan_type_index = index;
         this.choose_plan_index = id;
         index === '2' ? this.recharge_btn_text = '选择叠加加油包套餐' : this.recharge_btn_text = '充值';
+
+        if (name.includes(this.guardianText)) this.guardian = true
+        else this.guardian = false
       },
       async recharge() {
+
+        if (this.guardian) {
+          if (!this.guardianChecked) {
+            Toast({
+              position: 'top',
+              message: "请同意该套餐协议",
+              duration: 4000
+            });
+            return
+          }
+        }
+
+
         let planName = this.render_type_name[this.cur_plan_type_index];
         let planType = '';
         for (let i in this.plan_type_name) {
@@ -487,6 +518,26 @@
       toCard() {
         appRate(14);
         this.$router.push({path: "/weixin/coupon/index"})
+      },
+      getPlanInfo(index) {
+       return new Promise((resolve) => {
+          let planName = this.render_type_name[this.cur_plan_type_index];
+          let planType = '';
+          for (let i in this.plan_type_name) {
+            if (this.plan_type_name[i] === planName) {
+              planType = i;
+              break
+            }
+          }
+          let planInfo = this.plan_list[planType][index];
+          resolve(planInfo)
+        })
+
+      },
+      goGuardia() {
+        this.$router.push({
+            path:"/weixin/question/guardian",
+          });
       }
     }
   };
@@ -515,34 +566,6 @@
       border-bottom: 1px solid #f4f4f4;
       box-sizing: border-box;
       background: #fff;
-
-      /*.swiper-slide {*/
-      /*  width: 25%;*/
-      /*  height: 46px;*/
-      /*  padding: 28px 0;*/
-      /*  font-size: 30px;*/
-      /*  line-height: 46px;*/
-      /*  color: #A6A6A6;*/
-      /*}*/
-
-      /*.swiper-slide-active {*/
-      /*  position: relative;*/
-      /*  color: #3E3E3E;*/
-      /*  opacity: 1;*/
-
-      /*  &:after {*/
-      /*    position: absolute;*/
-      /*    left: 50%;*/
-      /*    bottom: 25px;*/
-      /*    content: '';*/
-      /*    width: 40%;*/
-      /*    height: 5px;*/
-      /*    margin-left: -20%;*/
-      /*    background: #3E3E3E;*/
-      /*  }*/
-
-      /*}*/
-
       span {
         display: inline-block;
         flex: 1;
@@ -762,12 +785,36 @@
     .btn-recharge-wrap {
       position: relative;
       display: flex;
-      padding-top: 40px;
+      padding-top: 55px;
 
       &.noDataHide {
         display: none;
       }
-
+      .guardian {
+        width: 100%;
+        height: 55px;
+        position: absolute;
+        top: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        white-space:nowrap;
+        padding: 0 30px;
+        box-sizing: border-box;
+        #guardian {
+          flex: .5;
+        }
+        span {
+          flex: 1;
+        }
+        p {
+          flex: 8;
+          color: #6D4C41;
+          font-weight: 500;
+          overflow: hidden;//禁止内容溢出
+          text-overflow: ellipsis;
+        }
+      }
       button {
         display: block;
         height: 100px;
