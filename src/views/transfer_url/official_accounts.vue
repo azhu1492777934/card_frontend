@@ -13,21 +13,21 @@
         <img src="../../assets/imgs/transferUrl/subscribe@3x.png" alt="">
       </div>
       <div class="qr-wrapper">
-        <img :src="qrImg" alt="二维码">
+        <img :src="qrImg" alt="二维码" v-show="qrImg">
       </div>
       <div class="box-wrapper">
         <img src="../../assets/imgs/transferUrl/box-deco@3x.png" alt="">
         <img src="" alt="">
       </div>
-
+      <p type="text" disabled id="copyMy" style="opacity: 0;position:absolute">{{imei}}</p>
       <div class="iccid-wrapper">
-        
         <div>
           <span>设备号:</span>
-          <p type="text" disabled  id="copyMy">{{imei}}</p>
+          <input class="text" type="text" v-model="imei">
           <div @click="copyFn()">复制 <div class="talk"></div></div>
-          
         </div>
+        <div class="search" v-if="!qrImg"><input type="button" value="查询" @click="search(imei)"></div>
+
         <p @click="to_watch()" v-if="video">视频教程 
           <transition 
             :duration="50000" 
@@ -49,21 +49,22 @@
       </div>
       <div class="qrImg-wrapper">
         <div class="qr-inner-wrapper">
-          <img :src="qrImg" alt="">
+          <img :src="qrImg" alt="二维码" v-show="qrImg">
         </div>
 
         <div class="bar-wrapper">
           <p>长按关注公众号</p>
         </div>
       </div>
+      <p type="text" disabled id="copyMy" style="opacity: 0;position:absolute">{{imei}}</p>
       <div class="iccid-wrapper">
         
         <div>
           <span>设备号:</span>
-          <p type="text" disabled id="copyMy">{{imei}}</p>
-          <div @click="copyFn()">复制<div class="talk2"></div></div>
-
+          <input class="text" type="text" v-model="imei">
+          <div @click="copyFn()">复制 <div class="talk2"></div></div>
         </div>
+        <div class="search" v-if="!qrImg"><input type="button" value="查询" @click="search(imei)"></div>
         <p @click="to_watch()" v-if="video">视频教程 
           <transition 
             :duration="50000" 
@@ -83,7 +84,7 @@
 </template>
 
 <script>
-  import {Toast} from 'vant';
+  import {Toast, Dialog} from 'vant';
   import {_get} from "../../http";
   import {getUrlParam} from "../../utilies";
 
@@ -101,45 +102,21 @@
     },
     components: {
       [Toast.name]: Toast,
+      [Dialog.name]: Dialog
     },
     created() {
       
       if (!getUrlParam('imei')) {
-        Toast({
-          message: '未识别到IMEI',
-          mask: true,
-          duration: 0,
+        Dialog.alert({
+          message: '未识别到设备号，请输入设备号并查询'
         })
-        return
       }
       
-      Toast.loading({
-        mask: true,
-        forbidClick: true,
-        duration: 0,
-      });
       if (this.imei) {
-      _get('/iot/v1/partners/get_partner_wx_config', {
-        imei: this.imei
-      }).then(res => {
-          Toast.clear();
-          if (res.state == 1) {
-            this.iccid = res.data.iccid
-            this.qrImg = res.data.wx_img_path
-            this.video = res.data.wx_video_path
-            this.visible = res.data.is_qiyu
-          }else {
-          Toast({
-            message: res.msg,
-            mask: true,
-            duration: 0,
-          })
-          }
-        })
+        this.search(this.imei)
         return
-      } else {
-        Toast.clear();
-      }
+      } 
+
     },
     mounted() {
       
@@ -155,6 +132,25 @@
         document.execCommand("Copy");
         Toast({
           message: '复制成功',
+        })
+      },
+      search() {
+        _get('/iot/v1/partners/get_partner_wx_config', {
+          imei: this.imei
+        }).then(res => {
+          Toast.clear();
+          if (res.state == 1) {
+            this.iccid = res.data.iccid
+            this.qrImg = res.data.wx_img_path
+            this.video = res.data.wx_video_path
+            this.visible = res.data.is_qiyu
+          }else {
+          Toast({
+            message: res.msg,
+            mask: true,
+            duration: 3000,
+          })
+          }
         })
       }
     }
@@ -177,6 +173,7 @@
     overflow: hidden;
 
     .deco-left {
+      
       display: inline-block;
       position: absolute;
       top: 0;
@@ -296,7 +293,7 @@
           color: #FF6F00;
           font-weight: 600;
         }
-        p {
+        .text {
           margin: 10px;
           box-sizing: border-box;
           width: 320px;
@@ -347,6 +344,18 @@
         background-image: url("../../assets/imgs/transferUrl/finger.png");
         background-size: 100% 100%;
         z-index: 999;
+      }
+      .search{
+        display: flex;
+        justify-content: center;
+        input {
+          width: 120px;
+          height: 50px;
+          border-radius: 10px;
+          line-height: 35px;
+          background: linear-gradient(#FF6D00, #FB8C00);
+          color: #fff;
+        }
       }
     }
 
@@ -455,14 +464,14 @@
           color: #81d4fa;
           font-weight: 600;
         }
-        p {
+        .text {
+          color: #81d4fa;
           margin: 10px;
           box-sizing: border-box;
           width: 320px;
           background: #fff;
           border-radius: 15px;
           font-size: 28px;
-          color: #333;
           text-align: left;
         }
         div {
@@ -479,10 +488,10 @@
         }
       }
       p {
+        color: #81d4fa;
         width: 100%;
         height: 70px;
         font-size: 32px;
-        color: #81d4fa;
         font-weight: 700;
         line-height: 70px;
         span {
@@ -505,6 +514,18 @@
         background-image: url("../../assets/imgs/transferUrl/finger2.png");
         background-size: 100% 100%;
         z-index: 999;
+      }
+      .search{
+        display: flex;
+        justify-content: center;
+        input {
+          width: 120px;
+          height: 50px;
+          border-radius: 10px;
+          line-height: 35px;
+          background: linear-gradient(#0288D1, #81D4FA);
+          color: #fff;
+        }
       }
     }
 
