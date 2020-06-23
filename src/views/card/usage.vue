@@ -119,7 +119,7 @@
                   </div>
                   <div class="plan-date-wrap">
                     <p class="plan-date"
-                       v-if="(inArray(usageInfo.source,watch_source)>=0||inArray(usageInfo.source,[1,7,8])>=0)">
+                       v-if="(filterCardInfo.is_watch_card||inArray(usageInfo.source,[1,7,8])>=0)">
                       <span>开始日期:{{filterDate(item.activated_at)}}</span><br>
                       <span>有效日期:{{filterDate(item.expired_at)}}</span>
                     </p><!--手表卡-->
@@ -137,7 +137,7 @@
 		                                    </span>
                     </div>
 
-                    <div class="prefer_use" v-if="usagePlanLength > 1 && inArray(usageInfo.source,watch_source) < 0">
+                    <div class="prefer_use" v-if="usagePlanLength > 1 && filterCardInfo.is_flow_card">
                       <a
                         @click="prefer_use_operate(usageInfo.iccid,item.id,item.priority,usageInfo.source,item.order_id)"
                         v-if="item.priority >= 1">优先使用</a>
@@ -737,7 +737,7 @@
                 this.filterCardInfo.operator_logo = require('../../assets/imgs/card/usage/telecom-logo.svg')
               }
 
-              if (this.inArray(this.usageInfo.source, this.watch_source) >= 0 && this.usageInfo.source !== 19) {
+              if (getStorage('is_watch_card') && this.usageInfo.source !== 19) {
                 if (this.usageInfo.msisdn.substr(0, 2) === '86') {
                   this.filterCardInfo.msisdn = this.usageInfo.msisdn.substr(2, this.usageInfo.msisdn.length);
                 } else {
@@ -788,8 +788,7 @@
               }
 
 
-              if (this.inArray(this.usageInfo.source, this.watch_source) >= 0) {
-
+              if (getStorage('is_watch_card')) {
                 this.filterCardInfo.is_watch_card = true;
                 this.filterCardInfo.is_flow_card = false;
 

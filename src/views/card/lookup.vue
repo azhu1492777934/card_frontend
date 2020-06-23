@@ -105,7 +105,7 @@
       cardButton,
     },
     created() {
-      removeStorage('migu_watch_card');
+      removeStorage('is_watch_card');
       removeStorage('MiGuMusic');
       removeStorage('realnameType');
       removeStorage('plan_list_new_card');
@@ -198,11 +198,11 @@
           if (res.state === 1) {
             this.realnameType = res.data.real_name_type;
           }
-          if (this.realnameType === 1 && res.data.order_status === 0) {
-            setStorage('realnameType', this.realnameType);
-            this.$router.push('/weixin/recharge/balance');
-            return
-          }
+          // if (this.realnameType === 1 && res.data.order_status === 0) {
+          //   setStorage('realnameType', this.realnameType);
+          //   this.$router.push('/weixin/recharge/balance');
+          //   return
+          // }
           if (this.realnameType === 1 && res.data.order_status === 1) {
             setStorage('realnameType', this.realnameType);
             this.$router.push('/weixin/card/plan_list');
@@ -212,7 +212,8 @@
           lossRate({type: 3, iccid: iccid})
             .then(res => {
               if (res.state === 1) {
-                if(is_watch === 1) setStorage('migu_watch_card',1);
+                if(is_watch === 1) setStorage('is_watch_card',1);
+                
                 setStorage('plan_list_new_card', 1);
                 this.$router.push({path: '/weixin/card/plan_list'});
               } else {
@@ -316,7 +317,7 @@
 
 
             if (res.data.status === 1) {
-              if(res.data.is_watch === 1) setStorage('migu_watch_card',1);
+              if(res.data.is_watch === 1) setStorage('is_watch_card',1);
               this.$router.push({path: '/weixin/card/usage'})
             }
             if (res.data.status === 2) {

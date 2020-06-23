@@ -238,8 +238,8 @@
           type: true,//true 为微信，false 为支付宝
         },
         settingRechargeList: [],
+        advertisement: 'https://interaction.clotfun.online/horse?appkey=9140154da0d728363fb5da33239d3316&adSpaceKey=7ef927bb19c43f04f948bb4138d21ee2&from=H5&1=1'
 
-    
       }
     },
     filters: {
@@ -444,7 +444,8 @@
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
           failed_page: window.location.href,
-          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
+          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: this.advertisement,
+          // `${window.location.protocol}//${window.location.host}/weixin/card/usage`
           recharge_id: rechargeInfo.id ? rechargeInfo.id : 0
         };
 

@@ -234,17 +234,14 @@
           type: 4,
           iccid: getStorage("check_iccid")
         });
-
-        // // 限时活动
-        // if (isMobile(this.authorizedUserInfo.mobile) && !getStorage('planListShowMiGu' && getStorage('MiGuMusic')) && getStorage('migu_watch_card')) {
-        //   this.showMiGuModel = true;
-        // }
       }
+
       let _this = this;
       //处理套餐数据
       _get("/api/v1/app/plan_list", {
         iccid: getStorage("check_iccid")
       }).then(async res => {
+
         if (res.state === 1) {
           if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
             this.load_plan_list = true;
@@ -254,7 +251,9 @@
 
           this.load_plan_msg = res.msg;
           this.load_plan_list = false;
-          this.plan_list = res.data;
+          this.plan_list = res.data
+    
+          
           for (let item in this.plan_list) {
             // 套餐类型
             if (this.plan_type_name.hasOwnProperty(item)) {
@@ -319,6 +318,9 @@
           this.load_plan_msg = res.msg;
         }
       });
+    },
+    mounted() {
+
     },
     methods: {
       toQuestion() {
@@ -529,6 +531,7 @@
               break
             }
           }
+          console.log(this.plan_list)
           let planInfo = this.plan_list[planType][index];
           resolve(planInfo)
         })
