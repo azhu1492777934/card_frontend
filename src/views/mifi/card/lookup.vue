@@ -466,12 +466,12 @@
         border-radius: 70px;
       }
       .advert {
-        width: 50px;
-        height: 70px;
+        width: 62px;
+        height: 86px;
         background: url("../../../assets/imgs/card/lookup/advert2.gif");
         background-size: 100%;
         position: absolute;
-        top: 0;
+        top: -8px;
         right: 0;
       }
     }
