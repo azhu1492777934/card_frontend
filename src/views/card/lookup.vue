@@ -14,6 +14,7 @@
       </div>
       <div class="btn-check-wrap">
         <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
+        <a class="advert" target="_Blank" :href="advertisement"></a>
       </div>
       <div v-show="recording_show" class="recording-wrap">
         <p class="recording-title">
@@ -46,6 +47,7 @@
       </div>
       <div class="btn-check-wrap">
         <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
+        <a class="advert" target="_Blank" :href="advertisement"></a>
       </div>
       <div v-show="recording_show" class="recording-wrap">
         <p class="recording-title">
@@ -86,6 +88,7 @@
     name: "home",
     data() {
       return {
+        advertisement: 'https://interaction.clotfun.online/horse?appkey=19a9a0d6ce1cc847fcf213dc9d75ade8&adSpaceKey=d66eb4937fdfb2e9b63ea6712cfa7881&from=H5&1=1', // 广告
         realnameType: 0,
         sort_recording_list: {}, // 排序查询列表
         recording_list: [],
@@ -537,6 +540,7 @@
 
     .btn-check-wrap {
       padding-bottom: 50px;
+      position: relative;
 
       button {
         display: inline-block;
@@ -548,6 +552,15 @@
         background-color: #38b5ed;
         text-align: center;
         border-radius: 70px;
+      }
+      .advert {
+        width: 50px;
+        height: 70px;
+        background: url("../../assets/imgs/card/lookup/advert.gif");
+        background-size: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
       }
     }
 
@@ -677,6 +690,7 @@
 
     .btn-check-wrap {
       padding-bottom: 84px;
+      position: relative;
 
       button {
         display: inline-block;
@@ -689,6 +703,16 @@
         background-color: #00CA9D;
         text-align: center;
         border-radius: 100px;
+      }
+
+      .advert {
+        width: 50px;
+        height: 70px;
+        background: url("../../assets/imgs/card/lookup/advert.gif");
+        background-size: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
       }
     }
 

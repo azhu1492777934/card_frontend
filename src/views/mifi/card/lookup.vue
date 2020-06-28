@@ -11,6 +11,7 @@
     </div>
     <div ref="ref_button" class="btn-check-wrap">
       <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
+      <a class="advert" target="_Blank" :href="advertisement"></a>
     </div>
     <div v-show="recording_show" class="recording-wrap">
       <p ref="recording_title" class="recording-title">
@@ -39,6 +40,7 @@
     name: "home",
     data() {
       return {
+        advertisement: 'https://interaction.clotfun.online/horse?appkey=db8a11aa22c93a1fa17fb5d7756288dc&adSpaceKey=eb7cfa98ab24d3fce04352f258f83e97&from=H5&1=1', // 广告
         sort_recording_list: {}, // 排序查询列表
         recording_list: [],
         recording_show: false,
@@ -450,6 +452,7 @@
 
     .btn-check-wrap {
       padding-bottom: 50px;
+      position: relative;
 
       button {
         display: inline-block;
@@ -461,6 +464,15 @@
         background-color: #38b5ed;
         text-align: center;
         border-radius: 70px;
+      }
+      .advert {
+        width: 50px;
+        height: 70px;
+        background: url("../../../assets/imgs/card/lookup/advert2.gif");
+        background-size: 100%;
+        position: absolute;
+        top: 0;
+        right: 0;
       }
     }
 

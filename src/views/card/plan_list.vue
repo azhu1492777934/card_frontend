@@ -531,7 +531,7 @@
               break
             }
           }
-          console.log(this.plan_list)
+     
           let planInfo = this.plan_list[planType][index];
           resolve(planInfo)
         })

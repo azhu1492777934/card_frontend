@@ -211,6 +211,7 @@
         minDate: new Date(),
         maxDate: new Date(this.getEndDate().endYear, this.getEndDate().endMonth, this.getEndDate().endDay),
         currentDate: new Date(),
+        advertisement: 'https://interaction.clotfun.online/horse', // 广告链接
       }
     },
     components: {
@@ -471,7 +472,9 @@
           start_time: this.valDate,
           type: 1,
           failed_page: window.location.href,
-          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`
+          success_page: this.global_variables.packed_project === 'mifi'? this.advertisement : `${window.location.protocol}//${window.location.host}/weixin/card/usage`
+          //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`
+          //  cardserve `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
         };
 
         if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid;
