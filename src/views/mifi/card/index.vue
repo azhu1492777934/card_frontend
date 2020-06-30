@@ -53,17 +53,17 @@
         </div>
         <div class="card-function-wrap">
             <div class="function-group-wrap">
-                <div @click="buyPlan">
+                <div @click="buyPlan" v-if="!(this.global_variables.device === 'iphone')">
                     <span class="iconfont icon-recharge"></span>
                     <p>购买套餐</p>
                 </div>
-                <span class="divider"></span>
+                <span class="divider" v-if="!(this.global_variables.device === 'iphone')"></span>
                 <div @click="flowCheck" class="item-function-wrap">
                     <span class="iconfont icon-info"></span>
                     <p>流量查询</p>
                 </div>
-                <span class="divider"></span>
-                <div @click="checkOrder">
+                <span class="divider" v-if="!(this.global_variables.device === 'iphone')"></span>
+                <div @click="checkOrder" v-if="!(this.global_variables.device === 'iphone')">
                     <span class="iconfont icon-txt"></span>
                     <p>订单查询</p>
                 </div>
