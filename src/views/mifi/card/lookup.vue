@@ -11,7 +11,7 @@
     </div>
     <div ref="ref_button" class="btn-check-wrap">
       <card-button @clickThrotle="searchIccid(iccid)" :btnText="'查询'"></card-button>
-      <a class="advert" target="_Blank" :href="advertisement"></a>
+      <a class="advert" target="_Blank" :href="advertisement" v-if="!(this.global_variables.device === 'iphone')"></a>
     </div>
     <div v-show="recording_show" class="recording-wrap">
       <p ref="recording_title" class="recording-title">
