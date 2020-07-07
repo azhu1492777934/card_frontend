@@ -468,7 +468,7 @@
       .advert {
         width: 62px;
         height: 86px;
-        background: url("../../../assets/imgs/card/lookup/advert2.gif");
+        background: url("../../../assets/imgs/card/lookup/advert.gif");
         background-size: 100%;
         position: absolute;
         top: -8px;
