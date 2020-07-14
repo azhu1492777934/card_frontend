@@ -17,13 +17,13 @@
 
         <div class="userMid">
           <div class="money">
-            <div >
+            <!-- <div >
               <span>{{getUserInfo.account.balance}}<i @click="getRmb"></i></span>
             </div>
             <div @click="goBalance">
               <i ></i>
               <span>余额</span> 
-            </div>
+            </div> -->
           </div>
 
 

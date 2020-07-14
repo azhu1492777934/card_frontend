@@ -303,12 +303,7 @@
             }
             //针对卡源调起接口
             if (getStorage('userInfo', 'obj')) {
-              if ([5, 10, 17, 18].includes(res.data.source)&&getStorage('userInfo', 'obj').account.balance>0) {
-                await this.getCanBalancePay()
-              } else {
-                setStorage('balance_pay', true)
-                this.$store.commit('userInfo/changeCanBalancePay', true);
-              }
+              await this.getCanBalancePay()
             }
 
             setStorage('originPrice', res.data.default_price);
@@ -371,6 +366,9 @@
               result.indexOf(',') > -1 ? result = result.substr(result.indexOf(',') + 1, result.length) : result;
               _this.iccid = (result.replace(/\s*/g, ""));
               _this.processCheckIccid(_this.iccid);
+            },
+            fail: function(err) {
+              Notify({message: '暂不支持，敬请原谅！'});
             }
           });
         } else if (this.client_type === 'alipay') {
