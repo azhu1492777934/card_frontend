@@ -168,9 +168,15 @@
   import {getStorage, setStorage, checkBrowser} from "../../../utilies";
   import {Popup, Toast, Notify, Dialog,RadioGroup, Radio,DatetimePicker, Collapse, CollapseItem} from 'vant'
   import {_post} from "../../../http";
-
+  import {mapState} from 'vuex'
+  
   export default {
     name: "plan_group",
+    computed: {
+      ...mapState({
+        authorizedUserInfo: state => state.userInfo.userInfoInner
+      }),
+    },
     data() {
       return {
         activeNames: [],
@@ -385,6 +391,15 @@
         this.picker.showPlanSelect = false;
       },
       recharge() {
+
+        if (!this.authorizedUserInfo.account.user_id) {
+          Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          });
+          return;
+        }
+
         let planInfo = null,
           _this = this,
           cur_date = new Date().getDate();

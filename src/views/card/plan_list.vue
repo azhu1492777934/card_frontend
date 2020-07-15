@@ -349,6 +349,14 @@
         else this.guardian = false
       },
       async recharge() {
+        
+        if (!this.authorizedUserInfo.account.user_id) {
+          Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          });
+          return;
+        }
 
         if (this.guardian) {
           if (!this.guardianChecked) {
