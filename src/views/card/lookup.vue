@@ -187,6 +187,11 @@
           Notify({message: this.checkSearchIccid(scanWatchCardIccid).msg});
         }
       }
+
+      if (getUrlParam('iccid')) {
+        this.processCheckIccid(getUrlParam('iccid'))
+      }
+
     },
     methods: {
       getRealnameType(iccid,is_watch) {
