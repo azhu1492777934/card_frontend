@@ -99,7 +99,7 @@
             let userDom = document.querySelector('.user-wrap');
             if (userDom) setStorage('userHeight', userDom.offsetHeight);
 
-            if (this.global_variables.packed_project === 'mifi') {
+            if (this.global_variables.packed_project === 'mifi' || this.client_type === 'app') {
               this.$store.commit('userInfo/changeUserStatus', false);
             }
           }

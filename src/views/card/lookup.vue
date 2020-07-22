@@ -239,11 +239,9 @@
       processCheckIccid: function (iccid) {
         // 清除用户输入的字母
         let newIccid;
-        // if (/[a-zA-Z]/.test(iccid.replace(/\s/g, "").charAt(iccid.length - 1))) {
-        //   newIccid = iccid.replace(/\s/g, "").substr(0, iccid.length - 1);
-        // } else {
+
         newIccid = iccid.replace(/\s/g, "");
-        // }
+
         Toast.loading({
           mask: true,
           message: "查询中,请等候",
