@@ -451,7 +451,7 @@
           recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
           recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
           failed_page: window.location.href,
-          success_page: this.global_variables.packed_project === 'mifi'? this.advertisement :  advert,
+          success_page:  getStorage('advertState') ? `${window.location.protocol}//${window.location.host}` :this.global_variables.packed_project === 'mifi'? this.advertisement :  advert,
           //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`
           //  cardserve `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
           recharge_id: rechargeInfo.id ? rechargeInfo.id : 0

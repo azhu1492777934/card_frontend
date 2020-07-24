@@ -313,6 +313,7 @@
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);
             removeStorage('plan_list_new_card');
+            removeStorage('advertState');
             localStorage.setItem("currentType", "card");
             if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
 
@@ -325,6 +326,7 @@
               this.toRealname(res.data.iccid, res.data.source);
             }
             if (res.data.status === 3) {
+              setStorage('advertState', 1);
               this.getRealnameType(res.data.iccid,res.data.is_watch);
             }
           } else {
