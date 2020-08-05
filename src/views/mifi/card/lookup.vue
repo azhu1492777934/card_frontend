@@ -213,7 +213,7 @@
             }
           } else if (res.state === 11022) {
             Dialog.alert({
-              message: res.msg
+              message: "此卡已过期，即将前往换卡页面"
             }).then(() => {
               this.$router.push({path: '/weixin/question/eqReplaceMent'})
             })
