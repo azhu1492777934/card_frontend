@@ -164,14 +164,14 @@
         show: false,
         areaList: areaList,
         replaceList: [],
-        currentType: 0,
+        currentType: 1,
         gift: 2,
         youku_mobile: ""
       };
     },
     created() {
       // this.currentType=getUrlParam("status");
-      this.currentType = localStorage.getItem("replaceStatus");
+      this.currentType = localStorage.getItem("replaceStatus") || 1; //默认为卡更换
       if(this.currentType==0){
         this.statusList=["设备更换", "物流查询"];
       }else{

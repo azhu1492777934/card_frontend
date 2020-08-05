@@ -329,6 +329,12 @@
               setStorage('advertState', 1);
               this.getRealnameType(res.data.iccid,res.data.is_watch);
             }
+          } else if (res.state === 11022) {
+            Dialog.alert({
+              message: res.msg
+            }).then(() => {
+              this.$router.push({path: '/weixin/question/eqReplaceMent'})
+            })
           } else {
             Notify({
               message: res.msg

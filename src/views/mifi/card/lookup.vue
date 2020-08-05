@@ -211,6 +211,12 @@
                 this.toRealname(res.data.iccid,res.data.source);
               // }
             }
+          } else if (res.state === 11022) {
+            Dialog.alert({
+              message: res.msg
+            }).then(() => {
+              this.$router.push({path: '/weixin/question/eqReplaceMent'})
+            })
           } else {
             Notify({message: res.msg})
           }
