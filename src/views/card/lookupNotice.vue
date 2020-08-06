@@ -64,6 +64,16 @@
       </div><!--历史记录-->
       <van-popup :close-on-click-overlay="false" v-model="forbidden_click"></van-popup>
     </div>
+
+    <notice 
+      content="因业务功能使用需要，需共享物联卡业务使用相关信息，我们将会获取您的用户信息，其中包括订购套餐
+      、使用流量、 业务功能状态等" 
+      textRight="同意" 
+      textLeft="不同意并退出" 
+      @textRightClick="consent()" 
+      @textLeftClick="close()"
+      v-if="visibleNotice">
+    </notice>
   </div>
 </template>
 
@@ -82,7 +92,7 @@
   import {Popup, Notify, Toast, Dialog} from 'vant'
   import {_post, _get} from "../../http";
   import cardButton from '../../components/button'
-  import Empty from '../../components/empty'
+  import Notice from '../../components/activity/notice'
 
   export default {
     name: "home",
@@ -98,13 +108,14 @@
         client_type: checkBrowser(),   //当前客户端环境 微信/支付宝
         showClearBtn: false,
         forbidden_click: true, //防止用户在未授权是进行业务操作
-        newAppStyle: "app"
+        newAppStyle: "app",
+        visibleNotice: false,
       }
     },
     components: {
       [Popup.name]: Popup,
       [Toast.name]: Toast,
-      Empty,
+      Notice,
       cardButton,
     },
     created() {
@@ -190,6 +201,10 @@
 
       if (getUrlParam('iccid')) {
         this.processCheckIccid(getUrlParam('iccid'))
+      }
+
+      if (!getStorage('notice') || getStorage('notice') == 0) {
+        this.visibleNotice = true
       }
 
     },
@@ -486,6 +501,15 @@
           }
         });
       },//判断余额是否可以支付
+      consent() {
+        setStorage('notice', 1)
+        this.visibleNotice = false
+      },
+      close() {
+        setStorage('notice', 0)
+        this.visibleNotice = false
+        this.$router.push({path: '/Not_fund'})
+      }
     }
   };
 </script>
@@ -794,4 +818,5 @@
     }
 
   }
+
 </style>

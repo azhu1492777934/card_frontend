@@ -45,6 +45,7 @@ const plan_list = r => require.ensure([], () => r(require('./views/card/plan_lis
 // 卡查询
 const card_wrapper = r => require.ensure([], () => r(require('./views/card/card_wrapper')), 'card_wrapper');
 const card_lookup = r => require.ensure([], () => r(require('./views/card/lookup')), 'card_lookup'); // 查询
+const card_lookup_notice = r => require.ensure([], () => r(require('./views/card/lookupNotice')), 'card_lookup_notice'); // 查询
 const card_usage = r => require.ensure([], () => r(require('./views/card/usage')), 'card_usage'); // 使用情况
 const card_more_flow = r => require.ensure([], () => r(require('./views/card/more_flow_plan')), 'card_more_flow'); // 加油包充值
 const card_connection = r => require.ensure([], () => r(require('./views/card/connection')), 'card_connection'); // 卡连接详情
@@ -338,7 +339,14 @@ export const constantRouterMap = [{
           title: '查询',
           requireAuth: true,
         }
-      },
+      },{
+        path: 'lookupN',
+        component: card_lookup_notice,
+        meta: {
+          title: '查询',
+          requireAuth: true,
+        }
+        },
         {
           path: 'esim_usage',
           component: esim_usage,
