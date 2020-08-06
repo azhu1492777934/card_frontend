@@ -92,7 +92,7 @@
                     <p class="plan-name">{{item.rps_name}}</p>
                     <div class="plan-describe">
                       <!--/*套餐描述-->
-                      <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
+                      <!-- <div v-if="item.planCellInfo && JSON.stringify(item.planCellInfo) != '{}'">
                         <div v-if="item.planCellInfo.key!='MG500'">
                           <p v-if="item.describe && item.describe!='None'">
                             <span>{{item.describe}}</span><br/>
@@ -103,9 +103,9 @@
                           </p>
                         </div>
                         <span v-if="item.planCellInfo.max_high">高速流量:{{item.planCellInfo.max_high}},已使用{{item.planCellInfo.used_high}}</span><br>
-                        <!-- <span v-if="item.planCellInfo.max_normal">中速流量:{{item.planCellInfo.max_normal}}</span> -->
-                      </div>
-                      <div v-else>
+                        <span v-if="item.planCellInfo.max_normal">中速流量:{{item.planCellInfo.max_normal}}</span>
+                      </div> -->
+                      <div>
                         <p v-if="item.describe && item.describe!='None'">
                           <span>{{item.describe}}</span><br/>
                           <span>{{item.remark}}</span>
