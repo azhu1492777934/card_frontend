@@ -66,7 +66,7 @@
     </div>
 
     <notice 
-      content="因业务功能使用需要，需共享物联卡业务使用相关信息，如用量信息，包括订购套餐、使用流量、业务功能状态" 
+      content="因业务功能使用需要，需共享物联卡业务使用相关信息，包括订购套餐、使用流量、业务功能状态"
       textRight="同意" 
       textLeft="不同意并退出" 
       @textRightClick="consent()" 
