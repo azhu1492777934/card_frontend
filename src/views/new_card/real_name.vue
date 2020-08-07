@@ -409,7 +409,9 @@
             } else if (res.state === 10015) {
               Notify({message: res.msg});
               setTimeout(function () {
-                _this.$router.push({path: '/weixin/card/plan_list'});
+                _this.$router.push({
+                  path: _this.global_variables.packed_project === 'mifi'?'/mifi/plan/group':'/weixin/card/plan_list'
+                });
               }, 1500);
             } else {
               if (res.msg) {

@@ -194,7 +194,7 @@
             if (res.data.status === 1) {
               this.$router.push({path: '/mifi/card/index'});
             }
-            if (res.data.status === 2 ) {
+            if (res.data.status === 2) {
               this.toRealname(res.data.iccid,res.data.source);
             }
             if (res.data.status === 3) {
