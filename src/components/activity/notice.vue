@@ -43,7 +43,6 @@ export default {
   .notice {
     position: absolute;
     top: 0;
-    left: 0;
     max-width: 750px;
     margin: 0 auto;
     width: 100%;
