@@ -43,7 +43,7 @@ module.exports = {
         }
       },
       '/accountCenter': {
-        target: 'http://uc-test.api.china-m2m.com',
+        target: 'http://uc.api.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/accountCenter': ''
@@ -71,7 +71,7 @@ module.exports = {
         }
       },
       '/pay': {
-        target: "https://paytt.china-m2m.com",
+        target: "https://pay.china-m2m.com",
         changeOrigin: true,
         pathRewrite: {
           '^/pay': ""
