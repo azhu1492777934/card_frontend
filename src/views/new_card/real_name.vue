@@ -396,7 +396,7 @@
                 source: this.card_source,
                 type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
               }).then(res => {
-                if (res.data.indexOf("taobao") !== -1) {
+                if (res.extra.to_external_browser == 1) {
                   if (this.global_variables.RuntimeEnv === 'wechat') {
                     this.$router.push({path: '/to_tb', query: {url: res.data}});
                   } else {

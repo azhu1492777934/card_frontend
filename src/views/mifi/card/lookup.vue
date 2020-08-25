@@ -161,7 +161,7 @@
         this.processCheckIccid(iccid);
       },
 
-       processCheckIccid: function (iccid) {
+      processCheckIccid: function (iccid) {
         this.$store.commit('mifiCommon/changeLoadingStatus', {flag: true});
         //查询
         _post('/api/v1/app/new_auth/check_auth_', {
