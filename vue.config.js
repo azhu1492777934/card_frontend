@@ -36,7 +36,7 @@ module.exports = {
     disableHostCheck: true,
     proxy: {
       '/api': {
-        target: 'https://cardserverapi.china-m2m.com',
+        target: 'http://cardserver_test.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

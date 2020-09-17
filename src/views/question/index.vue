@@ -8,14 +8,14 @@
       <li>
         <a  @click="q2()">2.流量通话显示正常，但无法使用</a>
       </li>
-      <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
+      <!-- <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
         <a @click="toRefund" href="javascript:;">3.套餐退款</a>
-      </li>
+      </li> -->
       <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
-        <router-link to="/weixin/userCenter/rechargeOrder">4.余额退款</router-link>
+        <router-link to="/weixin/refund/argument">3.订单退款</router-link>
       </li>
       <li>
-        <a  @click="q3()"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">5</span>.解约自动续费套餐</a>
+        <a  @click="q3()"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">4</span>.解约自动续费套餐</a>
       </li>
      
      <li v-if="global_variables.packed_project=='mifi'">

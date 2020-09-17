@@ -55,7 +55,7 @@
     methods: {
       checkArgument() {
         this.$router.push({
-          path: '/weixin/refund/index',
+          path: '/weixin/userCenter/rechargeOrder',
         })
       },
       cancel() {
