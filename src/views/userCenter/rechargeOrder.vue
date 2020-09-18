@@ -332,12 +332,12 @@
 
       >span:nth-child(5){
         position:absolute;
-        top:10px;
+        top:20px;
         right:36px;
-        font-size:24px;
+        font-size:26px;
         font-family:SourceHanSansSC-Light;
-        font-weight:300;
-        color:rgba(149,149,149,1);
+        font-weight:600;
+        color:rgba(87,155,255,1);
       }
       .rcved{
         color:rgba(251,93,32,1) !important;
