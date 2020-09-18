@@ -131,7 +131,7 @@
         methods: {
           //订单查询
           goRecord(){
-            this.$router.push({path:"orderRecord"})
+            this.$router.push({path:"rechargeOrder"})
           },
           goCard(){
             this.$router.push({path:"cardPackage"});

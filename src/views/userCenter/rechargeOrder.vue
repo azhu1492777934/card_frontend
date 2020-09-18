@@ -43,9 +43,7 @@
 
       <van-popup
         v-model="showPopup"
-       
         position="bottom"
-        
       >
         <van-radio-group v-model="radio" @change="radioChange">
           <div class="refundtitle">退款原因</div>
