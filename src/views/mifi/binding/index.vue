@@ -21,7 +21,7 @@
         <button :disabled="loginDisabled" @click="login">绑定</button>
       </div>
       <div class="phone-tip">
-        温馨提示<br/>以'145','146','166','177','199'号段开头的号码无法接收短信验证码
+        温馨提示<br/>以'145','146','166','177','191','199'号段开头的号码无法接收短信验证码
       </div>
     </div>
 

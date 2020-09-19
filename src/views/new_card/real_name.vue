@@ -42,7 +42,7 @@
       <button @click="checkInfo" class="btn-next">完成实名 激活卡</button>
     </div>
     <div class="phone-tip">
-      温馨提示<br/>以'145','146','166','177','199'号段开头的号码无法接收短信验证码
+      温馨提示<br/>以'145','146','166','177','191','199'号段开头的号码无法接收短信验证码
     </div>
     <van-popup v-model="showItem.showFixedWrap" :close-on-click-overlay="false">
       <p class="showTip">{{showTipMsg}}</p>
