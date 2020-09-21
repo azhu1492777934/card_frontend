@@ -131,7 +131,10 @@
         methods: {
           //订单查询
           goRecord(){
-            this.$router.push({path:"rechargeOrder"})
+            Dialog.alert({
+              message: '请到 ‘激活续费’ -> ‘进入查询’ -> ‘详情页’ -> ‘问题中心’ -> ‘订单退款’ 进行查询'
+            })
+            // this.$router.push({path:"rechargeOrder"})
           },
           goCard(){
             this.$router.push({path:"cardPackage"});
