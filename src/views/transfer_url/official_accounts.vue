@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div v-if="!visible" class="transfer-url-wrapper">
+    <!-- <div v-if="!visible" class="transfer-url-wrapper">
 
       <div>
         <span class="deco-left"></span>
@@ -76,7 +76,7 @@
         </transition>
         </p>
       </div>
-    </div>
+    </div> -->
     
   </div>
 
@@ -106,6 +106,9 @@
     },
     created() {
       
+      window.location.href = `http://mifi.china-m2m.com/mifi/index?imei=${this.imei}`
+      return
+
       if (!getUrlParam('imei')) {
         Dialog.alert({
           message: '未识别到设备号，请输入设备号并查询'
