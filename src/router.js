@@ -201,14 +201,16 @@ export const constantRouterMap = [{
             title: '问题中心',
             requireAuth: true,
           }
-        }, {
-          path: 'revoke_plan',
-          component: revoke_plan,
-          meta: {
-            title: '唤醒套餐',
-            requireAuth: true,
-          }
-        }, {
+        }, 
+        // {
+        //   path: 'revoke_plan',
+        //   component: revoke_plan,
+        //   meta: {
+        //     title: '唤醒套餐',
+        //     requireAuth: true,
+        //   }
+        // },
+         {
           path: 'release_plan',
           component: release_plan,
           meta: {
