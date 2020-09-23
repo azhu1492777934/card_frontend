@@ -122,8 +122,8 @@
       _get('/api/v1/app/cards/telcom/usage', {
         iccid: getStorage('check_iccid'),
       }).then(res => {
+        this.loading = false
         if (res.state == 1) {
-          this.loading = false
           this.hasUsagePlan = !!res.data.usage.plans.length;
         } else {
           Notify({
