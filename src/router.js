@@ -197,20 +197,20 @@ export const constantRouterMap = [{
         {
           path: 'index',
           component: question,
+          name:'question',
           meta: {
             title: '问题中心',
             requireAuth: true,
           }
-        }, 
-        // {
-        //   path: 'revoke_plan',
-        //   component: revoke_plan,
-        //   meta: {
-        //     title: '唤醒套餐',
-        //     requireAuth: true,
-        //   }
-        // },
-         {
+        }, {
+          path: 'revoke_plan',
+          component: revoke_plan,
+          name: 'revoke_plan',
+          meta: {
+            title: '唤醒套餐',
+            requireAuth: true,
+          }
+        }, {
           path: 'release_plan',
           component: release_plan,
           meta: {

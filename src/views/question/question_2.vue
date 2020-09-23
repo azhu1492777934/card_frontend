@@ -1,5 +1,9 @@
 <template>
   <div class="get-plan-wrap">
+    <div class="loading" v-if="loading">
+      <van-loading vertical size="64px"/>
+      <span>{{loadingText}}</span> 
+    </div>
     <div class="get-plan-inner">
       <p>解决方案</p>
       <div class="solution-wrap">
@@ -66,29 +70,77 @@
     }
 
   }
+
+  .loading {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 260px;
+    height: 260px;
+    background: #3C3C3C;
+    opacity: .68;
+    border-radius: 9px;
+    z-index: 11;
+    font-size: 24px;
+    color: #EBEBEB;
+    display: flex;
+    justify-content:center;
+    align-items: center;
+    flex-direction: column;
+    span:nth-child(2){
+      display: block;
+      margin-top: 15px; 
+      font-size: 30px;
+    }
+  }
 </style>
 
 <script>
   // @ is an alias to /src
-  import {_post} from "../../http";
+  import {_get, _post} from "../../http";
   import {getStorage} from "../../utilies";
-  import {Notify} from 'vant'
+  import {Notify, Loading} from 'vant'
   import cardButton from '../../components/button'
 
   export default {
     name: "home",
 
     data() {
-      return {}
+      return {
+        hasUsagePlan: null,
+        loading: true,
+        loadingText: null
+      }
     },
     components: {
-      cardButton
+      cardButton,
+      [Loading.name]: Loading
     },
     created() {
-
+      
+      _get('/api/v1/app/cards/telcom/usage', {
+        iccid: getStorage('check_iccid'),
+      }).then(res => {
+        if (res.state == 1) {
+          this.loading = false
+          this.hasUsagePlan = !!res.data.usage.plans.length;
+        } else {
+          Notify({
+            message: res.msg,
+          })
+        }
+        
+      })
     },
     methods: {
       revokePlan: function () {
+        if (!this.hasUsagePlan) {
+          Notify({
+            message: '当前套餐已过期，无法唤醒',
+          })
+          return
+        }
         let _this = this;
         _post('/api/v1/app/restart_device', {
           iccid: getStorage('check_iccid'),
