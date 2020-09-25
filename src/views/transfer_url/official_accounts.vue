@@ -1,93 +1,96 @@
 <template>
   <div>
-    <!-- <div v-if="!visible" class="transfer-url-wrapper">
+    <div v-show="divisivePartner">
+      <div v-if="!visible" class="transfer-url-wrapper">
 
-      <div>
-        <span class="deco-left"></span>
-        <span class="deco-right"></span>
-        <span class="word-left"></span>
-        <span class="word-right"></span>
-      </div>
-
-      <div class="subscribe-wrapper">
-        <img src="../../assets/imgs/transferUrl/subscribe@3x.png" alt="">
-      </div>
-      <div class="qr-wrapper">
-        <img :src="qrImg" alt="二维码" v-show="qrImg">
-      </div>
-      <div class="box-wrapper">
-        <img src="../../assets/imgs/transferUrl/box-deco@3x.png" alt="">
-        <img src="" alt="">
-      </div>
-      <p type="text" disabled id="copyMy" style="opacity: 0;position:absolute">{{imei}}</p>
-      <div class="iccid-wrapper">
         <div>
-          <span>设备号:</span>
-          <input class="text" type="text" v-model="imei">
-          <div @click="copyFn()">复制 <div class="talk"></div></div>
+          <span class="deco-left"></span>
+          <span class="deco-right"></span>
+          <span class="word-left"></span>
+          <span class="word-right"></span>
         </div>
-        <div class="search" v-if="!qrImg"><input type="button" value="查询" @click="search(imei)"></div>
 
-        <p @click="to_watch()" v-if="video">视频教程 
-          <transition 
-            :duration="50000" 
-            appear 
-            enter-active-class="animated animate__bounce" 
-            leave-active-class="animated animate__bounce" 
-            appear-active-class="animated animate__bounce">
-            <span v-show="!visible"></span>
-        </transition>
-        </p>
-      </div>
-
-    </div>
-
-    <div v-if="visible" class="transfer-url-wrapper2">
-      <div>
-        <span class="word-left"></span>
-        <span class="word-right"></span>
-      </div>
-      <div class="qrImg-wrapper">
-        <div class="qr-inner-wrapper">
+        <div class="subscribe-wrapper">
+          <img src="../../assets/imgs/transferUrl/subscribe@3x.png" alt="">
+        </div>
+        <div class="qr-wrapper">
           <img :src="qrImg" alt="二维码" v-show="qrImg">
         </div>
+        <div class="box-wrapper">
+          <img src="../../assets/imgs/transferUrl/box-deco@3x.png" alt="">
+          <img src="" alt="">
+        </div>
+        <p type="text" disabled id="copyMy" style="opacity: 0;position:absolute">{{imei}}</p>
+        <div class="iccid-wrapper">
+          <div>
+            <span>设备号:</span>
+            <input class="text" type="text" v-model="imei">
+            <div @click="copyFn()">复制 <div class="talk"></div></div>
+          </div>
+          <div class="search" v-if="!qrImg"><input type="button" value="查询" @click="search(imei)"></div>
 
-        <div class="bar-wrapper">
-          <p>长按关注公众号</p>
+          <p @click="to_watch()" v-if="video">视频教程 
+            <transition 
+              :duration="50000" 
+              appear 
+              enter-active-class="animated animate__bounce" 
+              leave-active-class="animated animate__bounce" 
+              appear-active-class="animated animate__bounce">
+              <span v-show="!visible"></span>
+          </transition>
+          </p>
         </div>
+
       </div>
-      <p type="text" disabled id="copyMy" style="opacity: 0;position:absolute">{{imei}}</p>
-      <div class="iccid-wrapper">
-        
+
+      <div v-if="visible" class="transfer-url-wrapper2">
         <div>
-          <span>设备号:</span>
-          <input class="text" type="text" v-model="imei">
-          <div @click="copyFn()">复制 <div class="talk2"></div></div>
+          <span class="word-left"></span>
+          <span class="word-right"></span>
         </div>
-        <div class="search" v-if="!qrImg"><input type="button" value="查询" @click="search(imei)"></div>
-        <p @click="to_watch()" v-if="video">视频教程 
-          <transition 
-            :duration="50000" 
-            appear 
-            enter-active-class="animated animate__bounce" 
-            leave-active-class="animated animate__bounce" 
-            appear-active-class="animated animate__bounce">
-            <span v-show="visible"></span>
-        </transition>
-        </p>
+        <div class="qrImg-wrapper">
+          <div class="qr-inner-wrapper">
+            <img :src="qrImg" alt="二维码" v-show="qrImg">
+          </div>
+
+          <div class="bar-wrapper">
+            <p>长按关注公众号</p>
+          </div>
+        </div>
+        <p type="text" disabled id="copyMy" style="opacity: 0;position:absolute">{{imei}}</p>
+        <div class="iccid-wrapper">
+          
+          <div>
+            <span>设备号:</span>
+            <input class="text" type="text" v-model="imei">
+            <div @click="copyFn()">复制 <div class="talk2"></div></div>
+          </div>
+          <div class="search" v-if="!qrImg"><input type="button" value="查询" @click="search(imei)"></div>
+          <p @click="to_watch()" v-if="video">视频教程 
+            <transition 
+              :duration="50000" 
+              appear 
+              enter-active-class="animated animate__bounce" 
+              leave-active-class="animated animate__bounce" 
+              appear-active-class="animated animate__bounce">
+              <span v-show="visible"></span>
+          </transition>
+          </p>
+        </div>
       </div>
-    </div> -->
-    
+    </div>
+    <loading :loading="loadingShow"/>
   </div>
+
 
   
 </template>
 
 <script>
-  import {Toast, Dialog} from 'vant';
-  import {_get} from "../../http";
-  import {getUrlParam} from "../../utilies";
-
+  import { Toast, Dialog } from 'vant';
+  import { _get } from "../../http";
+  import { getUrlParam } from "../../utilies";
+  import loading from '../../components/loading'
   export default {
     name: "index",
     data() {
@@ -97,32 +100,32 @@
         visible: '',
         imei: getUrlParam('imei'),
         video:'',
-        show: false
+        show: false,
+        divisivePartner: false, // 区分代理商 走不同的流程
+        partnerGroup: [7235], // 走二维码引导页面的代理ID
+        loadingShow: true
       }
     },
     components: {
       [Toast.name]: Toast,
-      [Dialog.name]: Dialog
+      [Dialog.name]: Dialog,
+      loading
     },
-    created() {
-      
-      window.location.href = `http://mifi.china-m2m.com/mifi/index?imei=${this.imei}`
-      return
-
-      if (!getUrlParam('imei')) {
+    async created() {
+      this.loadingShow = true
+      if (this.imei) {
+        const partner_id = await this.search(this.imei)
+        this.loadingShow = false
+        if (this.partnerGroup.includes(partner_id)) {
+          this.divisivePartner = true
+        } else {
+          window.location.href = `http://mifi.china-m2m.com/mifi/index?imei=${this.imei}`
+        }
+      } else {
         Dialog.alert({
-          message: '未识别到设备号，请输入设备号并查询'
+          message: '未识别到设备号'
         })
       }
-      
-      if (this.imei) {
-        this.search(this.imei)
-        return
-      } 
-
-    },
-    mounted() {
-      
     },
     methods: {
       to_watch() {
@@ -138,22 +141,25 @@
         })
       },
       search() {
-        _get('/iot/v1/partners/get_partner_wx_config', {
-          imei: this.imei
-        }).then(res => {
-          Toast.clear();
-          if (res.state == 1) {
-            this.iccid = res.data.iccid
-            this.qrImg = res.data.wx_img_path
-            this.video = res.data.wx_video_path
-            this.visible = res.data.is_qiyu
-          }else {
-          Toast({
-            message: res.msg,
-            mask: true,
-            duration: 3000,
+        return  new Promise((resolve) => {
+          _get('/iot/v1/partners/get_partner_wx_config', {
+            imei: this.imei
+          }).then(res => {
+            Toast.clear();
+            if (res.state == 1) {
+              this.iccid = res.data.iccid
+              this.qrImg = res.data.wx_img_path
+              this.video = res.data.wx_video_path
+              this.visible = res.data.is_qiyu
+              resolve(res.data.partner_id)
+            }else {
+              Toast({
+                message: res.msg,
+                mask: true,
+                duration: 3000,
+              })
+            }
           })
-          }
         })
       }
     }
@@ -230,11 +236,6 @@
     .qr-wrapper {
       position: relative;
       padding-top: 50px;
-      // width: 330px;
-      // height: 330px;
-      // padding: 5px;
-      // border-radius: 8px;
-      // background-color: #fff;
       img {
         position: relative;
         width: 320px;
@@ -265,6 +266,7 @@
           width: 574px;
           height: 417px;
           bottom: 0;
+          opacity: 0;
         }
 
       }
