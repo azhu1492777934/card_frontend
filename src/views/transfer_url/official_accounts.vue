@@ -153,11 +153,7 @@
               this.visible = res.data.is_qiyu
               resolve(res.data.partner_id)
             }else {
-              Toast({
-                message: res.msg,
-                mask: true,
-                duration: 3000,
-              })
+              resolve(0)
             }
           })
         })
