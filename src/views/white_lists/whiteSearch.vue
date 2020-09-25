@@ -63,9 +63,10 @@ export default {
     }
   },
   created() {
-    if (this.$route.query.operator == 0) {
+    let operator = this.$route.query.operator
+    if (operator == 0) {
       this.operatorLogo = require('../../assets/imgs/card/usage/unicom-logo.svg')
-    } else if (this.$route.params.operator == 1) {
+    } else if (operator == 1) {
       this.operatorLogo = require('../../assets/imgs/card/usage/mobile-logo.png')
     } else {
       this.operatorLogo = require('../../assets/imgs/card/usage/telecom-logo.svg')
