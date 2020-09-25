@@ -35,8 +35,15 @@ module.exports = {
     port: 8080,
     disableHostCheck: true,
     proxy: {
+      '/opi': {
+        target: 'http://operators.china-m2m.com/',
+        changeOrigin: true,
+        pathRewrite: {
+          '^/opi': ''
+        }
+      },
       '/api': {
-        target: 'http://cardserver_test.china-m2m.com',
+        target: 'http://cardserverapi.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''

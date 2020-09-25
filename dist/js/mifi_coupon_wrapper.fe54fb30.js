@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["mifi_coupon_wrapper"],{"4a26":function(n,e,o){},b2c4:function(n,e,o){"use strict";var r=o("4a26"),t=o.n(r);t.a},dadb:function(n,e,o){"use strict";o.r(e);var r=function(){var n=this,e=n.$createElement,o=n._self._c||e;return o("router-view")},t=[],a={name:"coupon_wrapper"},c=a,p=(o("b2c4"),o("2877")),u=Object(p["a"])(c,r,t,!1,null,"2dd26002",null);u.options.__file="coupon_wrapper.vue";e["default"]=u.exports}}]);
-//# sourceMappingURL=mifi_coupon_wrapper.fe54fb30.js.map

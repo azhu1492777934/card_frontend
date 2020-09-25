@@ -130,11 +130,15 @@ const rechargeOrder = r => require.ensure([], () => r(require('./views/userCente
 const balanceIndex = r => require.ensure([], () => r(require('./views/userCenter/balanceIndex')), 'balanceIndex'); //余额
 const refundRules = r => require.ensure([], () => r(require('./views/userCenter/refundRules')), 'refundRules'); //订单规则说明
 
-
 //复充活动
 const repeatRecharge = r => require.ensure([], () => r(require('./views/card/repeatRecharge')), 'repeatRecharge');  //复充活动
 //设备更换
 const eqReplaceMent = r => require.ensure([], () => r(require('./views/question/eqReplaceMent')), 'eqReplaceMent');  //设备更换
+
+//白名单
+const whiteListsWrapper = r => require.ensure([], () => r(require('./views/white_lists/whiteListsWrapper')), 'whiteListsWrapper');
+const whiteSearch = r => require.ensure([], () => r(require('./views/white_lists/whiteSearch')), 'whiteSearch'); //查询
+const whiteNewlist = r => require.ensure([], () => r(require('./views/white_lists/whiteNewlist')), 'whiteNewlist'); //新增
 
 Vue.use(Router);
 
@@ -169,6 +173,27 @@ export const constantRouterMap = [{
     title: '阿里实名',
     requireAuth: true,
   }
+}, {
+  path:'/whiteLists',
+  component: whiteListsWrapper,
+  children: [
+    {
+      path: 'whiteSearch',
+      name: 'whiteSearch',
+      component: whiteSearch,
+      meta: {
+        title: '白名单',
+      }
+    },
+    {
+      path: 'whiteNewlist',
+      name: 'whiteNewlist',
+      component: whiteNewlist,
+      meta: {
+        title: '新增白名单',
+      }
+    },
+  ]
 }, {
   path: '/weixin',
   component: Layout,

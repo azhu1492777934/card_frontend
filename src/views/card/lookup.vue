@@ -312,11 +312,11 @@
             setStorage('originPrice', res.data.default_price);
             setStorage('check_iccid', res.data.iccid);
             setStorage('new_auth_search_iccid', res.data.iccid);
+            setStorage('source', res.data.source);
             removeStorage('plan_list_new_card');
             removeStorage('advertState');
             localStorage.setItem("currentType", "card");
             if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
-
 
             if (res.data.status === 1) {
               if(res.data.is_watch === 1) setStorage('is_watch_card',1);

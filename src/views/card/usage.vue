@@ -13,16 +13,19 @@
             ICCID:{{usageInfo.iccid}}(编码:{{usageInfo.source}})</p>
           <p v-if="usageInfo.imei && usageInfo.imei!='864319031839011'">IMEI:{{usageInfo.imei}}</p>
           <div class="card-state-wrap">
-            <div>
+            <div class="card-state1">
               <span :class="usageInfo.auth_status>=3?'cl-state-normal':'cl-state-warning'">{{filterCardInfo.real_name_state}}</span>
               <span v-if="filterCardInfo.device_state==''"
                     :class="usageInfo.status!=1?'cl-state-warning':'cl-state-primary'">{{filterCardInfo.card_str_state}}</span>
               <span :class="filterCardInfo.device_state.code==1?'cl-state-primary':'cl-state-warning'"
                     v-if="filterCardInfo.device_state!=''">{{filterCardInfo.device_state.state}}</span>
             </div>
-            <div>
+            <div class="card-state2">
               <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
               <a @click="toQ()">问题中心></a>
+            </div>
+            <div class="card-state3" v-if="sourceWhite == '63'">
+              <a @click="withePhone()">白名单</a>
             </div>
           </div>
         </div>
@@ -321,16 +324,16 @@
         .card-state-wrap {
           display: flex;
           align-items: center;
-
-          div {
-            &:first-child {
-              flex: 3;
-            }
-
-            &:last-child {
-              text-align: right;
-              margin-left: 20px;
-            }
+          .card-state1 {
+            flex: 3;
+          }
+          .card-state2 {
+            text-align: right;
+            margin-left: 10px;
+          }
+          .card-state3 {
+             text-align: right;
+            margin-left: 10px;
           }
 
           span {
@@ -690,7 +693,9 @@
           is_app: false,
           is_c_frontend: true,
           is_normal: false,
-        }
+        },
+        msisdn: null,
+        sourceWhite: getStorage('source')
       }
     },
     components: {
@@ -859,6 +864,10 @@
                 }
               }
 
+              if (getStorage('source') == '63') {
+                this.witheOnLoad(this.filterCardInfo.msisdn)
+              }
+              
             } else {
               Toast({
                 icon: 'warning-o',
@@ -1113,6 +1122,37 @@
         if (isMobile(mobile) && !getStorage('showMiGu') && getStorage('MiGuMusic') && getStorage('migu_watch_card')) {
           this.showMiGuModel = true;
         }
+      },
+      withePhone() {
+        this.$router.push({
+          name: 'whiteSearch',
+          query: {
+            msisdn: this.filterCardInfo.msisdn,
+            operator: this.usageInfo.operator
+          }
+        })
+      },
+      witheOnLoad(msisdn) {
+        _get('/opi/cards/get_yd_wt_list', {
+          iccid: msisdn
+        }).then((res) => {
+          if (res.code == 0 ) {
+            if (res.data.whiteList.userWhiteInfo.length < 2) {
+              Dialog.alert({
+                message: '请添加手表卡白名单',
+                confirmButtonText: '前往'
+              }).then(() => {
+                this.$router.push({
+                  name: 'whiteSearch',
+                  query: {
+                    msisdn: this.filterCardInfo.msisdn,
+                    operator: this.usageInfo.operator
+                  }
+                })
+              })
+            }
+          }
+        })
       },
     }
   };
