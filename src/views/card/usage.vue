@@ -1139,7 +1139,7 @@
           if (res.code == 0 ) {
             if (res.data.whiteList.userWhiteInfo.length < 2) {
               Dialog.alert({
-                message: '请添加手表卡白名单',
+                message: '提示：您好，呼出通话前请先设置本号码的联系人（名单内的号码才可以拨打成功哦）',
                 confirmButtonText: '前往'
               }).then(() => {
                 this.$router.push({
