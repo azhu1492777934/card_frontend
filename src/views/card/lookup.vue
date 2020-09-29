@@ -323,9 +323,21 @@
               this.$router.push({path: '/weixin/card/usage'})
             }
             if (res.data.status === 2) {
+              if (res.data.source == 39) {
+                Dialog.alert({
+                  message: "目前运营商正在系统升级，无法进行实名与充值，预计恢复时间9月30号7点，给您带来不便之处请见谅！"
+                })
+                return
+              }
               this.toRealname(res.data.iccid, res.data.source);
             }
             if (res.data.status === 3) {
+              if (res.data.source == 39) {
+                Dialog.alert({
+                  message: "目前运营商正在系统升级，无法进行实名与充值，预计恢复时间9月30号7点，给您带来不便之处请见谅！"
+                })
+                return
+              }
               setStorage('advertState', 1);
               this.getRealnameType(res.data.iccid,res.data.is_watch);
             }
