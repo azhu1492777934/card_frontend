@@ -4,6 +4,7 @@ import global_variables from './utilies/domain'
 
 // 临时组件
 const usage_bak = r => require.ensure([], () => r(require('./views/card/usage_bak')), 'Layout');
+const real_name_bak = r => require.ensure([], () => r(require('./views/new_card/real_name_back')), 'Layout');
 
 // layout
 const Layout = r => require.ensure([], () => r(require('./components/layout')), 'Layout');
@@ -162,6 +163,10 @@ export const constantRouterMap = [{
   path: '/card/usage_bak',
   meta: {title: '临时链接'},
   component: usage_bak,
+}, {
+  path: '/weixin/new_card/real_name_back',
+  meta: {title: '实名'},
+  component: real_name_bak,
 }, {
   path: "/change_network_explanation",
   component: mifi_change_network_explanation,
