@@ -22,7 +22,7 @@
             </div>
             <div class="card-state2">
               <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
-              <a @click="toQ()">问题中心></a>
+              <a @click="toQ()">问题中心</a>
             </div>
             <div class="card-state3" v-if="sourceWhite == '63'">
               <a @click="withePhone()">白名单</a>
@@ -325,14 +325,14 @@
           display: flex;
           align-items: center;
           .card-state1 {
-            flex: 3;
+            flex: 1;
           }
           .card-state2 {
             text-align: right;
             margin-left: 10px;
           }
           .card-state3 {
-             text-align: right;
+            text-align: right;
             margin-left: 10px;
           }
 
