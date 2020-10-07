@@ -329,11 +329,11 @@
           }
           .card-state2 {
             text-align: right;
-            margin-left: 10px;
+            margin-left: 12px;
           }
           .card-state3 {
             text-align: right;
-            margin-left: 10px;
+            margin-left: 12px!important;
           }
 
           span {
@@ -342,7 +342,7 @@
 
           span, em, a {
             display: inline-block;
-            margin-right: 15px;
+            margin-right: 12px;
             padding: 0 10px;
             height: 36px;
             line-height: 36px;
@@ -365,7 +365,7 @@
           }
 
           a {
-            padding: 0 20px;
+            padding: 0 10px;
             font-style: normal;
             color: #fff;
             border: 1PX solid #ffb73a;
