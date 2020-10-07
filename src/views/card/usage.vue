@@ -325,7 +325,7 @@
           display: flex;
           align-items: center;
           .card-state1 {
-            // flex: 1;
+            flex: 0!important;
           }
           .card-state2 {
             text-align: right;
