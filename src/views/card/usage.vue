@@ -325,7 +325,7 @@
           display: flex;
           align-items: center;
           .card-state1 {
-            flex: 1;
+            // flex: 1;
           }
           .card-state2 {
             text-align: right;
@@ -864,6 +864,7 @@
                 }
               }
 
+              //显示白名单弹窗
               if (getStorage('source') == '63') {
                 this.witheOnLoad(this.filterCardInfo.msisdn)
               }
