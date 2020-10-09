@@ -43,9 +43,9 @@
                 <span>已使用:{{this.filterCardInfo.flow_card_usage.used_flow}}</span>
               </p>
             </div>
-            <div @click="toConnection" class="to-flow-wrap">
+            <!-- <div @click="toConnection" class="to-flow-wrap">
               <a> 流量用量详情> </a>
-            </div>
+            </div> -->
           </div>
         </div>
         <div v-else class="card-used-wrap">
@@ -64,9 +64,9 @@
                 <span>已使用:{{this.filterCardInfo.watch_card_usage.used_voice}}</span>
               </p>
             </div>
-            <div @click="toConnection" class="to-flow-wrap watch-card__to-flow-wrapper">
+            <!-- <div @click="toConnection" class="to-flow-wrap watch-card__to-flow-wrapper">
               <a> 流量用量详情> </a>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
