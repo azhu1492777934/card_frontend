@@ -46,15 +46,11 @@ function getStorage(key, type) {
   if (type === 'arr' || type === 'obj') {
     if (localStorage.getItem(key)) {
       return JSON.parse(localStorage.getItem(key));
-    } else if (getCookie(key, type)) {
-      return getCookie(key, type)
     }
     return undefined
   } else {
     if (localStorage.getItem(key)) {
       return localStorage.getItem(key);
-    } else if (getCookie(key, type)) {
-      return getCookie(key, type);
     }
     return undefined
   }

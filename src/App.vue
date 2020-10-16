@@ -10,7 +10,7 @@
 <script>
   import {Notify, Dialog, Popup,Loading} from 'vant'
   import {_get} from "./http";
-  import {codeParam, getStorage, setStorage} from "./utilies";
+  import {codeParam, getStorage, setStorage, removeStorage} from "./utilies";
 
   export default {
     name: 'App',
@@ -39,6 +39,13 @@
         }, 'get'))
           .then((res) => {
             if (res.error === 0) {
+              if (getStorage('token') == res.data) {
+                console.log(88)
+                removeStorage('token');
+                window.location.href= 'https://cardserver.china-m2m.com'
+                return
+              }
+
               setStorage('token', res.data, 'str', true);
               if (this.global_variables.packed_project === 'card' || this.global_variables.packed_project === 'mifi') {
                 this.getUserInfo();
