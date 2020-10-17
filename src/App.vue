@@ -42,7 +42,12 @@
               if (getStorage('token') == res.data) {
                 console.log(88)
                 removeStorage('token');
-                window.location.href= 'https://cardserver.china-m2m.com'
+                if (this.global_variables.packed_project === 'card') {
+                  window.location.href= 'https://cardserver.china-m2m.com'
+                }else if (this.global_variables.packed_project === 'mifi') {
+                  window.location.href= 'http://mifiserver.china-m2m.com'
+                }
+                
                 return
               }
 
