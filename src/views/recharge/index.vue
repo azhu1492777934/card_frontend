@@ -169,7 +169,7 @@
 
 <script>
   import {mapState} from 'vuex'
-  import {DatetimePicker, Area, Popup, Notify} from 'vant';
+  import {DatetimePicker, Area, Popup, Notify, Toast} from 'vant';
   import {removeStorage, getStorage, checkBrowser, lossRate, toDecimal, Today, appRate, isMobile} from "../../utilies";
   import {_post, _get} from "../../http";
 
@@ -182,6 +182,7 @@
       }),
     },
     components: {
+      [Toast.name]: Toast,
       [DatetimePicker.name]: DatetimePicker,
       [Area.name]: Area,
       [Popup.name]: Popup,
