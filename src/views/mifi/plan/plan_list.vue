@@ -150,58 +150,65 @@
         this.choose_plan_index = index;
       },
       recharge: function () {
-        let planInfo = null,
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          })
+          return
+        }
+        try {
+          let planInfo = null,
           _this = this,
           cur_date = new Date().getDate(),
           ref_plan_type_index = 0;//当前套餐索引
-        for (let i = 0; i < this.$refs.ref_plan_type.length; i++) {
-          if (this.$refs.ref_plan_type[i].className === "active_type") {
-            if (this.$refs.ref_plan_type[i].innerText === "累计套餐") {
-              ref_plan_type_index = 0;
-            } else if (this.$refs.ref_plan_type[i].innerText === "月套餐") {
-              ref_plan_type_index = 1;
-            } else if (this.$refs.ref_plan_type[i].innerText === "加油包") {
-              ref_plan_type_index = 2;
+          for (let i = 0; i < this.$refs.ref_plan_type.length; i++) {
+            if (this.$refs.ref_plan_type[i].className === "active_type") {
+              if (this.$refs.ref_plan_type[i].innerText === "累计套餐") {
+                ref_plan_type_index = 0;
+              } else if (this.$refs.ref_plan_type[i].innerText === "月套餐") {
+                ref_plan_type_index = 1;
+              } else if (this.$refs.ref_plan_type[i].innerText === "加油包") {
+                ref_plan_type_index = 2;
+              }
+              break;
             }
-            break;
           }
-        }
 
-        planInfo = this.plan_list[ref_plan_type_index][this.choose_plan_index];
+          planInfo = this.plan_list[ref_plan_type_index][this.choose_plan_index];
 
-        if (planInfo.surplus_times <= 0) {
+          if (planInfo.surplus_times <= 0) {
+            Toast({
+              message: '此套餐已售罄, 请更换套餐',
+              position: 'top'
+            });
+            return;
+          }
+
+          planInfo.iccid = getStorage("check_iccid");
+          setStorage("planInfo", planInfo, "obj");
+
+          if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
+
+            Dialog.confirm({
+              title: '温馨提示',
+              message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
+            }).then(() => {
+              _this.toRechargeList(planInfo);
+            }).catch(() => {
+              return
+            })
+
+          } else {
+            this.toRechargeList(planInfo)
+          }
+        } catch (err) {
           Toast({
-            message: '此套餐已售罄, 请更换套餐',
-            position: 'top'
-          });
-          return;
-        }
-
-        planInfo.iccid = getStorage("check_iccid");
-        setStorage("planInfo", planInfo, "obj");
-
-        if (!getStorage("userInfo", "obj")) {
-          Toast({
-            message: '请在微信或支付宝客服端打开充值',
-            position: 'top'
-          });
-          return
-        }
-
-        if (planInfo.type == 1 && planInfo.day <= 30 && cur_date >= 20 && cur_date <= 26) {
-
-          Dialog.confirm({
-            title: '温馨提示',
-            message: '您购买的套餐将在本月26号清零，为避免套餐短期内失效请在充值页手动选择套餐生效时间（范围：本月27号及以后时间）。'
-          }).then(() => {
-            _this.toRechargeList(planInfo);
-          }).catch(() => {
-            return
+            position: 'top',
+            message: err.message
           })
-
-        } else {
-          this.toRechargeList(planInfo)
         }
+        
 
       },
       toRechargeList(planInfo) {

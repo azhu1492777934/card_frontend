@@ -350,131 +350,133 @@
       },
       async recharge() {
         
-        if (!this.authorizedUserInfo.account.user_id) {
-          Toast({
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
             position: 'top',
             message: "请在微信或支付宝客户端充值"
-          });
-          return;
+          })
+          return
         }
 
-        if (this.guardian) {
-          if (!this.guardianChecked) {
-            Toast({
-              position: 'top',
-              message: "请同意该套餐协议",
-              duration: 4000
+        try {
+          if (this.guardian) {
+            if (!this.guardianChecked) {
+              Toast({
+                position: 'top',
+                message: "请同意该套餐协议",
+                duration: 4000
+              });
+              return
+            }
+          }
+
+          let planName = this.render_type_name[this.cur_plan_type_index];
+          let planType = '';
+          for (let i in this.plan_type_name) {
+            if (this.plan_type_name[i] === planName) {
+              planType = i;
+              break
+            }
+          }
+
+          let planInfo = this.plan_list[planType][this.choose_plan_index];
+          let date = new Date().getDate()
+          if (planName === '月套餐' && date<=26 && date>=22) {
+            Dialog.alert({
+              title: '温馨提醒',
+              message: '此套餐默认为立即生效，并且26日24时流量清零，请注意根据需求选择生效日期。'
+            })
+          }
+
+          if (planInfo.surplus_times <= 0) {
+            Toast("此套餐已售罄, 请更换套餐");
+            return;
+          }
+
+          planInfo.iccid = getStorage("check_iccid");
+          setStorage("planInfo", planInfo, "obj");
+
+          // 加油包套餐充值
+          if (planType === '2') {
+            this.$router.push({
+              path:"/weixin/card/more_flow",
             });
-            return
+            return;
           }
-        }
 
-
-        let planName = this.render_type_name[this.cur_plan_type_index];
-        let planType = '';
-        for (let i in this.plan_type_name) {
-          if (this.plan_type_name[i] === planName) {
-            planType = i;
-            break
+          // 实名类型流程
+          if (this.realnameType === '1') {
+            this.directRecharge(planInfo);
+            return;
           }
-        }
-
-        let planInfo = this.plan_list[planType][this.choose_plan_index];
-        let date = new Date().getDate()
-        if (planName === '月套餐' && date<=26 && date>=22) {
-          Dialog.alert({
-            title: '温馨提醒',
-            message: '此套餐默认为立即生效，并且26日24时流量清零，请注意根据需求选择生效日期。'
+          appRate(3);
+          //获取当前包月套餐信息
+          _get("/api/v1/app/plans/renew_info", {
+            user_id: getStorage("userInfo", "obj").account.user_id,
+            rating_id: planInfo.id
+          }).then(res => {
+            if (res.state === 1) {
+              setStorage("monthlyMsg", res.data, "obj");
+              this.$router.push({
+                path: "/weixin/recharge/index",
+                query: {
+                  type: this.$route.query.type
+                }
+              });
+            } else {
+              Toast({
+                position: 'top',
+                message: res.msg
+              });
+            }
+          })
+        } catch (err) {
+          Toast({
+            position: 'top',
+            message: err.message
           })
         }
 
-        if (planInfo.surplus_times <= 0) {
-          Toast("此套餐已售罄, 请更换套餐");
-          return;
-        }
-
-        planInfo.iccid = getStorage("check_iccid");
-        setStorage("planInfo", planInfo, "obj");
-
-
-
-
-        // 加油包套餐充值
-        if (planType === '2') {
-          this.$router.push({
-            path:"/weixin/card/more_flow",
-          });
-          return;
-        }
-
-        // 实名类型流程
-        if (this.realnameType === '1') {
-          this.directRecharge(planInfo);
-          return;
-        }
-        appRate(3);
-        //获取当前包月套餐信息
-        _get("/api/v1/app/plans/renew_info", {
-          user_id: getStorage("userInfo", "obj").account.user_id,
-          rating_id: planInfo.id
-        }).then(res => {
-          if (res.state === 1) {
-            setStorage("monthlyMsg", res.data, "obj");
-            this.$router.push({
-              path: "/weixin/recharge/index",
-              query: {
-                type: this.$route.query.type
-              }
-            });
-          } else {
-            Toast({
-              position: 'top',
-              message: res.msg
-            });
-          }
-        });
       },
       //直接充值
       directRecharge(planInfo) {
-        if (!this.authorizedUserInfo.account.user_id) {
+        try {
+          let param = {
+            status: this.authorizedUserInfo.account.balance > 0 ? 1 : 0,
+            recharge_price: planInfo.price,
+            price: planInfo.price,
+            iccid: planInfo.iccid || getStorage("check_iccid"),
+            rating_id: planInfo.id,
+            user_id: getStorage("userInfo", "obj").account.user_id,
+            env: this.client_type,
+            start_time: Today(),
+            type: 0,
+            recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+            success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
+            failed_page: window.location.href
+          };
+
+          if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
+          if (this.client_type === "wechat") param.pay_type = "WEIXIN";
+          if (this.client_type === "alipay") param.pay_type = "ALIPAY";
+          if (this.client_type === "app") {
+            param.open_id = this.authorizedUserInfo.account.user_id;
+            this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
+          }
+          Dialog.confirm({
+            title: '充值',
+            message: `是否确认充值'${planInfo.name}'?`
+          }).then(() => {
+            this.finalRecharge(param);
+          }).catch(() => {
+            // on cancel
+          });
+        } catch (err) {
           Toast({
             position: 'top',
-            message: "请在微信或支付宝客户端充值"
-          });
-          return;
+            message: err.message
+          })
         }
-        let param = {
-          status: this.authorizedUserInfo.account.balance > 0 ? 1 : 0,
-          recharge_price: planInfo.price,
-          price: planInfo.price,
-          iccid: planInfo.iccid || getStorage("check_iccid"),
-          rating_id: planInfo.id,
-          user_id: getStorage("userInfo", "obj").account.user_id,
-          env: this.client_type,
-          start_time: Today(),
-          type: 0,
-          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
-          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
-          failed_page: window.location.href
-        };
-
-        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
-        if (this.client_type === "wechat") param.pay_type = "WEIXIN";
-        if (this.client_type === "alipay") param.pay_type = "ALIPAY";
-        if (this.client_type === "app") {
-          param.open_id = this.authorizedUserInfo.account.user_id;
-          this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
-        }
-
-        Dialog.confirm({
-          title: '充值',
-          message: `是否确认充值'${planInfo.name}'?`
-        }).then(() => {
-          this.finalRecharge(param);
-        }).catch(() => {
-          // on cancel
-        });
-
       },
       finalRecharge(param) {
         this.rechargeShow = true;

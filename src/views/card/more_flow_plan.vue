@@ -163,6 +163,7 @@
     },
     methods: {
       recharge: function () {
+
         this.choose_plan_info = this.plan_list[this.choose_plan_index];
         if (!this.choose_plan_info.order_id || !this.choose_plan_info.id) {
           Toast({
@@ -190,82 +191,96 @@
       },
       //直接充值
       directRecharge(planInfo, isBalance) {
-        if (!this.authorizedUserInfo.account.user_id) {
-          Notify({message: "请在微信或支付宝客户端充值"});
-          return;
-        }
-        let _this = this;
-        let param = {
-          status: this.global_variables.packed_project === 'mifi'? 0 : isBalance ? 1 : 0,// 区分现金与非现金
-          recharge_price: planInfo.price,
-          price: planInfo.price,
-          iccid: planInfo.iccid || getStorage("check_iccid"),
-          rating_id: planInfo.id,
-          user_id: this.authorizedUserInfo.account.user_id,
-          env: this.client_type,
-          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
-          // type: 0,
-          start_time: Today(),
-          band_rating_id: this.choose_plan_info.id,
-          band_order_id: this.choose_plan_info.order_id,
-          success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
-          failed_page: window.location.href
-        };
-        if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
-        if (this.client_type === "wechat") param.pay_type = "WEIXIN";
-        if (this.client_type === "alipay") param.pay_type = "ALIPAY";
-        if (this.client_type === "app") {
-          param.open_id = this.authorizedUserInfo.account.user_id;
-          this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
-        }
-
-        if(!param.band_rating_id || !param.band_order_id){
-          Toast({
+        
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
             position: 'top',
-            message: "没有检测到主套餐，请刷新重试"
-          });
+            message: "请在微信或支付宝客户端充值"
+          })
           return
         }
-
-        this.rechargeShow = true;
-        let payDom = document.querySelector('form');
-        if (payDom) document.removeChild(payDom);
-        _post("/api/v1/pay/weixin/create", param).then(res => {
-          if (res.state === 1) {
-            this.rechargeShow = false;
-            if (/<[^>]+>/.test(res.data)) {
-              const div = document.createElement('div');
-              div.innerHTML = res.data;
-              document.body.appendChild(div);
-              document.forms[0].submit();
-            } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
-              //app
-              this.global_variables.packed_project === "mifi"
-                ? location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
-                : location.href = res.data;
-            } else {
-              Notify({
-                message: "创建订单成功",
-                background: "#60ce53"
-              });
-
-              setTimeout(function () {
-                if (localStorage.getItem("currentType") === "esim") {
-                  location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
-                } else {
-                  _this.global_variables.packed_project === "mifi"
-                    ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`
-                    : location.href = res.data.return_url;
-                }
-              }, 1500);
-            } //纯钻石支付
-          } else {
-            this.rechargeShow = false;
-            Notify({
-              message: res.msg
-            });
+        try {
+          let _this = this;
+          let param = {
+            status: this.global_variables.packed_project === 'mifi'? 0 : isBalance ? 1 : 0,// 区分现金与非现金
+            recharge_price: planInfo.price,
+            price: planInfo.price,
+            iccid: planInfo.iccid || getStorage("check_iccid"),
+            rating_id: planInfo.id,
+            user_id: this.authorizedUserInfo.account.user_id,
+            env: this.client_type,
+            recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+            // type: 0,
+            start_time: Today(),
+            band_rating_id: this.choose_plan_info.id,
+            band_order_id: this.choose_plan_info.order_id,
+            success_page: this.global_variables.packed_project === 'mifi'? `${window.location.protocol}//${window.location.host}/mifi/card/index`: `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
+            failed_page: window.location.href
+          };
+          if (this.client_type === "alipay" || this.client_type === "wechat") param.open_id = (getStorage("decrypt_data", "obj") || {}).openid;
+          if (this.client_type === "wechat") param.pay_type = "WEIXIN";
+          if (this.client_type === "alipay") param.pay_type = "ALIPAY";
+          if (this.client_type === "app") {
+            param.open_id = this.authorizedUserInfo.account.user_id;
+            this.appPay.type ? param.pay_type = "WEIXIN" : param.pay_type = "ALIPAY";
           }
-        });
+
+          if(!param.band_rating_id || !param.band_order_id){
+            Toast({
+              position: 'top',
+              message: "没有检测到主套餐，请刷新重试"
+            });
+            return
+          }
+
+          this.rechargeShow = true;
+          let payDom = document.querySelector('form');
+          if (payDom) document.removeChild(payDom);
+          _post("/api/v1/pay/weixin/create", param).then(res => {
+            if (res.state === 1) {
+              this.rechargeShow = false;
+              if (/<[^>]+>/.test(res.data)) {
+                const div = document.createElement('div');
+                div.innerHTML = res.data;
+                document.body.appendChild(div);
+                document.forms[0].submit();
+              } else if (res.data && Object.prototype.toString.call(res.data) === "[object String]" && res.data.substr(0, 4) === "http") {
+                //app
+                this.global_variables.packed_project === "mifi"
+                  ? location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index`
+                  : location.href = res.data;
+              } else {
+                Notify({
+                  message: "创建订单成功",
+                  background: "#60ce53"
+                });
+
+                setTimeout(function () {
+                  if (localStorage.getItem("currentType") === "esim") {
+                    location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                  } else {
+                    _this.global_variables.packed_project === "mifi"
+                      ? location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index`
+                      : location.href = res.data.return_url;
+                  }
+                }, 1500);
+              } //纯钻石支付
+            } else {
+              this.rechargeShow = false;
+              Notify({
+                message: res.msg
+              });
+            }
+          });
+        } catch (err) {
+          Toast({
+            position: 'top',
+            message: err.message
+          })
+        }
+        
+
+        
       },
       balanceRecharge(action, done) {
         if (action === 'cancel') done();

@@ -116,50 +116,56 @@
         this.activeIndex = index
       },
       recharge: function () {
-        if (!this.authorizedUserInfo.account.user_id) {
-          Toast({
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
             position: 'top',
-            message: '请在微信或支付宝客户端充值'
-          });
+            message: "请在微信或支付宝客户端充值"
+          })
           return
         }
-        let param = {
-          user_id: this.authorizedUserInfo.account.user_id,
-          env: this.client_type,
-          iccid: getStorage('check_iccid'),
-          price: this.settingRechargeList[this.activeIndex].price,
-          recharge_type: 0,
-          success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback`,
-          failed_page: window.location.href
-        };
+        try {
+          let param = {
+            user_id: this.authorizedUserInfo.account.user_id,
+            env: this.client_type,
+            iccid: getStorage('check_iccid'),
+            price: this.settingRechargeList[this.activeIndex].price,
+            recharge_type: 0,
+            success_page: `${window.location.protocol}//${window.location.host}/weixin/recharge/callback`,
+            failed_page: window.location.href
+          };
 
-        if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = this.open_id;
-        if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
-        if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
-        if (this.client_type === 'app') {
-          param.open_id = this.authorizedUserInfo.account.user_id;
-          (this.appPay.type) ? param.pay_type = 'WEIXIN' : param.pay_type = 'ALIPAY';
-        }
-
-        this.rechargeShow = true;
-        // 墙出此前创建的form表单
-        let payDom = document.querySelector('form');
-        if (payDom) document.removeChild(payDom);
-        _post('/api/v1/pay/balance/recharge_create', param)
-          .then(res => {
-            this.rechargeShow = false;
-            if (res.state === 1) {
-              const div = document.createElement('div');
-              div.innerHTML = res.data;
-              document.body.appendChild(div);
-              document.forms[0].submit();
-            } else {
-              Toast({
-                position: 'top',
-                message: res.msg
-              })
-            }
+          if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = this.open_id;
+          if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
+          if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
+          if (this.client_type === 'app') {
+            param.open_id = this.authorizedUserInfo.account.user_id;
+            (this.appPay.type) ? param.pay_type = 'WEIXIN' : param.pay_type = 'ALIPAY';
+          }
+          this.rechargeShow = true;
+          // 墙出此前创建的form表单
+          let payDom = document.querySelector('form');
+          if (payDom) document.removeChild(payDom);
+          _post('/api/v1/pay/balance/recharge_create', param)
+            .then(res => {
+              this.rechargeShow = false;
+              if (res.state === 1) {
+                const div = document.createElement('div');
+                div.innerHTML = res.data;
+                document.body.appendChild(div);
+                document.forms[0].submit();
+              } else {
+                Toast({
+                  position: 'top',
+                  message: res.msg
+                })
+              }
+            })
+        } catch (err) {
+          Toast({
+            position: 'top',
+            message: err.message
           })
+        }
       },
       normalPay() {
         if (this.client_type === 'app') {

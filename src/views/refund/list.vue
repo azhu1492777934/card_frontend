@@ -202,7 +202,7 @@
       [Popup.name]: Popup
     },
     created() {
-      if (!this.authorizedUserInfo.account.user_id) {
+      if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
         this.isExistOrder = true;
         this.load_plan_msg = '请在微信或支付宝客户端查询'
         return
@@ -210,22 +210,6 @@
         this.isExistOrder = false;
         this.load_plan_msg = ''
       }
-
-      // if(getStorage('check_iccid')){
-      //     this.iccid = getStorage('check_iccid')
-      // }else{
-      //     let _this=this;
-      //     setTimeout(function(){
-      //         if(localStorage.getItem("currentType")=="userCenter"){
-      //             _this.$router.push({path:'/weixin/userCenter/index'});
-      //         }else if(localStorage.getItem("currentType")=="esim"){
-      //             _this.$router.push({path:'/weixin/card/esim_usage'});
-      //         }else{
-      //             _this.$route.query.from == 'mifi' ? _this.$router.push({path:'/mifi/card/lookup'}) : _this.$router.push({path:'/weixin/card/lookup'});
-      //         }
-      //     },1000)
-
-      // }
     },
     methods: {
       onLoad() {

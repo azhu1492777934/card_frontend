@@ -424,160 +424,172 @@
         this.showDate = false;
       },//取消日期弹窗
       recharge: function () {
-        if (!this.userInfo.account.user_id) {
-          Notify({message: '请在微信或支付宝客户端充值'});
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          })
           return
         }
-        let rechargeInfo = this.new_recharge_list[this.activeIndex];
-        if (this.client_type === "app" && this.planInfo.price > 100 && rechargeInfo.pay_money === 50) {
-          Notify({message: '充值后余额不足抵扣套餐价格，请选择其他套餐进行充值'});
-          return
-        }
-        // 广告
-        let advert = this.advertisement
-        if (rechargeInfo.pay_type === 'diamond_charge' && (this.planInfo.price < getStorage("userInfo", "obj").account.balance)) {
-          advert = this.advertisementParam
-        }
+        try {
+          let rechargeInfo = this.new_recharge_list[this.activeIndex];
+          if (this.client_type === "app" && this.planInfo.price > 100 && rechargeInfo.pay_money === 50) {
+            Notify({message: '充值后余额不足抵扣套餐价格，请选择其他套餐进行充值'});
+            return
+          }
+          // 广告
+          let advert = this.advertisement
+          if (rechargeInfo.pay_type === 'diamond_charge' && (this.planInfo.price < getStorage("userInfo", "obj").account.balance)) {
+            advert = this.advertisementParam
+          }
 
-        let _this = this;
-        let param = {
-          user_id: this.userInfo.account.user_id,
-          env: this.client_type,
-          iccid: this.planInfo.iccid || getStorage('check_iccid'),
-          rating_id: this.planInfo.id,
-          is_renew: rechargeInfo.is_renew,
-          price: rechargeInfo.is_renew == true ? rechargeInfo.first_price : this.planInfo.price,
-          status: (rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? 1 : 0,
-          recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
-          recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
-          failed_page: window.location.href,
-          success_page:  getStorage('advertState') ? `${window.location.protocol}//${window.location.host}` :this.global_variables.packed_project === 'mifi'? this.advertisement :  advert,
-          //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`
-          //  cardserve `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
-          recharge_id: rechargeInfo.id ? rechargeInfo.id : 0
-        };
+          let _this = this;
+          let param = {
+            user_id: this.userInfo.account.user_id,
+            env: this.client_type,
+            iccid: this.planInfo.iccid || getStorage('check_iccid'),
+            rating_id: this.planInfo.id,
+            is_renew: rechargeInfo.is_renew,
+            price: rechargeInfo.is_renew == true ? rechargeInfo.first_price : this.planInfo.price,
+            status: (rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? 1 : 0,
+            recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
+            recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
+            failed_page: window.location.href,
+            success_page:  getStorage('advertState') ? `${window.location.protocol}//${window.location.host}` :this.global_variables.packed_project === 'mifi'? this.advertisement :  advert,
+            //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`
+            //  cardserve `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
+            recharge_id: rechargeInfo.id ? rechargeInfo.id : 0
+          };
 
-        if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
-        if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid
-        if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
-        if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
-        if (this.client_type === 'app') {
-          param.open_id = this.userInfo.account.user_id;
-          (this.appPay.type) ? param.pay_type = 'WEIXIN' : param.pay_type = 'ALIPAY';
-        }
-        // 折扣相关参数判断
-        let elbDiscountParams = [{
-          pattern: !this.val_elb,
-          msg: '请输入ELB抵扣数'
-        }, {
-          pattern: this.planInfo.is_elb_deductible === 0,
-          msg: '此套餐不可抵扣ELB'
-        }, {
-          pattern: !/^[1-9]\d*$/.test(this.val_elb),
-          msg: 'ELB最低抵扣数额为1'
-        }, {
-          pattern: this.val_elb > parseInt(this.userInfo.account.elb),
-          msg: '您的ELB余额不足'
-        }, {
-          pattern: this.planInfo.is_elb_deductible === 1 && this.val_elb > this.planInfo.max_deductible_elb,
-          msg: `此套餐ELB最大抵扣值为${this.planInfo.max_deductible_elb}`
-        }, {
-          pattern: this.val_elb >= this.planInfo.price,
-          msg: 'ELB抵扣数不能超过套餐总值'
-        }];
+          if (this.$route.query.un_pay_order === '1') param.no = this.planInfo.no;
+          if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid
+          if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
+          if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
+          if (this.client_type === 'app') {
+            param.open_id = this.userInfo.account.user_id;
+            (this.appPay.type) ? param.pay_type = 'WEIXIN' : param.pay_type = 'ALIPAY';
+          }
+          // 折扣相关参数判断
+          let elbDiscountParams = [{
+            pattern: !this.val_elb,
+            msg: '请输入ELB抵扣数'
+          }, {
+            pattern: this.planInfo.is_elb_deductible === 0,
+            msg: '此套餐不可抵扣ELB'
+          }, {
+            pattern: !/^[1-9]\d*$/.test(this.val_elb),
+            msg: 'ELB最低抵扣数额为1'
+          }, {
+            pattern: this.val_elb > parseInt(this.userInfo.account.elb),
+            msg: '您的ELB余额不足'
+          }, {
+            pattern: this.planInfo.is_elb_deductible === 1 && this.val_elb > this.planInfo.max_deductible_elb,
+            msg: `此套餐ELB最大抵扣值为${this.planInfo.max_deductible_elb}`
+          }, {
+            pattern: this.val_elb >= this.planInfo.price,
+            msg: 'ELB抵扣数不能超过套餐总值'
+          }];
 
-        if (this.check_elb) {
-          let hasError = false;
-          for (let i = 0; i < elbDiscountParams.length; i++) {
-            if (elbDiscountParams[i].pattern) {
-              Notify({message: elbDiscountParams[i].msg});
-              hasError = true;
-              break;
+          if (this.check_elb) {
+            let hasError = false;
+            for (let i = 0; i < elbDiscountParams.length; i++) {
+              if (elbDiscountParams[i].pattern) {
+                Notify({message: elbDiscountParams[i].msg});
+                hasError = true;
+                break;
+              }
+            }
+            if (hasError) return;
+
+            param.elb_deduction = this.val_elb
+          }
+          if (this.check_coupon) {
+            if (!this.val_coupon) {
+              Notify({message: '请输入券码'});
+              return
+            } else {
+              if (rechargeInfo.pay_type === 'diamond_charge') {
+                param.coupon_no = this.val_coupon
+              } else {
+                Notify({message: '必须使用余额支付才能使用抵扣券'});
+                return
+              }
             }
           }
-          if (hasError) return;
-
-          param.elb_deduction = this.val_elb
-        }
-        if (this.check_coupon) {
-          if (!this.val_coupon) {
-            Notify({message: '请输入券码'});
-            return
-          } else {
-            if (rechargeInfo.pay_type === 'diamond_charge') {
-              param.coupon_no = this.val_coupon
-            } else {
-              Notify({message: '必须使用余额支付才能使用抵扣券'});
+          if (this.check_date) {
+            if (!this.val_date) {
+              Notify({message: '请选择套餐生效时间'});
               return
             }
+            param.start_time = this.val_date
+          } else {
+            param.start_time = this.val_date
           }
-        }
-        if (this.check_date) {
-          if (!this.val_date) {
-            Notify({message: '请选择套餐生效时间'});
-            return
-          }
-          param.start_time = this.val_date
-        } else {
-          param.start_time = this.val_date
-        }
 
-        this.rechargeShow = true;
-        // 墙出此前创建的form表单
-        let payDom = document.querySelector('form');
-        if (payDom) document.removeChild(payDom);
-        _post('/api/v1/pay/weixin/create', param)
-          .then(res => {
-            this.rechargeShow = false;
-            if (res.state === 1) {
-              if (/<[^>]+>/.test(res.data)) {
-                // document.write(res.data);
-                const div = document.createElement('div');
-                div.innerHTML = res.data;
-                document.body.appendChild(div);
-                document.forms[0].submit();
-              } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
-                this.global_variables.packed_project === 'mifi' ?
-                  location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` :
-                  location.href = res.data;
-              } else {
-
-                if (this.planInfo.vip_type_id != 0) {
-                  if (this.global_variables.device === "iphone" && this.client_type === "app") {
-                    Notify({
-                      message: '购买成功。',
-                      background: '#60ce53'
-                    });
-                  } else {
-                    Notify({
-                      message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
-                      background: '#60ce53'
-                    });
-                  }
-
+          this.rechargeShow = true;
+          // 墙出此前创建的form表单
+          let payDom = document.querySelector('form');
+          if (payDom) document.removeChild(payDom);
+          _post('/api/v1/pay/weixin/create', param)
+            .then(res => {
+              this.rechargeShow = false;
+              if (res.state === 1) {
+                if (/<[^>]+>/.test(res.data)) {
+                  // document.write(res.data);
+                  const div = document.createElement('div');
+                  div.innerHTML = res.data;
+                  document.body.appendChild(div);
+                  document.forms[0].submit();
+                } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
+                  this.global_variables.packed_project === 'mifi' ?
+                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` :
+                    location.href = res.data;
                 } else {
-                  Notify({
-                    message: '充值成功',
-                    background: '#60ce53'
-                  });
-                }
-                this.$emit('getUserData');
-                setTimeout(function () {
-                  if (localStorage.getItem("currentType") === "esim") {
-                    location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+
+                  if (this.planInfo.vip_type_id != 0) {
+                    if (this.global_variables.device === "iphone" && this.client_type === "app") {
+                      Notify({
+                        message: '购买成功。',
+                        background: '#60ce53'
+                      });
+                    } else {
+                      Notify({
+                        message: '购买成功，兑换码已发放到您的手机号啦，请在7天内进行兑换。',
+                        background: '#60ce53'
+                      });
+                    }
+
                   } else {
-                    _this.global_variables.packed_project === 'mifi' ?
-                      location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` :
-                      location.href = res.data.return_url
+                    Notify({
+                      message: '充值成功',
+                      background: '#60ce53'
+                    });
                   }
-                }, 1500);
-              }//纯钻石支付
-            } else {
-              Notify({
-                message: res.msg
-              })
-            }
+                  this.$emit('getUserData');
+                  setTimeout(function () {
+                    if (localStorage.getItem("currentType") === "esim") {
+                      location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                    } else {
+                      _this.global_variables.packed_project === 'mifi' ?
+                        location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` :
+                        location.href = res.data.return_url
+                    }
+                  }, 1500);
+                }//纯钻石支付
+              } else {
+                Notify({
+                  message: res.msg
+                })
+              }
+            })
+        } catch (err) {
+          Toast({
+            position: 'top',
+            message: err.message
           })
+        }
+       
+        
       },
       normalPay() {
         let rechargeInfo = this.new_recharge_list[this.activeIndex];

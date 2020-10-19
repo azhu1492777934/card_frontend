@@ -287,93 +287,105 @@
 
       //表单提交
       async submit() {
-        let _this = this;
-
-        if (!(/^[1-9]\d*$/).test(this.replaceData.code)) {
-          Notify({message: "请填写正确的验证码"});
-          return false;
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          })
+          return
         }
 
-        if (this.currentType == 0) {
-          if (this.replaceData.model_name == "") {
-            Notify({message: "请填写设备型号"});
+        try {
+          let _this = this;
+
+          if (!(/^[1-9]\d*$/).test(this.replaceData.code)) {
+            Notify({message: "请填写正确的验证码"});
+            return false;
+          }
+
+          if (this.currentType == 0) {
+            if (this.replaceData.model_name == "") {
+              Notify({message: "请填写设备型号"});
+              return false;
+            }
+
+
+          }
+          if (this.replaceData.iccid == "") {
+            Notify({message: "请填写卡号"});
             return false;
           }
 
 
-        }
-        if (this.replaceData.iccid == "") {
-          Notify({message: "请填写卡号"});
-          return false;
-        }
-
-
-        if (this.replaceData.user_name == "") {
-          Notify({message: "请填写收件人姓名"});
-          return false;
-        }
-        if (this.replaceData.mobile == "") {
-          Notify({message: "请填写手机号"});
-          return false;
-        }
-        if (this.replaceData.code == "") {
-          Notify({message: "请填写验证码"});
-          return false;
-        }
-        if (this.replaceData.province == "" || this.replaceData.city == "" || this.replaceData.district == "") {
-          Notify({message: "请选择所在地区"});
-          return false;
-        }
-        if (this.replaceData.addr == "") {
-          Notify({message: "请填写详细地址"});
-          return false;
-        }
-        if (this.replaceData.addr.length < 3) {
-          Notify({message: "详细地址过短"});
-          return false;
-        }
-        if (this.gift == 1){
-          if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.youku_mobile)) {
-          Notify({message: "请填写正确优酷绑定的手机号"});
-          return false;
+          if (this.replaceData.user_name == "") {
+            Notify({message: "请填写收件人姓名"});
+            return false;
           }
-        }
-        if (this.gift == 2) {
-          this.youku_mobile = ""
-        }
+          if (this.replaceData.mobile == "") {
+            Notify({message: "请填写手机号"});
+            return false;
+          }
+          if (this.replaceData.code == "") {
+            Notify({message: "请填写验证码"});
+            return false;
+          }
+          if (this.replaceData.province == "" || this.replaceData.city == "" || this.replaceData.district == "") {
+            Notify({message: "请选择所在地区"});
+            return false;
+          }
+          if (this.replaceData.addr == "") {
+            Notify({message: "请填写详细地址"});
+            return false;
+          }
+          if (this.replaceData.addr.length < 3) {
+            Notify({message: "详细地址过短"});
+            return false;
+          }
+          if (this.gift == 1){
+            if (!(/^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/).test(this.youku_mobile)) {
+            Notify({message: "请填写正确优酷绑定的手机号"});
+            return false;
+            }
+          }
+          if (this.gift == 2) {
+            this.youku_mobile = ""
+          }
 
-        let newData = this.replaceData;
-        for (let item in newData) {
-          newData[item] = String(newData[item]).replace(/\s*/g, "");
+          let newData = this.replaceData;
+          for (let item in newData) {
+            newData[item] = String(newData[item]).replace(/\s*/g, "");
+          }
+
+          newData.user_id = getStorage("userInfo", "obj").account.user_id;
+          newData.type = this.currentType;
+          newData.gift = this.gift;
+          newData.youku_mobile = this.youku_mobile;
+          // newData.user_id="613639";
+
+          // if(this.currentType==1){
+          //   let activitySourceArray=[1,7,11,16];
+          //   if(activitySourceArray.indexOf(await this.getSource(newData.iccid))!=-1){
+          //     Dialog.confirm({
+          //       title: '',
+          //       message: '换卡需支付10元快递费，请确认',
+          //     }).then(() => {
+          //       this.cfmSubmit(newData);
+          //     }).catch(() => {
+
+          //     });
+          //   }else{
+          //     this.cfmSubmit(newData);
+          //   }
+          // }else{
+            this.cfmSubmit(newData);
+          // }
+        } catch (err) {
+          Toast({
+            position: 'top',
+            message: err.message
+          })
         }
-
-        if (!getStorage("userInfo", "obj")) {
-          Notify({message: "请在微信客户端打开"});
-          return false;
-        }
-        newData.user_id = getStorage("userInfo", "obj").account.user_id;
-        newData.type = this.currentType;
-        newData.gift = this.gift;
-        newData.youku_mobile = this.youku_mobile;
-        // newData.user_id="613639";
-
-        // if(this.currentType==1){
-        //   let activitySourceArray=[1,7,11,16];
-        //   if(activitySourceArray.indexOf(await this.getSource(newData.iccid))!=-1){
-        //     Dialog.confirm({
-        //       title: '',
-        //       message: '换卡需支付10元快递费，请确认',
-        //     }).then(() => {
-        //       this.cfmSubmit(newData);
-        //     }).catch(() => {
-
-        //     });
-        //   }else{
-        //     this.cfmSubmit(newData);
-        //   }
-        // }else{
-          this.cfmSubmit(newData);
-        // }
+       
         
         
       },

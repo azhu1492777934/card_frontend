@@ -389,6 +389,13 @@
         this.choose_plan_index = index;
       },
       recharge: function () {
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Toast({
+            position: 'top',
+            message: "请在微信或支付宝客户端充值"
+          })
+          return
+        }
         let planInfo = this.repeat_plan_list[this.choose_plan_index];
         planInfo.iccid = getStorage("check_iccid");
         planInfo.price = planInfo.repeat_recharge_price;
@@ -402,86 +409,91 @@
       },
       //直接充值
       directRecharge(planInfo) {
-        if (!getStorage("userInfo", "obj").account.user_id) {
-          Notify({message: '请在微信或支付宝客户端充值'});
-          return
-        }
-        let param = {},
+        try {
+          let param = {},
           _this = this;
-        param.status = 0;
-        param.recharge_price = planInfo.price;
-        param.price = planInfo.price;
+          param.status = 0;
+          param.recharge_price = planInfo.price;
+          param.price = planInfo.price;
 
-        if (this.client_type === 'alipay' || this.client_type === 'wechat') {
-          param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid;
-        } else if (this.client_type === 'app') {
-          param.open_id = getStorage("userInfo", "obj").account.user_id
+          if (this.client_type === 'alipay' || this.client_type === 'wechat') {
+            param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid;
+          } else if (this.client_type === 'app') {
+            param.open_id = getStorage("userInfo", "obj").account.user_id
 
-        }
-        param.iccid = planInfo.iccid || getStorage('check_iccid');
-        param.rating_id = planInfo.id;
+          }
+          param.iccid = planInfo.iccid || getStorage('check_iccid');
+          param.rating_id = planInfo.id;
 
 
-        param.user_id = getStorage("userInfo", "obj").account.user_id;
-        param.env = this.client_type;
+          param.user_id = getStorage("userInfo", "obj").account.user_id;
+          param.env = this.client_type;
 
-        if (this.client_type === 'app') {
-          if (this.appPay.type) {
+          if (this.client_type === 'app') {
+            if (this.appPay.type) {
+              param.pay_type = 'WEIXIN'
+            } else {
+              param.pay_type = 'ALIPAY'
+            }
+          } else if (this.client_type === 'wechat') {
             param.pay_type = 'WEIXIN'
-          } else {
+          } else if (this.client_type === 'alipay') {
             param.pay_type = 'ALIPAY'
           }
-        } else if (this.client_type === 'wechat') {
-          param.pay_type = 'WEIXIN'
-        } else if (this.client_type === 'alipay') {
-          param.pay_type = 'ALIPAY'
-        }
 
-        param.start_time = this.getToday();
+          param.start_time = this.getToday();
 
-        param.type = 0;
-        if (planInfo.is_repeat_plan) {
-          param.is_repeat_plan = 1;
-        }
-        this.rechargeShow = true;
-        _post('/api/v1/pay/weixin/create', param)
-          .then(res => {
-            if (res.state === 1) {
-              this.rechargeShow = false;
+          param.type = 0;
+          if (planInfo.is_repeat_plan) {
+            param.is_repeat_plan = 1;
+          }
+          this.rechargeShow = true;
+          _post('/api/v1/pay/weixin/create', param)
+            .then(res => {
+              if (res.state === 1) {
+                this.rechargeShow = false;
 
-              if (/<[^>]+>/.test(res.data)) {
+                if (/<[^>]+>/.test(res.data)) {
 
-                document.write(res.data);
+                  document.write(res.data);
 
-              } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
-                this.global_variables.packed_project === 'mifi' ?
-                  location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
-              } else {
-                Notify({
-                  message: '充值成功',
-                  background: '#60ce53'
-                });
+                } else if (res.data && Object.prototype.toString.call(res.data) === '[object String]' && res.data.substr(0, 4) === 'http') { //app
+                  this.global_variables.packed_project === 'mifi' ?
+                    location.href = `${this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data;
+                } else {
+                  Notify({
+                    message: '充值成功',
+                    background: '#60ce53'
+                  });
+                  setTimeout(function () {
+                    if (localStorage.getItem("currentType") === "esim") {
+                      location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
+                    } else {
+                      _this.global_variables.packed_project === 'mifi' ?
+                        location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
+                    }
+                  }, 1500);
+                }//纯钻石支付
+              } else if (res.state == "10015") {
+                Notify({message: res.msg,})
                 setTimeout(function () {
-                  if (localStorage.getItem("currentType") === "esim") {
-                    location.href = `${_this.global_variables.authorized_redirect_url}/weixin/card/esim_usage`;
-                  } else {
-                    _this.global_variables.packed_project === 'mifi' ?
-                      location.href = `${_this.global_variables.authorized_redirect_url}/mifi/card/index` : location.href = res.data.return_url
-                  }
+                  _this.$router.push({path: '/weixin/card/plan_list'});
                 }, 1500);
-              }//纯钻石支付
-            } else if (res.state == "10015") {
-              Notify({message: res.msg,})
-              setTimeout(function () {
-                _this.$router.push({path: '/weixin/card/plan_list'});
-              }, 1500);
-            } else {
-              this.rechargeShow = false;
-              Notify({
-                message: res.msg
-              })
-            }
+              } else {
+                this.rechargeShow = false;
+                Notify({
+                  message: res.msg
+                })
+              }
+            })
+        } catch (err) {
+          Toast({
+            position: 'top',
+            message: err.message
           })
+        }
+        
+        
       },
       getToday: function (val) {
         let date = new Date();

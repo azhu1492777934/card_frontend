@@ -32,7 +32,6 @@ const wx = require('weixin-js-sdk');
 Vue.prototype.wx = wx;
 Vue.prototype.global_variables = global_variables;
 
-
 // 扫码请求
 let scanUrlArray = ['/mifi/card/lookup', '/weixin/card/lookup', '/weixin/question/eqReplaceMent'];
 let scanApi = global_variables.packed_project === 'mifi' ? '/api/v1/app/mifi_sign_info' : '/api/v1/app/sign_info';

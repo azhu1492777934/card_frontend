@@ -105,8 +105,11 @@
         }
       }
 
-      if (!this.authorizedUserInfo.account.user_id) {
-        Toast({message: '请在微信或支付宝客户端查询'});
+      if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+        Toast({
+          position: 'top',
+          message: "请在微信或支付宝客户端充值"
+        })
         return
       }
 
@@ -120,6 +123,7 @@
         this.isOther = name === '5';
       },
       btnRefund() {
+        
         let _this = this;
 
         if (this.radio === '5' && !this.refundInfo.reason) {
