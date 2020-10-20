@@ -24,7 +24,7 @@
               <em @click="refreshOrActivated">{{filterCardInfo.refresh_actived}}</em>
               <a @click="toQ()">问题中心</a>
             </div>
-            <div class="card-state3" v-if="sourceWhite == '63'">
+            <div class="card-state3" v-if="sourceWhiteLists.includes(this.sourceWhite)">
               <a @click="withePhone()">白名单</a>
             </div>
           </div>
@@ -695,7 +695,8 @@
           is_normal: false,
         },
         msisdn: null,
-        sourceWhite: getStorage('source')
+        sourceWhite: getStorage('source'),
+        sourceWhiteLists: ['63']
       }
     },
     components: {
@@ -865,7 +866,7 @@
               }
 
               //显示白名单弹窗
-              if (getStorage('source') == '63') {
+              if (this.sourceWhiteLists.includes(this.sourceWhite)) {
                 this.witheOnLoad(this.filterCardInfo.msisdn)
               }
               
@@ -1135,7 +1136,8 @@
       },
       witheOnLoad(msisdn) {
         _get('/opi/cards/get_yd_wt_list', {
-          iccid: msisdn
+          iccid: msisdn,
+          source: getStorage('source')
         }).then((res) => {
           if (res.code == 0 ) {
             if (res.data.whiteList.userWhiteInfo.length <= 2) {

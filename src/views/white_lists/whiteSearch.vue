@@ -41,6 +41,7 @@
 <script>
 import { List, Cell, Tab, Tabs, Popup, Notify } from 'vant'
 import {_post, _get} from "../../http";
+import {getStorage} from "../../utilies";
 export default {
   name: 'whiteSearch',
   components: {
@@ -76,7 +77,8 @@ export default {
   methods: {
      onLoad() {
       _get('/opi/cards/get_yd_wt_list', {
-        iccid: this.msisdn
+        iccid: this.msisdn,
+        source: getStorage('source')
       }).then((res) => {
         if (res.code == 0) {
           this.loading = false;
@@ -92,7 +94,8 @@ export default {
     whiteCreate() {
       _get('/opi/cards/add_yd_wt_list', {
         iccid: this.msisdn,
-        phones: this.phone
+        phones: this.phone,
+        source: getStorage('source')
       }).then((res) => {
         this.show = false
         if (res.status == 1) {

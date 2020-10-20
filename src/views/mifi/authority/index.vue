@@ -95,6 +95,7 @@
       }, // 解密data
       login(res) {
         let _this = this;
+        const codeLog = res.data.code
         _post('/accountCenter/v2/auth/login?' + codeParam({}, 'post'), {
           uuid: getStorage('decrypt_data', 'obj').openid,
           code: res.data.code
@@ -114,7 +115,7 @@
               _this.$router.push({path: '/binding'});
             // })
           } else {
-            this.showAuthorityError('L' + res.error)
+            this.showAuthorityError('L' + res.error + 'U-'+getStorage('decrypt_data', 'obj').openid+'Co-'+codeLog)
           }
         })
       }, // 登录
