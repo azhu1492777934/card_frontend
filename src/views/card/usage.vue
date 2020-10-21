@@ -696,7 +696,7 @@
         },
         msisdn: null,
         sourceWhite: getStorage('source'),
-        sourceWhiteLists: ['63']
+        sourceWhiteLists: ['38','63']
       }
     },
     components: {
@@ -1139,7 +1139,7 @@
           iccid: msisdn,
           source: getStorage('source')
         }).then((res) => {
-          if (res.code == 0 ) {
+          if (res.code == 0 && this.sourceWhite == '63') {
             if (res.data.whiteList.userWhiteInfo.length <= 2) {
               Dialog.alert({
                 message: '提示：您好，呼出通话前请先设置本号码的联系人（名单内的号码才可以拨打成功哦）',
@@ -1154,7 +1154,21 @@
                 })
               })
             }
+          } else if (res.code == 390101) {
+            Dialog.alert({
+              message: '提示：您好，呼出通话前请先设置本号码的联系人（名单内的号码才可以拨打成功哦）',
+              confirmButtonText: '前往'
+            }).then(() => {
+              this.$router.push({
+                name: 'whiteSearch',
+                query: {
+                  msisdn: this.filterCardInfo.msisdn,
+                  operator: this.usageInfo.operator
+                }
+              })
+            })
           }
+
         })
       },
     }
