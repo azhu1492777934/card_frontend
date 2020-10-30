@@ -409,7 +409,7 @@
           }
 
           newData.user_id = 0;
-          newData.type = this.currentType;
+          newData.type = 2;
           newData.gift = this.gift;
           newData.youku_mobile = this.youku_mobile;
           
