@@ -141,6 +141,11 @@ const whiteListsWrapper = r => require.ensure([], () => r(require('./views/white
 const whiteSearch = r => require.ensure([], () => r(require('./views/white_lists/whiteSearch')), 'whiteSearch'); //查询
 const whiteNewlist = r => require.ensure([], () => r(require('./views/white_lists/whiteNewlist')), 'whiteNewlist'); //新增
 
+//京东
+const jdWrapper = r => require.ensure([], () => r(require('./views/jd/jdWrapper')), 'jdWrapper');
+const jdReplaceMent = r => require.ensure([], () => r(require('./views/jd/jdReplaceMent')), 'jdReplaceMent'); //查询
+
+
 Vue.use(Router);
 
 export const constantRouterMap = [{
@@ -196,6 +201,19 @@ export const constantRouterMap = [{
       component: whiteNewlist,
       meta: {
         title: '新增白名单',
+      }
+    },
+  ]
+}, {
+  path:'/jd',
+  component: jdWrapper,
+  children: [
+    {
+      path: 'jdReplaceMent',
+      name: 'jdReplaceMent',
+      component: jdReplaceMent,
+      meta: {
+        title: '卡更换',
       }
     },
   ]
