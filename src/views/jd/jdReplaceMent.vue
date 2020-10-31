@@ -245,7 +245,7 @@
           if (res.status == 1) {
             this.newIccidData = res.data
             this.newIccidData.map((item) => {
-              this.newIccidTotal.push(item.msisdn)
+              this.newIccidTotal.push(item[0])
             })
             let Length = (this.newIccidTotal.length>9?9:this.newIccidTotal.length-1)
             for (let i=0; i<=Length; i++) {
@@ -414,8 +414,8 @@
           newData.youku_mobile = this.youku_mobile;
           
           this.newIccidData.some((item) => {
-            if (item.msisdn ==this.newIccid) {
-              newData.new_iccid = item.iccid
+            if (item[0] ==this.newIccid) {
+              newData.new_iccid = item[1]
             }
             console.log(88)
           })
