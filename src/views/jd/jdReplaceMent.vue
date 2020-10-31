@@ -43,7 +43,7 @@
                 </li>
                 <li class="borderStyle">
                   <span><span class="redWord">*</span> 手机号码:</span>
-                  <input v-model="replaceData.mobile" placeholder="请输入老设备实名手机号" type="number">
+                  <input v-model="replaceData.mobile" placeholder="请输入手机号" type="number">
                 </li>
                 <li class="marginStyle">
                   <span><span class="redWord">*</span> 验证码:</span>
