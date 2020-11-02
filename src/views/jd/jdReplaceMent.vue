@@ -64,8 +64,8 @@
               <div class="submitButton">
                 <div @click="submit()">提交</div>
                 <div>注：请仔细核对信息后再提交</div>
-                <div>1.新卡1-3个工作日发出</div>
-                <div>2.快件发出后方可在“物流查询”界面查询快递信息</div>
+                <div>新卡1-3个工作日发出</div>
+                <!-- <div>2.快件发出后方可在“物流查询”界面查询快递信息</div> -->
               </div>
             </div>
 
