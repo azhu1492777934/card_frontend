@@ -206,6 +206,9 @@
     },
     methods: {
       initial() {
+        if (getUrlParam('iccid')) {
+          this.replaceData.iccid = getUrlParam('iccid')
+        }
         this.getNewIccidList()
       },
       changeStatus(index) {
