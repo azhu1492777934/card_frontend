@@ -39,7 +39,7 @@
                 </li>
                 <li>
                   <span><span class="redWord">*</span> 验证码</span>
-                  <input v-model="replaceData.code" placeholder="请输入短信验证码" type="text">
+                  <input v-model="replaceData.code" placeholder="请输入短信验证码" type="text" v-on:input ="limlit()">
                   <span class="getCode" @click="getCode(replaceData.mobile)">{{codeText}}</span>
                 </li>
                 <li>
@@ -489,11 +489,19 @@
       },
       //深圳移动 激活 只调不做任何提示
       activate(new_iccid) {
-      _get('/api/v1/app/cards/yd_allow_auth',{
-          iccid:new_iccid,
-          user_id:getStorage("userInfo", "obj").account.user_id
-      })
+        _get('/api/v1/app/cards/yd_allow_auth',{
+            iccid:new_iccid,
+            user_id:getStorage("userInfo", "obj").account.user_id
+        })
       },
+      limlit() { //ios键盘输入触发两次输入事件
+        if (this.replaceData.code.length == 8) {
+          this.replaceData.code = this.replaceData.code.slice(0, 4)
+        }
+        if (this.replaceData.code.length == 12) {
+          this.replaceData.code = this.replaceData.code.slice(0, 6)
+        }
+      }
     }
   };
 </script>

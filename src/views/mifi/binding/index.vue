@@ -14,7 +14,7 @@
         <input type="text" placeholder="请输入手机号码" maxlength="11" v-model="phone"/>
       </div>
       <div class="code-wrap">
-        <input type="number" placeholder="请输入验证码" maxlength="10" v-model="code"/>
+        <input type="number" placeholder="请输入验证码" maxlength="10" v-model="code" v-on:input ="limlit()"/>
         <button :disabled="btnCode_disabled" class="getCode" @click="getCode">{{codeText}}</button>
       </div>
       <div class="btn-login-wrap">
@@ -350,6 +350,14 @@
         }
         setStorage('recording_list', this.recording_list, 'arr')
       },
+      limlit() { //ios键盘输入触发两次输入事件
+        if (this.code.length == 8) {
+          this.code = this.code.slice(0, 4)
+        }
+        if (this.code.length == 12) {
+          this.code = this.code.slice(0, 6)
+        }
+      }
     }
   }
 </script>
