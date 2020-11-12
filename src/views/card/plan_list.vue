@@ -226,7 +226,7 @@
       swiper,
       swiperSlide,
     },
-    created() {
+    async created() {
       if (!getStorage('check_iccid')) this.$router.push({path: '/weixin/card/lookup'});
       // 流失率统计
       if (getStorage('plan_list_new_card') === "1") {
@@ -238,91 +238,112 @@
 
       let _this = this;
       //处理套餐数据
-      _get("/api/v1/app/plan_list", {
-        iccid: getStorage("check_iccid")
-      }).then(async res => {
+      let res = await this.getPlanList()
+      if (res.state === 1) {
+        if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
+          this.load_plan_list = true;
+          this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
+          return;
+        }
 
-        if (res.state === 1) {
-          if (JSON.stringify(res.data) === "{}" || res.data.length === 0) {
-            this.load_plan_list = true;
-            this.load_plan_msg = "此卡暂无充值套餐，请联系客服人员及时处理";
-            return;
-          }
+        this.load_plan_msg = res.msg;
+        this.load_plan_list = false;
 
-          this.load_plan_msg = res.msg;
-          this.load_plan_list = false;
-          this.plan_list = res.data
-    
-          
-          for (let item in this.plan_list) {
-            // 套餐类型
-            if (this.plan_type_name.hasOwnProperty(item)) {
+        this.plan_list = res.data
+  
+        
+        for (let item in this.plan_list) {
+          // 套餐类型
+          if (this.plan_type_name.hasOwnProperty(item)) {
+            if (item == 5) {
+              this.render_type_name.unshift(this.plan_type_name[item]);
+            } else {
               this.render_type_name.push(this.plan_type_name[item]);
             }
+            
+          }
 
-            let newArray1 = [], newArray2 = [], newArray3 = [];
-            for (let i = 0; i < this.plan_list[item].length; i++) {
-              //区分推荐/未推荐
-              if (this.plan_list[item][i].is_recommend === true) {
-                newArray1.push(this.plan_list[item][i]);
-              } else {
-                newArray2.push(this.plan_list[item][i]);
-              }
-            }
-            //分别进行排序
-            // newArray1.sort(this.compare("id", 'asc'));
-            // newArray2.sort(this.compare("id", 'asc'));
-            newArray3 = newArray1.concat(newArray2);
-
-            this.plan_list[item] = newArray3;
-
-            // 处理加油包
-            if (!this.hasValidatedPlan) {
-              if (item !== '2') {
-                this.plan_type.push(item);
-              }
+          let newArray1 = [], newArray2 = [], newArray3 = [];
+          for (let i = 0; i < this.plan_list[item].length; i++) {
+            //区分推荐/未推荐
+            if (this.plan_list[item][i].is_recommend === true) {
+              newArray1.push(this.plan_list[item][i]);
             } else {
-              this.plan_type.push(item);
+              newArray2.push(this.plan_list[item][i]);
             }
           }
+          //分别进行排序
+          // newArray1.sort(this.compare("id", 'asc'));
+          // newArray2.sort(this.compare("id", 'asc'));
+          newArray3 = newArray1.concat(newArray2);
+
+          this.plan_list[item] = newArray3;
 
           // 处理加油包
           if (!this.hasValidatedPlan) {
-            if (this.plan_list.hasOwnProperty(2)) {
-              delete this.plan_list[2];
+            if (item !== '2') {
+              if (item == 5) {
+                this.plan_type.unshift(item)
+              } else {
+                this.plan_type.push(item);
+              }
             }
-            if (this.render_type_name.includes('加油包')) {
-              this.render_type_name.splice(this.render_type_name.findIndex(item => item === '加油包'), 1);
-            }
-          }
-
-          if (this.global_variables.device === 'iphone' && this.client_type === "app") {
-            this.plan_list_height.is_app = true;
           } else {
-            this.plan_list_height.is_app = false;
-            if (this.client_type === "wechat" || this.client_type === "alipay") {
-              this.plan_list_height.is_c_frontend = true;
+            if (item == 5) {
+              this.plan_type.unshift(item)
             } else {
-              this.plan_list_height.is_c_frontend = false;
-              this.plan_list_height.is_normal = true;
+              this.plan_type.push(item);
             }
+            
           }
-
-
-          
-         let planInfo = await this.getPlanInfo(this.choose_plan_index)
-         if (planInfo.name.includes(this.guardianText))this.guardian = true
-
-        } else {
-          this.load_plan_list = true;
-          this.load_plan_msg = res.msg;
         }
-      });
+
+        // 处理加油包
+        if (!this.hasValidatedPlan) {
+          if (this.plan_list.hasOwnProperty(2)) {
+            delete this.plan_list[2];
+          }
+          if (this.render_type_name.includes('加油包')) {
+            this.render_type_name.splice(this.render_type_name.findIndex(item => item === '加油包'), 1);
+          }
+        }
+
+        if (this.global_variables.device === 'iphone' && this.client_type === "app") {
+          this.plan_list_height.is_app = true;
+        } else {
+          this.plan_list_height.is_app = false;
+          if (this.client_type === "wechat" || this.client_type === "alipay") {
+            this.plan_list_height.is_c_frontend = true;
+          } else {
+            this.plan_list_height.is_c_frontend = false;
+            this.plan_list_height.is_normal = true;
+          }
+        }
+        
+
+        
+        let planInfo = await this.getPlanInfo(this.choose_plan_index)
+        if (planInfo.name.includes(this.guardianText))this.guardian = true
+
+      } else {
+        this.load_plan_list = true;
+        this.load_plan_msg = res.msg;
+      }
+      
     },
     mounted() {
 
     },
     methods: {
+      getPlanList() {
+        return new Promise((resolve) => {
+          _get("/api/v1/app/plan_list", {
+            iccid: getStorage("check_iccid")
+          }).then(async res => {
+            resolve(res)
+          })
+        })
+      },
       toQuestion() {
         this.$router.push({
           path: '/weixin/question/common_question'
