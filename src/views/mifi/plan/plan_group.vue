@@ -260,10 +260,18 @@
    
 
               for (let item in this.totalPlan) {
-                this.columns[0].values.push({
-                  'keyId': item,
-                  'text': this.planName[item]
-                })
+                //前置 周期性套餐
+                if (item == 5) {
+                  this.columns[0].values.unshift({
+                    'keyId': item,
+                    'text': this.planName[item]
+                  })
+                } else {
+                  this.columns[0].values.push({
+                    'keyId': item,
+                    'text': this.planName[item]
+                  })
+                }
               }
 
               if (this.columns[0].values.length > 0) {
@@ -279,16 +287,29 @@
                 this.$refs.planList.style.height = (clientHeight - refBanner - refTitle) + 'px'
               });
 
+
               for (let i in this.totalPlan) {
                 this.group_list = this.totalPlan[i];
                 this.group_list.length ? this.showNoData = false : this.showNoData = true;
-                this.cur_plan_type_index = i;
+                
+                //前置 周期性套餐
+                if (this.columns[0].values.some((item => {
+                  return item.keyId == 5
+                }))) {
+                  this.cur_plan_type_index = 5;
+                  this.group_list = this.totalPlan[5];
+                }else {
+                  this.cur_plan_type_index = i;
+                }
 
                 this.activeNames.push(this.group_list[0].id)
-                //this.sortPlan(this.group_list)
                 return this.group_list;
               }
-              
+
+
+
+
+ 
 
             } else {
               this.$store.commit('mifiCommon/changeErrStatus', {
