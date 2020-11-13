@@ -39,10 +39,11 @@
       <a @click="toTutorial"><span class="iconfont icon-tutorial"></span>查看实名教程</a>
     </p>
     <div class="btn-next-wrap">
-      <button @click="checkInfo" class="btn-next">完成实名 激活卡</button>
+      <button @click="checkInfo" class="btn-next">复制iccid号 完成实名 激活卡</button>
     </div>
     <div class="phone-tip">
-      温馨提示<br/>以'145','146','166','177','191','199'号段开头的号码无法接收短信验证码
+      温馨提示<br/>以'145','146','166','177','191','199'号段开头的号码无法接收短信验证码<br/>
+      请完成验证码后复制iccid号至运营商实名认证处粘贴iccid号
     </div>
     <van-popup v-model="showItem.showFixedWrap" :close-on-click-overlay="false">
       <p class="showTip">{{showTipMsg}}</p>
@@ -55,7 +56,7 @@
 </template>
 
 <script>
-  import {Popup, Notify} from 'vant';
+  import {Popup, Notify, Toast} from 'vant';
   import {_get, _post} from "../../http";
   import {getStorage, removeStorage, inArray, getUrlParam} from "../../utilies";
   import '../../assets/less/common.less'
@@ -109,6 +110,7 @@
     components: {
       [Popup.name]: Popup,
       [Notify.name]: Notify,
+      [Toast.name]: Toast,
     },
     created() {
       removeStorage('realnameType');
@@ -371,7 +373,12 @@
           return
         }
 
-        this.bindImei();
+        this.copy(this.info_iccid)
+
+        setTimeout(() => {
+          this.bindImei();
+        }, 2000)
+
       },
       bindImei() {
         let param = {
@@ -436,6 +443,18 @@
         if (this.info_code.length == 12) {
           this.info_code = this.info_code.slice(0, 6)
         }
+      },
+      copy(str) {
+        let input = document.createElement("input");   // 直接构建input
+        input.value = str;  // 设置内容
+        document.body.appendChild(input);    // 添加临时实例
+        input.select();   // 选择实例内容
+        document.execCommand("Copy");
+        document.body.removeChild(input);
+        Toast({
+          message: '已复制到剪贴板',
+          position: 'bottom'
+        })
       }
     }
   };
