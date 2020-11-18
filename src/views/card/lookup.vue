@@ -289,61 +289,69 @@
         _post('/api/v1/app/new_auth/check_auth_', {
           iccid: newIccid,
         }).then(async res => {
-          Toast.clear();
-          let autoCount = getStorage('watchAutoSearch');
-          if (autoCount) {
-            autoCount++;
-            setStorage('watchAutoSearch', autoCount);
-          }
-          if (res.state === 1) {
+          try {
+            Toast.clear();
+            let autoCount = getStorage('watchAutoSearch');
+            if (autoCount) {
+              autoCount++;
+              setStorage('watchAutoSearch', autoCount);
+            }
+            if (res.state === 1) {
 
-            //奇宇卡控制
-            if(res.data.is_qiyu === 1 ) {
+              //奇宇卡控制
+              if(res.data.is_qiyu === 1 ) {
+                Notify({
+                  message: '此卡不属于物联网通信运营商'
+                });
+                return
+              }
+              //针对卡源调起接口
+              if (getStorage('userInfo', 'obj')) {
+                await this.getCanBalancePay()
+              }
+
+              setStorage('originPrice', res.data.default_price);
+              setStorage('check_iccid', res.data.iccid);
+              setStorage('new_auth_search_iccid', res.data.iccid);
+              setStorage('source', res.data.source);
+              removeStorage('plan_list_new_card');
+              removeStorage('advertState');
+              localStorage.setItem("currentType", "card");
+              if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
+
+              if (res.data.status === 1) {
+                if(res.data.is_watch === 1) setStorage('is_watch_card',1);
+                this.$router.push({path: '/weixin/card/usage'})
+              }
+              if (res.data.status === 2) {
+                this.toRealname(res.data.iccid, res.data.source);
+              }
+              if (res.data.status === 3) {
+                setStorage('advertState', 1);
+                this.getRealnameType(res.data.iccid,res.data.is_watch);
+              }
+            } else if (res.state === 11022) {
+              Dialog.alert({
+                message: "此卡已过期，即将前往换卡页面"
+              }).then(() => {
+                this.$router.push({path: '/weixin/question/eqReplaceMent'})
+              })
+            } else if (res.state === 11023) {
+              Dialog.alert({
+                message:`尊敬的用户您好: ${res.data}，给您带来的不便，敬请谅解。`
+              })
+            } else {
               Notify({
-                message: '此卡不属于物联网通信运营商'
+                message: res.msg
               });
-              return
             }
-            //针对卡源调起接口
-            if (getStorage('userInfo', 'obj')) {
-              await this.getCanBalancePay()
-            }
-
-            setStorage('originPrice', res.data.default_price);
-            setStorage('check_iccid', res.data.iccid);
-            setStorage('new_auth_search_iccid', res.data.iccid);
-            setStorage('source', res.data.source);
-            removeStorage('plan_list_new_card');
-            removeStorage('advertState');
-            localStorage.setItem("currentType", "card");
-            if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
-
-            if (res.data.status === 1) {
-              if(res.data.is_watch === 1) setStorage('is_watch_card',1);
-              this.$router.push({path: '/weixin/card/usage'})
-            }
-            if (res.data.status === 2) {
-              this.toRealname(res.data.iccid, res.data.source);
-            }
-            if (res.data.status === 3) {
-              setStorage('advertState', 1);
-              this.getRealnameType(res.data.iccid,res.data.is_watch);
-            }
-          } else if (res.state === 11022) {
-            Dialog.alert({
-              message: "此卡已过期，即将前往换卡页面"
-            }).then(() => {
-              this.$router.push({path: '/weixin/question/eqReplaceMent'})
+          } catch (err) {
+            Toast({
+              position: 'top',
+              message: err.message
             })
-          } else if (res.state === 11023) {
-            Dialog.alert({
-              message:`尊敬的用户您好: ${res.data}，给您带来的不便，敬请谅解。`
-            })
-          } else {
-            Notify({
-              message: res.msg
-            });
           }
+          
         })
       },
       toRealname(iccid, source) {
