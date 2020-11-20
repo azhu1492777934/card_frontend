@@ -35,6 +35,10 @@
                 <div>订单编号:{{item.no}}</div>
                 <div>{{item.created_at}}</div>
               </div>
+              <div>
+                <div>客户订单:{{item.order_no}}</div>
+                <div></div>
+              </div>
             </div>
           </van-list>
 
@@ -293,12 +297,12 @@
   }
   .orderContent{
     width:694px;
-    height:200px;
+    height:230px;
     background:#fff;
     border-radius:14px;
     margin:13px auto;
     text-align:left;
-    padding:18px 32px;
+    padding:25px 32px;
     box-sizing: border-box;
     position:relative;
     >div:nth-child(1){
@@ -311,7 +315,7 @@
         height:88px;
         background:url("../../assets/imgs/userCenter/rechargeIcon.png")no-repeat;
         background-size:100% 100%;
-        top:10px;
+        top:17px;
       }
       >span:nth-child(2){
         font-size:44px;
@@ -369,6 +373,15 @@
       color:rgba(149,149,149,1);
     }
 
+    >div:nth-child(5){
+      display:flex;
+      justify-content: space-between;
+      font-size:20px;
+      font-family:SourceHanSansSC-Light;
+      font-weight:300;
+      color:rgba(149,149,149,1);
+      padding-top: 10px;
+    }
 
   }
 

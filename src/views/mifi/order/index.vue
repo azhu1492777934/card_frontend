@@ -30,6 +30,10 @@
                   <span class="iconfont icon-plan"></span>
                   {{ inner_item.rating_name }}
                 </p>
+                <p class="plan-order">
+                  <span>订单号：</span>
+                  {{ inner_item.no }}
+                </p>
               </div>
 
               <div class="order-price-wrap">
@@ -295,6 +299,12 @@
               color: #faa500;
               font-size: 30px;
             }
+          }
+
+          .plan-order {
+            padding-top: 15px;
+            font-size: 22px;
+            color: #9fa4af;
           }
 
         }

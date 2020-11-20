@@ -43,7 +43,8 @@ module.exports = {
         }
       },
       '/api': {
-        target: 'http://cardserver_test.china-m2m.com',
+        // target: 'http://cardserver_test.china-m2m.com',
+        target: 'http://cardserverapi.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/api': ''
@@ -57,7 +58,7 @@ module.exports = {
         }
       },
       '/iot': {
-        target: 'https://iottest.china-m2m.com',
+        target: 'https://iot.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/iot': ''
