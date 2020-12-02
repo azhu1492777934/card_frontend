@@ -1,2 +1,0 @@
-(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["whiteNewlist"],{b544:function(e,t,n){"use strict";var i=n("d721"),s=n.n(i);s.a},d721:function(e,t,n){},fb43:function(e,t,n){"use strict";n.r(t);var i=function(){var e=this,t=e.$createElement,n=e._self._c||t;return n("div")},s=[],c=(n("cadf"),n("551c"),n("097d"),{name:"whiteNewList"}),u=c,l=(n("b544"),n("2877")),w=Object(l["a"])(u,i,s,!1,null,null,null);w.options.__file="whiteNewlist.vue";t["default"]=w.exports}}]);
-//# sourceMappingURL=whiteNewlist.fb5bdc43.js.map
