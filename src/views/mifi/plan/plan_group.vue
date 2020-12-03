@@ -511,7 +511,7 @@
             success_page: this.global_variables.packed_project === 'mifi'? this.advertisement : `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
             //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`
             //  cardserve `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
-            recharge_type: 2,
+            // recharge_type: 2,
             channel_id: 9,
             wx_id: userInfo.account.user_id,
           };
@@ -520,7 +520,7 @@
           if (this.client_type === 'app') param.open_id = userInfo.account.user_id;
           if (this.client_type === 'wechat') param.pay_type = 'WEIXIN';
           if (this.client_type === 'alipay') param.pay_type = 'ALIPAY';
-          // this.global_variables.packed_project === 'mifi' ? param.recharge_type = 1 : param.recharge_type = 0;
+          this.global_variables.packed_project === 'mifi' ? param.recharge_type = 1 : param.recharge_type = 0;
           this.rechargeShow = false;
           let payDom = document.querySelector('form');
           if (payDom) document.removeChild(payDom);
