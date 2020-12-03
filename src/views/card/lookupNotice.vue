@@ -261,9 +261,7 @@
 
         newIccid = iccid.replace(/\s/g, "");
 
-        setStorage('check_iccid', newIccid);
-        this.$router.push({path: '/weixin/card/usage'})
-        return
+
 
         Toast.loading({
           mask: true,
@@ -316,12 +314,12 @@
           if (res.state === 1) {
 
             //奇宇卡控制
-            if(res.data.is_qiyu === 1 ) {
-              Notify({
-                message: '此卡不属于物联网通信运营商'
-              });
-              return
-            }
+            // if(res.data.is_qiyu === 1 ) {
+            //   Notify({
+            //     message: '此卡不属于物联网通信运营商'
+            //   });
+            //   return
+            // }
             //针对卡源调起接口
             if (getStorage('userInfo', 'obj')) {
               await this.getCanBalancePay()
@@ -353,6 +351,15 @@
             }).then(() => {
               this.$router.push({path: '/weixin/question/eqReplaceMent'})
             })
+          } else if (res.state === 11024) {
+              Notify({
+                message: res.msg
+              });
+              setStorage('check_iccid', newIccid);
+              setTimeout(() => {
+                
+                this.$router.push({path: '/weixin/card/usage'})
+              }, 1000)
           } else {
             Notify({
               message: res.msg
