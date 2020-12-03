@@ -261,6 +261,10 @@
 
         newIccid = iccid.replace(/\s/g, "");
 
+        setStorage('check_iccid', newIccid);
+        this.$router.push({path: '/weixin/card/usage'})
+        return
+
         Toast.loading({
           mask: true,
           message: "查询中,请等候",
