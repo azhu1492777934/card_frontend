@@ -314,12 +314,16 @@
           if (res.state === 1) {
 
             //奇宇卡控制
-            // if(res.data.is_qiyu === 1 ) {
-            //   Notify({
-            //     message: '此卡不属于物联网通信运营商'
-            //   });
-            //   return
-            // }
+            if(res.data.is_qiyu === 1 ) {
+              Notify({
+                message: '此卡为奇宇卡'
+              });
+              setStorage('check_iccid', res.data.iccid);
+              setTimeout(() => {
+                this.$router.push({path: '/weixin/card/usage'})
+              }, 1000)
+              return
+            }
             //针对卡源调起接口
             if (getStorage('userInfo', 'obj')) {
               await this.getCanBalancePay()
@@ -357,7 +361,6 @@
               });
               setStorage('check_iccid', newIccid);
               setTimeout(() => {
-                
                 this.$router.push({path: '/weixin/card/usage'})
               }, 1000)
           } else {
