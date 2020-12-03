@@ -32,8 +32,8 @@ self.__precacheManifest = [
     "url": "/js/whiteNewlist.ac0b4bd4.js"
   },
   {
-    "revision": "109d87d0e9824f7af145",
-    "url": "/js/app.b95e573a.js"
+    "revision": "fdfe7b7bc1e32227dfc9",
+    "url": "/js/app.87d41fcb.js"
   },
   {
     "revision": "3a089487da1935a1f131",
@@ -284,8 +284,8 @@ self.__precacheManifest = [
     "url": "/js/guardian.1680b926.js"
   },
   {
-    "revision": "c8e79cd79d3d0d51d13b",
-    "url": "/js/mifi_plan_group.ec9cdf02.js"
+    "revision": "6960b1cbe55b0876cb28",
+    "url": "/js/mifi_plan_group.d266068c.js"
   },
   {
     "revision": "d5ab2be0a35210907d96",
@@ -356,8 +356,8 @@ self.__precacheManifest = [
     "url": "/js/mifi_card_wrapper.dcdf9dda.js"
   },
   {
-    "revision": "657033323334e91efb0011bbc18f8c04",
-    "url": "/img/yidong.65703332.png"
+    "revision": "91e1d2771efacd45e5e465d9a001f197",
+    "url": "/img/liantong.91e1d277.png"
   },
   {
     "revision": "cd82b8195486a176b094",
@@ -368,7 +368,7 @@ self.__precacheManifest = [
     "url": "/css/mifi_change_network_explanation.e965877f.css"
   },
   {
-    "revision": "91dcb8644c4d7502ac15554f98bf4f89",
+    "revision": "c2e80133d85a29904b4d48636adb477a",
     "url": "/index.html"
   },
   {
@@ -420,7 +420,7 @@ self.__precacheManifest = [
     "url": "/img/07.daa86b54.png"
   },
   {
-    "revision": "c8e79cd79d3d0d51d13b",
+    "revision": "6960b1cbe55b0876cb28",
     "url": "/css/mifi_plan_group.77ecfaa1.css"
   },
   {
@@ -724,16 +724,24 @@ self.__precacheManifest = [
     "url": "/fonts/element-icons.535877f5.woff"
   },
   {
-    "revision": "91e1d2771efacd45e5e465d9a001f197",
-    "url": "/img/liantong.91e1d277.png"
+    "revision": "0f16389ec218c90cf8f657e233b745f2",
+    "url": "/img/balanceBg1.0f16389e.png"
+  },
+  {
+    "revision": "565459ef2ee8b71db421144ad21c23e3",
+    "url": "/img/balanceBg2.565459ef.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test@3x.6e5cee73.png"
   },
   {
     "revision": "4a0cab0f33beb48ea985714d1b91fef7",
     "url": "/img/dianxin.4a0cab0f.png"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test@3x.6e5cee73.png"
+    "revision": "657033323334e91efb0011bbc18f8c04",
+    "url": "/img/yidong.65703332.png"
   },
   {
     "revision": "8da3b83b73e44e54d6be4b2522bcb1f2",
@@ -746,14 +754,6 @@ self.__precacheManifest = [
   {
     "revision": "d461d18e42a310bd709b2ce97d159153",
     "url": "/img/pkgBg3.d461d18e.png"
-  },
-  {
-    "revision": "0f16389ec218c90cf8f657e233b745f2",
-    "url": "/img/balanceBg1.0f16389e.png"
-  },
-  {
-    "revision": "565459ef2ee8b71db421144ad21c23e3",
-    "url": "/img/balanceBg2.565459ef.png"
   },
   {
     "revision": "0078f03c08066d51d64b92a13e194ebb",
@@ -792,6 +792,14 @@ self.__precacheManifest = [
     "url": "/img/bg.2d6d06f4.png"
   },
   {
+    "revision": "e93b8c03293c5b6a311da784f9c19c8f",
+    "url": "/img/bg.e93b8c03.jpeg"
+  },
+  {
+    "revision": "ffb1612d9660e2ecd9d3872d57a8a2f9",
+    "url": "/img/bar.ffb1612d.png"
+  },
+  {
     "revision": "e625229e32d9deeb5f2909c314d8e609",
     "url": "/img/ios@2x.e625229e.png"
   },
@@ -820,14 +828,6 @@ self.__precacheManifest = [
     "url": "/img/telcom_sim@3x.9e02095f.png"
   },
   {
-    "revision": "e93b8c03293c5b6a311da784f9c19c8f",
-    "url": "/img/bg.e93b8c03.jpeg"
-  },
-  {
-    "revision": "ffb1612d9660e2ecd9d3872d57a8a2f9",
-    "url": "/img/bar.ffb1612d.png"
-  },
-  {
     "revision": "3d0fc424b703032ca595090e99f8354b",
     "url": "/img/login_bg@2x.3d0fc424.png"
   },
@@ -844,50 +844,6 @@ self.__precacheManifest = [
     "url": "/img/advert.8cb139e0.gif"
   },
   {
-    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
-    "url": "/img/bg_test.6e5cee73.png"
-  },
-  {
-    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
-    "url": "/img/youku.d0ccbc8a.png"
-  },
-  {
-    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
-    "url": "/img/activityPage.014d354b.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
-  },
-  {
-    "revision": "fff5af4325410621aeec4e60b3b92d9b",
-    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@3x.42c0fbd4.png"
-  },
-  {
-    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
-    "url": "/img/orderTopBg@2x.42c0fbd4.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@3x.b899232b.png"
-  },
-  {
-    "revision": "b899232b79ad9962c5ab5572775a0400",
-    "url": "/img/card_index_bg@2x.b899232b.png"
-  },
-  {
-    "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
-    "url": "/img/bg_network@3x.2c51a1e5.png"
-  },
-  {
-    "revision": "32d70c8fc305e3647098f3de0c71b618",
-    "url": "/img/bg_network@2x.32d70c8f.png"
-  },
-  {
     "revision": "a859e9ca4606d567c42b9c7bcd4fdce9",
     "url": "/img/iccid_bg@2x.a859e9ca.png"
   },
@@ -902,6 +858,50 @@ self.__precacheManifest = [
   {
     "revision": "d140650fa64e0f1fc771610dba62aed7",
     "url": "/img/bg.d140650f.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@3x.b899232b.png"
+  },
+  {
+    "revision": "b899232b79ad9962c5ab5572775a0400",
+    "url": "/img/card_index_bg@2x.b899232b.png"
+  },
+  {
+    "revision": "014d354b9b25b67ae95857ba17e2f4cc",
+    "url": "/img/activityPage.014d354b.png"
+  },
+  {
+    "revision": "2c51a1e53c1ea0b35086d8d7261b4933",
+    "url": "/img/bg_network@3x.2c51a1e5.png"
+  },
+  {
+    "revision": "32d70c8fc305e3647098f3de0c71b618",
+    "url": "/img/bg_network@2x.32d70c8f.png"
+  },
+  {
+    "revision": "6e5cee7393060b0ec3dcd587c2518b94",
+    "url": "/img/bg_test.6e5cee73.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@3x.fff5af43.png"
+  },
+  {
+    "revision": "fff5af4325410621aeec4e60b3b92d9b",
+    "url": "/img/mifi_binding_bg@2x.fff5af43.png"
+  },
+  {
+    "revision": "d0ccbc8a35180bb40e027b44dd26035a",
+    "url": "/img/youku.d0ccbc8a.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@3x.42c0fbd4.png"
+  },
+  {
+    "revision": "42c0fbd4915870e5e60452fd0ef2cbec",
+    "url": "/img/orderTopBg@2x.42c0fbd4.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -932,7 +932,7 @@ self.__precacheManifest = [
     "url": "/css/coupon_wrapper.12696ad3.css"
   },
   {
-    "revision": "109d87d0e9824f7af145",
+    "revision": "fdfe7b7bc1e32227dfc9",
     "url": "/css/app.d1d8428f.css"
   },
   {
