@@ -19,6 +19,10 @@
           <!-- <swiper-slide v-for="(item,index) in statusList" :key="index"> -->
 
             <div v-show="statusIndex==0" >
+              <van-notice-bar
+                left-icon="volume-o"
+                text="尊敬的用户您好，您使用的物联网卡已到期。因系统原因，原有续费服务已关闭，为能继续给您提供更好的服务和感谢您长久以来对我们的支持，您可以参与换新卡活动，并有众多靓号供您选择。"
+              />
               <ul>
                 <li class="borderStyle">
                   <span><span class="redWord">*</span> ICCID卡号:</span>
@@ -134,7 +138,7 @@
 
 <script>
   import {swiper, swiperSlide} from "vue-awesome-swiper";
-  import {Toast, Popup, Notify, Loading, Area, Dialog, Icon} from "vant";
+  import {Toast, Popup, Notify, Loading, Area, Dialog, Icon, NoticeBar} from "vant";
   import {getStorage, setStorage, checkBrowser, Today, getCardServerToken, getUrlParam} from "../../utilies";
   import {_get, _post} from "../../http";
   import areaList from "../../assets/js/areaData.js"
@@ -146,6 +150,7 @@
       [Popup.name]: Popup,
       [Loading.name]: Loading,
       [Icon.name]: Icon,
+      [NoticeBar.name]: NoticeBar,
       swiper,
       swiperSlide,
       vanArea: Area,
