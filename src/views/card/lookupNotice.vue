@@ -318,10 +318,9 @@
               Notify({
                 message: '此卡为奇宇卡'
               });
-              setStorage('check_iccid', res.data.iccid);
               setTimeout(() => {
-                this.$router.push({path: '/weixin/card/usage'})
-              }, 1000)
+                window.location.href = `https://card.qiyu-m2m.com/weixin/card/lookup?iccid=${newIccid}`
+              }, 1500)
               return
             }
             //针对卡源调起接口
@@ -356,13 +355,12 @@
               this.$router.push({path: '/weixin/question/eqReplaceMent'})
             })
           } else if (res.state === 11024) {
-              Notify({
-                message: res.msg
-              });
-              setStorage('check_iccid', newIccid);
-              setTimeout(() => {
-                this.$router.push({path: '/weixin/card/usage'})
-              }, 1000)
+            Notify({
+              message: res.msg
+            });
+            setTimeout(() => {
+              window.location.href = `https://card.qiyu-m2m.com/weixin/card/lookup?iccid=${newIccid}`
+            }, 1500)
           } else {
             Notify({
               message: res.msg
