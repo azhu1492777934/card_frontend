@@ -319,10 +319,13 @@
                 message: '此卡为奇宇卡'
               });
               setTimeout(() => {
-                window.location.href = `https://card.qiyu-m2m.com/weixin/card/lookup?iccid=${newIccid}`
+                window.location.href = `https://card.qiyu-m2m.com/weixin/card/lookupN?iccid=${newIccid}`
               }, 1500)
               return
             }
+
+           
+
             //针对卡源调起接口
             if (getStorage('userInfo', 'obj')) {
               await this.getCanBalancePay()
@@ -336,7 +339,9 @@
             localStorage.setItem("currentType", "card");
             if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
 
-
+            this.$router.push({path: '/weixin/card/usage'})
+            return
+            
             if (res.data.status === 1) {
               if(res.data.is_watch === 1) setStorage('is_watch_card',1);
               this.$router.push({path: '/weixin/card/usage'})
@@ -354,12 +359,16 @@
             }).then(() => {
               this.$router.push({path: '/weixin/question/eqReplaceMent'})
             })
+          }else if (res.state === 11023) {
+            Dialog.alert({
+              message:`尊敬的用户您好: ${res.data}，给您带来的不便，敬请谅解。`
+            })
           } else if (res.state === 11024) {
             Notify({
               message: res.msg
             });
             setTimeout(() => {
-              window.location.href = `https://card.qiyu-m2m.com/weixin/card/lookup?iccid=${newIccid}`
+              window.location.href = `https://card.qiyu-m2m.com/weixin/card/lookupN?iccid=${newIccid}`
             }, 1500)
           } else {
             Notify({

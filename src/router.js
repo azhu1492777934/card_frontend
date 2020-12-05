@@ -390,12 +390,12 @@ export const constantRouterMap = [{
           requireAuth: true,
         }
       },{
-        path: 'lookupN',
-        component: card_lookup_notice,
-        meta: {
-          title: '查询',
-          requireAuth: true,
-        }
+          path: 'lookupN',
+          component: card_lookup_notice,
+          meta: {
+            title: '查询',
+            requireAuth: true,
+          }
         },
         {
           path: 'esim_usage',
