@@ -178,9 +178,10 @@
                       <span>续费日期:{{filterDate(item.created_at)}}</span>
                     </p>
                     <p class="plan-order-status-wrap">
-                      <span v-if="item.refund==2">已退款</span>
-                      <span v-if="item.refund!=2&&item.status!=-1">{{order_state[item.status]}}</span>
-                      <span v-if="item.refund!=2&&item.status==-1">已删除</span>
+                      <span v-if="(item.order_type==0 || item.order_type==4)&&item.refund!=2" @click="toInvoice(item)" class="plan-order-status-blue">发票申请</span>
+                      <span v-if="item.refund==2" class="plan-order-status-green">已退款</span>
+                      <span v-if="item.refund!=2&&item.status!=-1" class="plan-order-status-green">{{order_state[item.status]}}</span>
+                      <span v-if="item.refund!=2&&item.status==-1" class="plan-order-status-green">已删除</span>
                     </p>
                   </div>
                 </li>
@@ -544,6 +545,27 @@
               color: #31b3ef;
 
             }
+            .plan-order-status-wrap {
+              .plan-order-status-blue {
+                margin: 0 5px 0 0;
+                display: inline-block;
+                padding: 0 10px;
+                height: 36px;
+                line-height: 36px;
+                border: 1PX solid #38b5ed;
+                color: #38b5ed;
+              }
+
+              .plan-order-status-green {
+                margin: 0 0 5px 0;
+                display: inline-block;
+                padding: 0 10px;
+                height: 36px;
+                line-height: 36px;
+                border: 1PX solid #3bce9e;
+                color: #3bce9e;
+              }
+            }  
 
             .speedup-wrap {
               a {
@@ -567,7 +589,18 @@
           .plan-order-status-wrap {
             padding-top: 40px;
 
-            span {
+            .plan-order-status-blue {
+              margin: 0 5px 0 0;
+              display: inline-block;
+              padding: 0 10px;
+              height: 36px;
+              line-height: 36px;
+              border: 1PX solid #38b5ed;
+              color: #38b5ed;
+            }
+
+            .plan-order-status-green {
+              margin: 0 0 5px 0;
               display: inline-block;
               padding: 0 10px;
               height: 36px;
@@ -575,6 +608,7 @@
               border: 1PX solid #3bce9e;
               color: #3bce9e;
             }
+
           }
 
           .plan-orderNo {
@@ -1171,6 +1205,23 @@
 
         })
       },
+      toInvoice(val) {
+        let timer = 10
+        if (this.dateDiff(val.created_at,new Date()) > timer) {
+          this.$router.push({
+            name: "card_invoice",
+            params: {
+              order: val
+            }
+          })
+        } else {
+          Notify({
+            message: `充值${timer}天过后才可以申请发票`,
+            background: '#f44336'
+          })
+        }
+
+      }
     }
   };
 </script>

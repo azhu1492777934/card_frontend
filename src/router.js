@@ -53,6 +53,7 @@ const card_connection = r => require.ensure([], () => r(require('./views/card/co
 const card_check = r => require.ensure([], () => r(require('./views/card/check')), 'card_check'); // 卡检测
 const esim_usage = r => require.ensure([], () => r(require('./views/card/esim_usage')), 'esim_usage'); // 卡检测
 const esim_plan_list = r => require.ensure([], () => r(require('./views/card/esim_plan_list')), 'esim_plan_list'); // 卡检测
+const card_invoice = r => require.ensure([], () => r(require('./views/card/card_invoice')), 'card_invoice'); // 发票申请
 
 
 // 儿童手表卡
@@ -456,6 +457,13 @@ export const constantRouterMap = [{
           component: repeatRecharge,
           meta: {
             title: '复充活动'
+          }
+        }, {
+          path: 'card_invoice',
+          component: card_invoice,
+          name: 'card_invoice',
+          meta: {
+            title: '开具发票'
           }
         }]
     }, {

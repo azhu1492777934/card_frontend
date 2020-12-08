@@ -59,7 +59,7 @@ module.exports = {
       },
       '/iot': {
         // target: 'https://iot.china-m2m.com',
-        target: 'https://iottt.china-m2m.com',
+        target: 'https://iottest.china-m2m.com',
         changeOrigin: true,
         pathRewrite: {
           '^/iot': ''
