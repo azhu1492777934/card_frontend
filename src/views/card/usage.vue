@@ -1206,6 +1206,13 @@
         })
       },
       toInvoice(val) {
+        if (this.client_type !== 'alipay' && this.client_type !== 'wechat') {
+         Notify({
+            position: 'top',
+            message: "请在微信或支付宝客户端申请"
+          })
+          return
+        }
         let timer = 10
         if (this.dateDiff(val.created_at,new Date()) > timer) {
           this.$router.push({

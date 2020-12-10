@@ -112,6 +112,7 @@
 <script>
 import { Form, Field, RadioGroup, Radio, Cell, AddressEdit, Popup, Area, Button, Notify, Dialog  } from 'vant';
 import areaList from "../../assets/js/areaData.js"
+import { getStorage } from "../../utilies";
 import { _post } from '../../http/index.js';
 export default {
   name: 'card_invoice',
@@ -218,13 +219,15 @@ export default {
         Notify({message: "请填写正确的邮箱"})
         return false
       }
+      let userInfo = getStorage("userInfo", "obj")
       let params = {
         ordernum: this.orderNo,
         contacts: this.applyName,
         telphone: this.applyPhone,
         address: this.applyEmail,
         inv_head: this.invoiceHead,
-        inv_ident_num: this.invoiceCode
+        inv_ident_num: this.invoiceCode,
+        user_id: userInfo?userInfo.account.user_id: 0
       }
       _post('/api/v1/app/orders/invoice_submits', {
         ...params
