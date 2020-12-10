@@ -455,9 +455,6 @@
             status: (rechargeInfo.pay_type === 'diamond_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? 1 : 0,
             recharge_price: (rechargeInfo.pay_type === 'over_charge' || rechargeInfo.pay_type === 'normal_charge' || rechargeInfo.pay_type === 'monthly_recharge') ? rechargeInfo.pay_money : this.planInfo.price,
             recharge_type: this.global_variables.packed_project === 'mifi' ? 1 : 0,
-            // recharge_type: 2,
-            channel_id: 9,
-            wx_id: this.userInfo.account.user_id,
             failed_page: window.location.href,
             success_page:  getStorage('advertState') ? `${window.location.protocol}//${window.location.host}` :this.global_variables.packed_project === 'mifi'? this.advertisement :  advert,
             //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`

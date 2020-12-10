@@ -511,9 +511,6 @@
             success_page: this.global_variables.packed_project === 'mifi'? this.advertisement : `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
             //  mifiserve `${window.location.protocol}//${window.location.host}/mifi/card/index`
             //  cardserve `${window.location.protocol}//${window.location.host}/weixin/card/usage`,
-            // recharge_type: 2,
-            channel_id: 9,
-            wx_id: userInfo.account.user_id,
           };
 
           if (this.client_type === 'alipay' || this.client_type === 'wechat') param.open_id = (getStorage('decrypt_data', 'obj') || {}).openid;
