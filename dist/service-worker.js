@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.5.0/workbox-sw.js");
 
 importScripts(
-  "/precache-manifest.eb2a49a36a719982f7e4e9a5836c2533.js"
+  "/precache-manifest.8fe32d1530c09717269be2d2b94e3d94.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "card_server"});
