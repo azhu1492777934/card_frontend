@@ -2,7 +2,7 @@
   <div class="login-wrap">
     <div class="info-wrap">
       <div class="phone-wrap">
-        <input type="text" placeholder="请输入手机号码" maxlength="11" v-model="phone"/>
+        <input type="text" placeholder="请输入微信绑定的手机号码，非新卡" maxlength="11" v-model="phone"/>
       </div>
       <div class="code-wrap">
         <input type="number" placeholder="请输入验证码" maxlength="10" v-model="code" v-on:input ="limlit()"/>
@@ -217,9 +217,10 @@
         border-radius: 7px;
         box-shadow: 0 18px 9px 0 rgba(5, 87, 197, 0.18);
         input {
+          width: 100%;
           display: inline-block;
           padding: 20px 0 20px 15px;
-          font-size: 30px;
+          font-size: 28px;
           color: #000;
         }
       }
@@ -228,6 +229,7 @@
         input {
           display: inline-block;
           width: 59%;
+          font-size: 28px;
         }
         button {
           display: inline-block;
