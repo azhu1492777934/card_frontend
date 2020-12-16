@@ -6,8 +6,9 @@
     <img class="realname-tip" src="../../assets/imgs/card/realname/tip.png" alt="">
     <div class="info-wrap">
       <div>
-        <span>ICCID</span>
-        <input v-model="info_iccid" readonly placeholder="请输入ICCID" type="text">
+        <span >ICCID</span>
+        <input v-model="info_iccid" readonly placeholder="请输入ICCID" type="text" >
+        <span class="copyBT" >{{info_iccid}}</span>
       </div>
       <div v-if="showItem.showImei">
         <span>IMEI</span>
@@ -24,8 +25,8 @@
         <input v-model="info_name" maxlength="15" placeholder="请输入姓名" type="text">
       </div>
       <div>
-        <span>手机号</span>
-        <input v-model="info_phone" :placeholder="isPhoneMifi=='mifi'?'请输入手机号接收验证码':'请输入家长手机号接收验证码'" type="number">
+        <span >手机号</span>
+        <input v-model="info_phone" :placeholder="'请输入手机号接收验证码'" type="number">
       </div>
       <div class="code-wrap">
         <input v-model="info_code" placeholder="请输入验证码" type="number" v-on:input ="limlit()"/>
@@ -373,7 +374,7 @@
           return
         }
 
-        this.copy(this.info_iccid)
+        this.copy('copyBT')
 
         setTimeout(() => {
           this.bindImei();
@@ -445,12 +446,12 @@
         }
       },
       copy(str) {
-        let input = document.createElement("input");   // 直接构建input
-        input.value = str;  // 设置内容
-        document.body.appendChild(input);    // 添加临时实例
-        input.select();   // 选择实例内容
-        document.execCommand("Copy");
-        document.body.removeChild(input);
+        const range = document.createRange();
+        range.selectNode(document.getElementsByClassName(str).item(0));
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
         Toast({
           message: '已复制到剪贴板',
           position: 'bottom'
@@ -667,6 +668,10 @@
       }
     }
 
+  }
+
+  .copyBT {
+    opacity: 0;
   }
 </style>
 

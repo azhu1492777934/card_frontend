@@ -12,6 +12,7 @@
       <div>
         <span>ICCID</span>
         <input v-model="info_iccid" readonly placeholder="请输入ICCID" type="text">
+        <span class="copyBT" >{{info_iccid}}</span>
       </div>
       <div v-if="showItem.showImei">
         <span>IMEI</span>
@@ -213,7 +214,7 @@
           return
         }
 
-        this.copy(this.info_iccid)
+        this.copy('copyBT')
 
         setTimeout(() => {
           this.bindImei();
@@ -283,12 +284,12 @@
         }
       },
       copy(str) {
-        let input = document.createElement("input");   // 直接构建input
-        input.value = str;  // 设置内容
-        document.body.appendChild(input);    // 添加临时实例
-        input.select();   // 选择实例内容
-        document.execCommand("Copy");
-        document.body.removeChild(input);
+        const range = document.createRange();
+        range.selectNode(document.getElementsByClassName(str).item(0));
+        const selection = window.getSelection();
+        if (selection.rangeCount > 0) selection.removeAllRanges();
+        selection.addRange(range);
+        document.execCommand('copy');
         Toast({
           message: '已复制到剪贴板',
           position: 'bottom'
@@ -505,6 +506,10 @@
       }
     }
 
+  }
+
+  .copyBT {
+    opacity: 0;
   }
 </style>
 
