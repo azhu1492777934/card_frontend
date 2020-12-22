@@ -191,7 +191,7 @@
             className:"shitDialog"
           }).then(() => {
             // on confirm
-            window.location.href = 'https://iotmanager.china-m2m.com/v1/qrcode/jump?business_type=WX_M2M'
+            window.location.href = 'https://ykf-webchat.7moor.com/wapchat.html?accessId=505a9e80-2075-11ea-9c67-676d79fbc218&fromUrl=&urlTitle='
           }).catch(() => {
             
           })
@@ -230,7 +230,8 @@
           let url="";
           let params={};
           params.id=this.currentInfo.id;
-          params.refund_reason=this.radio == 3 ? this.reason_input :this.refund_reason[this.radio]
+          params.user_id = getStorage("userInfo", "obj").account.user_id;
+          params.refund_reason = `C端_${this.radio == 3 ? this.reason_input :this.refund_reason[this.radio]}`
           url="/iot/v1/orders/balance/recharge/refund";
           if(this.global_variables.packed_project=='mifi'){
             params.should_plan_refund=1
