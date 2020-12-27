@@ -101,6 +101,7 @@ const mifi_card_wrapper = r => require.ensure([], () => r(require('./views/mifi/
 const mifi_card_lookup = r => require.ensure([], () => r(require('./views/mifi/card/lookup')), 'mifi_card_lookup'); // 查卡
 const mifi_card_info = r => require.ensure([], () => r(require('./views/mifi/card/index')), 'mifi_card_info'); // 卡状态详情
 const mifi_change_network = r => require.ensure([], () => r(require('./views/mifi/card/change_net')), 'mifi_change_network'); // 切换网络
+const mifi_lookupKeFu = r => require.ensure([], () => r(require('./views/mifi/card/lookupKeFu')), 'mifi_lookupKeFu'); // 切换网络
 
 // mifi 订单
 const mifi_order_wrapper = r => require.ensure([], () => r(require('./views/mifi/order/order_wrapper')), 'mifi_order_wrapper')
@@ -579,6 +580,10 @@ export const constantRouterMap = [{
       path: 'lookup',
       component: mifi_card_lookup,
       meta: {title: '查询'}
+    }, {
+      path: 'lookupKeFu',
+      component: mifi_lookupKeFu,
+      meta: {title: '客服'}
     }, {
       path: 'change_network',
       component: mifi_change_network,
