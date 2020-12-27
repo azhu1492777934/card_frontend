@@ -174,6 +174,10 @@ export const constantRouterMap = [{
   path: '/weixin/new_card/real_name_back',
   meta: {title: '实名'},
   component: real_name_bak,
+},{
+  path: '/mifi/card/lookupKeFu',
+  component: mifi_lookupKeFu,
+  meta: {title: '客服'}
 }, {
   path: "/change_network_explanation",
   component: mifi_change_network_explanation,
@@ -580,10 +584,6 @@ export const constantRouterMap = [{
       path: 'lookup',
       component: mifi_card_lookup,
       meta: {title: '查询'}
-    }, {
-      path: 'lookupKeFu',
-      component: mifi_lookupKeFu,
-      meta: {title: '客服'}
     }, {
       path: 'change_network',
       component: mifi_change_network,
