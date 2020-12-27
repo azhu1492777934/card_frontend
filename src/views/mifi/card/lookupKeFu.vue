@@ -65,10 +65,6 @@
       [NoticeBar.name]: NoticeBar,
     },
     created() {
-
-      _get('http://quicktest.natapp1.cc/').then((res) => {
-        console.log(res)
-      })
       this.$store.commit('mifiCommon/changeErrStatus', {show: false});
       let _this = this;
 
