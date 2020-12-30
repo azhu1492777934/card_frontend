@@ -1174,7 +1174,7 @@
           source: getStorage('source')
         }).then((res) => {
           if (res.code == 0 && this.sourceWhite == '63') {
-            if (res.data.whiteList.userWhiteInfo.length <= 2) {
+            if (res.data.whiteList.userWhiteInfo.length == 0) {
               Dialog.alert({
                 message: '提示：您好，呼出通话前请先设置本号码的联系人（名单内的号码才可以拨打成功哦）',
                 confirmButtonText: '前往'
@@ -1188,7 +1188,7 @@
                 })
               })
             }
-          } else if (res.code == 390101) {
+          } else if (res.code == 390101 || res.code == 395103) {
             Dialog.alert({
               message: '提示：您好，呼出通话前请先设置本号码的联系人（名单内的号码才可以拨打成功哦）',
               confirmButtonText: '前往'
