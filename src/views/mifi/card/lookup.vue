@@ -191,6 +191,13 @@
               realname: (!(res.data.status === 2 || res.data.status === 3))
             }); // 增加iccid实名记录
 
+            if (res.data.status !== 1 && res.data.is_popup === 1) {
+              Dialog.alert({
+                title: '温馨提示',
+                message: res.data.popup_msg
+              })
+            }
+
             if (res.data.status === 1) {
               this.$router.push({path: '/mifi/card/index'});
             }

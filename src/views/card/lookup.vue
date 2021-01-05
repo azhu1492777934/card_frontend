@@ -319,6 +319,12 @@
               localStorage.setItem("currentType", "card");
               if (res.data.is_migu_music === 1) setStorage('MiGuMusic', true);
 
+              if (res.data.status !== 1 && res.data.is_popup === 1) {
+                Dialog.alert({
+                  title: '温馨提示',
+                  message: res.data.popup_msg
+                })
+              }
               if (res.data.status === 1) {
                 if(res.data.is_watch === 1) setStorage('is_watch_card',1);
                 this.$router.push({path: '/weixin/card/usage'})
@@ -330,6 +336,7 @@
                 setStorage('advertState', 1);
                 this.getRealnameType(res.data.iccid,res.data.is_watch);
               }
+
             } else if (res.state === 11022) {
               Dialog.alert({
                 message: "此卡已过期，即将前往换卡页面"
