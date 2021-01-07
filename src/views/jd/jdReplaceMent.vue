@@ -204,6 +204,12 @@
       };
     },
     created() {  
+      Dialog.alert({
+        title: '温馨提示',
+        message: '尊敬的用户您好，为进一步加强物联网卡安全管理，防范物联网卡被电信网络诈骗等违法活动利用，积极配合工信部“断卡行动”，自即日起因受物流限制，旧卡换新活动服务暂时关闭；如需用卡可到三大运营商服务点办理开户，感谢您的理解与配合',
+        showConfirmButton: false
+      })
+      return
       this.initial()
     },
     computed: {
