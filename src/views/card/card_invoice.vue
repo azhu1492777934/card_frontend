@@ -222,11 +222,11 @@ export default {
       let userInfo = getStorage("userInfo", "obj")
       let params = {
         ordernum: this.orderNo,
-        contacts: this.applyName,
+        contacts: this.applyName.replace(/\s+/g,''),
         telphone: this.applyPhone,
-        address: this.applyEmail,
-        inv_head: this.invoiceHead,
-        inv_ident_num: this.invoiceCode,
+        address: this.applyEmail.replace(/\s+/g,''),
+        inv_head: this.invoiceHead.replace(/\s+/g,''),
+        inv_ident_num: this.invoiceCode.replace(/\s+/g,''),
         user_id: userInfo?userInfo.account.user_id: 0
       }
       _post('/api/v1/app/orders/invoice_submits', {
