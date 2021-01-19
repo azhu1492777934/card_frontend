@@ -175,7 +175,7 @@
 
                   <div class="plan-date-wrap">
                     <p class="plan-date">
-                      <span>续费日期:{{filterDate(item.created_at)}}</span>
+                      <span>生效日期:{{filterDate(item.created_at)}}</span>
                     </p>
                     <p class="plan-order-status-wrap">
                       <span v-if="(item.order_type==0 || item.order_type==4)&&item.refund!=2" @click="toInvoice(item)" class="plan-order-status-blue">发票申请</span>
