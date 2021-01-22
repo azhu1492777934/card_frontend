@@ -163,7 +163,6 @@
         </div>
       </div>
     </van-popup><!--app支付选择-->
-
   </div>
 </template>
 

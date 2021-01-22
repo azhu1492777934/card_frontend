@@ -98,7 +98,7 @@
          
         </van-checkbox>
         <span>我同意</span>
-         <p @click="goGuardia">《中国人民财产保险股份有限公司少儿走失找寻费用补偿保险条款》</p>
+         <p @click="goGuardia">《通信用户入网服务协议》</p>
       </div>
       <button
         @click="toService"
@@ -135,7 +135,6 @@
       v-model="rechargeShow">
       <p class="showTip">创建订单中,请等候</p>
     </van-popup>
-
   </div>
 </template>
 
@@ -209,8 +208,7 @@
         },
         // 协议
         guardianChecked: false,
-        guardian: false,
-        guardianText: '翼联守护'
+        guardian: true,
       };
     },
     components: {
@@ -225,6 +223,7 @@
       MiGu,
       swiper,
       swiperSlide,
+
     },
     async created() {
       if (!getStorage('check_iccid')) this.$router.push({path: '/weixin/card/lookup'});
@@ -319,11 +318,6 @@
             this.plan_list_height.is_normal = true;
           }
         }
-        
-
-        
-        let planInfo = await this.getPlanInfo(this.choose_plan_index)
-        if (planInfo.name.includes(this.guardianText))this.guardian = true
 
       } else {
         this.load_plan_list = true;
@@ -355,19 +349,12 @@
       async planTypeClikc(index) {
         this.cur_plan_type_index = index;
         this.swiper.slideTo(index);
-        /* 获取当前套餐信息*/
-        let planInfo = await this.getPlanInfo(0)
-      
-        if (planInfo.name.includes(this.guardianText))this.guardian = true
-        else this.guardian = false
       },
       choosePlanClick: function (id, index, name) {
         this.ref_plan_type_index = index;
         this.choose_plan_index = id;
         index === '2' ? this.recharge_btn_text = '选择叠加加油包套餐' : this.recharge_btn_text = '充值';
 
-        if (name.includes(this.guardianText)) this.guardian = true
-        else this.guardian = false
       },
       async recharge() {
         
@@ -384,7 +371,7 @@
             if (!this.guardianChecked) {
               Toast({
                 position: 'top',
-                message: "请同意该套餐协议",
+                message: "请同意通信用户入网服务协议",
                 duration: 4000
               });
               return
@@ -552,26 +539,10 @@
         appRate(14);
         this.$router.push({path: "/weixin/coupon/index"})
       },
-      getPlanInfo(index) {
-       return new Promise((resolve) => {
-          let planName = this.render_type_name[this.cur_plan_type_index];
-          let planType = '';
-          for (let i in this.plan_type_name) {
-            if (this.plan_type_name[i] === planName) {
-              planType = i;
-              break
-            }
-          }
-     
-          let planInfo = this.plan_list[planType][index];
-          resolve(planInfo)
-        })
-
-      },
       goGuardia() {
         this.$router.push({
-            path:"/weixin/question/guardian",
-          });
+          path:"/weixin/question/guardian",
+        });
       }
     }
   };

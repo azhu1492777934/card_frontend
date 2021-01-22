@@ -72,7 +72,13 @@
       <div v-if="showNoData">
         <img class="noOrderPic" src="../../../assets/imgs/mifi/common/noData@2x.png" alt="">
       </div>
-
+      <div class="guardian" v-show="guardian">
+        <van-checkbox v-model="guardianChecked" icon-size="16px" shape="square" checked-color="#FFB214" id="guardian">
+         
+        </van-checkbox>
+        <span>我同意</span>
+         <p @click="goGuardia">《通信用户入网服务协议》</p>
+      </div>
     </div>
 
     <div ref="btnRechargeWrap" class="btn-recharge-wrap">
@@ -166,7 +172,7 @@
 <script>
   import {_get} from "../../../http";
   import {getStorage, setStorage, checkBrowser} from "../../../utilies";
-  import {Popup, Toast, Notify, Dialog,RadioGroup, Radio,DatetimePicker, Collapse, CollapseItem} from 'vant'
+  import {Popup, Toast, Notify, Dialog,RadioGroup, Radio,DatetimePicker, Collapse, CollapseItem, Checkbox} from 'vant'
   import {_post} from "../../../http";
   import {mapState} from 'vuex'
   
@@ -218,6 +224,9 @@
         maxDate: new Date(this.getEndDate().endYear, this.getEndDate().endMonth, this.getEndDate().endDay),
         currentDate: new Date(),
         advertisement: 'https://interaction.clotfun.online/horse', // 广告链接
+        // 协议
+        guardianChecked: false,
+        guardian: true,
       }
     },
     components: {
@@ -229,6 +238,7 @@
       [RadioGroup.name]: RadioGroup,
       [Radio.name]: Radio,
       [DatetimePicker.name]: DatetimePicker,
+      [Checkbox.name]: Checkbox,
     },
     created() {
       this.iccid ? this.initial({}) : this.$router.push({path: '/mifi/card/lookup'});
@@ -422,6 +432,16 @@
         }
 
         try {
+          if (this.guardian) {
+            if (!this.guardianChecked) {
+              Toast({
+                position: 'top',
+                message: "请同意通信用户入网服务协议",
+                duration: 4000
+              });
+              return
+            }
+          }
           let planInfo = null,
           _this = this,
           cur_date = new Date().getDate();
@@ -586,6 +606,11 @@
         plan.sort(this.compare2('index'))   
 
    
+      },
+      goGuardia() {
+        this.$router.push({
+          path:"/weixin/question/guardian",
+        });
       }
     },
     mounted() {
@@ -667,10 +692,37 @@
 
     .group-list-wrap {
       overflow: hidden;
+      position: relative;
+      background: #F5F5F5;
+      .guardian {
+        width: 100%;
+        height: 36px;
+        position: absolute;
+        bottom: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        white-space:nowrap;
+        padding: 0 30px;
+        box-sizing: border-box;
+        #guardian {
+          flex: .5;
+        }
+        span {
+          flex: 1;
+        }
+        p {
+          flex: 8;
+          color: #6D4C41;
+          font-weight: 500;
+          overflow: hidden;//禁止内容溢出
+          text-overflow: ellipsis;
+        }
+      }
     }
 
     .plan-list-wrap {
-      height: 100%;
+      height: 96%;
       overflow: auto;
       -webkit-overflow-scrolling: touch;
       background: #F5F5F5;
@@ -876,7 +928,7 @@
     .btn-recharge-wrap {
       padding: 40px 0;
       height: 80px;
-
+      position: relative;
       button {
         &.noDataHide {
           display: none;
