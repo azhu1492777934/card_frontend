@@ -700,7 +700,6 @@
         position: absolute;
         bottom: 0;
         display: flex;
-        justify-content: center;
         align-items: center;
         white-space:nowrap;
         padding: 0 30px;
@@ -717,6 +716,7 @@
           font-weight: 500;
           overflow: hidden;//禁止内容溢出
           text-overflow: ellipsis;
+          text-align: left;
         }
       }
     }
