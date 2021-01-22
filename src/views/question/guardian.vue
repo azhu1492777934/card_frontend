@@ -3,8 +3,8 @@
     <div class="refund-title" style="text-align: center;">《通信用户入网服务协议》</div>
     <!-- <div class="refund-title">总则</div> -->
     <div class="refund-content">
-      <p><span>甲方：</span> <span>微信绑定的用户信息</span></p>
-      <p><span>乙方：</span> <span>深圳前海翼联科技有限公司集团公司</span> </p>
+      <p><span>甲方：</span> <span>微信用</span></p>
+      <p><span>乙方：</span> <span>深圳前海翼联科技有限公司</span></p>
     </div>
     <div class="refund-title">一、服务内容及服务承诺</div>
     <div class="refund-content">
