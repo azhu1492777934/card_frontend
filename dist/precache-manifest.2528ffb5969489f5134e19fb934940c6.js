@@ -28,12 +28,12 @@ self.__precacheManifest = [
     "url": "/js/Not_fund.16285675.js"
   },
   {
-    "revision": "cc0f7e33dd6f8dc9d40d",
+    "revision": "b7092adcd6acfb81f401",
     "url": "/css/app.097110e6.css"
   },
   {
-    "revision": "cc0f7e33dd6f8dc9d40d",
-    "url": "/js/app.85758611.js"
+    "revision": "b7092adcd6acfb81f401",
+    "url": "/js/app.24837a3d.js"
   },
   {
     "revision": "ea8842aa178839b499ea",
@@ -788,6 +788,78 @@ self.__precacheManifest = [
     "url": "/img/bg.d140650f.png"
   },
   {
+    "revision": "cc0636ca2944024fd3ebf33a5412ff35",
+    "url": "/img/icon-right@3x.cc0636ca.png"
+  },
+  {
+    "revision": "1b983020cfed6b7a8ca5c300c24ca186",
+    "url": "/img/icon-left@3x.1b983020.png"
+  },
+  {
+    "revision": "d796d97eb9ebb2e89bb966343e2362e9",
+    "url": "/img/icon-left@2x.d796d97e.png"
+  },
+  {
+    "revision": "ccb9865dadbc642b8c4dd0a1abc8e570",
+    "url": "/img/recharge-word@2x.ccb9865d.png"
+  },
+  {
+    "revision": "ccb9865dadbc642b8c4dd0a1abc8e570",
+    "url": "/img/recharge-word@3x.ccb9865d.png"
+  },
+  {
+    "revision": "41a8c268f703fe646d5d08099eb778ae",
+    "url": "/img/icon-right@2x.41a8c268.png"
+  },
+  {
+    "revision": "2d6d06f4da15fc1a748677c49c5f1854",
+    "url": "/img/bg.2d6d06f4.png"
+  },
+  {
+    "revision": "1d7515ee61c3f659227318b4050955ed",
+    "url": "/img/mobile_sim@2x.1d7515ee.png"
+  },
+  {
+    "revision": "0f980b79d9a52702004de9f652a68835",
+    "url": "/img/telcom_sim@2x.0f980b79.png"
+  },
+  {
+    "revision": "98141226a7e992e3072a280746a259c4",
+    "url": "/img/mobile_sim@3x.98141226.png"
+  },
+  {
+    "revision": "0c88168b284b92c37f3a873f26a97d69",
+    "url": "/img/bg.0c88168b.jpg"
+  },
+  {
+    "revision": "9e02095f31a07b972244f1c714c1dfe7",
+    "url": "/img/telcom_sim@3x.9e02095f.png"
+  },
+  {
+    "revision": "e93b8c03293c5b6a311da784f9c19c8f",
+    "url": "/img/bg.e93b8c03.jpeg"
+  },
+  {
+    "revision": "ffb1612d9660e2ecd9d3872d57a8a2f9",
+    "url": "/img/bar.ffb1612d.png"
+  },
+  {
+    "revision": "3d0fc424b703032ca595090e99f8354b",
+    "url": "/img/login_bg@2x.3d0fc424.png"
+  },
+  {
+    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
+    "url": "/img/login_bg@3x.11000d4e.png"
+  },
+  {
+    "revision": "e625229e32d9deeb5f2909c314d8e609",
+    "url": "/img/ios@2x.e625229e.png"
+  },
+  {
+    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
+    "url": "/img/android@2x.af8bbdfa.png"
+  },
+  {
     "revision": "6e5cee7393060b0ec3dcd587c2518b94",
     "url": "/img/bg_test@3x.6e5cee73.png"
   },
@@ -820,76 +892,12 @@ self.__precacheManifest = [
     "url": "/img/invaildedOrder@2x.be0f1e33.png"
   },
   {
-    "revision": "e625229e32d9deeb5f2909c314d8e609",
-    "url": "/img/ios@2x.e625229e.png"
+    "revision": "fa855242805b87da42c65763acd64ac0",
+    "url": "/img/bg-plan-type@2x.fa855242.png"
   },
   {
-    "revision": "af8bbdfa0a90c4eed4563f8c06ce5ff8",
-    "url": "/img/android@2x.af8bbdfa.png"
-  },
-  {
-    "revision": "3d0fc424b703032ca595090e99f8354b",
-    "url": "/img/login_bg@2x.3d0fc424.png"
-  },
-  {
-    "revision": "11000d4e510a6df565eb69ba6f2c1dfc",
-    "url": "/img/login_bg@3x.11000d4e.png"
-  },
-  {
-    "revision": "1d7515ee61c3f659227318b4050955ed",
-    "url": "/img/mobile_sim@2x.1d7515ee.png"
-  },
-  {
-    "revision": "0f980b79d9a52702004de9f652a68835",
-    "url": "/img/telcom_sim@2x.0f980b79.png"
-  },
-  {
-    "revision": "98141226a7e992e3072a280746a259c4",
-    "url": "/img/mobile_sim@3x.98141226.png"
-  },
-  {
-    "revision": "0c88168b284b92c37f3a873f26a97d69",
-    "url": "/img/bg.0c88168b.jpg"
-  },
-  {
-    "revision": "9e02095f31a07b972244f1c714c1dfe7",
-    "url": "/img/telcom_sim@3x.9e02095f.png"
-  },
-  {
-    "revision": "cc0636ca2944024fd3ebf33a5412ff35",
-    "url": "/img/icon-right@3x.cc0636ca.png"
-  },
-  {
-    "revision": "1b983020cfed6b7a8ca5c300c24ca186",
-    "url": "/img/icon-left@3x.1b983020.png"
-  },
-  {
-    "revision": "d796d97eb9ebb2e89bb966343e2362e9",
-    "url": "/img/icon-left@2x.d796d97e.png"
-  },
-  {
-    "revision": "ccb9865dadbc642b8c4dd0a1abc8e570",
-    "url": "/img/recharge-word@2x.ccb9865d.png"
-  },
-  {
-    "revision": "ccb9865dadbc642b8c4dd0a1abc8e570",
-    "url": "/img/recharge-word@3x.ccb9865d.png"
-  },
-  {
-    "revision": "41a8c268f703fe646d5d08099eb778ae",
-    "url": "/img/icon-right@2x.41a8c268.png"
-  },
-  {
-    "revision": "2d6d06f4da15fc1a748677c49c5f1854",
-    "url": "/img/bg.2d6d06f4.png"
-  },
-  {
-    "revision": "e93b8c03293c5b6a311da784f9c19c8f",
-    "url": "/img/bg.e93b8c03.jpeg"
-  },
-  {
-    "revision": "ffb1612d9660e2ecd9d3872d57a8a2f9",
-    "url": "/img/bar.ffb1612d.png"
+    "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
+    "url": "/img/bg-plan-type@3x.4a9ca192.png"
   },
   {
     "revision": "3f342771b9b81ab929e0fbcbcd0e6533",
@@ -900,24 +908,12 @@ self.__precacheManifest = [
     "url": "/img/bg-check-wrap@2x.9713b218.png"
   },
   {
-    "revision": "fa855242805b87da42c65763acd64ac0",
-    "url": "/img/bg-plan-type@2x.fa855242.png"
-  },
-  {
-    "revision": "4a9ca192485effa8b8f4b5b2df5b9caf",
-    "url": "/img/bg-plan-type@3x.4a9ca192.png"
-  },
-  {
     "revision": "f40c7e0b20fe25eb78a7658c3ae56312",
     "url": "/img/noData@3x.f40c7e0b.png"
   },
   {
     "revision": "644e6e3cf5f33943747b116316694e28",
     "url": "/img/noData@2x.644e6e3c.png"
-  },
-  {
-    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
-    "url": "/img/changeBg.af3ed0b3.png"
   },
   {
     "revision": "0f16389ec218c90cf8f657e233b745f2",
@@ -930,6 +926,10 @@ self.__precacheManifest = [
   {
     "revision": "0078f03c08066d51d64b92a13e194ebb",
     "url": "/img/balanceRefund.0078f03c.png"
+  },
+  {
+    "revision": "af3ed0b3236bbfdbc3ad61b8d41c3dec",
+    "url": "/img/changeBg.af3ed0b3.png"
   },
   {
     "revision": "91e1d2771efacd45e5e465d9a001f197",
@@ -1100,16 +1100,16 @@ self.__precacheManifest = [
     "url": "/img/4.3e217df4.png"
   },
   {
-    "revision": "31518f7a333d084877fad7a56958860f",
+    "revision": "4dca6aba8a306463e90759fa42244ac8",
     "url": "/index.html"
-  },
-  {
-    "revision": "652317b098ca24e4511926c7fd57cbbe",
-    "url": "/MP_verify_8JoCCldW78DygS5c.txt"
   },
   {
     "revision": "00bbf6b458bf7ea6bd01f443eb3045d9",
     "url": "/MP_verify_4r3DVk3KUjgWsQsG.txt"
+  },
+  {
+    "revision": "652317b098ca24e4511926c7fd57cbbe",
+    "url": "/MP_verify_8JoCCldW78DygS5c.txt"
   },
   {
     "revision": "86c422d8c98b247235d04b49fb1c4b05",
