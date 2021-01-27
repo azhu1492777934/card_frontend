@@ -11,17 +11,17 @@
       <!-- <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
         <a @click="toRefund" href="javascript:;">3.套餐退款</a>
       </li> -->
-      <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'" @click="q4()">
-        <!-- <router-link to="/weixin/refund/argument">3.订单退款</router-link> -->
-        <a>3.订单退款</a>
+      <li v-if="global_variables.packed_project!='mifi'&&client_type!='app'">
+        <router-link to="/weixin/refund/argument">3.订单退款</router-link>
+        <!-- <a>3.订单退款</a> -->
       </li>
       <li>
         <a  @click="q3()"><span v-if="global_variables.packed_project=='mifi'||client_type=='app'">3</span><span v-if="global_variables.packed_project!='mifi'&&client_type!='app'">4</span>.解约自动续费套餐</a>
       </li>
      
-     <li v-if="global_variables.packed_project=='mifi'" @click="q4()">
-        <!-- <router-link to="/weixin/userCenter/rechargeOrder">4.订单退款</router-link> -->
-        <a>4.订单退款</a>
+     <li v-if="global_variables.packed_project=='mifi'">
+        <router-link to="/weixin/userCenter/rechargeOrder">4.订单退款</router-link>
+        <!-- <a>4.订单退款</a> -->
       </li>
     </ul>
   </div>
