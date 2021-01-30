@@ -106,6 +106,11 @@
     <van-popup v-model="showArea" position="bottom" :overlay="true">
       <van-area :area-list="areaList" @cancel="showArea=false" />
     </van-popup>
+
+    <van-dialog v-model="show" title="通知" :beforeClose="closedNotice">
+      <p class="notice">春节期间该功能暂时关闭，给您带来的不便，请谅解。</p>
+    </van-dialog>
+
   </div>
 </template>
 
@@ -151,6 +156,8 @@ export default {
 
       cardInvoiceHeigh: '',
       btnDisabled: true,
+      
+      show: true,
     };
   },
   computed: {
@@ -168,12 +175,17 @@ export default {
     }
   },
   created() {
-    this.initial()
+    this.initial();
   },
   mounted() {
 
   },
   methods: {
+    closedNotice(action, done) {
+      done();
+      this.$router.go(-1)
+      // history.go(-1)
+    },
     initial() {
       if (!this.$route.params.order) {
         Notify({
@@ -286,6 +298,11 @@ export default {
       bottom: 0;
       left: 0;
       box-sizing: border-box;
+    }
+    .notice {
+      padding: 20px 40px;
+      font-size: 0.38rem;
+      line-height: 0.5rem;
     }
   }
   .van-address-edit {
